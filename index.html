@@ -1246,13 +1246,8 @@ function renderVersions(){
  if(releaseIndex?.latestIterationId&&activeManifest&&(releaseIndex.latestIterationId!==(activeManifest.iterationId||activeManifest.releaseId)))updateFab.classList.add('hasUpdate');else updateFab.classList.remove('hasUpdate');
 }
 async function refreshVersions(){
- updateCheck.disabled=true;updateState.textContent='Vérification du registre publié depuis le dépôt privé…';
- try{
-  const r=await fetch('./releases.json?ts='+Date.now(),{cache:'no-store'});if(r.status===404){releaseIndex=null;updateState.textContent='Historique non initialisé · version courante uniquement.';renderVersions();return}if(!r.ok)throw new Error('HTTP '+r.status);
-  const idx=await r.json();if(idx.schema!=='GVAULT_PUBLIC_RELEASE_INDEX_V1'||!Array.isArray(idx.releases))throw new Error('Registre incompatible');releaseIndex=idx;
-  if(!selectionExplicit&&!activeManifest&&idx.releases[0]){selectedManifestUrl=idx.releases[0].manifest;selectedIterationId=idx.releases[0].iterationId||'';}
-  renderVersions();const newer=activeManifest&&idx.latestIterationId&&idx.latestIterationId!==(activeManifest.iterationId||activeManifest.releaseId);updateState.textContent=newer?'MISE À JOUR DISPONIBLE · choisis une version ci-dessous.':activeManifest?'À JOUR · jusqu’aux trois dernières itérations disponibles.':'Choisis une version ou déverrouille la plus récente.';
- }catch(e){updateState.textContent='Vérification impossible · '+(e?.message||e)}finally{updateCheck.disabled=false}
+ if(window.GVaultOfficialRefs?.reload)return window.GVaultOfficialRefs.reload();
+ updateState.textContent='Catalogue OFFICIEL en initialisation…';
 }
 async function chooseRelease(item,action){
  selectedManifestUrl=item.manifest;selectedIterationId=item.iterationId||item.releaseId;selectionExplicit=true;renderVersions();
