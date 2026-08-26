@@ -1556,38 +1556,58 @@ window.GVaultProjectStore=Object.freeze({install,status:()=>({installed:!!window
 })();
 </script>
 
-<script id="gvault-private-official-refs-v1">
+<!-- GVAULT_PRIVATE_OFFICIAL_REFS_SELECTOR_START -->
+<script id="gvault-private-official-refs-v2" data-gvault-private-official-refs="GVAULT_PRIVATE_OFFICIAL_REFS_V2">
 (()=>{
 'use strict';
-const MARK='GVAULT_PRIVATE_OFFICIAL_REFS_V1';
-let refs=[],currentSha='',painting=false;
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const SCHEMA='GVAULT_PUBLIC_OFFICIAL_REFS_V1';
+let refs=[],currentSha='',loading=false;
+const q=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
 const fmt=v=>{if(!v)return '';try{return new Intl.DateTimeFormat('fr-FR',{dateStyle:'short',timeStyle:'short'}).format(new Date(v))}catch{return String(v)}};
-async function load(){
- try{const r=await fetch('./manifest.json?officialRefs='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const m=await r.json();currentSha=m?.source?.sha256||'';const c=m?.officialRefs;if(c?.schema!=='GVAULT_PUBLIC_OFFICIAL_REFS_V1'||!Array.isArray(c.releases))return;refs=c.releases.slice();render();}
- catch(e){const s=document.querySelector('#vaultUpdateState');if(s)s.textContent='Références OFFICIELLES indisponibles · '+(e?.message||e)}
-}
+function state(text){const el=q('#vaultUpdateState');if(el)el.textContent=text}
 function render(){
- const list=document.querySelector('#vaultVersionList');if(!list||!refs.length||painting)return;painting=true;
+ const list=q('#vaultVersionList');if(!list)return;
+ list.dataset.privateOfficialRefs='2';list.innerHTML='';
+ for(const item of refs){
+  const active=item.sourceSha256===currentSha;
+  const card=document.createElement('article');card.className='versionCard';
+  card.dataset.releaseId=String(item.releaseId||'');card.dataset.sourceSha=String(item.sourceSha256||'');card.dataset.availability=String(item.availability||'');
+  const items=Array.isArray(item.changelog?.items)?item.changelog.items:[];
+  const aliases=Array.isArray(item.aliases)&&item.aliases.length?' · '+item.aliases.join(', '):'';
+  const actionLabel=active?'ACTIVE':item.availability==='PRIVATE_ROOT_REFERENCE'?'RACINE PRIVÉE':'RÉFÉRENCE';
+  card.innerHTML='<div class="versionTop"><div><div class="versionName">'+esc(item.releaseId||'OFFICIELLE')+esc(aliases)+'</div><div class="versionMeta">'+esc(fmt(item.publishedAt))+(item.publishedAt?' · ':'')+esc(String(item.sourceSha256||'').slice(0,12))+'</div></div><button class="versionAction" type="button" '+(active?'disabled':'')+'>'+actionLabel+'</button></div><div class="changeTitle">'+esc(item.changelog?.title||item.releaseId||'Changelog')+'</div>'+(items.length?'<ul class="changeItems">'+items.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'<div class="versionMeta">Référence officielle privée.</div>');
+  const b=card.querySelector('.versionAction');
+  if(!active)b.addEventListener('click',()=>state('OFFICIELLE RÉFÉRENCÉE · '+(item.releaseId||'version')+' · racine conservée dans le privé. Aucun payload historique permanent n’est exposé par Pages.'));
+  list.appendChild(card);
+ }
+ const activeRef=refs.find(x=>x.sourceSha256===currentSha);
+ const newest=refs[refs.length-1]||null;
+ const hasDifferent=!!newest&&newest.sourceSha256!==currentSha;
+ q('#vaultUpdateFab')?.classList.toggle('hasUpdate',hasDifferent);
+ state('Catalogue OFFICIEL actualisé · '+refs.length+' racine(s) privée(s) référencée(s) · active : '+(activeRef?.releaseId||'inconnue')+'.');
+}
+async function reload(){
+ if(loading)return;loading=true;
+ const check=q('#vaultUpdateCheck');if(check)check.disabled=true;
+ state('Actualisation depuis le registre OFFICIEL privé…');
  try{
-  list.dataset.privateOfficialRefs='1';list.innerHTML='';
-  for(const item of refs){
-   const active=item.sourceSha256===currentSha;const card=document.createElement('article');card.className='versionCard';
-   const items=Array.isArray(item.changelog?.items)?item.changelog.items:[];const aliases=Array.isArray(item.aliases)&&item.aliases.length?' · '+item.aliases.join(', '):'';
-   card.innerHTML='<div class="versionTop"><div><div class="versionName">'+esc(item.releaseId||'OFFICIELLE')+esc(aliases)+'</div><div class="versionMeta">'+esc(fmt(item.publishedAt))+(item.publishedAt?' · ':'')+esc(String(item.sourceSha256||'').slice(0,12))+'</div></div><button class="versionAction" type="button" '+(active?'disabled':'')+'>'+(active?'ACTIVE':'RACINE PRIVÉE')+'</button></div><div class="changeTitle">'+esc(item.changelog?.title||item.releaseId||'Changelog')+'</div>'+(items.length?'<ul class="changeItems">'+items.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'<div class="versionMeta">Référence officielle privée.</div>');
-   const b=card.querySelector('.versionAction');if(!active)b.addEventListener('click',()=>{const s=document.querySelector('#vaultUpdateState');if(s)s.textContent='OFFICIELLE RÉFÉRENCÉE · '+(item.releaseId||'version')+' · racine conservée dans le privé. Aucun payload historique permanent n’est exposé par Pages.'});
-   list.appendChild(card);
-  }
-  const state=document.querySelector('#vaultUpdateState');if(state)state.textContent='Catalogue OFFICIEL · '+refs.length+' racine(s) référencée(s) · seule la version active possède un payload public.';
- }finally{painting=false}
+  const r=await fetch('./manifest.json?officialRefs='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
+  const m=await r.json();const c=m?.officialRefs;
+  if(c?.schema!==SCHEMA||!Array.isArray(c.releases))throw new Error('Références OFFICIELLES absentes ou incompatibles');
+  currentSha=String(m?.source?.sha256||'');refs=c.releases.slice();render();
+ }catch(e){state('Actualisation impossible · '+(e?.message||e));}
+ finally{loading=false;if(check)check.disabled=false}
 }
 function wire(){
- const list=document.querySelector('#vaultVersionList');if(list){const obs=new MutationObserver(()=>{if(!painting)setTimeout(render,0)});obs.observe(list,{childList:true,subtree:true});}
- for(const id of ['vaultUpdateFab','vaultUpdateCheck'])document.querySelector('#'+id)?.addEventListener('click',()=>setTimeout(render,350));
+ const check=q('#vaultUpdateCheck'),fab=q('#vaultUpdateFab');
+ check?.addEventListener('click',()=>{queueMicrotask(reload)});
+ fab?.addEventListener('click',()=>{if(q('#vaultUpdatePanel')?.classList.contains('open'))queueMicrotask(reload)});
 }
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{wire();load()},{once:true});else{wire();load()}
-window.__GVAULT_PRIVATE_OFFICIAL_REFS__=MARK;
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{wire();reload()},{once:true});else{wire();reload()}
+window.GVaultOfficialRefs=Object.freeze({schema:'GVAULT_PRIVATE_OFFICIAL_REFS_V2',reload,list:()=>refs.map(x=>({...x})),currentSha:()=>currentSha});
 })();
 </script>
+<!-- GVAULT_PRIVATE_OFFICIAL_REFS_SELECTOR_END -->
 </body>
 </html>

@@ -33,7 +33,7 @@
   },
   "officialRefs": {
     "schema": "GVAULT_PUBLIC_OFFICIAL_REFS_V1",
-    "generatedAt": "2026-08-26T22:41:02.935Z",
+    "generatedAt": "2026-08-26T23:10:57.303Z",
     "authority": "PRIVATE_ROOTS_SANITIZED_REFERENCES",
     "releases": [
       {
@@ -80,7 +80,7 @@
         "aliases": [],
         "sourceSha256": "793fa9995a053acb71c41721d21126d99775e53ab4a9bf64eacf47d95e2f77bc",
         "sourceSize": 20308766,
-        "publishedAt": null,
+        "publishedAt": "2026-08-26T19:40:52.000Z",
         "changelog": {
           "title": "R5.6.3 · ALPHA VALIDÉE",
           "items": [
