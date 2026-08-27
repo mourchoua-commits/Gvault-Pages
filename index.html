@@ -1229,6 +1229,38 @@ async function launchCanonical(html,password){
  }catch(e){frame.remove();URL.revokeObjectURL(url);throw e}
 }
 async function mountRelease(manifestUrl,password){const decoded=await decryptManifest(manifestUrl,password);await launchCanonical(decoded.html,password);activeManifest=decoded.m;sessionPassword=password;selectedIterationId=decoded.m.iterationId||decoded.m.releaseId;renderVersions();return decoded.m;}
+
+/* GVAULT_SECURE_PREVIEW_PROVIDER_V2_4_1 — official preview decrypts through the SAS-session closure; the password is never returned or globalized. */
+let gvSecurePreviewProviderInstalled=false;
+async function gvSecureOfficialPreviewProvider(item){
+ const ref=item?.preview;
+ if(ref?.schema!=='GVAULT_OFFICIAL_PREVIEW_REF_V1'||ref?.transport!=='PUBLIC_CIPHERTEXT_SAS_MEMORY_ONLY'||!ref?.manifest)throw new Error('Transport privé de prévisualisation indisponible.');
+ const password=sessionPassword;
+ if(!password)throw new Error('Session SAS absente · déverrouille GVAULT avant la prévisualisation.');
+ const manifestUrl=new URL(ref.manifest,location.href);manifestUrl.searchParams.set('preview',Date.now());
+ const m=await (await fetchOk(manifestUrl.href,{cache:'no-store'})).json();
+ if(m?.schema!=='GVAULT_OFFICIAL_PREVIEW_ENCRYPTED_V1'||m?.purpose!=='MEMORY_BLOB_PREVIEW_ONLY')throw new Error('Manifest de prévisualisation incompatible.');
+ if(String(m.releaseId||'')!==String(item.releaseId||''))throw new Error('Identité de version de prévisualisation incohérente.');
+ if(String(m.source?.sha256||'')!==String(item.sourceSha256||'')||Number(m.source?.size)!==Number(item.sourceSize))throw new Error('Racine chiffrée différente de la référence OFFICIELLE.');
+ const payloadUrl=new URL(m.payload?.path||'',manifestUrl);payloadUrl.search='';
+ const cr=await fetchOk(payloadUrl.href,{cache:'force-cache'});const cipher=await cr.arrayBuffer();
+ if(cipher.byteLength!==Number(m.payload?.size))throw new Error('Taille du payload chiffré invalide.');
+ if(await sha256(cipher)!==String(m.payload?.sha256||''))throw new Error('SHA du payload chiffré invalide.');
+ const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveKey']);
+ const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(m.crypto?.saltB64),iterations:Number(m.crypto?.iterations),hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+ let plain;try{plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(m.crypto?.ivB64)},key,cipher)}catch{throw new Error('Déchiffrement impossible · session invalide ou paquet altéré.');}
+ if(plain.byteLength!==Number(item.sourceSize))throw new Error('Taille déchiffrée invalide.');
+ if(await sha256(plain)!==String(item.sourceSha256||''))throw new Error('SHA déchiffré différent de la racine OFFICIELLE.');
+ return {bytes:plain,transport:'SAS_SESSION_CLOSURE_V2_4_1'};
+}
+function gvAttachSecurePreviewProvider(){
+ if(gvSecurePreviewProviderInstalled)return true;
+ const t=window.GVaultOfficialPreviewTransport;
+ if(!t||typeof t.installProvider!=='function')return false;
+ t.installProvider(gvSecureOfficialPreviewProvider);gvSecurePreviewProviderInstalled=true;return true;
+}
+setTimeout(gvAttachSecurePreviewProvider,0);const gvSecurePreviewTimer=setInterval(()=>{if(gvAttachSecurePreviewProvider())clearInterval(gvSecurePreviewTimer)},250);
+
 function fmtDate(v){try{return new Intl.DateTimeFormat('fr-FR',{dateStyle:'short',timeStyle:'short'}).format(new Date(v))}catch{return v||''}}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function currentFallbackEntry(){if(!activeManifest)return null;return {iterationId:activeManifest.iterationId||activeManifest.releaseId,releaseId:activeManifest.releaseId,publishedAt:activeManifest.publishedAt,sourceSha256:activeManifest.source?.sha256,manifest:'manifest.json',changelog:activeManifest.changelog||{title:activeManifest.releaseId,items:[]}};}
@@ -1540,7 +1572,9 @@ function apiFor(store){
  return Object.freeze({schema:'GVAULT_PRIVATE_PROJECT_SOURCES_V1',source:'encrypted-private-official-store',list:()=>store.projects.map(({projectId,name,version,approvedAt,files})=>({projectId,name,version,approvedAt,fileCount:files.length})),has:(id,version)=>!!pick(id,version),get:(id,version)=>pick(id,version),getText:(id,version,file)=>{const p=pick(id,version);if(!p)return null;const f=p.files.find(x=>x.path===file)||p.files[0];return f?new TextDecoder().decode(Uint8Array.from(atob(f.contentB64),c=>c.charCodeAt(0))):null}});
 }
 async function install(){
- const pw=window.__GVAULT_PROJECT_STORE_PASSWORD__,frame=document.querySelector('#gvaultRuntime');if(!pw||!frame?.contentWindow)return null;
+ const frame=document.querySelector('#gvaultRuntime');if(!frame?.contentWindow)return null;
+ if(!document.querySelector('meta[data-gvault-private-project-store-enabled="true"]'))return null;
+ const pw=window.__GVAULT_PROJECT_STORE_PASSWORD__;if(!pw)return null;
  const key=String(frame.src||'')+'|'+pw.length;
  if(installedKey===key&&window.GVAULT_PRIVATE_PROJECT_SOURCES_V1)return window.GVAULT_PRIVATE_PROJECT_SOURCES_V1;
  if(installPromise)return installPromise;
@@ -1666,9 +1700,9 @@ async function preparePreviewBlob(blob,item){
  return {blob:new Blob([wrapped],{type:'text/html;charset=utf-8'}),nonce};
 }
 async function reusePreviewSas(nonce,item){
- if(!nonce)return;
+ if(!nonce)return false;
  const password=window.__GVAULT_PROJECT_STORE_PASSWORD__;
- if(!password)throw new Error('Session SAS indisponible pour la racine prévisualisée.');
+ if(!password){state('PRÉVISUALISATION · racine déchiffrée en mémoire · ressaisis le SAS dans la prévisualisation.');return false;}
  state('Réutilisation du SAS pour '+(item.releaseId||'OFFICIELLE')+'…');
  await new Promise((resolve,reject)=>{
   let done=false;
@@ -1683,6 +1717,7 @@ async function reusePreviewSas(nonce,item){
   window.addEventListener('message',onMessage);
   frame.contentWindow?.postMessage({schema:'GVAULT_PREVIEW_SAS_SESSION_V1',nonce,password},'*');
  });
+ return true;
 }
 async function decryptPublicPacket(item){
  const ref=item?.preview;
@@ -1736,8 +1771,8 @@ async function open(item){
   shell.classList.add('open');shell.setAttribute('aria-hidden','false');exit.classList.add('show');previewState.classList.add('show');document.body.classList.add('gvaultOfficialPreviewOpen');
   state('PRÉVISUALISATION · '+(item.releaseId||'OFFICIELLE')+' · Blob mémoire · version active inchangée.');
   await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(new Error('Le Blob de prévisualisation ne démarre pas.')),30000);frame.addEventListener('load',()=>{clearTimeout(t);resolve()},{once:true})});
-  await reusePreviewSas(prepared.nonce,item);
-  state('PRÉVISUALISATION · '+(item.releaseId||'OFFICIELLE')+' · SAS réutilisé · version active inchangée.');
+  const sasReused=await reusePreviewSas(prepared.nonce,item);
+  state(sasReused?'PRÉVISUALISATION · '+(item.releaseId||'OFFICIELLE')+' · SAS réutilisé · version active inchangée.':'PRÉVISUALISATION · '+(item.releaseId||'OFFICIELLE')+' · racine vérifiée · SAS à saisir dans la prévisualisation · version active inchangée.');
  }catch(e){cleanup();state('PRÉVISUALISATION IMPOSSIBLE · '+(e?.message||e));throw e}
  finally{busy=false}
 }
