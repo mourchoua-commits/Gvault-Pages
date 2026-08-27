@@ -1,0 +1,11 @@
+{
+  "schema": "GVAULT_PUBLIC_CHOUFF_MARKER_V1",
+  "keyword": "CHOUFF",
+  "role": "public-search-marker-only",
+  "repository": "mourchoua-commits/Gvault-Pages",
+  "monitoring": "external-private",
+  "telemetry": false,
+  "privateData": false,
+  "autoRepairPublic": false,
+  "note": "CHOUFF is only a searchable public marker. Monitoring state and maintenance logic are not published here."
+}
