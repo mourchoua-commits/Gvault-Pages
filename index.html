@@ -2128,5 +2128,30 @@ window.GVAULT_PUBLIC_SAFETY_INFO=Object.freeze({schema:'GVAULT_PUBLIC_GATEWAY_SA
 })();
 </script>
 
+
+<!-- GVAULT_SAS_FIRST_ACTION_FIX_V2_4_2 -->
+<style data-gvault-sas-first-action="GVAULT_SAS_FIRST_ACTION_FIX_V2_4_2">
+#lockScreen{pointer-events:auto!important;touch-action:pan-y}
+#lockScreenTrigger{pointer-events:auto!important;touch-action:none;min-height:168px}
+body.unlockPrompt #lockScreen{pointer-events:none!important}
+</style>
+<script data-gvault-sas-first-action-runtime="GVAULT_SAS_FIRST_ACTION_FIX_V2_4_2">
+(()=>{'use strict';
+const screen=document.querySelector('#lockScreen'),trigger=document.querySelector('#lockScreenTrigger');if(!screen||!trigger)return;
+let startY=null;
+function openPrompt(){
+ if(document.body.classList.contains('unlockPrompt'))return;
+ document.body.classList.add('unlockPrompt');document.body.classList.remove('unlockFailed');
+ const pass=document.querySelector('#vaultPassword');setTimeout(()=>{try{pass?.focus({preventScroll:true})}catch{try{pass?.focus()}catch{}}},80);
+}
+function excluded(target){return !!target?.closest?.('#gvBlopRailToggle,#gvBlopRail,#vaultUpdateFab,#vaultUpdatePanel')}
+screen.addEventListener('click',e=>{if(!excluded(e.target))openPrompt()},true);
+screen.addEventListener('pointerdown',e=>{if(excluded(e.target)){startY=null;return}startY=e.clientY},{passive:true,capture:true});
+screen.addEventListener('pointerup',e=>{if(startY!==null&&startY-e.clientY>24)openPrompt();startY=null},{passive:true,capture:true});
+trigger.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPrompt()}},true);
+window.GVAULT_SAS_FIRST_ACTION_INFO=Object.freeze({schema:'GVAULT_SAS_FIRST_ACTION_FIX_V2_4_2',tapFullScreen:true,swipeUp:true,captureFallback:true,mobile:true});
+})();
+</script>
+
 </body>
 </html>
