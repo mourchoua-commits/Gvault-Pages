@@ -1,0 +1,17 @@
+{
+  "schema": "GVAULT_DATAPASSIV_PUBLIC_KEY_V1",
+  "epoch": "20260827",
+  "kid": "8b67e32735e3ed0a",
+  "algorithm": "RSA-OAEP-256",
+  "jwk": {
+    "kty": "RSA",
+    "alg": "RSA-OAEP-256",
+    "use": "enc",
+    "kid": "8b67e32735e3ed0a",
+    "n": "u-_ANOBog2KGVlCDJwsUxUM1xDTmOIJP3JQuFy3-X5YclGJnzCgwV9_ZRA9HnTr-ZwW9q9A4rZ_PMUTtdL8J-NqI82UgId5RkFREwToymoXu8pI7fwgpf6_s29CMj7DYyBGj_KxKh4pPp7SZjZpiguNZY1sky6Xmn9A3NqQDnngDo-KByMHGWd0G5IN7IS7IgJwD0lcuQCIJfutRbYWhb7GoEea8kaVAg76mD89-P7gfrwJyD7QNh6YO34FOPM-bR3eWpsQXmY45I1ttQg3xUAWXh-ZIeCZAQwK11AbhwKCRkAL7svP1K6ryEgvO4jlsvG-cNultuonETMvnHreK5Q",
+    "e": "AQAB",
+    "ext": true
+  },
+  "privateKeyLocation": "Gvault private only",
+  "note": "Public encryption key. Capsules remain confidential only if the matching private key remains private."
+}
