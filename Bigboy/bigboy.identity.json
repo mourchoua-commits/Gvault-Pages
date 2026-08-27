@@ -1,8 +1,9 @@
 {
   "schema": "GVAULT_BIG_BOY_IDENTITY_V1",
+  "version": "7.1.0",
   "name": "GVAULT BIG BOY",
   "role": "declared-health-observer",
-  "purpose": "health-check-and-change-observation",
+  "purpose": "health-check-change-observation-and-declared-source-discovery",
   "mode": "read-only",
   "collects": [
     "feed metadata",
@@ -11,8 +12,25 @@
     "HTTP status",
     "ETag/Last-Modified",
     "content fingerprints",
-    "declared public health/status fields"
+    "declared public health/status fields",
+    "same-origin feed links declared by the page",
+    "same-origin Sitemap references declared by robots.txt"
   ],
+  "discovery": {
+    "sameOriginOnly": true,
+    "standardPaths": [
+      "/robots.txt",
+      "/sitemap.xml",
+      "/.well-known/security.txt",
+      "/health",
+      "/healthz",
+      "/status",
+      "/api/health"
+    ],
+    "portScanning": false,
+    "bruteForcePaths": false,
+    "deepCrawl": false
+  },
   "doesNotCollect": [
     "passwords",
     "form values",
