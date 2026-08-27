@@ -1,0 +1,14 @@
+{
+  "schema": "GVAULT_BIG_BOY_PUBLIC_V1",
+  "version": "7.0.0",
+  "role": "declared-health-observer-identity-surface",
+  "identity": "bigboy.identity.json",
+  "runtimePublic": false,
+  "secretsPublic": false,
+  "littleBoyDataPublic": false,
+  "notes": [
+    "Public surface contains identity only.",
+    "Scout runtime and Little Boy collector remain outside this public directory.",
+    "BIG BOY declares read-only health-check intent in its User-Agent and X-BigBoy headers."
+  ]
+}
