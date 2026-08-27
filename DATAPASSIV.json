@@ -1,0 +1,29 @@
+{
+  "schema": "GVAULT_DATAPASSIV_SPOOL_V1",
+  "branch": "datapassiv",
+  "role": "public_ciphertext_spool",
+  "activeEpoch": "20260827",
+  "publicKey": "keys/datapassiv-20260827-public.json",
+  "inboxPrefix": "inbox/20260827/",
+  "capsuleSchema": "GVAULT_DATAPASSIV_CAPSULE_V1",
+  "cipher": "AES-256-GCM",
+  "keyWrap": "RSA-OAEP-256",
+  "plaintextAllowed": false,
+  "tokenAllowed": false,
+  "passwordAllowed": false,
+  "privatePayloadAllowed": false,
+  "maxCapsuleBytes": 262144,
+  "retentionPolicy": {
+    "publicBranchIsNotSecret": true,
+    "gitDeletionIsNotErasure": true,
+    "ttlHours": 48,
+    "harvestBeforeTTLTargetHours": 6
+  },
+  "harvestTarget": "mourchoua-commits/Gvault@vigie-state/modules/vigie/datapassiv",
+  "notes": [
+    "Only encrypted technical traces belong here.",
+    "No visitor identity inference.",
+    "No credentials or form values.",
+    "Public cleanup is TTL/rotation; private harvest is a separate operation."
+  ]
+}
