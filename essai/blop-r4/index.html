@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>GVAULT · BLOP ESSAI r4</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#070907;color:#e7e1d2}body{padding:10px}.shell{display:grid;grid-template-rows:auto minmax(420px,1fr);gap:8px;min-height:100vh}.bar{display:grid;gap:7px;padding:9px;border:1px solid #4c4b40;border-radius:12px;background:#0d100d}.title{font-weight:950;color:#c8a95a}.meta{font-size:9px;color:#969080;line-height:1.45}.checks{display:flex;gap:5px;flex-wrap:wrap}.chip{padding:4px 7px;border:1px solid #555;border-radius:999px;font-size:8px}.pass{border-color:#528764;color:#a8dfb7}.fail{border-color:#9b5353;color:#ffaaa0}.wait{border-color:#8c7847;color:#e1c77d}.buttons{display:flex;gap:6px;flex-wrap:wrap}button{min-height:38px;padding:0 10px;border:1px solid #655d43;border-radius:9px;background:#11150f;color:#dfd7c2;font:850 9px ui-monospace,monospace}iframe{width:100%;height:100%;min-height:620px;border:1px solid #4c4b40;border-radius:12px;background:#000}.tools{font-size:8px;line-height:1.5;white-space:pre-wrap;color:#b9b29f}
+</style>
+</head>
+<body>
+<div class="shell">
+<section class="bar">
+ <div class="title">BLOP · ESSAI r4 · HARNESS NON DESTRUCTIF</div>
+ <div class="meta">Base testée : Gvault-Pages ESSAI r3 · c21f79621543c4e9d805d95da23930bccaae618f · GvaultStable non modifié.</div>
+ <div class="buttons"><button id="reload">RECHARGER r3</button><button id="base">BASE</button><button id="smoke">SMOKE</button><button id="blop">BLOP + DIAG</button></div>
+ <div id="checks" class="checks"><span class="chip wait">initialisation…</span></div>
+ <div id="tools" class="tools"></div>
+</section>
+<iframe id="target" title="GVAULT ESSAI r3"></iframe>
+</div>
+<script>
+(()=>{'use strict';
+const ROOT='../../';
+const EXPECTED=['open','analysis','dissection','reference','exam','complement','gforge','ladybug','wand','gadmin'];
+const f=document.querySelector('#target'),checks=document.querySelector('#checks'),tools=document.querySelector('#tools');
+function url(mode){if(mode==='base')return ROOT+'?r=4-base';if(mode==='smoke')return ROOT+'?essai-debug=1&r=4-smoke';return ROOT+'?essai-blop=1&essai-debug=1&r=4-blop'}
+function load(mode='blop'){f.src=url(mode)}
+function chip(name,ok,detail=''){const s=document.createElement('span');s.className='chip '+(ok===null?'wait':ok?'pass':'fail');s.textContent=(ok===null?'… ':ok?'✓ ':'✕ ')+name+(detail?' · '+detail:'');return s}
+function render(list){checks.replaceChildren(...list.map(x=>chip(x[0],x[1],x[2]||'')))}
+async function inspect(){let w,d;try{w=f.contentWindow;d=f.contentDocument}catch{return render([['same_origin',false,'iframe inaccessible']])}const out=[];out.push(['baseline',w.GVAULT_ESSAI_BASELINE?.sourceCommit==='bb36cd4d328ca8c4ee94aae6fd1a2e5c63bac4e1',w.GVAULT_ESSAI_BASELINE?.sourceCommit?.slice(0,12)||'absent']);const graft=w.GVAULT_ESSAI_BLOP_GRAFT;out.push(['graft',graft?.status==='PASS',graft?.status||'absent']);const info=w.GVAULT_BLOP_TERMINAL_INFO;out.push(['memory_only',info?.authPersistence==='memory-only',info?.authPersistence||'absent']);out.push(['private_persist_none',info?.privateSourcePersistence==='none',info?.privateSourcePersistence||'absent']);const safety=w.GVAULT_PUBLIC_SAFETY_INFO;out.push(['safety_targeted',safety?.targetedObserver===true,safety?.schema||'absent']);out.push(['subtree_observer_off',safety?.subtreeObserver===false,String(safety?.subtreeObserver)]);const buttons=[...d.querySelectorAll('#gvBlopRail [data-gvbs-tool]')];const names=buttons.map(b=>b.dataset.gvbsTool);out.push(['tools_10',EXPECTED.every(x=>names.includes(x))&&names.length>=10,names.length+' outils']);const preSas=!d.querySelector('#gvaultRuntime')?.classList.contains('ready');if(preSas){const sensitive=buttons.filter(b=>b.dataset.gvbsTool!=='open');out.push(['pre_sas_locked',sensitive.length>0&&sensitive.every(b=>b.disabled),sensitive.filter(b=>b.disabled).length+'/'+sensitive.length])}else out.push(['runtime_ready',true,'session ouverte']);const reg=Array.isArray(info?.registry)?info.registry:[];out.push(['registry',reg.length>0,reg.length+' entrées']);render(out);tools.textContent='OUTILS DOM : '+names.join(' · ')+'\nREGISTRE : '+reg.map(x=>x.id||x.name||'?').join(' · ');window.GVAULT_BLOP_R4_REPORT=Object.freeze({schema:'GVAULT_BLOP_R4_HARNESS_V1',at:new Date().toISOString(),checks:out,tools:names,registry:reg.map(x=>x.id||x.name||'?')})}
+f.addEventListener('load',()=>{render([['iframe_loaded',true,'attente runtime']]);let n=0;const t=setInterval(()=>{n++;inspect();if(n>=12)clearInterval(t)},500)});
+document.querySelector('#reload').onclick=()=>load('blop');document.querySelector('#base').onclick=()=>load('base');document.querySelector('#smoke').onclick=()=>load('smoke');document.querySelector('#blop').onclick=()=>load('blop');load('blop');
+})();
+</script>
+</body>
+</html>
