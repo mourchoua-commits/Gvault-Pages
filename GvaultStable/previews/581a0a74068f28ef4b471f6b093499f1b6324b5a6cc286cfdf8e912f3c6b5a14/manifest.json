@@ -1,0 +1,22 @@
+{
+  "schema": "GVAULT_OFFICIAL_PREVIEW_ENCRYPTED_V1",
+  "releaseId": "R5.6.1",
+  "purpose": "MEMORY_BLOB_PREVIEW_ONLY",
+  "generatedAt": "2026-08-27T00:38:12.168Z",
+  "source": {
+    "sha256": "581a0a74068f28ef4b471f6b093499f1b6324b5a6cc286cfdf8e912f3c6b5a14",
+    "size": 20312655
+  },
+  "crypto": {
+    "cipher": "AES-256-GCM",
+    "kdf": "PBKDF2-HMAC-SHA256",
+    "iterations": 900000,
+    "saltB64": "Thf4BiRRAQdw6qlu4YTm5Q==",
+    "ivB64": "cmIKNJacIkMujrfx"
+  },
+  "payload": {
+    "path": "preview.64e7d9afde6dffd0ce16b930729e12d81638b0658d006598d02106a0707a59d2.bin",
+    "sha256": "64e7d9afde6dffd0ce16b930729e12d81638b0658d006598d02106a0707a59d2",
+    "size": 20312671
+  }
+}

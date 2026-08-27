@@ -1,0 +1,1768 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16130e">
+<title>GAME VAULT</title>
+<style>
+:root{--text:#efe8d5;--muted:#918a76;--gold:#c8a95a;--line:#555546;--panel1:#181b15;--panel2:#0c0f0c;--input:#050705;--accent:#c8a95a;--bg1:#0a0d0a;--bg2:#040504;--glow:rgba(200,169,90,.08)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+body{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 50% 0,var(--glow),transparent 30rem),
+    linear-gradient(180deg,var(--bg1),var(--bg2));
+  transition:background .18s ease,color .18s ease;
+  overflow:hidden;
+  position:relative
+}
+body[data-theme="obsidian"]{--text:#eef4fb;--muted:#8f9aad;--gold:#66e6ff;--line:#384654;--panel1:#111722;--panel2:#090d13;--input:#060910;--accent:#66e6ff;--bg1:#090b10;--bg2:#04060a;--glow:rgba(102,230,255,.08)}
+body[data-theme="vault"]{--text:#efe8d5;--muted:#918a76;--gold:#c8a95a;--line:#555546;--panel1:#181b15;--panel2:#0c0f0c;--input:#050705;--accent:#c8a95a;--bg1:#0a0d0a;--bg2:#040504;--glow:rgba(200,169,90,.08)}
+body[data-theme="light"]{--text:#17212d;--muted:#667483;--gold:#087d9c;--line:#bcc7d1;--panel1:#ffffff;--panel2:#eef3f8;--input:#ffffff;--accent:#087d9c;--bg1:#edf2f6;--bg2:#dce4ec;--glow:rgba(8,125,156,.08)}
+body[data-theme="neon"]{--text:#f6f0ff;--muted:#a58fb6;--gold:#4ff6ff;--line:#4a3558;--panel1:#140d1d;--panel2:#09060e;--input:#07050b;--accent:#4ff6ff;--bg1:#10091a;--bg2:#05030a;--glow:rgba(79,246,255,.09)}
+body[data-theme="terminal"]{--text:#c9ffd4;--muted:#6ea57b;--gold:#61ff85;--line:#31553a;--panel1:#071009;--panel2:#020604;--input:#010302;--accent:#61ff85;--bg1:#041008;--bg2:#010302;--glow:rgba(97,255,133,.08)}
+body[data-theme="mono"]{--text:#f2f2f2;--muted:#8c8c8c;--gold:#f2f2f2;--line:#3d3d3d;--panel1:#141414;--panel2:#080808;--input:#030303;--accent:#f2f2f2;--bg1:#090909;--bg2:#020202;--glow:rgba(255,255,255,.04)}
+
+#themeFx{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .2s ease;
+}
+body[data-theme="terminal"] #themeFx{opacity:.84}
+
+#themeScene{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .22s ease;
+}
+body[data-theme="obsidian"] #themeScene,
+body[data-theme="vault"] #themeScene,
+body[data-theme="light"] #themeScene,
+body[data-theme="neon"] #themeScene,
+body[data-theme="mono"] #themeScene{opacity:1}
+
+#themeArtifacts{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.themeArtifact{
+  position:absolute;
+  left:0;
+  top:0;
+  pointer-events:none;
+  transform:translate3d(0,0,0);
+  will-change:transform,opacity,filter;
+}
+
+/* OBSIDIAN — constellations / data fragments */
+.constellationTag{
+  color:#aeefff;
+  border:1px solid rgba(102,230,255,.38);
+  background:rgba(3,9,16,.72);
+  box-shadow:0 0 16px rgba(102,230,255,.12);
+  padding:4px 7px;
+  border-radius:999px;
+  font:900 6px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.08em;
+  opacity:0;
+  animation:constellationLife var(--life,7s) ease-in-out forwards;
+}
+.constellationTag::before{
+  content:"";
+  display:inline-block;
+  width:4px;height:4px;border-radius:50%;
+  margin-right:5px;
+  background:#bff7ff;
+  box-shadow:0 0 8px #66e6ff;
+}
+@keyframes constellationLife{
+  0%{opacity:0;transform:translate3d(var(--x0),var(--y0),0) scale(.88)}
+  18%,72%{opacity:.86}
+  100%{opacity:0;transform:translate3d(var(--x1),var(--y1),0) scale(1)}
+}
+
+/* COFFRE-FORT — mécanique + archives */
+.vaultGear{
+  width:var(--size,54px);height:var(--size,54px);
+  border-radius:50%;
+  border:2px dotted rgba(214,181,90,.32);
+  box-shadow:
+    0 0 0 6px rgba(214,181,90,.035),
+    inset 0 0 0 8px rgba(214,181,90,.035);
+  opacity:.42;
+  animation:gearTurn var(--turn,24s) linear infinite;
+}
+.vaultGear::before{
+  content:"";
+  position:absolute;inset:27%;
+  border:1px solid rgba(214,181,90,.42);
+  border-radius:50%;
+  box-shadow:0 0 0 3px rgba(0,0,0,.18) inset;
+}
+@keyframes gearTurn{to{transform:translate3d(var(--gx),var(--gy),0) rotate(360deg)}}
+
+.archiveSlip{
+  min-width:92px;
+  padding:6px 8px;
+  border:1px solid rgba(214,181,90,.5);
+  border-left:3px solid #d6b55a;
+  background:linear-gradient(180deg,rgba(28,23,16,.95),rgba(11,9,6,.92));
+  color:#e4cf91;
+  box-shadow:0 8px 24px rgba(0,0,0,.34);
+  font:900 6px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.06em;
+  opacity:0;
+  animation:archiveReveal var(--life,6.5s) ease forwards;
+}
+.archiveSlip small{display:block;margin-top:3px;color:rgba(214,181,90,.55);font-size:5px}
+@keyframes archiveReveal{
+  0%{opacity:0;clip-path:inset(0 100% 0 0);transform:translate3d(var(--x0),var(--y0),0)}
+  16%,72%{opacity:.9;clip-path:inset(0 0 0 0)}
+  100%{opacity:0;clip-path:inset(0 0 0 100%);transform:translate3d(var(--x1),var(--y1),0)}
+}
+
+/* NÉON — arcade / CRT */
+.neonSprite{
+  width:26px;height:26px;
+  border:1px solid rgba(79,246,255,.5);
+  background:rgba(10,5,18,.82);
+  color:#4ff6ff;
+  display:grid;place-items:center;
+  box-shadow:
+    0 0 10px rgba(79,246,255,.22),
+    0 0 18px rgba(255,79,216,.12);
+  font:900 14px/1 monospace;
+  image-rendering:pixelated;
+  opacity:.9;
+}
+.neonSprite::after{
+  content:attr(data-code);
+  position:absolute;
+  top:29px;left:50%;
+  transform:translateX(-50%);
+  white-space:nowrap;
+  color:#ff77de;
+  font:900 5px monospace;
+  letter-spacing:.05em;
+  text-shadow:0 0 6px rgba(255,79,216,.55);
+}
+.neonScanline{
+  position:fixed;
+  left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(79,246,255,.3),rgba(255,79,216,.25),transparent);
+  box-shadow:0 0 12px rgba(79,246,255,.18);
+  animation:scanMove 6.5s linear infinite;
+}
+@keyframes scanMove{from{top:-4px}to{top:100vh}}
+
+/* CLAIR — labo / papier technique */
+.labNote{
+  max-width:150px;
+  padding:6px 8px;
+  border:1px solid rgba(8,125,156,.25);
+  background:rgba(255,255,255,.78);
+  color:#245267;
+  box-shadow:0 5px 14px rgba(44,78,102,.08);
+  font:900 6px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.04em;
+  opacity:.18;
+  transform:rotate(var(--rot,-2deg));
+  transition:opacity .18s ease,filter .18s ease,transform .18s ease;
+}
+.labNote b{color:#087d9c}
+.labNote small{display:block;margin-top:3px;color:#728a98;font-size:5px}
+
+/* MONO — signal furtif */
+.monoGhost{
+  color:#f4f4f4;
+  border-left:2px solid #fff;
+  padding:3px 6px;
+  background:rgba(0,0,0,.72);
+  font:900 7px/1 monospace;
+  letter-spacing:.12em;
+  mix-blend-mode:screen;
+  opacity:0;
+  animation:monoBlink var(--life,1.25s) steps(2,end) forwards;
+}
+@keyframes monoBlink{
+  0%{opacity:0;filter:contrast(2)}
+  16%{opacity:.92}
+  27%{opacity:.18}
+  41%{opacity:.86}
+  68%{opacity:.3}
+  100%{opacity:0}
+}
+
+@media(max-width:620px){
+  .archiveSlip{min-width:76px;font-size:5px}
+  .constellationTag{font-size:5px}
+  .labNote{max-width:118px;font-size:5px}
+  .neonSprite{width:22px;height:22px;font-size:12px}
+  .neonSprite::after{top:24px;font-size:4px}
+}
+
+#terminalSprites{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+  display:none;
+}
+body[data-theme="terminal"] #terminalSprites{display:block}
+
+.matrixSprite{
+  position:absolute;
+  left:0;
+  top:0;
+  min-width:max-content;
+  padding:4px 7px 5px;
+  border:1px solid rgba(97,255,133,.72);
+  background:
+    linear-gradient(180deg,rgba(1,12,4,.96),rgba(0,5,2,.92));
+  color:#baffc7;
+  box-shadow:
+    0 0 0 1px rgba(97,255,133,.08) inset,
+    0 0 12px rgba(97,255,133,.18);
+  font:900 8px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  image-rendering:pixelated;
+  opacity:0;
+  transform:translate3d(0,0,0) scale(.94);
+  animation:matrixSpriteLife var(--life,6.8s) linear forwards;
+}
+.matrixSprite::before,
+.matrixSprite::after{
+  content:"";
+  position:absolute;
+  width:3px;height:3px;
+  background:#d7ffe0;
+  box-shadow:
+    4px 0 #61ff85,
+    0 4px #61ff85,
+    4px 4px rgba(97,255,133,.35);
+}
+.matrixSprite::before{left:-5px;top:-5px}
+.matrixSprite::after{right:-5px;bottom:-5px}
+
+.matrixSprite .spriteCode{
+  display:block;
+  margin-top:3px;
+  color:rgba(97,255,133,.56);
+  font-size:5px;
+  letter-spacing:.04em;
+}
+
+@keyframes matrixSpriteLife{
+  0%{opacity:0;transform:translate3d(var(--x0),var(--y0),0) scale(.92)}
+  10%{opacity:1}
+  78%{opacity:.92}
+  100%{opacity:0;transform:translate3d(var(--x1),var(--y1),0) scale(1)}
+}
+
+@media(max-width:620px){
+  .matrixSprite{
+    padding:3px 5px 4px;
+    font-size:6px;
+    letter-spacing:.04em;
+    max-width:42vw;
+    white-space:normal;
+  }
+  .matrixSprite .spriteCode{font-size:4px}
+}
+
+.safe{
+  position:relative;
+  z-index:3;
+  width:min(500px,100%);
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,var(--panel1),var(--panel2));
+  box-shadow:0 30px 90px rgba(0,0,0,.72);
+  border-radius:18px;
+  padding:15px;
+  backdrop-filter:blur(2px)
+}
+.safeHead{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding-bottom:11px;
+  border-bottom:1px solid color-mix(in srgb,var(--line) 65%,transparent)
+}
+.dial{
+  width:50px;height:50px;border:3px solid var(--line);border-radius:50%;
+  position:relative;
+  background:radial-gradient(circle,var(--panel1) 0 32%,var(--panel2) 33% 100%)
+}
+.dial:before{
+  content:"";
+  position:absolute;left:50%;top:6px;width:2px;height:18px;background:var(--gold);
+  transform:translateX(-50%)
+}
+.safeTitle b{display:block;font-size:18px;letter-spacing:.12em}
+.safeTitle span{display:block;margin-top:4px;font-size:8px;color:var(--muted)}
+.agentWelcome{
+  margin:10px 0 8px;
+  padding:8px 9px;
+  border:1px solid color-mix(in srgb,var(--accent) 24%,var(--line));
+  border-radius:10px;
+  background:color-mix(in srgb,var(--accent) 4%,var(--panel2));
+  display:flex;
+  gap:8px;
+  align-items:flex-start
+}
+.agentDot{
+  flex:0 0 24px;width:24px;height:24px;border-radius:8px;
+  border:1px solid color-mix(in srgb,var(--accent) 36%,var(--line));
+  color:var(--accent);display:grid;place-items:center;font-size:11px
+}
+.agentWelcome b{display:block;font-size:7px;color:var(--accent);letter-spacing:.08em}
+.agentWelcome span{display:block;margin-top:2px;font-size:7px;line-height:1.45;color:var(--muted)}
+.status{
+  margin:8px 0;
+  padding:9px;
+  border:1px solid color-mix(in srgb,var(--line) 72%,transparent);
+  background:var(--panel2);
+  border-radius:10px;
+  font-size:8px;
+  line-height:1.55;
+  color:var(--muted)
+}
+.field{display:grid;gap:5px;margin-top:8px}
+.field label{font-size:8px;color:var(--muted);font-weight:900;letter-spacing:.07em}
+.themeRow,.passRow{display:grid;grid-template-columns:1fr auto;gap:7px}
+select,input{
+  width:100%;
+  min-height:42px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--input);
+  color:var(--text);
+  padding:0 12px;
+  outline:none;
+  font:13px monospace
+}
+select:focus,input:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 10%,transparent)}
+button{
+  border:1px solid var(--line);
+  background:var(--panel1);
+  color:var(--text);
+  border-radius:10px;
+  padding:0 13px;
+  min-height:42px;
+  font:900 9px monospace;
+  cursor:pointer
+}
+.unlock{
+  width:100%;
+  margin-top:8px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 76%,white 8%),color-mix(in srgb,var(--accent) 62%,black 15%));
+  border-color:color-mix(in srgb,var(--accent) 42%,var(--line));
+  color:#111
+}
+body[data-theme="terminal"] .unlock,
+body[data-theme="obsidian"] .unlock,
+body[data-theme="neon"] .unlock{color:#061015}
+body[data-theme="light"] .unlock{color:#fff}
+.error{min-height:18px;margin-top:9px;font-size:8px;color:#e08c84}
+.loader{display:none;margin-top:10px;font-size:8px;color:var(--accent)}.loader.show{display:block}
+.entryNote{margin-top:9px;font-size:6px;color:var(--muted);line-height:1.45}
+
+
+/* α2.6 — sas type écran verrouillé téléphone */
+.lockScreen{
+  position:fixed;inset:0;z-index:8;display:grid;place-items:end center;
+  padding:0 18px max(34px,env(safe-area-inset-bottom));pointer-events:none;
+  transition:opacity .24s ease,transform .24s ease
+}
+.lockScreenInner{
+  width:min(320px,92vw);display:grid;justify-items:center;gap:10px;
+  pointer-events:auto;user-select:none;touch-action:none;cursor:pointer;
+  padding:18px 14px;border-radius:24px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--panel1) 10%,transparent),transparent);
+  backdrop-filter:blur(2px)
+}
+.phoneLockSymbol{
+  position:relative;width:72px;height:72px;border-radius:50%;
+  border:1px solid color-mix(in srgb,var(--accent) 52%,var(--line));
+  background:color-mix(in srgb,var(--panel1) 72%,transparent);
+  box-shadow:0 16px 46px rgba(0,0,0,.34),inset 0 0 0 1px rgba(255,255,255,.03),0 0 28px color-mix(in srgb,var(--accent) 12%,transparent);
+  display:grid;place-items:center;animation:phoneLockFloat 3.2s ease-in-out infinite
+}
+.phoneLockBody{position:relative;width:30px;height:24px;box-sizing:border-box;border:2px solid var(--accent);border-radius:7px;background:color-mix(in srgb,var(--accent) 7%,var(--panel2));box-shadow:0 0 14px color-mix(in srgb,var(--accent) 20%,transparent)}
+.phoneLockBody:before{content:"";position:absolute;left:50%;top:-17px;width:17px;height:17px;box-sizing:border-box;border:2px solid var(--accent);border-bottom:0;border-radius:11px 11px 0 0;transform:translateX(-50%)}
+.phoneLockBody:after{content:"";position:absolute;left:50%;top:7px;width:4px;height:8px;border-radius:3px;background:var(--accent);transform:translateX(-50%)}
+.lockScreenTitle{font:950 11px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.13em;color:var(--text);text-shadow:0 2px 10px rgba(0,0,0,.45)}
+.lockScreenHint{font:800 7px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;color:var(--muted);text-align:center}
+.lockSwipe{width:42px;height:4px;border-radius:999px;background:color-mix(in srgb,var(--text) 65%,transparent);opacity:.7;animation:lockSwipeHint 1.8s ease-in-out infinite}
+body.unlockPrompt .lockScreen{opacity:0;transform:translateY(-18px);pointer-events:none}
+body:not(.unlockPrompt) .safe{opacity:0;transform:translate(-50%,-46%) scale(.97);pointer-events:none}
+.safe{position:fixed!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%);transition:opacity .24s ease,transform .24s ease;z-index:10}
+body.unlockPrompt .safe{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
+.safeCollapse{position:absolute;right:12px;top:12px;width:34px;height:34px;min-height:34px;padding:0;border-radius:50%;font-size:15px;z-index:3}
+body.unlocking .phoneLockBody:before{transform:translateX(-50%) translateX(6px) rotate(22deg);transform-origin:2px 14px;transition:transform .22s ease}
+body.unlockFailed .safe{animation:unlockShake .32s ease}
+@keyframes phoneLockFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes lockSwipeHint{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-5px);opacity:.9}}
+@keyframes unlockShake{0%,100%{transform:translate(-50%,-50%)}25%{transform:translate(calc(-50% - 5px),-50%)}75%{transform:translate(calc(-50% + 5px),-50%)}}
+@media(max-width:620px){
+  .safe{width:min(94vw,430px)!important;max-height:calc(100vh - 28px);overflow:auto}
+  .lockScreen{padding-bottom:max(24px,env(safe-area-inset-bottom))}
+}
+
+/* GVAULT_CANONICAL_SAS_MIRROR_V1 — only gateway/update overlay additions below. */
+.runtimeFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#000;z-index:50;visibility:hidden;opacity:0;pointer-events:none}.runtimeFrame.ready{visibility:visible;opacity:1;pointer-events:auto}
+.updateFab{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));z-index:90;width:34px;height:34px;min-height:34px;border-radius:50%;border:1px solid color-mix(in srgb,var(--accent) 48%,var(--line));background:color-mix(in srgb,var(--panel1) 78%,transparent);color:var(--accent);display:grid;place-items:center;padding:0;font:900 15px/1 ui-monospace,SFMono-Regular,Menlo,monospace;box-shadow:0 6px 24px rgba(0,0,0,.34),0 0 18px color-mix(in srgb,var(--accent) 8%,transparent);backdrop-filter:blur(5px);opacity:.58;transition:opacity .15s ease,transform .15s ease}.updateFab:hover,.updateFab:focus{opacity:1;transform:scale(1.03)}.updateFab.hasUpdate:after{content:"";position:absolute;right:1px;top:1px;width:7px;height:7px;border-radius:50%;background:#8bd3a1;box-shadow:0 0 8px #8bd3a1}
+.updatePanel{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:max(52px,calc(env(safe-area-inset-bottom) + 52px));z-index:100;width:min(92vw,390px);max-height:min(72vh,540px);overflow:auto;border:1px solid color-mix(in srgb,var(--accent) 34%,var(--line));border-radius:14px;background:color-mix(in srgb,var(--panel1) 94%,black 6%);color:var(--text);box-shadow:0 18px 60px rgba(0,0,0,.58);padding:13px;display:none;backdrop-filter:blur(9px)}.updatePanel.open{display:block}.updateHead{display:flex;align-items:center;justify-content:space-between;gap:10px}.updateTitle{font:950 10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em}.closeUpdate{width:30px;height:30px;min-height:30px;border-radius:50%;padding:0;border:1px solid var(--line);background:var(--panel2);color:var(--muted);font-size:16px}.updateCheck{width:100%;margin:10px 0;padding:0 10px;min-height:36px;border:1px solid color-mix(in srgb,var(--accent) 42%,var(--line));background:var(--panel2);color:var(--text);font:900 8px monospace;letter-spacing:.04em}.updateState{font:700 7px/1.45 monospace;color:var(--muted);min-height:1.5em}.versionList{display:grid;gap:7px;margin-top:9px}.versionCard{border:1px solid color-mix(in srgb,var(--accent) 20%,var(--line));border-radius:10px;padding:9px;background:color-mix(in srgb,var(--panel2) 72%,transparent)}.versionTop{display:flex;gap:8px;align-items:center;justify-content:space-between}.versionName{font:900 9px monospace;color:var(--text)}.versionMeta{font:700 7px/1.4 monospace;color:var(--muted);margin-top:3px}.versionAction{min-height:30px;padding:0 8px;border-radius:8px;border:1px solid color-mix(in srgb,var(--accent) 38%,var(--line));background:var(--panel1);color:var(--accent);font:900 7px monospace}.versionAction:disabled{opacity:.5}.changeTitle{font:900 7px monospace;color:var(--accent);margin-top:7px}.changeItems{margin:4px 0 0 14px;padding:0;color:var(--muted);font:700 7px/1.45 monospace}.changeItems li+li{margin-top:2px}
+@media(max-width:620px){.updatePanel{max-height:72vh}.updateFab{right:max(8px,env(safe-area-inset-right));bottom:max(8px,env(safe-area-inset-bottom))}}
+
+/* GVAULT_SAS_REVIEW_TOOL_V1 */
+.reviewFab{position:fixed;right:max(52px,calc(env(safe-area-inset-right) + 52px));bottom:max(10px,env(safe-area-inset-bottom));z-index:92;width:34px;height:34px;min-height:34px;border-radius:50%;border:1px solid color-mix(in srgb,var(--accent) 48%,var(--line));background:color-mix(in srgb,var(--panel1) 78%,transparent);color:var(--accent);display:grid;place-items:center;padding:0;font:900 15px/1 ui-monospace,SFMono-Regular,Menlo,monospace;box-shadow:0 6px 24px rgba(0,0,0,.34),0 0 18px color-mix(in srgb,var(--accent) 8%,transparent);backdrop-filter:blur(5px);opacity:.58;transition:opacity .15s ease,transform .15s ease}.reviewFab:hover,.reviewFab:focus,.reviewFab.active{opacity:1;transform:scale(1.03)}.reviewFab.hasItems:after{content:attr(data-count);position:absolute;right:-4px;top:-5px;min-width:14px;height:14px;padding:0 3px;border-radius:999px;background:var(--accent);color:var(--panel2);display:grid;place-items:center;font:950 7px/1 monospace;box-shadow:0 0 8px color-mix(in srgb,var(--accent) 45%,transparent)}
+.reviewPanel{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:max(52px,calc(env(safe-area-inset-bottom) + 52px));z-index:112;width:min(94vw,410px);max-height:min(76vh,590px);overflow:auto;border:1px solid color-mix(in srgb,var(--accent) 34%,var(--line));border-radius:14px;background:color-mix(in srgb,var(--panel1) 96%,black 4%);color:var(--text);box-shadow:0 18px 60px rgba(0,0,0,.62);padding:13px;display:none;backdrop-filter:blur(10px)}.reviewPanel.open{display:block}.reviewHead{display:flex;align-items:center;justify-content:space-between;gap:10px}.reviewTitle{font:950 10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em}.reviewClose{width:30px;height:30px;min-height:30px;border-radius:50%;padding:0;border:1px solid var(--line);background:var(--panel2);color:var(--muted);font-size:16px}.reviewIntro{margin:8px 0 10px;color:var(--muted);font:700 7px/1.45 monospace}.reviewModes{display:grid;gap:8px}.reviewMode{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid color-mix(in srgb,var(--accent) 18%,var(--line));border-radius:10px;padding:9px;background:color-mix(in srgb,var(--panel2) 74%,transparent)}.reviewModeText b{display:block;color:var(--text);font:900 8px/1.2 monospace}.reviewModeText span{display:block;margin-top:3px;color:var(--muted);font:700 6px/1.35 monospace}.reviewSwitch{appearance:none;width:36px;height:20px;flex:0 0 36px;border-radius:999px;border:1px solid var(--line);background:var(--input);position:relative;transition:.16s}.reviewSwitch:before{content:"";position:absolute;width:14px;height:14px;left:2px;top:2px;border-radius:50%;background:var(--muted);transition:.16s}.reviewSwitch:checked{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--input))}.reviewSwitch:checked:before{left:18px;background:var(--accent);box-shadow:0 0 8px color-mix(in srgb,var(--accent) 55%,transparent)}
+.reviewState{min-height:28px;margin:9px 0 0;border-left:2px solid color-mix(in srgb,var(--accent) 55%,transparent);padding:6px 8px;background:color-mix(in srgb,var(--panel2) 58%,transparent);color:var(--muted);font:750 7px/1.4 monospace}.reviewActions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.reviewAction{min-height:34px;padding:0 8px;border:1px solid color-mix(in srgb,var(--accent) 34%,var(--line));border-radius:8px;background:var(--panel2);color:var(--text);font:900 7px/1.15 monospace}.reviewAction.full{grid-column:1/-1}.reviewItems{display:grid;gap:6px;margin-top:9px}.reviewItem{border:1px solid color-mix(in srgb,var(--accent) 14%,var(--line));border-radius:8px;padding:7px;background:color-mix(in srgb,var(--panel2) 68%,transparent);font:700 6px/1.4 monospace;color:var(--muted)}.reviewItem b{color:var(--text)}
+.reviewPickOutline{position:fixed;z-index:124;pointer-events:none;border:1px dashed var(--accent);box-shadow:0 0 0 1px rgba(0,0,0,.6),0 0 16px color-mix(in srgb,var(--accent) 30%,transparent);background:color-mix(in srgb,var(--accent) 5%,transparent);display:none}.reviewPickOutline.show{display:block}
+.reviewModalShade{position:fixed;inset:0;z-index:130;background:rgba(0,0,0,.66);display:none;align-items:center;justify-content:center;padding:14px}.reviewModalShade.open{display:flex}.reviewModal{width:min(94vw,470px);max-height:88vh;overflow:auto;border:1px solid color-mix(in srgb,var(--accent) 42%,var(--line));border-radius:14px;background:var(--panel1);color:var(--text);box-shadow:0 24px 90px rgba(0,0,0,.78);padding:13px}.reviewModal h3{margin:0 0 8px;font:950 10px/1.2 monospace;letter-spacing:.08em}.reviewDetected,.reviewSuggestions{border:1px solid color-mix(in srgb,var(--accent) 16%,var(--line));border-radius:9px;background:var(--panel2);padding:8px;margin-top:7px;color:var(--muted);font:700 7px/1.4 monospace;white-space:pre-wrap}.reviewSuggestions b,.reviewDetected b{color:var(--accent)}.reviewModal label{display:block;margin-top:9px;color:var(--muted);font:900 7px/1.2 monospace}.reviewModal select,.reviewModal textarea{width:100%;margin-top:5px;border:1px solid var(--line);border-radius:8px;background:var(--input);color:var(--text);padding:8px;font:750 8px/1.4 monospace}.reviewModal textarea{min-height:92px;resize:vertical}.reviewModalButtons{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.reviewModalButtons button{min-height:36px;border:1px solid color-mix(in srgb,var(--accent) 36%,var(--line));border-radius:8px;background:var(--panel2);color:var(--text);font:900 7px monospace}.reviewModalButtons .primary{background:color-mix(in srgb,var(--accent) 16%,var(--panel2));color:var(--accent)}.reviewToast{position:fixed;left:50%;bottom:max(58px,calc(env(safe-area-inset-bottom) + 58px));z-index:150;transform:translate(-50%,10px);max-width:min(88vw,430px);padding:8px 11px;border:1px solid color-mix(in srgb,var(--accent) 34%,var(--line));border-radius:999px;background:color-mix(in srgb,var(--panel1) 96%,black 4%);color:var(--text);font:850 7px/1.25 monospace;opacity:0;pointer-events:none;transition:.18s}.reviewToast.show{opacity:1;transform:translate(-50%,0)}
+body.gvaultReviewPicking,body.gvaultReviewPicking *{cursor:crosshair!important}
+@media(max-width:620px){.reviewFab{right:max(50px,calc(env(safe-area-inset-right) + 50px));bottom:max(8px,env(safe-area-inset-bottom))}.reviewPanel{max-height:74vh}.reviewModalButtons{grid-template-columns:1fr}}
+</style>
+
+<style data-gvault-public-mobile-skin="GVAULT_PUBLIC_MOBILE_SKIN_V1">
+/* Mobile-only integration pass for controls added by the public gateway.
+   Canonical Vault/SAS CSS remains untouched and continues to be mirrored from the private build. */
+@media(max-width:620px){
+  .updateFab,.reviewFab{width:44px;height:44px;min-width:44px;min-height:44px}
+  .updateFab{right:max(8px,env(safe-area-inset-right));bottom:max(8px,env(safe-area-inset-bottom))}
+  .reviewFab{right:max(60px,calc(env(safe-area-inset-right) + 60px));bottom:max(8px,env(safe-area-inset-bottom))}
+  .updatePanel{bottom:max(60px,calc(env(safe-area-inset-bottom) + 60px));width:min(94vw,410px);max-height:76vh}
+  .reviewPanel{bottom:max(60px,calc(env(safe-area-inset-bottom) + 60px));width:min(94vw,410px);max-height:76vh}
+  .closeUpdate,.reviewClose{width:44px;height:44px;min-width:44px;min-height:44px}
+  .updateCheck,.versionAction,.reviewAction,.reviewModalButtons button{min-height:44px}
+  .updateTitle,.reviewTitle{font-size:11px;line-height:1.25}
+  .versionName{font-size:11px;line-height:1.3}
+  .updateState,.versionMeta,.changeTitle,.changeItems,.reviewIntro,.reviewState,.reviewItem,.reviewDetected,.reviewSuggestions,.reviewModal label{font-size:10px;line-height:1.5}
+  .reviewModeText b{font-size:11px;line-height:1.3}
+  .reviewModeText span{font-size:10px;line-height:1.45}
+  .reviewModal select,.reviewModal textarea{font-size:11px;line-height:1.45}
+  .reviewModalButtons button,.reviewAction,.updateCheck,.versionAction{font-size:10px;line-height:1.25}
+}
+</style>
+</head>
+<body data-theme="vault">
+
+<canvas id="themeScene" aria-hidden="true"></canvas>
+<canvas id="themeFx" aria-hidden="true"></canvas>
+<div id="themeArtifacts" aria-hidden="true"></div>
+<div id="terminalSprites" aria-hidden="true"></div>
+
+<section class="lockScreen" id="lockScreen" aria-label="Écran verrouillé">
+  <div class="lockScreenInner" id="lockScreenTrigger" role="button" tabindex="0" aria-label="Afficher le déverrouillage">
+    <div class="phoneLockSymbol" aria-hidden="true"><span class="phoneLockBody"></span></div>
+    <div class="lockScreenTitle">GAME VAULT</div>
+    <div class="lockScreenHint">TOUCHER OU GLISSER VERS LE HAUT POUR DÉVERROUILLER</div>
+    <div class="lockSwipe" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="safe">
+  <button class="safeCollapse" id="safeCollapse" type="button" title="Revenir à l’écran verrouillé">⌄</button>
+  <div class="safeHead">
+    <div class="dial"></div>
+    <div class="safeTitle">
+      <b>GAME VAULT</b>
+      <span>ZONE PROTÉGÉE · ÉCRAN VERROUILLÉ · VFS α2.6</span>
+    </div>
+  </div>
+
+  <div class="agentWelcome">
+    <div class="agentDot">◆</div>
+    <div>
+      <b>VAULT AGENT</b>
+      <span id="agentWelcomeText">Bienvenue. Le coffre est verrouillé. Choisis ton thème puis déverrouille le Vault.</span>
+    </div>
+  </div>
+
+  <div class="status"><strong>ACCÈS VERROUILLÉ.</strong> Le mot de passe historique est vérifié avant montage du Vault VFS.</div>
+
+  <div class="field">
+    <label>THÈME</label>
+    <div class="themeRow">
+      <select id="entryTheme">
+        <option value="obsidian">OBSIDIAN</option>
+        <option value="vault">COFFRE-FORT</option>
+        <option value="light">CLAIR</option>
+        <option value="neon">NÉON RÉTRO</option>
+        <option value="terminal">TERMINAL</option>
+        <option value="mono">NOIR / BLANC</option>
+      </select>
+      <button id="themeCycle" type="button" title="Thème suivant">↻</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>MOT DE PASSE</label>
+    <div class="passRow">
+      <input id="vaultPassword" type="password" autocomplete="current-password">
+      <button id="togglePass" type="button">ŒIL</button>
+    </div>
+  </div>
+
+  <button class="unlock" id="unlockBtn">DÉVERROUILLER LE COFFRE</button>
+  <div class="loader" id="loader">VÉRIFICATION + MONTAGE VFS…</div>
+  <div class="error" id="error"></div>
+  <div class="entryNote">Le thème choisi ici sera repris automatiquement après ouverture. Les fonds/sprites du sas restent isolés du runtime principal.</div>
+</section>
+
+
+<button class="updateFab" id="vaultUpdateFab" type="button" aria-label="Versions et mises à jour" title="Versions et mises à jour">↻</button>
+<section class="updatePanel" id="vaultUpdatePanel" aria-label="Versions GVAULT">
+  <div class="updateHead"><div class="updateTitle">GVAULT · VERSIONS</div><button class="closeUpdate" id="vaultUpdateClose" type="button" aria-label="Fermer">×</button></div>
+  <button class="updateCheck" id="vaultUpdateCheck" type="button">RECHERCHER UNE MISE À JOUR</button>
+  <div class="updateState" id="vaultUpdateState">Registre non consulté.</div>
+  <div class="versionList" id="vaultVersionList"></div>
+</section>
+<script>
+(()=>{
+'use strict';
+const THEME_KEY='game_vault_theme_v1';
+  const THEMES=['obsidian','vault','light','neon','terminal','mono'];
+  const metaMap={obsidian:'#090b10',vault:'#16130e',light:'#eef2f6',neon:'#090610',terminal:'#020604',mono:'#050505'};
+  const msgs={
+    obsidian:'Obsidian actif. Les constellations de données se relient surtout hors de ta zone d’attention.',
+    vault:'Coffre-fort actif. Les archives mécaniques essaient de se refermer quand tu les approches.',
+    light:'Laboratoire actif. Les annotations deviennent plus lisibles quand ton attention s’en rapproche.',
+    neon:'Néon rétro actif. Les sprites arcade changent de trajectoire quand tu les approches.',
+    terminal:'Terminal actif. Les anomalies apparaissent plutôt hors de ta zone d’attention.',
+    mono:'Noir / blanc actif. Les signaux furtifs cherchent la zone opposée à ton attention.'
+  };
+
+  const $=s=>document.querySelector(s),
+        pass=$('#vaultPassword'),
+        btn=$('#unlockBtn'),
+        err=$('#error'),
+        loader=$('#loader'),
+        theme=$('#entryTheme'),
+        agent=$('#agentWelcomeText'),
+        fx=$('#themeFx'),
+        scene=$('#themeScene'),
+        artifacts=$('#themeArtifacts');
+
+  let failures=0,lockedUntil=0;
+  const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+  const safeRead=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+  const safeWrite=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+
+  const matrix=(()=>{
+    if(!fx) return {start(){},stop(){},resize(){}};
+    const ctx=fx.getContext('2d');
+    let raf=0,active=false,cols=0,drops=[],speeds=[],fontSize=16,dpr=1;
+    const chars='アイウエオカキクケコサシスセソ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$#@%&+';
+    function randomGlyph(){ return chars[Math.floor(Math.random()*chars.length)] }
+    function randomSpeed(){ return 0.12 + Math.random()*0.24 }
+    function resize(){
+      dpr=Math.min(window.devicePixelRatio||1,1.5);
+      fx.width=Math.floor(innerWidth*dpr);
+      fx.height=Math.floor(innerHeight*dpr);
+      fx.style.width=innerWidth+'px';
+      fx.style.height=innerHeight+'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      fontSize=Math.max(11, Math.floor(innerWidth/44));
+      cols=Math.max(12, Math.floor(innerWidth/fontSize));
+      drops=Array.from({length:cols},()=>Math.random()*-34);
+      speeds=Array.from({length:cols},()=>randomSpeed());
+    }
+    function draw(){
+      if(!active) return;
+      ctx.fillStyle='rgba(1,6,2,0.16)';
+      ctx.fillRect(0,0,innerWidth,innerHeight);
+      ctx.font=fontSize+'px monospace';
+      ctx.textBaseline='top';
+      for(let i=0;i<cols;i++){
+        const x=i*fontSize;
+        const y=drops[i]*fontSize;
+        ctx.fillStyle='rgba(205,255,214,0.92)';
+        ctx.fillText(randomGlyph(),x,y);
+        if(Math.random()>0.28){
+          ctx.fillStyle='rgba(97,255,133,0.66)';
+          ctx.fillText(randomGlyph(),x,y-fontSize);
+        }
+        if(Math.random()>0.58){
+          ctx.fillStyle='rgba(63,191,92,0.42)';
+          ctx.fillText(randomGlyph(),x,y-fontSize*2);
+        }
+        if(y>innerHeight+fontSize && Math.random()>0.992){
+          drops[i]=Math.random()*-22;
+          speeds[i]=randomSpeed();
+        }
+        drops[i]+=speeds[i];
+      }
+      raf=requestAnimationFrame(draw);
+    }
+    return {
+      start(){
+        if(active) return;
+        active=true;
+        resize();
+        ctx.fillStyle='rgba(0,0,0,1)';
+        ctx.fillRect(0,0,innerWidth,innerHeight);
+        draw();
+      },
+      stop(){
+        active=false;
+        if(raf) cancelAnimationFrame(raf);
+        raf=0;
+        ctx.clearRect(0,0,innerWidth,innerHeight);
+      },
+      resize
+    };
+  })();
+
+  const attentionTracker=(()=>{
+    let x=innerWidth*.5,y=innerHeight*.48,last=0,source='center';
+    const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+    function set(nx,ny,kind){
+      x=clamp(Number(nx)||innerWidth*.5,0,innerWidth);
+      y=clamp(Number(ny)||innerHeight*.5,0,innerHeight);
+      last=Date.now();source=kind||'input';
+    }
+    addEventListener('pointermove',e=>set(e.clientX,e.clientY,'pointer'),{passive:true});
+    addEventListener('pointerdown',e=>set(e.clientX,e.clientY,'pointer'),{passive:true});
+    addEventListener('touchstart',e=>{const t=e.touches?.[0];if(t)set(t.clientX,t.clientY,'touch')},{passive:true});
+    addEventListener('touchmove',e=>{const t=e.touches?.[0];if(t)set(t.clientX,t.clientY,'touch')},{passive:true});
+    addEventListener('focusin',e=>{
+      const r=e.target?.getBoundingClientRect?.();
+      if(r&&r.width&&r.height)set(r.left+r.width/2,r.top+r.height/2,'focus');
+    });
+    addEventListener('resize',()=>{x=clamp(x,0,innerWidth);y=clamp(y,0,innerHeight)});
+    function point(){
+      // If there has been no interaction for a while, attention slowly returns to the center.
+      if(Date.now()-last>6500){
+        x+=(innerWidth*.5-x)*.035;
+        y+=(innerHeight*.48-y)*.035;
+        source='center';
+      }
+      return {x,y,source,last};
+    }
+    function distance(px,py){const p=point();return Math.hypot(px-p.x,py-p.y)}
+    return {point,distance,set};
+  })();
+
+
+  function effectZones(){
+    const panel=document.querySelector('.safe')?.getBoundingClientRect();
+    const vw=innerWidth,vh=innerHeight;
+    if(!panel)return [{x:8,y:8,w:Math.max(40,vw-16),h:Math.max(40,vh-16)}];
+    const zones=[];
+    if(panel.top>54)zones.push({x:8,y:8,w:Math.max(60,vw-16),h:Math.max(36,panel.top-16)});
+    if(vh-panel.bottom>54)zones.push({x:8,y:panel.bottom+8,w:Math.max(60,vw-16),h:Math.max(36,vh-panel.bottom-16)});
+    if(panel.left>92)zones.push({x:8,y:8,w:Math.max(54,panel.left-16),h:Math.max(60,vh-16)});
+    if(vw-panel.right>92)zones.push({x:panel.right+8,y:8,w:Math.max(54,vw-panel.right-16),h:Math.max(60,vh-16)});
+    if(!zones.length){
+      zones.push({x:8,y:8,w:Math.max(100,vw*.46),h:62});
+      zones.push({x:Math.max(8,vw*.54),y:Math.max(8,vh-70),w:Math.max(100,vw*.42),h:62});
+    }
+    return zones;
+  }
+
+  function zoneAwayFromAttention(){
+    const gaze=attentionTracker.point();
+    const zones=effectZones();
+    return zones.map(z=>{
+      const cx=z.x+z.w/2,cy=z.y+z.h/2;
+      return {z,score:Math.hypot(cx-gaze.x,cy-gaze.y)+Math.random()*70};
+    }).sort((a,b)=>b.score-a.score)[0]?.z||zones[0];
+  }
+
+  function pointInZone(z,padX=80,padY=30){
+    return {
+      x:z.x+Math.random()*Math.max(5,z.w-padX),
+      y:z.y+Math.random()*Math.max(5,z.h-padY)
+    };
+  }
+
+  const themeSceneFx=(()=>{
+    if(!scene)return {setTheme(){},resize(){},stop(){}};
+    const ctx=scene.getContext('2d');
+    let raf=0,current='',dpr=1,w=0,h=0,stars=[],phase=0;
+
+    function resize(){
+      dpr=Math.min(devicePixelRatio||1,1.5);
+      w=innerWidth;h=innerHeight;
+      scene.width=Math.floor(w*dpr);scene.height=Math.floor(h*dpr);
+      scene.style.width=w+'px';scene.style.height=h+'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      stars=Array.from({length:Math.max(35,Math.floor(w*h/15000))},()=>({
+        x:Math.random()*w,y:Math.random()*h,
+        r:.5+Math.random()*1.5,p:Math.random()*Math.PI*2
+      }));
+    }
+
+    function clear(alpha=1){
+      ctx.clearRect(0,0,w,h);
+      if(alpha<1){ctx.fillStyle=`rgba(0,0,0,${alpha})`;ctx.fillRect(0,0,w,h)}
+    }
+
+    function drawObsidian(){
+      ctx.clearRect(0,0,w,h);
+      const gaze=attentionTracker.point();
+      for(const s of stars){
+        const tw=.35+.45*(.5+.5*Math.sin(phase*.018+s.p));
+        ctx.fillStyle=`rgba(174,239,255,${tw})`;
+        ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+      }
+      const far=stars.filter(s=>Math.hypot(s.x-gaze.x,s.y-gaze.y)>Math.min(w,h)*.25);
+      ctx.strokeStyle='rgba(102,230,255,.085)';
+      ctx.lineWidth=1;
+      for(let i=0;i<far.length-1;i+=3){
+        const a=far[i],b=far[(i+1)%far.length];
+        if(Math.hypot(a.x-b.x,a.y-b.y)<140){
+          ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+        }
+      }
+    }
+
+    function drawVault(){
+      ctx.clearRect(0,0,w,h);
+      const cx=w*.5,cy=h*.5;
+      ctx.strokeStyle='rgba(214,181,90,.055)';
+      ctx.lineWidth=1;
+      for(let r=80;r<Math.max(w,h);r+=74){
+        ctx.beginPath();
+        ctx.arc(cx,cy,r,phase*.0015+r*.002,phase*.0015+r*.002+Math.PI*1.35);
+        ctx.stroke();
+      }
+      ctx.strokeStyle='rgba(214,181,90,.035)';
+      for(let x=-h;x<w+h;x+=54){
+        ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x-h,h);ctx.stroke();
+      }
+    }
+
+    function drawLight(){
+      ctx.clearRect(0,0,w,h);
+      ctx.strokeStyle='rgba(8,125,156,.075)';
+      ctx.lineWidth=1;
+      const step=28;
+      for(let x=(phase*.03)%step;x<w;x+=step){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+      for(let y=0;y<h;y+=step){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+      ctx.strokeStyle='rgba(8,125,156,.12)';
+      ctx.beginPath();ctx.arc(w*.18,h*.22,48,0,Math.PI*1.55);ctx.stroke();
+      ctx.beginPath();ctx.arc(w*.82,h*.72,70,Math.PI*.2,Math.PI*1.7);ctx.stroke();
+      ctx.setLineDash([4,5]);
+      ctx.beginPath();ctx.moveTo(0,h*.62);ctx.lineTo(w,h*.38);ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    function drawNeon(){
+      ctx.clearRect(0,0,w,h);
+      const horizon=h*.58;
+      const grad=ctx.createLinearGradient(0,0,0,h);
+      grad.addColorStop(0,'rgba(255,79,216,.02)');
+      grad.addColorStop(1,'rgba(79,246,255,.09)');
+      ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
+
+      ctx.strokeStyle='rgba(79,246,255,.12)';
+      ctx.lineWidth=1;
+      for(let i=-10;i<=10;i++){
+        const bottomX=w*.5+i*w*.12;
+        ctx.beginPath();ctx.moveTo(w*.5,horizon);ctx.lineTo(bottomX,h);ctx.stroke();
+      }
+      for(let j=0;j<11;j++){
+        const t=j/10;
+        const y=horizon+(h-horizon)*(t*t);
+        ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();
+      }
+      ctx.fillStyle='rgba(255,79,216,.38)';
+      for(const s of stars.slice(0,Math.min(stars.length,40))){
+        const yy=(s.y+phase*.035)%Math.max(1,horizon-8);
+        ctx.fillRect(s.x,yy,1,1);
+      }
+    }
+
+    function drawMono(){
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle='rgba(255,255,255,.025)';
+      for(let y=(phase*.15)%7;y<h;y+=7)ctx.fillRect(0,y,w,1);
+      if(Math.random()>.985){
+        ctx.fillStyle='rgba(255,255,255,.06)';
+        ctx.fillRect(0,Math.random()*h,w,1+Math.random()*3);
+      }
+      if(Math.random()>.993){
+        ctx.fillStyle='rgba(255,255,255,.04)';
+        const bx=Math.random()*w,by=Math.random()*h;
+        ctx.fillRect(bx,by,20+Math.random()*80,4+Math.random()*18);
+      }
+    }
+
+    function draw(){
+      phase++;
+      if(current==='obsidian')drawObsidian();
+      else if(current==='vault')drawVault();
+      else if(current==='light')drawLight();
+      else if(current==='neon')drawNeon();
+      else if(current==='mono')drawMono();
+      else ctx.clearRect(0,0,w,h);
+      raf=requestAnimationFrame(draw);
+    }
+
+    function setTheme(themeName){
+      current=themeName==='terminal'?'':themeName;
+      if(!raf){resize();draw()}
+      if(!current)ctx.clearRect(0,0,w,h);
+    }
+    function stop(){
+      current='';
+      if(raf)cancelAnimationFrame(raf);
+      raf=0;ctx.clearRect(0,0,w,h);
+    }
+    resize();
+    return {setTheme,resize,stop};
+  })();
+
+  const themeArtifactFx=(()=>{
+    if(!artifacts)return {start(){},stop(){}};
+    let themeName='',timers=[],intervals=[],persistent=[];
+
+    const eggs=['GLITCH','VEYRA','CHECKPOINT','OCTOSPIRE','MIRROR','PROFILE LAB','MEGA EVOLUTION','ARI','DOJO','BRANCHE'];
+    const archiveEggs=[
+      ['VEYRA','ARCHIVE CITY.ROOT'],
+      ['GLITCH','AGENT RECORD'],
+      ['ALPHA 2.44','CANONICAL BUILD'],
+      ['CHECKPOINT','CONTINUITY LOCK'],
+      ['DO NOT MERGE','BRANCH RULE'],
+      ['MIRROR 3.2','AUDIT RECORD']
+    ];
+    const labEggs=[
+      ['VALIDÉ','rigueur en construction'],
+      ['À TESTER','interaction mobile'],
+      ['REJETÉ','doublon silencieux'],
+      ['OBSERVATION','liberté en interprétation'],
+      ['NOTE','chaos bien coiffé'],
+      ['AXE','respirer → réflexe']
+    ];
+    const neonEggs=[
+      ['◆','AGENT'],['◉','OCULUS'],['✣','OCTO'],['▣','TD'],['◇','GLITCH'],['⌁','MUTATION']
+    ];
+    const monoEggs=['◆','GLITCH','VEYRA','SIGNAL','CHECKPOINT','?'];
+
+    function clearAll(){
+      timers.forEach(clearTimeout);intervals.forEach(clearInterval);
+      timers=[];intervals=[];
+      persistent.forEach(el=>el.remove());persistent=[];
+      artifacts.innerHTML='';
+    }
+
+    function addTimer(fn,ms){const id=setTimeout(fn,ms);timers.push(id);return id}
+    function addInterval(fn,ms){const id=setInterval(fn,ms);intervals.push(id);return id}
+
+    function spawnObsidian(){
+      if(themeName!=='obsidian')return;
+      const z=zoneAwayFromAttention(),p=pointInZone(z,100,28);
+      const label=eggs[Math.floor(Math.random()*eggs.length)];
+      const gaze=attentionTracker.point();
+      const vx=p.x-gaze.x,vy=p.y-gaze.y,len=Math.max(1,Math.hypot(vx,vy));
+      const el=document.createElement('div');
+      el.className='themeArtifact constellationTag';
+      el.textContent=label;
+      el.style.setProperty('--x0',p.x+'px');el.style.setProperty('--y0',p.y+'px');
+      el.style.setProperty('--x1',(p.x+vx/len*16)+'px');el.style.setProperty('--y1',(p.y+vy/len*16)+'px');
+      el.style.setProperty('--life',(6+Math.random()*3)+'s');
+      artifacts.appendChild(el);
+      addTimer(()=>el.remove(),9500);
+      addTimer(spawnObsidian,1700+Math.random()*2600);
+    }
+
+    function createGears(){
+      const positions=[[7,14,58,29],[82,16,46,34],[9,78,42,31],[85,76,66,38]];
+      positions.forEach(([xp,yp,size,turn])=>{
+        const el=document.createElement('div');
+        el.className='themeArtifact vaultGear';
+        el.style.setProperty('--size',size+'px');
+        el.style.setProperty('--turn',turn+'s');
+        el.style.setProperty('--gx',(innerWidth*xp/100)+'px');
+        el.style.setProperty('--gy',(innerHeight*yp/100)+'px');
+        artifacts.appendChild(el);persistent.push(el);
+      });
+    }
+
+    function spawnVault(){
+      if(themeName!=='vault')return;
+      const z=zoneAwayFromAttention(),p=pointInZone(z,116,36);
+      const [label,code]=archiveEggs[Math.floor(Math.random()*archiveEggs.length)];
+      const el=document.createElement('div');
+      el.className='themeArtifact archiveSlip';
+      el.innerHTML=`<b>${label}</b><small>${code}</small>`;
+      el.style.setProperty('--x0',p.x+'px');el.style.setProperty('--y0',p.y+'px');
+      el.style.setProperty('--x1',(p.x+(Math.random()-.5)*10)+'px');el.style.setProperty('--y1',(p.y+8)+'px');
+      el.style.setProperty('--life',(5.8+Math.random()*2.4)+'s');
+      artifacts.appendChild(el);
+      const watch=addInterval(()=>{
+        if(!el.isConnected)return;
+        const r=el.getBoundingClientRect(),d=attentionTracker.distance(r.left+r.width/2,r.top+r.height/2);
+        if(d<82){el.style.opacity='0';el.style.clipPath='inset(0 100% 0 0)';}
+      },160);
+      addTimer(()=>{clearInterval(watch);el.remove()},9000);
+      addTimer(spawnVault,2300+Math.random()*3200);
+    }
+
+    function startNeonBase(){
+      const scan=document.createElement('div');scan.className='themeArtifact neonScanline';
+      artifacts.appendChild(scan);persistent.push(scan);
+    }
+
+    function spawnNeon(){
+      if(themeName!=='neon')return;
+      const z=zoneAwayFromAttention(),p=pointInZone(z,42,52);
+      const [glyph,code]=neonEggs[Math.floor(Math.random()*neonEggs.length)];
+      const el=document.createElement('div');
+      el.className='themeArtifact neonSprite';el.textContent=glyph;el.dataset.code=code;
+      let x=p.x,y=p.y,vx=(Math.random()>.5?1:-1)*(10+Math.random()*18),vy=(Math.random()-.5)*12;
+      el.style.transform=`translate3d(${x}px,${y}px,0)`;
+      artifacts.appendChild(el);
+      const born=Date.now();
+      const tick=addInterval(()=>{
+        if(!el.isConnected)return;
+        const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+        const gaze=attentionTracker.point(),d=Math.hypot(cx-gaze.x,cy-gaze.y);
+        if(d<105){
+          const ax=cx-gaze.x,ay=cy-gaze.y,len=Math.max(1,Math.hypot(ax,ay));
+          vx=(ax/len)*24;vy=(ay/len)*18;
+          el.style.filter='brightness(1.35)';
+        }else el.style.filter='none';
+        x+=vx*.08;y+=vy*.08;
+        if(x<4||x>innerWidth-32)vx*=-1;
+        if(y<4||y>innerHeight-42)vy*=-1;
+        el.style.transform=`translate3d(${x}px,${y}px,0)`;
+        if(Date.now()-born>7800){clearInterval(tick);el.remove()}
+      },50);
+      addTimer(spawnNeon,1500+Math.random()*2300);
+    }
+
+    function spawnLight(){
+      if(themeName!=='light')return;
+      const zones=effectZones(),z=zones[Math.floor(Math.random()*zones.length)],p=pointInZone(z,145,48);
+      const [label,code]=labEggs[Math.floor(Math.random()*labEggs.length)];
+      const el=document.createElement('div');
+      el.className='themeArtifact labNote';
+      el.innerHTML=`<b>${label}</b><small>${code}</small>`;
+      el.style.transform=`translate3d(${p.x}px,${p.y}px,0) rotate(${(-4+Math.random()*8).toFixed(1)}deg)`;
+      artifacts.appendChild(el);
+      const watch=addInterval(()=>{
+        if(!el.isConnected)return;
+        const r=el.getBoundingClientRect(),d=attentionTracker.distance(r.left+r.width/2,r.top+r.height/2);
+        const strength=Math.max(0,1-Math.min(1,d/180));
+        el.style.opacity=String(.16+strength*.78);
+        el.style.filter=strength>.55?'contrast(1.08)':'none';
+      },120);
+      addTimer(()=>{clearInterval(watch);el.remove()},10000);
+      addTimer(spawnLight,1800+Math.random()*3000);
+    }
+
+    function spawnMono(){
+      if(themeName!=='mono')return;
+      const gaze=attentionTracker.point();
+      const z=zoneAwayFromAttention();
+      let p=pointInZone(z,80,24);
+      // Push the signal further toward the opposite side of attention.
+      p.x=Math.max(6,Math.min(innerWidth-88,p.x+(p.x-gaze.x)*.18));
+      p.y=Math.max(6,Math.min(innerHeight-26,p.y+(p.y-gaze.y)*.18));
+      const el=document.createElement('div');
+      el.className='themeArtifact monoGhost';
+      el.textContent=monoEggs[Math.floor(Math.random()*monoEggs.length)];
+      el.style.transform=`translate3d(${p.x}px,${p.y}px,0)`;
+      el.style.setProperty('--life',(0.8+Math.random()*.75)+'s');
+      artifacts.appendChild(el);
+      addTimer(()=>el.remove(),1800);
+      addTimer(spawnMono,3800+Math.random()*5200);
+    }
+
+    function start(nextTheme){
+      clearAll();themeName=nextTheme;
+      if(nextTheme==='obsidian')addTimer(spawnObsidian,500);
+      else if(nextTheme==='vault'){createGears();addTimer(spawnVault,700)}
+      else if(nextTheme==='neon'){startNeonBase();addTimer(spawnNeon,550)}
+      else if(nextTheme==='light')addTimer(spawnLight,650);
+      else if(nextTheme==='mono')addTimer(spawnMono,1500);
+    }
+
+    function stop(){themeName='';clearAll()}
+    return {start,stop};
+  })();
+
+  const terminalSpriteFx=(()=>{
+    const layer=$('#terminalSprites');
+    if(!layer)return {start(){},stop(){}};
+
+    const easterEggs=[
+      ['GLITCH','PAA.AGENT'],
+      ['PIXEL AGENT ARENA','ALPHA'],
+      ['STR RPG ZERO','VEYRA'],
+      ['VEYRA','CITY.ROOT'],
+      ['MIRROR AUDIT','LAB.3.2'],
+      ['PROFILE LAB','DISCIPLINE'],
+      ['OCTOSPIRE','ENGINE'],
+      ['TRYPOZOMIC TD','FUSION'],
+      ['ARI','STR.ZERO'],
+      ['MEGA EVOLUTION','MUTATION'],
+      ['CHECKPOINT','CONTINUITY'],
+      ['DOJO','AGENT.TEST'],
+      ['ZONE INTERDITE','VAULT'],
+      ['CHAOS BIEN COIFFÉ','SIGNAL'],
+      ['RESPIRER','REFLEX'],
+      ['BRANCHE','DO NOT MERGE']
+    ];
+
+    let timer=0,active=false,last=-1;
+
+    function safeZone(){
+      const panel=document.querySelector('.safe')?.getBoundingClientRect();
+      const vw=innerWidth,vh=innerHeight;
+      if(!panel)return {zones:[{x:8,y:8,w:vw-16,h:vh-16}]};
+
+      const zones=[];
+      if(panel.top>44) zones.push({x:8,y:8,w:Math.max(40,vw-16),h:Math.max(24,panel.top-16)});
+      if(vh-panel.bottom>44) zones.push({x:8,y:panel.bottom+8,w:Math.max(40,vw-16),h:Math.max(24,vh-panel.bottom-16)});
+      if(panel.left>120) zones.push({x:8,y:8,w:Math.max(40,panel.left-16),h:Math.max(40,vh-16)});
+      if(vw-panel.right>120) zones.push({x:panel.right+8,y:8,w:Math.max(40,vw-panel.right-16),h:Math.max(40,vh-16)});
+
+      // On narrow phones there is little side-space: use the corners around the panel.
+      if(!zones.length){
+        zones.push({x:8,y:8,w:Math.max(100,vw*.48),h:58});
+        zones.push({x:Math.max(8,vw*.52),y:Math.max(8,vh-66),w:Math.max(100,vw*.44),h:58});
+      }
+      return {zones};
+    }
+
+    function pickEgg(){
+      let i=Math.floor(Math.random()*easterEggs.length);
+      if(i===last)i=(i+1)%easterEggs.length;
+      last=i;
+      return easterEggs[i];
+    }
+
+    function spawn(){
+      if(!active)return;
+      const [label,code]=pickEgg();
+      const zoneData=safeZone();
+      const gaze=attentionTracker.point();
+      const scored=zoneData.zones.map(z=>{
+        const cx=z.x+z.w/2,cy=z.y+z.h/2;
+        return {z,score:Math.hypot(cx-gaze.x,cy-gaze.y)+(Math.random()*90)};
+      }).sort((a,b)=>b.score-a.score);
+      const z=(scored[0]||{z:zoneData.zones[0]}).z;
+      const el=document.createElement('div');
+      el.className='matrixSprite';
+      el.innerHTML=`<span>${label}</span><span class="spriteCode">${code}</span>`;
+
+      let startX=z.x+Math.random()*Math.max(6,z.w-110);
+      let startY=z.y+Math.random()*Math.max(6,z.h-30);
+      // Try a few candidates and keep the one furthest from the estimated attention point.
+      let best={x:startX,y:startY,d:attentionTracker.distance(startX,startY)};
+      for(let k=0;k<5;k++){
+        const cx=z.x+Math.random()*Math.max(6,z.w-110);
+        const cy=z.y+Math.random()*Math.max(6,z.h-30);
+        const d=attentionTracker.distance(cx,cy);
+        if(d>best.d)best={x:cx,y:cy,d};
+      }
+      startX=best.x;startY=best.y;
+      const attentionNow=attentionTracker.point();
+      const vx=startX-attentionNow.x,vy=startY-attentionNow.y,len=Math.max(1,Math.hypot(vx,vy));
+      const driftX=(vx/len)*(10+Math.random()*18)+(Math.random()-.5)*8;
+      const driftY=(vy/len)*(10+Math.random()*18)+12+Math.random()*18;
+      el.style.setProperty('--x0',startX+'px');
+      el.style.setProperty('--y0',startY+'px');
+      el.style.setProperty('--x1',(startX+driftX)+'px');
+      el.style.setProperty('--y1',(startY+driftY)+'px');
+      el.style.setProperty('--life',(5.8+Math.random()*3.6)+'s');
+      layer.appendChild(el);
+      const dodge=()=>{
+        if(!el.isConnected)return;
+        const r=el.getBoundingClientRect();
+        const cx=r.left+r.width/2,cy=r.top+r.height/2;
+        const d=attentionTracker.distance(cx,cy);
+        el.style.filter=d<105?'brightness(1.35) saturate(1.2)':'none';
+        el.style.opacity=d<70?'0.42':'';
+      };
+      const dodgeTimer=setInterval(dodge,180);
+      setTimeout(()=>{clearInterval(dodgeTimer);el.remove()},10000);
+    }
+
+    function loop(){
+      if(!active)return;
+      spawn();
+      timer=setTimeout(loop,1800+Math.random()*2600);
+    }
+
+    return {
+      start(){
+        if(active)return;
+        active=true;
+        layer.innerHTML='';
+        // First sprite appears quickly so the user can notice the feature.
+        setTimeout(()=>active&&spawn(),350);
+        timer=setTimeout(loop,1800);
+      },
+      stop(){
+        active=false;
+        clearTimeout(timer);
+        layer.innerHTML='';
+      }
+    };
+  })();
+
+  function applyTheme(t,save=true){
+    const next=THEMES.includes(t)?t:'vault';
+    document.body.dataset.theme=next;
+    theme.value=next;
+    if(agent)agent.textContent=msgs[next]||msgs.vault;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content',metaMap[next]||'#16130e');
+    matrix.stop();
+    terminalSpriteFx.stop();
+    themeArtifactFx.stop();
+    themeSceneFx.setTheme(next);
+    if(next==='terminal'){
+      themeSceneFx.setTheme('');
+      matrix.start();
+      terminalSpriteFx.start();
+    }else{
+      themeArtifactFx.start(next);
+    }
+    if(save)safeWrite(THEME_KEY,next);
+  }
+
+  applyTheme(safeRead(THEME_KEY)||'vault',false);
+  theme.onchange=()=>applyTheme(theme.value,true);
+  $('#themeCycle').onclick=()=>{const i=THEMES.indexOf(theme.value);applyTheme(THEMES[(i+1)%THEMES.length],true)};
+  $('#togglePass').onclick=()=>pass.type=pass.type==='password'?'text':'password';
+  addEventListener('resize',()=>{matrix.resize();themeSceneFx.resize()});
+
+  // α2.6 — interaction type écran verrouillé de téléphone.
+  const lockTrigger=$('#lockScreenTrigger'),safeCollapse=$('#safeCollapse');
+  let lockStartY=null;
+  function showUnlockPrompt(){
+    document.body.classList.add('unlockPrompt');
+    document.body.classList.remove('unlockFailed');
+    setTimeout(()=>{try{pass.focus({preventScroll:true})}catch(_){pass.focus()}},260);
+  }
+  function hideUnlockPrompt(){
+    document.body.classList.remove('unlockPrompt','unlocking','unlockFailed');
+    pass.blur();err.textContent='';
+  }
+  if(lockTrigger){
+    lockTrigger.onclick=showUnlockPrompt;
+    lockTrigger.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showUnlockPrompt()}};
+    lockTrigger.addEventListener('pointerdown',e=>{lockStartY=e.clientY},{passive:true});
+    lockTrigger.addEventListener('pointerup',e=>{if(lockStartY!==null&&lockStartY-e.clientY>28)showUnlockPrompt();lockStartY=null},{passive:true});
+  }
+  if(safeCollapse)safeCollapse.onclick=hideUnlockPrompt;
+
+
+
+const updateFab=$('#vaultUpdateFab'),updatePanel=$('#vaultUpdatePanel'),updateClose=$('#vaultUpdateClose'),updateCheck=$('#vaultUpdateCheck'),updateState=$('#vaultUpdateState'),versionList=$('#vaultVersionList');
+const entryStatus=document.querySelector('.safe .status');
+const hex=b=>Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,'0')).join('');
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let sessionPassword='';
+let activeManifest=null;
+let releaseIndex=null;
+let selectedManifestUrl='./manifest.json';
+let selectedIterationId='';
+let selectionExplicit=false;
+async function sha256(bytes){return hex(await crypto.subtle.digest('SHA-256',bytes));}
+async function fetchOk(url,opts){const r=await fetch(url,opts);if(!r.ok)throw new Error(url+' HTTP '+r.status);return r;}
+function setEntryStatus(text,bad=false){if(entryStatus)entryStatus.innerHTML='<strong>'+esc(text)+'</strong>';err.textContent=bad?text:'';}
+async function waitFor(fn,timeout=60000,step=80){const end=Date.now()+timeout;while(Date.now()<end){try{const v=fn();if(v)return v}catch{}await sleep(step)}throw new Error('Délai de démarrage GVAULT dépassé');}
+async function decryptManifest(manifestUrl,password){
+ const url=new URL(manifestUrl,location.href);url.searchParams.set('ts',Date.now());
+ const m=await (await fetchOk(url.href,{cache:'no-store'})).json();
+ if(m.schema!=='GVAULT_PUBLIC_ENCRYPTED_V1')throw new Error('Manifeste incompatible');
+ const payloadUrl=new URL(m.payload.path,url);payloadUrl.search='';
+ const cipher=await (await fetchOk(payloadUrl.href,{cache:'force-cache'})).arrayBuffer();
+ if(cipher.byteLength!==m.payload.size)throw new Error('Taille payload invalide');
+ if(await sha256(cipher)!==m.payload.sha256)throw new Error('SHA payload invalide');
+ const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveKey']);
+ const k=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(m.crypto.saltB64),iterations:m.crypto.iterations,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+ const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(m.crypto.ivB64)},k,cipher);
+ if(plain.byteLength!==m.source.size)throw new Error('Taille source invalide');
+ if(await sha256(plain)!==m.source.sha256)throw new Error('SHA source invalide');
+ return {m,html:new TextDecoder('utf-8',{fatal:true}).decode(plain)};
+}
+async function launchCanonical(html,password){
+ const blob=new Blob([html],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(blob);
+ const frame=document.createElement('iframe');frame.className='runtimeFrame';frame.title='GVAULT';frame.src=url;frame.setAttribute('allow','clipboard-read; clipboard-write');document.body.appendChild(frame);
+ try{
+  await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(new Error('Chargement du SAS canonique impossible')),30000);frame.addEventListener('load',()=>{clearTimeout(t);resolve()},{once:true})});
+  const d=()=>frame.contentDocument;
+  await waitFor(()=>d()?.querySelector('#lockScreenTrigger'),30000);
+  d().querySelector('#lockScreenTrigger').click();
+  const internalTheme=d().querySelector('#entryTheme');if(internalTheme&&theme){internalTheme.value=theme.value;internalTheme.dispatchEvent(new Event('change',{bubbles:true}));}
+  const internalPw=await waitFor(()=>d()?.querySelector('#vaultPassword'),30000);internalPw.value=password;internalPw.dispatchEvent(new Event('input',{bubbles:true}));
+  const internalBtn=await waitFor(()=>d()?.querySelector('#unlockBtn'),30000);internalBtn.click();
+  await waitFor(()=>d()?.querySelector('#projectsBtn'),90000,120);
+  internalPw.value='';
+  const old=$('#gvaultRuntime');frame.id='gvaultRuntime';frame.classList.add('ready');if(old&&old!==frame)old.remove();
+  document.querySelector('#lockScreen')?.setAttribute('aria-hidden','true');
+  document.querySelector('.safe')?.setAttribute('aria-hidden','true');
+  document.querySelector('#lockScreen')?.style.setProperty('display','none');
+  document.querySelector('.safe')?.style.setProperty('display','none');
+  setTimeout(()=>URL.revokeObjectURL(url),1000);return frame;
+ }catch(e){frame.remove();URL.revokeObjectURL(url);throw e}
+}
+async function mountRelease(manifestUrl,password){const decoded=await decryptManifest(manifestUrl,password);await launchCanonical(decoded.html,password);activeManifest=decoded.m;sessionPassword=password;window.__GVAULT_PROJECT_STORE_PASSWORD__=password;selectedIterationId=decoded.m.iterationId||decoded.m.releaseId;renderVersions();return decoded.m;}
+function fmtDate(v){try{return new Intl.DateTimeFormat('fr-FR',{dateStyle:'short',timeStyle:'short'}).format(new Date(v))}catch{return v||''}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function currentFallbackEntry(){if(!activeManifest)return null;return {iterationId:activeManifest.iterationId||activeManifest.releaseId,releaseId:activeManifest.releaseId,publishedAt:activeManifest.publishedAt,sourceSha256:activeManifest.source?.sha256,manifest:'manifest.json',changelog:activeManifest.changelog||{title:activeManifest.releaseId,items:[]}};}
+function entries(){const list=Array.isArray(releaseIndex?.releases)?releaseIndex.releases.slice(0,3):[];if(!list.length){const e=currentFallbackEntry();if(e)list.push(e)}return list;}
+function renderVersions(){
+ const list=entries();versionList.innerHTML='';
+ for(const item of list){
+  const active=!!activeManifest&&(item.iterationId||item.releaseId)===(activeManifest.iterationId||activeManifest.releaseId);
+  const selected=!active&&selectedIterationId&&(item.iterationId===selectedIterationId);
+  const card=document.createElement('article');card.className='versionCard';
+  const items=Array.isArray(item.changelog?.items)?item.changelog.items:[];
+  const label=active?'ACTIVE':selected?'SÉLECTIONNÉ':'CHOISIR';
+  card.innerHTML='<div class="versionTop"><div><div class="versionName">'+esc(item.releaseId||item.iterationId)+'</div><div class="versionMeta">'+esc(fmtDate(item.publishedAt))+' · '+esc(String(item.sourceSha256||'').slice(0,12))+'</div></div><button class="versionAction" type="button" '+((active||selected)?'disabled':'')+'>'+label+'</button></div><div class="changeTitle">'+esc(item.changelog?.title||'Changelog')+'</div>'+(items.length?'<ul class="changeItems">'+items.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'<div class="versionMeta">Aucun détail public supplémentaire.</div>');
+  const action=card.querySelector('.versionAction');if(!active&&!selected)action.addEventListener('click',()=>chooseRelease(item,action));versionList.appendChild(card);
+ }
+ if(releaseIndex?.latestIterationId&&activeManifest&&(releaseIndex.latestIterationId!==(activeManifest.iterationId||activeManifest.releaseId)))updateFab.classList.add('hasUpdate');else updateFab.classList.remove('hasUpdate');
+}
+async function refreshVersions(){
+ if(window.GVaultOfficialRefs?.reload)return window.GVaultOfficialRefs.reload();
+ updateState.textContent='Catalogue OFFICIEL en initialisation…';
+}
+async function chooseRelease(item,action){
+ selectedManifestUrl=item.manifest;selectedIterationId=item.iterationId||item.releaseId;selectionExplicit=true;renderVersions();
+ if(!sessionPassword){updateState.textContent='VERSION SÉLECTIONNÉE · déverrouille le coffre pour l’ouvrir.';return}
+ action.disabled=true;updateState.textContent='Vérification et montage de '+(item.releaseId||item.iterationId)+'…';
+ try{await mountRelease(item.manifest,sessionPassword);updateState.textContent='VERSION CHARGÉE · '+(activeManifest.releaseId||activeManifest.iterationId);await refreshVersions()}catch(e){updateState.textContent='ÉCHEC DU CHANGEMENT · '+(e?.name==='OperationError'?'authentification refusée':(e?.message||e));action.disabled=false}
+}
+async function unlock(){
+ if(!pass.value){err.textContent='Mot de passe requis.';return}
+ btn.disabled=true;loader.classList.add('show');err.textContent='';document.body.classList.add('unlocking');document.body.classList.remove('unlockFailed');applyTheme(theme.value,true);
+ try{const m=await mountRelease(selectedManifestUrl||'./manifest.json',pass.value);setEntryStatus('INTÉGRITÉ VALIDÉE · '+(m.releaseId||m.iterationId));pass.value='';setTimeout(refreshVersions,350)}
+ catch(e){console.error(e);sessionPassword='';err.textContent='Accès refusé.';document.body.classList.remove('unlocking');document.body.classList.add('unlockFailed');setTimeout(()=>document.body.classList.remove('unlockFailed'),420);pass.value='';pass.focus()}
+ finally{btn.disabled=false;loader.classList.remove('show')}
+}
+updateFab.addEventListener('click',()=>{updatePanel.classList.toggle('open');if(updatePanel.classList.contains('open'))refreshVersions()});
+updateClose.addEventListener('click',()=>updatePanel.classList.remove('open'));
+updateCheck.addEventListener('click',refreshVersions);
+btn.onclick=unlock;pass.addEventListener('keydown',e=>{if(e.key==='Enter')unlock()});
+})();
+</script>
+
+<button class="reviewFab" id="vaultReviewFab" type="button" aria-label="Baguette de revue" title="Baguette de revue">🪄</button>
+<section class="reviewPanel" id="vaultReviewPanel" aria-label="Revue interactive GVAULT">
+  <div class="reviewHead"><div class="reviewTitle">GVAULT · BAGUETTE DE REVUE</div><button class="reviewClose" id="vaultReviewClose" type="button" aria-label="Fermer">×</button></div>
+  <div class="reviewIntro">Active un mode puis touche la zone concernée. Les actions et signalements sont ajoutés au rapport local sans exposer le dépôt privé.</div>
+  <div class="reviewModes">
+    <label class="reviewMode"><span class="reviewModeText"><b>SUPPRIMER / RÉORGANISER</b><span>Sélectionne un élément, détecte les risques et propose suppression, déplacement, fusion ou masquage.</span></span><input class="reviewSwitch" id="vaultReviewArrange" type="checkbox" role="switch" aria-label="Mode supprimer ou réorganiser"></label>
+    <label class="reviewMode"><span class="reviewModeText"><b>SIGNALEMENT</b><span>Chaque clic ouvre une fiche : diagnostic automatique + ce que tu as remarqué.</span></span><input class="reviewSwitch" id="vaultReviewReport" type="checkbox" role="switch" aria-label="Mode signalement"></label>
+  </div>
+  <div class="reviewState" id="vaultReviewState">Mode inactif.</div>
+  <div class="reviewActions">
+    <button class="reviewAction" id="vaultReviewCopy" type="button">COPIER LE RAPPORT</button>
+    <button class="reviewAction" id="vaultReviewUndo" type="button">RÉAFFICHER LE DERNIER</button>
+    <button class="reviewAction full" id="vaultReviewClear" type="button">EFFACER LE RAPPORT LOCAL</button>
+  </div>
+  <div class="reviewItems" id="vaultReviewItems"></div>
+</section>
+<div class="reviewPickOutline" id="vaultReviewOutline" aria-hidden="true"></div>
+<div class="reviewModalShade" id="vaultReviewModalShade" role="dialog" aria-modal="true" aria-labelledby="vaultReviewModalTitle">
+  <div class="reviewModal">
+    <h3 id="vaultReviewModalTitle">GVAULT · CAPTURE DE REVUE</h3>
+    <div class="reviewDetected" id="vaultReviewDetected"></div>
+    <div class="reviewSuggestions" id="vaultReviewSuggestions"></div>
+    <label for="vaultReviewIntent">ACTION / INTENTION</label>
+    <select id="vaultReviewIntent">
+      <option value="SIGNALER">SIGNALER</option>
+      <option value="SUPPRIMER">SUPPRIMER</option>
+      <option value="DEPLACER">DÉPLACER</option>
+      <option value="FUSIONNER">FUSIONNER</option>
+      <option value="MASQUER">MASQUER</option>
+      <option value="A_ETUDIER">À ÉTUDIER</option>
+    </select>
+    <label for="vaultReviewNote">CE QUE TU AS REMARQUÉ</label>
+    <textarea id="vaultReviewNote" placeholder="À chaque signalement, note ce que tu as remarqué ici…"></textarea>
+    <div class="reviewModalButtons">
+      <button id="vaultReviewCancel" type="button">ANNULER</button>
+      <button id="vaultReviewHide" type="button">MASQUER POUR CETTE SESSION</button>
+      <button class="primary" id="vaultReviewSave" type="button">AJOUTER AU RAPPORT</button>
+    </div>
+  </div>
+</div>
+<div class="reviewToast" id="vaultReviewToast" role="status" aria-live="polite"></div>
+
+<script data-gvault-review-tool="GVAULT_SAS_REVIEW_TOOL_V1">
+(()=>{
+'use strict';
+const KEY='gvault_sas_review_report_v1';
+const SCHEMA='GVAULT_SAS_REVIEW_REPORT_V1';
+const q=(s,r=document)=>r.querySelector(s);
+const qa=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const fab=q('#vaultReviewFab'),panel=q('#vaultReviewPanel'),close=q('#vaultReviewClose'),arrange=q('#vaultReviewArrange'),report=q('#vaultReviewReport'),state=q('#vaultReviewState'),items=q('#vaultReviewItems'),copyBtn=q('#vaultReviewCopy'),undoBtn=q('#vaultReviewUndo'),clearBtn=q('#vaultReviewClear'),outline=q('#vaultReviewOutline'),shade=q('#vaultReviewModalShade'),detected=q('#vaultReviewDetected'),suggestions=q('#vaultReviewSuggestions'),intent=q('#vaultReviewIntent'),note=q('#vaultReviewNote'),cancel=q('#vaultReviewCancel'),hideBtn=q('#vaultReviewHide'),saveBtn=q('#vaultReviewSave'),toast=q('#vaultReviewToast');
+let mode='',pending=null,lastHidden=null,toastTimer=0;
+const reportState=load();
+function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&v.schema===SCHEMA&&Array.isArray(v.entries))return v}catch{}return {schema:SCHEMA,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),entries:[]}}
+function persist(){reportState.updatedAt=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify(reportState))}catch{}renderReport()}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toastMsg(v){clearTimeout(toastTimer);toast.textContent=v;toast.classList.add('show');toastTimer=setTimeout(()=>toast.classList.remove('show'),2200)}
+function isTool(el){return !!el?.closest?.('#vaultReviewFab,#vaultReviewPanel,#vaultReviewModalShade,#vaultReviewToast')}
+function contextName(doc){return doc===document?'SAS':'RUNTIME'}
+function selectorFor(el){if(!el||el.nodeType!==1)return '';if(el.id)return '#'+CSS.escape(el.id);const bits=[];let n=el;for(let depth=0;n&&n.nodeType===1&&depth<4;depth++,n=n.parentElement){let part=n.tagName.toLowerCase();const cls=Array.from(n.classList||[]).filter(x=>!x.startsWith('review')).slice(0,2);if(cls.length)part+='.'+cls.map(CSS.escape).join('.');if(n.parentElement){const same=Array.from(n.parentElement.children).filter(x=>x.tagName===n.tagName);if(same.length>1)part+=':nth-of-type('+(same.indexOf(n)+1)+')'}bits.unshift(part);if(n.id)break}return bits.join(' > ')}
+function textFor(el){if(!el)return '';const tag=el.tagName||'';if(/^(INPUT|TEXTAREA|SELECT)$/i.test(tag)){const label=el.getAttribute('aria-label')||el.getAttribute('placeholder')||el.name||el.id||tag;return '[champ '+String(label).slice(0,80)+']'}return String(el.innerText||el.textContent||'').replace(/\s+/g,' ').trim().slice(0,180)}
+function diagnose(el,doc){const r=el.getBoundingClientRect();const win=doc.defaultView||window;const s=win.getComputedStyle(el);const vw=win.innerWidth,vh=win.innerHeight;const d=[];if(r.left<0||r.top<0||r.right>vw||r.bottom>vh)d.push('élément partiellement hors écran');if(el.scrollWidth>el.clientWidth+2)d.push('débordement horizontal interne');if(el.scrollHeight>el.clientHeight+2&&s.overflowY==='hidden')d.push('contenu vertical masqué');if(/BUTTON|A|INPUT|SELECT/.test(el.tagName)&&(r.width<44||r.height<44))d.push('cible tactile inférieure à 44 px');if(s.display==='none'||s.visibility==='hidden'||Number(s.opacity)===0)d.push('élément non visible');const cx=Math.max(0,Math.min(vw-1,r.left+r.width/2)),cy=Math.max(0,Math.min(vh-1,r.top+r.height/2));let top=[];try{top=doc.elementsFromPoint(cx,cy).filter(x=>x!==el&&!el.contains(x)&&!x.contains(el)).slice(0,3).map(selectorFor)}catch{}if(top.length)d.push('superposition possible : '+top.join(', '));if(!d.length)d.push('aucun défaut géométrique évident détecté automatiquement');return {rect:{x:Math.round(r.x),y:Math.round(r.y),width:Math.round(r.width),height:Math.round(r.height)},viewport:{width:vw,height:vh,dpr:win.devicePixelRatio||1},style:{display:s.display,position:s.position,zIndex:s.zIndex,overflowX:s.overflowX,overflowY:s.overflowY},diagnostics:d}}
+function propose(el,ctx,diag){const out=[];const sel=selectorFor(el);if(ctx==='SAS'&&el.closest('.safe')){out.push('Si secondaire : déplacer dans un bloc repliable du panneau protégé.');out.push('Si redondant : fusionner avec le bloc voisin au lieu de multiplier les contrôles.')}if(ctx==='SAS'&&el.closest('#themeArtifacts,#terminalSprites,canvas'))out.push('Décor : préférer masquer ou alléger plutôt que supprimer une fonction interactive.');if(el.matches('button,a,[role="button"]'))out.push('Contrôle interactif : vérifier qu’une fonction équivalente reste accessible avant suppression.');if(diag.diagnostics.some(x=>x.includes('hors écran')||x.includes('débordement')))out.push('Déplacement conseillé : ramener la cible dans la zone sûre mobile sans modifier le flux principal.');if(diag.diagnostics.some(x=>x.includes('44 px')))out.push('Agrandir la zone tactile ou fusionner ce contrôle avec une action voisine.');if(el.closest('.updatePanel,.updateFab'))out.push('Élément du gestionnaire de versions : conserver la fonction mais possibilité de la ranger dans le groupe outils bas-droite.');if(!out.length){out.push('Option 1 : masquer temporairement pour mesurer l’impact visuel.');out.push('Option 2 : déplacer vers une zone secondaire cohérente avant suppression définitive.');out.push('Option 3 : fusionner avec un voisin si les deux servent la même intention.')}return out.slice(0,4)}
+function capture(el,doc,ev){const ctx=contextName(doc);const diag=diagnose(el,doc);return {context:ctx,selector:selectorFor(el),tag:el.tagName,id:el.id||'',classes:Array.from(el.classList||[]).slice(0,8),text:textFor(el),click:{x:Math.round(ev.clientX||0),y:Math.round(ev.clientY||0)},...diag,suggestions:propose(el,ctx,diag),capturedAt:new Date().toISOString(),_el:el}}
+function openCapture(el,doc,ev){pending=capture(el,doc,ev);const d=pending.diagnostics.map(x=>'• '+x).join('\n');detected.innerHTML='<b>'+esc(pending.context)+' · '+esc(pending.selector||pending.tag)+'</b>\n'+esc(pending.text||'(sans texte)')+'\nZone '+pending.rect.width+'×'+pending.rect.height+' @ '+pending.rect.x+','+pending.rect.y+'\n'+esc(d);suggestions.innerHTML='<b>SOLUTIONS PROPOSÉES</b>\n'+pending.suggestions.map((x,i)=>(i+1)+'. '+esc(x)).join('\n');intent.value=mode==='report'?'SIGNALER':'SUPPRIMER';note.value='';shade.classList.add('open');outline.classList.remove('show');setTimeout(()=>note.focus(),50)}
+function setMode(next){mode=next;arrange.checked=mode==='arrange';report.checked=mode==='report';document.body.classList.toggle('gvaultReviewPicking',!!mode);fab.classList.toggle('active',!!mode);state.textContent=mode==='arrange'?'SUPPRIMER / RÉORGANISER actif · touche un élément à examiner.':mode==='report'?'SIGNALEMENT actif · touche une zone, puis note ce que tu as remarqué.':'Mode inactif.'}
+function onPick(ev,doc){if(!mode||shade.classList.contains('open'))return;const el=ev.target;if(!el||isTool(el))return;ev.preventDefault();ev.stopPropagation();ev.stopImmediatePropagation?.();openCapture(el,doc,ev)}
+function onMove(ev,doc){if(!mode||shade.classList.contains('open'))return;const el=ev.target;if(!el||isTool(el)){outline.classList.remove('show');return}const r=el.getBoundingClientRect();if(doc===document){outline.style.left=r.left+'px';outline.style.top=r.top+'px'}else{const fr=q('#gvaultRuntime')?.getBoundingClientRect();if(!fr)return;outline.style.left=(fr.left+r.left)+'px';outline.style.top=(fr.top+r.top)+'px'}outline.style.width=r.width+'px';outline.style.height=r.height+'px';outline.classList.add('show')}
+function attachDoc(doc){if(!doc||doc.__gvaultReviewAttached)return;doc.__gvaultReviewAttached=true;doc.addEventListener('click',e=>onPick(e,doc),true);doc.addEventListener('pointermove',e=>onMove(e,doc),true)}
+attachDoc(document);
+function attachRuntime(){const fr=q('#gvaultRuntime');try{if(fr?.contentDocument)attachDoc(fr.contentDocument)}catch{}}
+new MutationObserver(attachRuntime).observe(document.documentElement,{childList:true,subtree:true});setInterval(attachRuntime,1500);
+function cleanEntry(p){const {_el,...safe}=p;return safe}
+function savePending(){if(!pending)return;const entry={id:'gvr_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),kind:mode==='report'?'SIGNALEMENT':'REVUE_STRUCTURE',intent:intent.value,userNote:note.value.trim(),...cleanEntry(pending)};reportState.entries.unshift(entry);if(reportState.entries.length>100)reportState.entries.length=100;persist();shade.classList.remove('open');pending=null;toastMsg(entry.kind+' ajouté au rapport · '+reportState.entries.length)}
+function hidePending(){if(!pending?._el)return;const el=pending._el;const old=el.style.display;el.style.setProperty('display','none','important');lastHidden={el,old};intent.value='MASQUER';const had=note.value.trim();note.value=(had?had+'\n':'')+'Prévisualisation : élément masqué pour cette session.';savePending();undoBtn.disabled=false}
+function undoHide(){if(!lastHidden?.el){toastMsg('Aucun élément masqué à réafficher.');return}lastHidden.el.style.display=lastHidden.old||'';lastHidden=null;undoBtn.disabled=true;toastMsg('Dernier élément réaffiché.')}
+function renderReport(){const list=reportState.entries.slice(0,6);fab.dataset.count=String(reportState.entries.length);fab.classList.toggle('hasItems',reportState.entries.length>0);items.innerHTML=list.length?list.map((e,i)=>'<div class="reviewItem"><b>#'+(reportState.entries.length-i)+' · '+esc(e.kind)+' · '+esc(e.context)+'</b><br>'+esc(e.intent)+' · '+esc(e.selector)+'<br>'+esc(e.userNote||e.diagnostics?.[0]||'Sans note')+'</div>').join(''):'<div class="reviewItem">Aucun signalement enregistré.</div>'}
+function reportText(){const lines=['# GVAULT — RAPPORT DE REVUE INTERACTIVE','', '- Format : '+SCHEMA,'- Mis à jour : '+reportState.updatedAt,'- Entrées : '+reportState.entries.length,''];reportState.entries.forEach((e,i)=>{lines.push('## '+(i+1)+'. '+e.kind+' · '+e.intent,'- Capture : '+e.capturedAt,'- Contexte : '+e.context,'- Cible : '+e.selector,'- Zone : '+e.rect.width+'×'+e.rect.height+' @ '+e.rect.x+','+e.rect.y,'- Viewport : '+e.viewport.width+'×'+e.viewport.height+' DPR '+e.viewport.dpr,'- Diagnostic : '+(e.diagnostics||[]).join(' | '),'- Note utilisateur : '+(e.userNote||'(aucune)'),'- Solutions : '+(e.suggestions||[]).join(' | '),'')});return lines.join('\n')}
+async function copyReport(){const t=reportText();try{await navigator.clipboard.writeText(t);toastMsg('Rapport copié · '+reportState.entries.length+' entrée(s).')}catch{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toastMsg('Rapport copié · '+reportState.entries.length+' entrée(s).')}}
+fab.addEventListener('click',()=>{panel.classList.toggle('open');q('#vaultUpdatePanel')?.classList.remove('open');if(panel.classList.contains('open'))renderReport()});
+q('#vaultUpdateFab')?.addEventListener('click',()=>panel.classList.remove('open'),true);
+close.addEventListener('click',()=>panel.classList.remove('open'));
+arrange.addEventListener('change',()=>setMode(arrange.checked?'arrange':''));
+report.addEventListener('change',()=>setMode(report.checked?'report':''));
+cancel.addEventListener('click',()=>{shade.classList.remove('open');pending=null});
+shade.addEventListener('click',e=>{if(e.target===shade){shade.classList.remove('open');pending=null}});
+saveBtn.addEventListener('click',savePending);hideBtn.addEventListener('click',hidePending);undoBtn.addEventListener('click',undoHide);copyBtn.addEventListener('click',copyReport);clearBtn.addEventListener('click',()=>{if(!confirm('Effacer le rapport de revue local sur cet appareil ?'))return;reportState.entries=[];persist();toastMsg('Rapport local effacé.')});
+undoBtn.disabled=true;renderReport();setMode('');
+})();
+</script>
+
+<script data-gvault-review-integration="GVAULT_REVIEW_INTEGRATION_V2">
+(()=>{
+'use strict';
+const KEY='gvault_sas_review_report_v1';
+const q=s=>document.querySelector(s);
+const panel=q('#vaultReviewPanel');
+const fab=q('#vaultReviewFab');
+const arrange=q('#vaultReviewArrange');
+const report=q('#vaultReviewReport');
+const shade=q('#vaultReviewModalShade');
+const outline=q('#vaultReviewOutline');
+const modalButtons=shade?.querySelector('.reviewModalButtons');
+const detected=q('#vaultReviewDetected');
+const intent=q('#vaultReviewIntent');
+const note=q('#vaultReviewNote');
+const save=q('#vaultReviewSave');
+const hide=q('#vaultReviewHide');
+const undo=q('#vaultReviewUndo');
+const moveStack=[];
+
+for(const sw of [arrange,report]) sw?.addEventListener('change',()=>{
+  if(sw.checked) requestAnimationFrame(()=>panel?.classList.remove('open'));
+});
+
+// SIGNALEMENT is intentionally one-shot: every action that validates/saves the
+// current report entry must return the gateway to its normal interaction mode.
+function finishSignalementOneShot(){
+  if(!report?.checked)return;
+  report.checked=false;
+  arrange && (arrange.checked=false);
+  report.dispatchEvent(new Event('change',{bubbles:true}));
+  shade?.classList.remove('open');
+  panel?.classList.remove('open');
+  outline?.classList.remove('show');
+  document.body.classList.remove('gvaultReviewPicking');
+  fab?.classList.remove('active');
+}
+save?.addEventListener('click',finishSignalementOneShot);
+hide?.addEventListener('click',finishSignalementOneShot);
+
+function reportEntries(){
+  try{
+    const v=JSON.parse(localStorage.getItem(KEY)||'null');
+    return v&&Array.isArray(v.entries)?v.entries:[];
+  }catch{return []}
+}
+function clean(v,n=700){return String(v??'').replace(/\s+/g,' ').trim().slice(0,n)}
+function reportSection(){
+  const entries=reportEntries();
+  const out=['## ALERTES VISUELLES / BAGUETTE','- Format : GVAULT_SAS_REVIEW_REPORT_V1','- Entrées : '+entries.length,'- Confidentialité : aucune valeur de champ n’est capturée automatiquement.'];
+  for(const [i,e] of entries.entries()){
+    out.push('','### '+(i+1)+'. '+clean(e.kind,80)+' · '+clean(e.intent,80),
+      '- Capture : '+clean(e.capturedAt,100),
+      '- Contexte : '+clean(e.context,80),
+      '- Cible : '+clean(e.selector,280),
+      '- Diagnostic : '+clean((e.diagnostics||[]).join(' | '),900),
+      '- Ce que tu as remarqué : '+clean(e.userNote||'(aucune)',1600),
+      '- Solutions proposées : '+clean((e.suggestions||[]).join(' | '),1200));
+  }
+  return out.join('\n');
+}
+function patchRuntime(frame){
+  try{
+    const w=frame?.contentWindow;
+    if(!w||w.__gvaultReviewReportBridgeV2)return;
+    if(typeof w.buildVaultBugReport==='function'){
+      const original=w.buildVaultBugReport;
+      w.buildVaultBugReport=function(...args){
+        const base=original.apply(this,args);
+        return String(base??'')+'\n\n'+reportSection();
+      };
+      w.__gvaultReviewReportBridgeV2=true;
+    }
+  }catch{}
+}
+function watchRuntime(){
+  const f=q('#gvaultRuntime');
+  if(f){patchRuntime(f);f.addEventListener('load',()=>setTimeout(()=>patchRuntime(f),80),{once:true})}
+}
+new MutationObserver(watchRuntime).observe(document.documentElement,{childList:true,subtree:true});
+setInterval(watchRuntime,1200);
+watchRuntime();
+
+function currentTarget(){
+  const first=(detected?.textContent||'').split(/\n/)[0].trim();
+  const sep=first.indexOf(' · ');
+  if(sep<0)return null;
+  const context=first.slice(0,sep).trim();
+  const selector=first.slice(sep+3).trim();
+  let doc=document;
+  if(context==='RUNTIME'){
+    try{doc=q('#gvaultRuntime')?.contentDocument||document}catch{return null}
+  }
+  try{return {context,selector,doc,el:doc.querySelector(selector)}}catch{return null}
+}
+function destinationFor(t){
+  if(!t?.el)return null;
+  const selectors=t.context==='RUNTIME'
+    ? ['.systemActions','.maintenanceGrid','.actions','.toolbar','.topin','.systemInfo','nav','footer']
+    : ['.safe','.agentWelcome'];
+  for(const s of selectors){
+    for(const c of t.doc.querySelectorAll(s)){
+      if(c!==t.el&&!c.contains(t.el)&&!t.el.contains(c))return c;
+    }
+  }
+  return null;
+}
+
+let moveBtn=null;
+if(modalButtons){
+  moveBtn=document.createElement('button');
+  moveBtn.id='vaultReviewMove';
+  moveBtn.type='button';
+  moveBtn.textContent='DÉPLACER · PRÉVISUALISER';
+  modalButtons.insertBefore(moveBtn,save||null);
+  moveBtn.addEventListener('click',()=>{
+    const t=currentTarget();
+    const dest=destinationFor(t);
+    if(!t?.el||!dest)return;
+    const parent=t.el.parentNode,next=t.el.nextSibling;
+    const destLabel=dest.id?'#'+dest.id:(dest.className?'.'+String(dest.className).trim().split(/\s+/).slice(0,2).join('.'):dest.tagName.toLowerCase());
+    dest.appendChild(t.el);
+    moveStack.push(()=>{try{next&&next.parentNode===parent?parent.insertBefore(t.el,next):parent.appendChild(t.el)}catch{}});
+    if(intent)intent.value='DEPLACER';
+    if(note){
+      const base=note.value.trim();
+      note.value=(base?base+'\n':'')+'Prévisualisation réversible : élément déplacé vers '+destLabel+'.';
+    }
+    if(undo)undo.disabled=false;
+    save?.click();
+  });
+}
+function refreshMove(){
+  if(!moveBtn)return;
+  const t=currentTarget(),dest=destinationFor(t);
+  moveBtn.disabled=!t?.el||!dest;
+  moveBtn.title=dest?'Déplacement provisoire et réversible vers une zone cohérente.':'Aucune zone de déplacement sûre détectée automatiquement.';
+}
+if(shade)new MutationObserver(()=>{if(shade.classList.contains('open'))setTimeout(refreshMove,0)}).observe(shade,{attributes:true,attributeFilter:['class']});
+undo?.addEventListener('click',ev=>{
+  if(!moveStack.length)return;
+  ev.preventDefault();ev.stopImmediatePropagation();
+  moveStack.pop()?.();
+  undo.disabled=!moveStack.length;
+},true);
+
+window.GVaultReviewBridge=Object.freeze({
+  schema:'GVAULT_REVIEW_INTEGRATION_V2',
+  reportSection,
+  entries:()=>reportEntries().map(x=>({...x})),
+  signalementOneShot:true,
+  signalementOneShotActions:Object.freeze(['save','hide-session'])
+});
+})();
+</script>
+
+<script data-gvault-project-store="GVAULT_PUBLIC_PROJECT_STORE_BRIDGE_V1">
+(()=>{'use strict';
+const M='./project-store/manifest.json';
+const hex=b=>Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,'0')).join('');
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const sha=async b=>hex(await crypto.subtle.digest('SHA-256',b));
+let installedKey='',installPromise=null;
+async function decryptStore(password){
+ const u=new URL(M,location.href);u.searchParams.set('ts',Date.now());
+ const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw new Error('project-store manifest HTTP '+r.status);
+ const m=await r.json();if(m.schema!=='GVAULT_ENCRYPTED_PROJECT_STORE_V1')throw new Error('project-store manifest incompatible');
+ const pu=new URL(m.payload.path,u);pu.search='';const c=await (await fetch(pu,{cache:'force-cache'})).arrayBuffer();
+ if(c.byteLength!==m.payload.size||await sha(c)!==m.payload.sha256)throw new Error('project-store encrypted payload invalid');
+ const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveKey']);
+ const k=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(m.crypto.saltB64),iterations:m.crypto.iterations,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+ const p=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(m.crypto.ivB64)},k,c);
+ if(p.byteLength!==m.source.size||await sha(p)!==m.source.sha256)throw new Error('project-store clear payload invalid');
+ const store=JSON.parse(new TextDecoder().decode(p));if(store.schema!=='GVAULT_PROJECT_SOURCE_STORE_V1'||!Array.isArray(store.projects))throw new Error('project-store schema invalid');return store;
+}
+function apiFor(store){
+ const pick=(id,version)=>{const list=store.projects.filter(x=>x.projectId===id);if(!list.length)return null;if(version)return list.find(x=>x.version===version)||null;return list.sort((a,b)=>String(b.approvedAt||'').localeCompare(String(a.approvedAt||'')))[0]||null};
+ return Object.freeze({schema:'GVAULT_PRIVATE_PROJECT_SOURCES_V1',source:'encrypted-private-official-store',list:()=>store.projects.map(({projectId,name,version,approvedAt,files})=>({projectId,name,version,approvedAt,fileCount:files.length})),has:(id,version)=>!!pick(id,version),get:(id,version)=>pick(id,version),getText:(id,version,file)=>{const p=pick(id,version);if(!p)return null;const f=p.files.find(x=>x.path===file)||p.files[0];return f?new TextDecoder().decode(Uint8Array.from(atob(f.contentB64),c=>c.charCodeAt(0))):null}});
+}
+async function install(){
+ const pw=window.__GVAULT_PROJECT_STORE_PASSWORD__,frame=document.querySelector('#gvaultRuntime');if(!pw||!frame?.contentWindow)return null;
+ const key=String(frame.src||'')+'|'+pw.length;
+ if(installedKey===key&&window.GVAULT_PRIVATE_PROJECT_SOURCES_V1)return window.GVAULT_PRIVATE_PROJECT_SOURCES_V1;
+ if(installPromise)return installPromise;
+ installPromise=(async()=>{const store=await decryptStore(pw),api=apiFor(store);frame.contentWindow.GVAULT_PRIVATE_PROJECT_SOURCES_V1=api;frame.contentWindow.gvaultResolveProjectSource=(id,version)=>api.get(id,version);frame.contentWindow.dispatchEvent(new CustomEvent('gvault:private-project-source-store-ready',{detail:{projectCount:store.projects.length}}));window.GVAULT_PRIVATE_PROJECT_SOURCES_V1=api;installedKey=key;return api;})();
+ try{return await installPromise}catch(e){console.warn('[GVAULT project-store]',e);return null}finally{installPromise=null}
+}
+window.addEventListener('gvault:request-project-source',async e=>{try{const d=e.detail||{},api=window.GVAULT_PRIVATE_PROJECT_SOURCES_V1||await install();if(api&&typeof d.resolve==='function')d.resolve(api.get(d.projectId,d.version));else if(!api&&typeof d.reject==='function')d.reject(new Error('project-store unavailable'))}catch(err){try{const d=e.detail||{};if(typeof d.reject==='function')d.reject(err)}catch{}}});
+window.GVaultProjectStore=Object.freeze({install,status:()=>({installed:!!window.GVAULT_PRIVATE_PROJECT_SOURCES_V1,busy:!!installPromise})});
+})();
+</script>
+
+<!-- GVAULT_PRIVATE_OFFICIAL_REFS_SELECTOR_START -->
+<script id="gvault-private-official-refs-v2" data-gvault-private-official-refs="GVAULT_PRIVATE_OFFICIAL_REFS_V2">
+(()=>{
+'use strict';
+const SCHEMA='GVAULT_PUBLIC_OFFICIAL_REFS_V1';
+let refs=[],currentSha='',loading=false;
+const q=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
+const fmt=v=>{if(!v)return '';try{return new Intl.DateTimeFormat('fr-FR',{dateStyle:'short',timeStyle:'short'}).format(new Date(v))}catch{return String(v)}};
+function state(text){const el=q('#vaultUpdateState');if(el)el.textContent=text}
+function render(){
+ const list=q('#vaultVersionList');if(!list)return;
+ list.dataset.privateOfficialRefs='2';list.innerHTML='';
+ for(const item of refs){
+  const active=item.sourceSha256===currentSha;
+  const card=document.createElement('article');card.className='versionCard';
+  card.dataset.releaseId=String(item.releaseId||'');card.dataset.sourceSha=String(item.sourceSha256||'');card.dataset.availability=String(item.availability||'');
+  const items=Array.isArray(item.changelog?.items)?item.changelog.items:[];
+  const aliases=Array.isArray(item.aliases)&&item.aliases.length?' · '+item.aliases.join(', '):'';
+  const actionLabel=active?'ACTIVE':'CHOISIR';
+  card.innerHTML='<div class="versionTop"><div><div class="versionName">'+esc(item.releaseId||'OFFICIELLE')+esc(aliases)+'</div><div class="versionMeta">'+esc(fmt(item.publishedAt))+(item.publishedAt?' · ':'')+esc(String(item.sourceSha256||'').slice(0,12))+'</div></div><button class="versionAction" type="button" '+(active?'disabled':'')+'>'+actionLabel+'</button></div><div class="changeTitle">'+esc(item.changelog?.title||item.releaseId||'Changelog')+'</div>'+(items.length?'<ul class="changeItems">'+items.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'<div class="versionMeta">Référence officielle privée.</div>');
+  list.appendChild(card);
+ }
+ const activeRef=refs.find(x=>x.sourceSha256===currentSha);
+ const newest=refs[refs.length-1]||null;
+ const hasDifferent=!!newest&&newest.sourceSha256!==currentSha;
+ q('#vaultUpdateFab')?.classList.toggle('hasUpdate',hasDifferent);
+ state('Catalogue OFFICIEL actualisé · '+refs.length+' racine(s) privée(s) référencée(s) · active : '+(activeRef?.releaseId||'inconnue')+'.');
+}
+async function reload(){
+ if(loading)return;loading=true;
+ const check=q('#vaultUpdateCheck');if(check)check.disabled=true;
+ state('Actualisation depuis le registre OFFICIEL privé…');
+ try{
+  const r=await fetch('./manifest.json?officialRefs='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
+  const m=await r.json();const c=m?.officialRefs;
+  if(c?.schema!==SCHEMA||!Array.isArray(c.releases))throw new Error('Références OFFICIELLES absentes ou incompatibles');
+  currentSha=String(m?.source?.sha256||'');refs=c.releases.slice();render();
+ }catch(e){state('Actualisation impossible · '+(e?.message||e));}
+ finally{loading=false;if(check)check.disabled=false}
+}
+function wire(){
+ const check=q('#vaultUpdateCheck'),fab=q('#vaultUpdateFab');
+ check?.addEventListener('click',()=>{queueMicrotask(reload)});
+ fab?.addEventListener('click',()=>{if(q('#vaultUpdatePanel')?.classList.contains('open'))queueMicrotask(reload)});
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{wire();reload()},{once:true});else{wire();reload()}
+window.GVaultOfficialRefs=Object.freeze({schema:'GVAULT_PRIVATE_OFFICIAL_REFS_V2',reload,list:()=>refs.map(x=>({...x})),currentSha:()=>currentSha});
+})();
+</script>
+<!-- GVAULT_PRIVATE_OFFICIAL_REFS_SELECTOR_END -->
+
+<!-- GVAULT_OFFICIAL_PREVIEW_BLOB_START -->
+<style id="gvault-official-preview-blob-style">
+#gvaultOfficialPreviewShell{position:fixed;inset:0;z-index:2147483500;background:#000;display:none;overflow:hidden}
+#gvaultOfficialPreviewShell.open{display:block}
+#gvaultOfficialPreviewFrame{position:absolute;inset:0;z-index:2147483550;width:100%;height:100%;border:0;background:#000;display:block}
+#gvaultOfficialPreviewExit{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));z-index:2147483647;width:56px;height:56px;min-width:56px;min-height:56px;border:2px solid #ff6b6b;border-radius:50%;background:#8f0d14;color:#fff;font:900 30px/1 ui-monospace,SFMono-Regular,Menlo,monospace;display:none;place-items:center;box-shadow:0 0 0 3px rgba(0,0,0,.72),0 8px 24px rgba(0,0,0,.45);cursor:pointer;touch-action:manipulation}
+#gvaultOfficialPreviewExit.show{display:grid}
+#gvaultOfficialPreviewExit:focus-visible{outline:3px solid #fff;outline-offset:3px}
+#gvaultOfficialPreviewState{position:fixed;left:82px;bottom:max(18px,calc(env(safe-area-inset-bottom) + 6px));z-index:2147483646;max-width:min(72vw,520px);padding:7px 9px;border:1px solid rgba(255,107,107,.5);border-radius:9px;background:rgba(10,10,10,.88);color:#fff;font:800 10px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;display:none;pointer-events:none}
+#gvaultOfficialPreviewState.show{display:block}
+body.gvaultOfficialPreviewOpen{overflow:hidden!important}
+</style>
+<div id="gvaultOfficialPreviewShell" aria-hidden="true">
+  <iframe id="gvaultOfficialPreviewFrame" title="Prévisualisation temporaire d’une version GVAULT" sandbox="allow-scripts allow-forms allow-modals allow-downloads allow-pointer-lock"></iframe>
+</div>
+<button id="gvaultOfficialPreviewExit" type="button" aria-label="Quitter la prévisualisation de mise à jour" title="Quitter la prévisualisation">×</button>
+<div id="gvaultOfficialPreviewState" role="status" aria-live="polite"></div>
+<script id="gvault-official-preview-blob-v1" data-gvault-official-preview="GVAULT_OFFICIAL_PREVIEW_BLOB_V1" data-gvault-encrypted-preview-transport="GVAULT_PUBLIC_ENCRYPTED_PREVIEW_TRANSPORT_V1">
+(()=>{
+'use strict';
+const CONTRACT='GVAULT_OFFICIAL_PREVIEW_BLOB_V1';
+const q=s=>document.querySelector(s);
+const shell=q('#gvaultOfficialPreviewShell'),frame=q('#gvaultOfficialPreviewFrame'),exit=q('#gvaultOfficialPreviewExit'),previewState=q('#gvaultOfficialPreviewState');
+let provider=null,currentUrl='',currentItem=null,busy=false;
+const hex=b=>Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,'0')).join('');
+const b64=s=>Uint8Array.from(atob(String(s||'')),c=>c.charCodeAt(0));
+const sha256=async b=>hex(await crypto.subtle.digest('SHA-256',b));
+function state(text,show=true){if(previewState){previewState.textContent=String(text||'');previewState.classList.toggle('show',!!show&&!!text)}const s=q('#vaultUpdateState');if(s&&text)s.textContent=String(text)}
+function cleanup(){
+ try{frame.removeAttribute('src')}catch{}
+ if(currentUrl){try{URL.revokeObjectURL(currentUrl)}catch{}currentUrl=''}
+ currentItem=null;busy=false;
+ shell?.classList.remove('open');shell?.setAttribute('aria-hidden','true');exit?.classList.remove('show');previewState?.classList.remove('show');document.body.classList.remove('gvaultOfficialPreviewOpen');
+}
+function close(){cleanup();state('Prévisualisation fermée · version active inchangée.',false)}
+async function normalize(payload,item){
+ let blob=null;
+ if(payload instanceof Blob)blob=payload;
+ else if(typeof payload==='string')blob=new Blob([payload],{type:'text/html;charset=utf-8'});
+ else if(payload?.blob instanceof Blob)blob=payload.blob;
+ else if(typeof payload?.html==='string')blob=new Blob([payload.html],{type:'text/html;charset=utf-8'});
+ else if(payload?.bytes instanceof ArrayBuffer)blob=new Blob([payload.bytes],{type:'text/html;charset=utf-8'});
+ else if(ArrayBuffer.isView(payload?.bytes))blob=new Blob([payload.bytes],{type:'text/html;charset=utf-8'});
+ if(!blob)throw new Error('Le transport de prévisualisation n’a fourni aucun HTML prévisualisable.');
+ const bytes=await blob.arrayBuffer();
+ if(Number(item.sourceSize)!==bytes.byteLength)throw new Error('Taille de la racine privée différente de la référence OFFICIELLE.');
+ const digest=await sha256(bytes);
+ if(digest!==String(item.sourceSha256||''))throw new Error('SHA-256 de la racine privée différent de la référence OFFICIELLE.');
+ return new Blob([bytes],{type:'text/html;charset=utf-8'});
+}
+const PREVIEW_SAS_BRIDGE_SOURCE="(()=>{'use strict';const NONCE='__GVAULT_NONCE__';let accepted=false;const send=(schema,extra)=>parent.postMessage(Object.assign({schema,nonce:NONCE},extra||{}),'*');const wait=(sel,timeout)=>new Promise((resolve,reject)=>{const end=Date.now()+(timeout||30000);(function tick(){const el=document.querySelector(sel);if(el)return resolve(el);if(Date.now()>end)return reject(new Error('Élément SAS introuvable: '+sel));setTimeout(tick,60)})()});async function unlock(secret){let pw=String(secret||'');try{if(document.querySelector('#projectsBtn')){send('GVAULT_PREVIEW_SAS_UNLOCKED_V1',{alreadyUnlocked:true});return}const trigger=document.querySelector('#lockScreenTrigger');if(trigger)trigger.click();const input=await wait('#vaultPassword',30000);input.value=pw;input.dispatchEvent(new Event('input',{bubbles:true}));input.dispatchEvent(new Event('change',{bubbles:true}));const button=await wait('#unlockBtn',30000);button.click();await wait('#projectsBtn',90000);input.value='';send('GVAULT_PREVIEW_SAS_UNLOCKED_V1',{alreadyUnlocked:false})}catch(e){send('GVAULT_PREVIEW_SAS_FAILED_V1',{message:String(e&&e.message||e)})}finally{pw=''}}window.addEventListener('message',e=>{if(accepted||e.source!==parent)return;const d=e.data||{};if(d.schema!=='GVAULT_PREVIEW_SAS_SESSION_V1'||d.nonce!==NONCE||typeof d.password!=='string'||!d.password)return;accepted=true;void unlock(d.password)});send('GVAULT_PREVIEW_SAS_READY_V1');})();";
+function previewNonce(){const b=crypto.getRandomValues(new Uint8Array(16));return Array.from(b,x=>x.toString(16).padStart(2,'0')).join('')}
+async function preparePreviewBlob(blob,item){
+ if(item?.preview?.transport!=='PUBLIC_CIPHERTEXT_SAS_MEMORY_ONLY')return {blob,nonce:''};
+ const nonce=previewNonce();
+ const source=await blob.text();
+ const bridge='<script data-gvault-preview-sas-reuse="GVAULT_PREVIEW_SAS_REUSE_V1">'+PREVIEW_SAS_BRIDGE_SOURCE.replace('__GVAULT_NONCE__',nonce)+'<\/script>';
+ const at=source.toLowerCase().lastIndexOf('</body>');
+ const wrapped=at>=0?source.slice(0,at)+bridge+source.slice(at):source+bridge;
+ return {blob:new Blob([wrapped],{type:'text/html;charset=utf-8'}),nonce};
+}
+async function reusePreviewSas(nonce,item){
+ if(!nonce)return;
+ const password=window.__GVAULT_PROJECT_STORE_PASSWORD__;
+ if(!password)throw new Error('Session SAS indisponible pour la racine prévisualisée.');
+ state('Réutilisation du SAS pour '+(item.releaseId||'OFFICIELLE')+'…');
+ await new Promise((resolve,reject)=>{
+  let done=false;
+  const finish=(err)=>{if(done)return;done=true;clearTimeout(timer);window.removeEventListener('message',onMessage);err?reject(err):resolve()};
+  const onMessage=ev=>{
+   if(ev.source!==frame.contentWindow)return;
+   const d=ev.data||{};if(d.nonce!==nonce)return;
+   if(d.schema==='GVAULT_PREVIEW_SAS_UNLOCKED_V1')finish();
+   else if(d.schema==='GVAULT_PREVIEW_SAS_FAILED_V1')finish(new Error('SAS interne bloqué · '+String(d.message||'échec inconnu')));
+  };
+  const timer=setTimeout(()=>finish(new Error('SAS interne de prévisualisation non déverrouillé dans le délai.')),95000);
+  window.addEventListener('message',onMessage);
+  frame.contentWindow?.postMessage({schema:'GVAULT_PREVIEW_SAS_SESSION_V1',nonce,password},'*');
+ });
+}
+async function decryptPublicPacket(item){
+ const ref=item?.preview;
+ if(ref?.schema!=='GVAULT_OFFICIAL_PREVIEW_REF_V1'||ref?.transport!=='PUBLIC_CIPHERTEXT_SAS_MEMORY_ONLY'||!ref?.manifest)throw new Error('Transport privé de prévisualisation indisponible.');
+ const password=window.__GVAULT_PROJECT_STORE_PASSWORD__;
+ if(!password)throw new Error('Session SAS indisponible · ouvrez d’abord GVAULT avec le mot de passe.');
+ state('Téléchargement chiffré de '+(item.releaseId||'OFFICIELLE')+'…');
+ const manifestUrl=new URL(ref.manifest,location.href);manifestUrl.searchParams.set('preview',Date.now());
+ const r=await fetch(manifestUrl.href,{cache:'no-store'});if(!r.ok)throw new Error('Manifest de prévisualisation HTTP '+r.status);
+ const m=await r.json();
+ if(m?.schema!=='GVAULT_OFFICIAL_PREVIEW_ENCRYPTED_V1'||m?.purpose!=='MEMORY_BLOB_PREVIEW_ONLY')throw new Error('Manifest de prévisualisation incompatible.');
+ if(String(m.releaseId||'')!==String(item.releaseId||''))throw new Error('Identité de version de prévisualisation incohérente.');
+ if(String(m.source?.sha256||'')!==String(item.sourceSha256||'')||Number(m.source?.size)!==Number(item.sourceSize))throw new Error('Racine chiffrée différente de la référence OFFICIELLE.');
+ const payloadUrl=new URL(m.payload?.path||'',manifestUrl);payloadUrl.search='';
+ const cr=await fetch(payloadUrl.href,{cache:'force-cache'});if(!cr.ok)throw new Error('Payload chiffré HTTP '+cr.status);
+ const cipher=await cr.arrayBuffer();
+ if(cipher.byteLength!==Number(m.payload?.size))throw new Error('Taille du payload chiffré invalide.');
+ if(await sha256(cipher)!==String(m.payload?.sha256||''))throw new Error('SHA du payload chiffré invalide.');
+ state('Déchiffrement mémoire de '+(item.releaseId||'OFFICIELLE')+'…');
+ const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveKey']);
+ const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(m.crypto?.saltB64),iterations:Number(m.crypto?.iterations),hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+ let plain;
+ try{plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(m.crypto?.ivB64)},key,cipher)}catch{throw new Error('Déchiffrement impossible · mot de passe/session invalide ou paquet altéré.');}
+ if(plain.byteLength!==Number(item.sourceSize))throw new Error('Taille déchiffrée invalide.');
+ if(await sha256(plain)!==String(item.sourceSha256||''))throw new Error('SHA déchiffré différent de la racine OFFICIELLE.');
+ return {bytes:plain};
+}
+async function request(item){
+ if(provider)return provider(Object.freeze({...item}));
+ if(item?.preview?.manifest)return decryptPublicPacket(item);
+ return new Promise((resolve,reject)=>{
+  let settled=false;
+  const done=v=>{if(settled)return;settled=true;clearTimeout(timer);resolve(v)};
+  const fail=e=>{if(settled)return;settled=true;clearTimeout(timer);reject(e instanceof Error?e:new Error(String(e||'Transport privé indisponible')))};
+  const timer=setTimeout(()=>fail(new Error('Transport privé de prévisualisation indisponible.')),1500);
+  window.dispatchEvent(new CustomEvent('gvault:request-official-preview',{detail:{schema:'GVAULT_OFFICIAL_PREVIEW_REQUEST_V1',releaseId:item.releaseId,sourceSha256:item.sourceSha256,sourceSize:item.sourceSize,resolve:done,reject:fail}}));
+ });
+}
+async function open(item){
+ if(busy)return;
+ if(!item||item.sourceSha256===window.GVaultOfficialRefs?.currentSha?.())return;
+ busy=true;currentItem={...item};
+ state('Préparation de '+(item.releaseId||'OFFICIELLE')+'…');
+ try{
+  const payload=await request(item);
+  const verifiedBlob=await normalize(payload,item);
+  const prepared=await preparePreviewBlob(verifiedBlob,item);
+  cleanup();busy=true;currentItem={...item};
+  currentUrl=URL.createObjectURL(prepared.blob);
+  frame.src=currentUrl;
+  shell.classList.add('open');shell.setAttribute('aria-hidden','false');exit.classList.add('show');previewState.classList.add('show');document.body.classList.add('gvaultOfficialPreviewOpen');
+  state('PRÉVISUALISATION · '+(item.releaseId||'OFFICIELLE')+' · Blob mémoire · version active inchangée.');
+  await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(new Error('Le Blob de prévisualisation ne démarre pas.')),30000);frame.addEventListener('load',()=>{clearTimeout(t);resolve()},{once:true})});
+  await reusePreviewSas(prepared.nonce,item);
+  state('PRÉVISUALISATION · '+(item.releaseId||'OFFICIELLE')+' · SAS réutilisé · version active inchangée.');
+ }catch(e){cleanup();state('PRÉVISUALISATION IMPOSSIBLE · '+(e?.message||e));throw e}
+ finally{busy=false}
+}
+function installProvider(fn){if(typeof fn!=='function')throw new TypeError('Le provider de prévisualisation doit être une fonction.');provider=fn;return ()=>{if(provider===fn)provider=null}}
+function enhance(){
+ const list=q('#vaultVersionList');if(!list)return;
+ for(const card of list.querySelectorAll('.versionCard')){
+  const button=card.querySelector('.versionAction');if(!button||button.dataset.previewBound==='1'||button.disabled)continue;
+  button.dataset.previewBound='1';button.textContent='CHOISIR';
+  button.addEventListener('click',ev=>{
+   ev.preventDefault();ev.stopImmediatePropagation();
+   const refs=window.GVaultOfficialRefs?.list?.()||[];
+   const item=refs.find(x=>String(x.releaseId||'')===String(card.dataset.releaseId||'')&&String(x.sourceSha256||'')===String(card.dataset.sourceSha||''));
+   if(!item){state('Référence OFFICIELLE introuvable après actualisation.');return}
+   open(item).catch(()=>{});
+  },true);
+ }
+}
+exit?.addEventListener('click',close);
+window.addEventListener('keydown',e=>{if(e.key==='Escape'&&shell?.classList.contains('open')){e.preventDefault();close()}},true);
+const list=q('#vaultVersionList');if(list)new MutationObserver(enhance).observe(list,{childList:true,subtree:true});
+queueMicrotask(enhance);
+window.GVaultOfficialPreviewTransport=Object.freeze({schema:'GVAULT_OFFICIAL_PREVIEW_TRANSPORT_V2',installProvider,hasProvider:()=>!!provider,hasEncryptedPacket:item=>!!item?.preview?.manifest});
+window.GVaultOfficialPreview=Object.freeze({schema:CONTRACT,open,close,isOpen:()=>!!shell?.classList.contains('open'),current:()=>currentItem?{...currentItem}:null});
+})();
+</script>
+<!-- GVAULT_OFFICIAL_PREVIEW_BLOB_END -->
+</body>
+</html>

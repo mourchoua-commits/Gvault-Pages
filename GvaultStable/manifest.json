@@ -1,0 +1,118 @@
+{
+  "schema": "GVAULT_PUBLIC_ENCRYPTED_V1",
+  "releaseId": "R5.6.2",
+  "iterationId": "R5.6.2-cdd9a9cbe3db",
+  "publishedAt": "2026-08-26T17:04:51.957Z",
+  "source": {
+    "sha256": "cdd9a9cbe3db9fddfd414276ffee7b123ffdcf6036be6b9338f39148c4f5c198",
+    "size": 20288261
+  },
+  "changelog": {
+    "title": "R5.6.2 · STRUCTURAL SAFETY",
+    "items": [
+      "Correction canonique de l’isolation des pannes Designer et Système identifiée par l’audit structurel.",
+      "featureFromTarget attribue désormais correctement les surfaces Designer et Système.",
+      "emergencyRelease ferme le Designer, le Système et le navigateur VFS concernés puis relâche designLabOpen/systemLabOpen.",
+      "Le mécanisme de fermeture d’urgence accepte plusieurs surfaces pour une même fonctionnalité.",
+      "Le VFS, les projets, les builds embarquées et leurs données métier ne sont pas modifiés par cette révision.",
+      "La passerelle publique reste dérivée du PHONE_LOCK privé puis chiffrée et vérifiée avant publication.",
+      "Baguette one-shot et correctif tactile mobile du gateway conservés."
+    ]
+  },
+  "crypto": {
+    "cipher": "AES-256-GCM",
+    "kdf": "PBKDF2-HMAC-SHA256",
+    "iterations": 900000,
+    "saltB64": "UJ9/igJ9VoHrjsxL84nj4Q==",
+    "ivB64": "WGDCOk59Uj8JOoOn"
+  },
+  "payload": {
+    "path": "vault.ff479f09629ce5795a82643b213efa9da68bbbc7f423bff1f9944f33d6ba6422.bin",
+    "sha256": "ff479f09629ce5795a82643b213efa9da68bbbc7f423bff1f9944f33d6ba6422",
+    "size": 20288277
+  },
+  "officialRefs": {
+    "schema": "GVAULT_PUBLIC_OFFICIAL_REFS_V1",
+    "generatedAt": "2026-08-27T00:38:12.501Z",
+    "authority": "PRIVATE_ROOTS_SANITIZED_REFERENCES",
+    "releases": [
+      {
+        "releaseId": "R5.6.1",
+        "aliases": [
+          "R5.6.1-TEST2"
+        ],
+        "sourceSha256": "581a0a74068f28ef4b471f6b093499f1b6324b5a6cc286cfdf8e912f3c6b5a14",
+        "sourceSize": 20312655,
+        "publishedAt": "2026-08-26T11:19:57.270Z",
+        "changelog": {
+          "title": "R5.6.1 · QA COHERENCE",
+          "items": [
+            "PHONE_LOCK canonique conservé et vérifié.",
+            "SAS public unique : une seule saisie du mot de passe.",
+            "Publication chiffrée automatique depuis le dépôt privé.",
+            "Historique sélectable des trois dernières itérations du Vault."
+          ]
+        },
+        "availability": "PRIVATE_ROOT_REFERENCE",
+        "preview": {
+          "schema": "GVAULT_OFFICIAL_PREVIEW_REF_V1",
+          "transport": "PUBLIC_CIPHERTEXT_SAS_MEMORY_ONLY",
+          "manifest": "previews/581a0a74068f28ef4b471f6b093499f1b6324b5a6cc286cfdf8e912f3c6b5a14/manifest.json",
+          "purpose": "MEMORY_BLOB_PREVIEW_ONLY"
+        }
+      },
+      {
+        "releaseId": "R5.6.2",
+        "aliases": [],
+        "sourceSha256": "cdd9a9cbe3db9fddfd414276ffee7b123ffdcf6036be6b9338f39148c4f5c198",
+        "sourceSize": 20288261,
+        "publishedAt": "2026-08-26T15:01:33.589Z",
+        "changelog": {
+          "title": "R5.6.2 · STRUCTURAL SAFETY",
+          "items": [
+            "Correction canonique de l’isolation des pannes Designer et Système identifiée par l’audit structurel.",
+            "featureFromTarget attribue désormais correctement les surfaces Designer et Système.",
+            "emergencyRelease ferme le Designer, le Système et le navigateur VFS concernés puis relâche designLabOpen/systemLabOpen.",
+            "Le mécanisme de fermeture d’urgence accepte plusieurs surfaces pour une même fonctionnalité.",
+            "Le VFS, les projets, les builds embarquées et leurs données métier ne sont pas modifiés par cette révision.",
+            "La passerelle publique reste dérivée du PHONE_LOCK privé puis chiffrée et vérifiée avant publication.",
+            "Baguette one-shot et correctif tactile mobile du gateway conservés."
+          ]
+        },
+        "availability": "PUBLIC_CURRENT_ENCRYPTED"
+      },
+      {
+        "releaseId": "R5.6.3",
+        "aliases": [],
+        "sourceSha256": "793fa9995a053acb71c41721d21126d99775e53ab4a9bf64eacf47d95e2f77bc",
+        "sourceSize": 20308766,
+        "publishedAt": "2026-08-26T19:40:52.000Z",
+        "changelog": {
+          "title": "R5.6.3 · ALPHA VALIDÉE",
+          "items": [
+            "Promotion officielle de R5.6.2-CATALYSE.",
+            "Alpha validée : R5.6.2-CATALYSE-793fa9995a05.",
+            "Candidate unique en attente de validation · 3 modification(s) de index.html depuis R5.6.2.",
+            "r1 · fix: FICSA report modal above full-screen labs",
+            "r2 · feat: add post-SAS admin project approval control",
+            "r3 · catalyse: refresh Gactu + Admin in GVAULT runtime"
+          ]
+        },
+        "availability": "PRIVATE_ROOT_REFERENCE",
+        "preview": {
+          "schema": "GVAULT_OFFICIAL_PREVIEW_REF_V1",
+          "transport": "PUBLIC_CIPHERTEXT_SAS_MEMORY_ONLY",
+          "manifest": "previews/793fa9995a053acb71c41721d21126d99775e53ab4a9bf64eacf47d95e2f77bc/manifest.json",
+          "purpose": "MEMORY_BLOB_PREVIEW_ONLY"
+        }
+      }
+    ],
+    "previewTransport": {
+      "schema": "GVAULT_PUBLIC_ENCRYPTED_PREVIEW_TRANSPORT_V1",
+      "plaintextPolicy": "NEVER_PERSIST_PUBLICLY_MEMORY_ONLY_AFTER_SAS",
+      "cipher": "AES-256-GCM",
+      "kdf": "PBKDF2-HMAC-SHA256",
+      "packetCount": 2
+    }
+  }
+}
