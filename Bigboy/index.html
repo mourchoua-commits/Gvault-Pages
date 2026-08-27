@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>GVAULT · BIG BOY</title>
+<style>
+:root{color-scheme:dark;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#07090b;color:#eef3f6}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:#07090b}.card{width:min(720px,94vw);border:1px solid #2b3740;border-radius:16px;background:#0d1216;padding:18px}.muted{color:#96a4ae}pre{white-space:pre-wrap;word-break:break-word;background:#080b0d;border:1px solid #232c33;border-radius:12px;padding:12px}a{color:inherit}
+</style>
+</head>
+<body>
+<main class="card">
+<div class="muted">GVAULT · DECLARED HEALTH OBSERVER</div>
+<h1>BIG BOY</h1>
+<p>BIG BOY est un observateur de santé déclaré et en lecture seule. Cette page expose son identité publique ; elle ne contient aucun secret ni donnée collectée.</p>
+<pre id="identity">Chargement de l’identité…</pre>
+<p class="muted"><a href="./bigboy.identity.json">bigboy.identity.json</a></p>
+</main>
+<script>
+fetch('./bigboy.identity.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(j=>document.querySelector('#identity').textContent=JSON.stringify(j,null,2)).catch(e=>document.querySelector('#identity').textContent='Identité indisponible · '+e.message);
+</script>
+</body>
+</html>
