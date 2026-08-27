@@ -1570,10 +1570,8 @@ function render(){
   card.dataset.releaseId=String(item.releaseId||'');card.dataset.sourceSha=String(item.sourceSha256||'');card.dataset.availability=String(item.availability||'');
   const items=Array.isArray(item.changelog?.items)?item.changelog.items:[];
   const aliases=Array.isArray(item.aliases)&&item.aliases.length?' · '+item.aliases.join(', '):'';
-  const actionLabel=active?'ACTIVE':item.availability==='PRIVATE_ROOT_REFERENCE'?'RACINE PRIVÉE':'RÉFÉRENCE';
+  const actionLabel=active?'ACTIVE':'CHOISIR';
   card.innerHTML='<div class="versionTop"><div><div class="versionName">'+esc(item.releaseId||'OFFICIELLE')+esc(aliases)+'</div><div class="versionMeta">'+esc(fmt(item.publishedAt))+(item.publishedAt?' · ':'')+esc(String(item.sourceSha256||'').slice(0,12))+'</div></div><button class="versionAction" type="button" '+(active?'disabled':'')+'>'+actionLabel+'</button></div><div class="changeTitle">'+esc(item.changelog?.title||item.releaseId||'Changelog')+'</div>'+(items.length?'<ul class="changeItems">'+items.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'<div class="versionMeta">Référence officielle privée.</div>');
-  const b=card.querySelector('.versionAction');
-  if(!active)b.addEventListener('click',()=>state('OFFICIELLE RÉFÉRENCÉE · '+(item.releaseId||'version')+' · racine conservée dans le privé. Aucun payload historique permanent n’est exposé par Pages.'));
   list.appendChild(card);
  }
  const activeRef=refs.find(x=>x.sourceSha256===currentSha);
@@ -1604,5 +1602,106 @@ window.GVaultOfficialRefs=Object.freeze({schema:'GVAULT_PRIVATE_OFFICIAL_REFS_V2
 })();
 </script>
 <!-- GVAULT_PRIVATE_OFFICIAL_REFS_SELECTOR_END -->
+
+<!-- GVAULT_OFFICIAL_PREVIEW_BLOB_START -->
+<style id="gvault-official-preview-blob-style">
+#gvaultOfficialPreviewShell{position:fixed;inset:0;z-index:2147483500;background:#000;display:none;overflow:hidden}
+#gvaultOfficialPreviewShell.open{display:block}
+#gvaultOfficialPreviewFrame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;display:block}
+#gvaultOfficialPreviewExit{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));z-index:2147483647;width:56px;height:56px;min-width:56px;min-height:56px;border:2px solid #ff6b6b;border-radius:50%;background:#8f0d14;color:#fff;font:900 30px/1 ui-monospace,SFMono-Regular,Menlo,monospace;display:none;place-items:center;box-shadow:0 0 0 3px rgba(0,0,0,.72),0 8px 24px rgba(0,0,0,.45);cursor:pointer;touch-action:manipulation}
+#gvaultOfficialPreviewExit.show{display:grid}
+#gvaultOfficialPreviewExit:focus-visible{outline:3px solid #fff;outline-offset:3px}
+#gvaultOfficialPreviewState{position:fixed;left:82px;bottom:max(18px,calc(env(safe-area-inset-bottom) + 6px));z-index:2147483646;max-width:min(72vw,520px);padding:7px 9px;border:1px solid rgba(255,107,107,.5);border-radius:9px;background:rgba(10,10,10,.88);color:#fff;font:800 10px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;display:none;pointer-events:none}
+#gvaultOfficialPreviewState.show{display:block}
+body.gvaultOfficialPreviewOpen{overflow:hidden!important}
+</style>
+<div id="gvaultOfficialPreviewShell" aria-hidden="true">
+  <iframe id="gvaultOfficialPreviewFrame" title="Prévisualisation temporaire d’une version GVAULT" sandbox="allow-scripts allow-forms allow-modals allow-downloads allow-pointer-lock"></iframe>
+</div>
+<button id="gvaultOfficialPreviewExit" type="button" aria-label="Quitter la prévisualisation de mise à jour" title="Quitter la prévisualisation">×</button>
+<div id="gvaultOfficialPreviewState" role="status" aria-live="polite"></div>
+<script id="gvault-official-preview-blob-v1" data-gvault-official-preview="GVAULT_OFFICIAL_PREVIEW_BLOB_V1">
+(()=>{
+'use strict';
+const CONTRACT='GVAULT_OFFICIAL_PREVIEW_BLOB_V1';
+const q=s=>document.querySelector(s);
+const shell=q('#gvaultOfficialPreviewShell'),frame=q('#gvaultOfficialPreviewFrame'),exit=q('#gvaultOfficialPreviewExit'),previewState=q('#gvaultOfficialPreviewState');
+let provider=null,currentUrl='',currentItem=null,busy=false;
+const hex=b=>Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,'0')).join('');
+const sha256=async b=>hex(await crypto.subtle.digest('SHA-256',b));
+function state(text,show=true){if(previewState){previewState.textContent=String(text||'');previewState.classList.toggle('show',!!show&&!!text)}const s=q('#vaultUpdateState');if(s&&text)s.textContent=String(text)}
+function cleanup(){
+ try{frame.removeAttribute('src')}catch{}
+ if(currentUrl){try{URL.revokeObjectURL(currentUrl)}catch{}currentUrl=''}
+ currentItem=null;busy=false;
+ shell?.classList.remove('open');shell?.setAttribute('aria-hidden','true');exit?.classList.remove('show');previewState?.classList.remove('show');document.body.classList.remove('gvaultOfficialPreviewOpen');
+}
+function close(){cleanup();state('Prévisualisation fermée · version active inchangée.',false)}
+async function normalize(payload,item){
+ let blob=null;
+ if(payload instanceof Blob)blob=payload;
+ else if(typeof payload==='string')blob=new Blob([payload],{type:'text/html;charset=utf-8'});
+ else if(payload?.blob instanceof Blob)blob=payload.blob;
+ else if(typeof payload?.html==='string')blob=new Blob([payload.html],{type:'text/html;charset=utf-8'});
+ else if(payload?.bytes instanceof ArrayBuffer)blob=new Blob([payload.bytes],{type:'text/html;charset=utf-8'});
+ else if(ArrayBuffer.isView(payload?.bytes))blob=new Blob([payload.bytes],{type:'text/html;charset=utf-8'});
+ if(!blob)throw new Error('Le transport privé n’a fourni aucun HTML prévisualisable.');
+ const bytes=await blob.arrayBuffer();
+ if(Number(item.sourceSize)!==bytes.byteLength)throw new Error('Taille de la racine privée différente de la référence publique.');
+ const digest=await sha256(bytes);
+ if(digest!==String(item.sourceSha256||''))throw new Error('SHA-256 de la racine privée différent de la référence publique.');
+ return new Blob([bytes],{type:'text/html;charset=utf-8'});
+}
+async function request(item){
+ if(provider)return provider(Object.freeze({...item}));
+ return new Promise((resolve,reject)=>{
+  let settled=false;
+  const done=v=>{if(settled)return;settled=true;clearTimeout(timer);resolve(v)};
+  const fail=e=>{if(settled)return;settled=true;clearTimeout(timer);reject(e instanceof Error?e:new Error(String(e||'Transport privé indisponible')))};
+  const timer=setTimeout(()=>fail(new Error('Transport privé de prévisualisation indisponible.')),1500);
+  window.dispatchEvent(new CustomEvent('gvault:request-official-preview',{detail:{schema:'GVAULT_OFFICIAL_PREVIEW_REQUEST_V1',releaseId:item.releaseId,sourceSha256:item.sourceSha256,sourceSize:item.sourceSize,resolve:done,reject:fail}}));
+ });
+}
+async function open(item){
+ if(busy)return;
+ if(!item||item.sourceSha256===window.GVaultOfficialRefs?.currentSha?.())return;
+ busy=true;currentItem={...item};
+ state('Récupération privée de '+(item.releaseId||'OFFICIELLE')+'…');
+ try{
+  const payload=await request(item);
+  const blob=await normalize(payload,item);
+  cleanup();busy=true;currentItem={...item};
+  currentUrl=URL.createObjectURL(blob);
+  frame.src=currentUrl;
+  shell.classList.add('open');shell.setAttribute('aria-hidden','false');exit.classList.add('show');previewState.classList.add('show');document.body.classList.add('gvaultOfficialPreviewOpen');
+  state('PRÉVISUALISATION · '+(item.releaseId||'OFFICIELLE')+' · Blob mémoire · version active inchangée.');
+  await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(new Error('Le Blob de prévisualisation ne démarre pas.')),30000);frame.addEventListener('load',()=>{clearTimeout(t);resolve()},{once:true})});
+ }catch(e){cleanup();state('PRÉVISUALISATION IMPOSSIBLE · '+(e?.message||e));throw e}
+ finally{busy=false}
+}
+function installProvider(fn){if(typeof fn!=='function')throw new TypeError('Le provider de prévisualisation doit être une fonction.');provider=fn;return ()=>{if(provider===fn)provider=null}}
+function enhance(){
+ const list=q('#vaultVersionList');if(!list)return;
+ for(const card of list.querySelectorAll('.versionCard')){
+  const button=card.querySelector('.versionAction');if(!button||button.dataset.previewBound==='1'||button.disabled)continue;
+  button.dataset.previewBound='1';button.textContent='CHOISIR';
+  button.addEventListener('click',ev=>{
+   ev.preventDefault();ev.stopImmediatePropagation();
+   const refs=window.GVaultOfficialRefs?.list?.()||[];
+   const item=refs.find(x=>String(x.releaseId||'')===String(card.dataset.releaseId||'')&&String(x.sourceSha256||'')===String(card.dataset.sourceSha||''));
+   if(!item){state('Référence OFFICIELLE introuvable après actualisation.');return}
+   open(item).catch(()=>{});
+  },true);
+ }
+}
+exit?.addEventListener('click',close);
+window.addEventListener('keydown',e=>{if(e.key==='Escape'&&shell?.classList.contains('open')){e.preventDefault();close()}},true);
+const list=q('#vaultVersionList');if(list)new MutationObserver(enhance).observe(list,{childList:true,subtree:true});
+queueMicrotask(enhance);
+window.GVaultOfficialPreviewTransport=Object.freeze({schema:'GVAULT_OFFICIAL_PREVIEW_TRANSPORT_V1',installProvider,hasProvider:()=>!!provider});
+window.GVaultOfficialPreview=Object.freeze({schema:CONTRACT,open,close,isOpen:()=>!!shell?.classList.contains('open'),current:()=>currentItem?{...currentItem}:null});
+})();
+</script>
+<!-- GVAULT_OFFICIAL_PREVIEW_BLOB_END -->
 </body>
 </html>
