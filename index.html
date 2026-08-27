@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="fr">
 <head>
+<meta name="referrer" content="no-referrer">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#16130e">
@@ -1208,7 +1209,7 @@ async function decryptManifest(manifestUrl,password){
 }
 async function launchCanonical(html,password){
  const blob=new Blob([html],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(blob);
- const frame=document.createElement('iframe');frame.className='runtimeFrame';frame.title='GVAULT';frame.src=url;frame.setAttribute('allow','clipboard-read; clipboard-write');document.body.appendChild(frame);
+ const frame=document.createElement('iframe');frame.className='runtimeFrame';frame.title='GVAULT';frame.src=url;frame.setAttribute('allow','clipboard-read; clipboard-write');frame.setAttribute('referrerpolicy','no-referrer');document.body.appendChild(frame);
  try{
   await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(new Error('Chargement du SAS canonique impossible')),30000);frame.addEventListener('load',()=>{clearTimeout(t);resolve()},{once:true})});
   const d=()=>frame.contentDocument;
@@ -1227,7 +1228,7 @@ async function launchCanonical(html,password){
   setTimeout(()=>URL.revokeObjectURL(url),1000);return frame;
  }catch(e){frame.remove();URL.revokeObjectURL(url);throw e}
 }
-async function mountRelease(manifestUrl,password){const decoded=await decryptManifest(manifestUrl,password);await launchCanonical(decoded.html,password);activeManifest=decoded.m;sessionPassword=password;window.__GVAULT_PROJECT_STORE_PASSWORD__=password;selectedIterationId=decoded.m.iterationId||decoded.m.releaseId;renderVersions();return decoded.m;}
+async function mountRelease(manifestUrl,password){const decoded=await decryptManifest(manifestUrl,password);await launchCanonical(decoded.html,password);activeManifest=decoded.m;sessionPassword=password;selectedIterationId=decoded.m.iterationId||decoded.m.releaseId;renderVersions();return decoded.m;}
 function fmtDate(v){try{return new Intl.DateTimeFormat('fr-FR',{dateStyle:'short',timeStyle:'short'}).format(new Date(v))}catch{return v||''}}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function currentFallbackEntry(){if(!activeManifest)return null;return {iterationId:activeManifest.iterationId||activeManifest.releaseId,releaseId:activeManifest.releaseId,publishedAt:activeManifest.publishedAt,sourceSha256:activeManifest.source?.sha256,manifest:'manifest.json',changelog:activeManifest.changelog||{title:activeManifest.releaseId,items:[]}};}
@@ -1660,138 +1661,7 @@ async function preparePreviewBlob(blob,item){
  const nonce=previewNonce();
  const source=await blob.text();
  const bridge='<script data-gvault-preview-sas-reuse="GVAULT_PREVIEW_SAS_REUSE_V1">'+PREVIEW_SAS_BRIDGE_SOURCE.replace('__GVAULT_NONCE__',nonce)+'<\/script>';
- const at=source.toLowerCase().lastIndexOf('
-<!-- GVAULT_BLOP_RAIL_DRAWER_V2_2 -->
-<style data-gvault-blop-rail-drawer="GVAULT_BLOP_RAIL_DRAWER_V2_2">
-#gvBlopRail{display:none!important;touch-action:none;user-select:none}
-#gvBlopRail.ready.gvbrOpen{display:flex!important}
-#gvBlopRailToggle{position:fixed;right:max(6px,env(safe-area-inset-right));top:50%;transform:translateY(-50%);z-index:166;display:none;width:38px;height:38px;place-items:center;padding:0;border:1px solid rgba(200,169,90,.30);border-radius:11px;background:rgba(4,6,5,.82);color:#c8a95a;box-shadow:0 8px 28px rgba(0,0,0,.30);backdrop-filter:blur(7px);font:950 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;cursor:pointer}
-#gvBlopRailToggle.ready{display:grid}#gvBlopRailToggle.open{border-color:rgba(200,169,90,.72);background:rgba(15,14,10,.94)}
-#gvBlopRail .gvbrHandle{display:flex;gap:4px;align-items:center;justify-content:space-between;padding-bottom:3px;border-bottom:1px solid rgba(200,169,90,.12)}
-#gvBlopRail .gvbrHandle button{height:24px!important;min-height:24px!important;width:auto!important;min-width:28px!important;padding:0 6px!important;font-size:9px!important}
-#gvBlopRail .gvbrDrag{cursor:grab!important;touch-action:none}#gvBlopRail .gvbrDrag:active{cursor:grabbing!important}
-#gvBlopInspector{display:none}
-#gvBlopPanel.gvbsToolOpen #gvBlopInspector{display:block}
-#gvBlopPanel.gvbsOn:not(.gvbsToolOpen) .gvbBody{grid-template-columns:minmax(170px,28%) minmax(0,1fr)}
-#gvBlopPanel.gvbsOn.gvbsToolOpen .gvbBody{grid-template-columns:minmax(170px,24%) minmax(0,1fr) minmax(230px,30%)}
-@media(max-width:760px){#gvBlopRailToggle{right:max(4px,env(safe-area-inset-right));width:40px;height:40px}#gvBlopPanel.gvbsOn:not(.gvbsToolOpen) .gvbBody{grid-template-columns:1fr;grid-template-rows:minmax(150px,34%) minmax(0,1fr)}#gvBlopPanel.gvbsOn.gvbsToolOpen .gvbBody{grid-template-columns:1fr;grid-template-rows:minmax(125px,24%) minmax(200px,43%) minmax(130px,33%)}}
-@media(pointer:coarse){#gvBlopRailToggle{width:44px;height:44px}#gvBlopRail .gvbrHandle button{min-height:38px!important;min-width:38px!important}}
-</style>
-<script data-gvault-blop-rail-drawer-runtime="GVAULT_BLOP_RAIL_DRAWER_V2_2">
-(()=>{'use strict';
-const MARK='GVAULT_BLOP_RAIL_DRAWER_V2_2',POS_KEY='gvault_blop_rail_pos_v22';
-const rail=document.querySelector('#gvBlopRail'),panel=document.querySelector('#gvBlopPanel');if(!rail||!panel)return;
-const toggle=document.createElement('button');toggle.id='gvBlopRailToggle';toggle.type='button';toggle.textContent='B';toggle.title='Déployer les outils BLOP';toggle.setAttribute('aria-label','Déployer les outils BLOP');toggle.setAttribute('aria-controls','gvBlopRail');toggle.setAttribute('aria-expanded','false');document.body.appendChild(toggle);
-const handle=document.createElement('div');handle.className='gvbrHandle';handle.innerHTML='<button type="button" class="gvbrDrag" title="Déplacer la barre" aria-label="Déplacer la barre">↕</button><button type="button" class="gvbrClose" title="Replier la barre" aria-label="Replier la barre">×</button>';rail.insertBefore(handle,rail.firstChild);
-const drag=handle.querySelector('.gvbrDrag'),close=handle.querySelector('.gvbrClose');
-let open=false,moving=false,pointerId=null,dx=0,dy=0;
-function clamp(n,min,max){return Math.max(min,Math.min(max,n))}
-function savePos(){const r=rail.getBoundingClientRect();try{localStorage.setItem(POS_KEY,JSON.stringify({x:Math.round(r.left),y:Math.round(r.top)}))}catch{}}
-function restorePos(){try{const p=JSON.parse(localStorage.getItem(POS_KEY)||'null');if(!p||!Number.isFinite(p.x)||!Number.isFinite(p.y))return;requestAnimationFrame(()=>{const r=rail.getBoundingClientRect(),x=clamp(p.x,4,Math.max(4,innerWidth-r.width-4)),y=clamp(p.y,4,Math.max(4,innerHeight-r.height-4));rail.style.left=x+'px';rail.style.top=y+'px';rail.style.right='auto';rail.style.transform='none'})}catch{}}
-function setOpen(v){open=!!v;rail.classList.toggle('gvbrOpen',open);toggle.classList.toggle('open',open);toggle.setAttribute('aria-expanded',String(open));toggle.textContent=open?'×':'B';if(open)restorePos()}
-toggle.addEventListener('click',()=>setOpen(!open));close.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();setOpen(false)});
-function startDrag(e){if(e.button!==undefined&&e.button!==0)return;e.preventDefault();e.stopPropagation();const r=rail.getBoundingClientRect();moving=true;pointerId=e.pointerId;dx=e.clientX-r.left;dy=e.clientY-r.top;rail.style.left=r.left+'px';rail.style.top=r.top+'px';rail.style.right='auto';rail.style.transform='none';drag.setPointerCapture?.(pointerId)}
-function moveDrag(e){if(!moving||e.pointerId!==pointerId)return;e.preventDefault();const r=rail.getBoundingClientRect(),x=clamp(e.clientX-dx,4,Math.max(4,innerWidth-r.width-4)),y=clamp(e.clientY-dy,4,Math.max(4,innerHeight-r.height-4));rail.style.left=x+'px';rail.style.top=y+'px'}
-function endDrag(e){if(!moving||e.pointerId!==pointerId)return;moving=false;try{drag.releasePointerCapture?.(pointerId)}catch{}pointerId=null;savePos()}
-drag.addEventListener('pointerdown',startDrag);drag.addEventListener('pointermove',moveDrag);drag.addEventListener('pointerup',endDrag);drag.addEventListener('pointercancel',endDrag);drag.addEventListener('dblclick',()=>{try{localStorage.removeItem(POS_KEY)}catch{}rail.style.left='';rail.style.top='50%';rail.style.right='max(5px,env(safe-area-inset-right))';rail.style.transform='translateY(-50%)'});
-rail.addEventListener('click',e=>{const b=e.target.closest('[data-gvbs-tool]');if(!b)return;const t=b.dataset.gvbsTool;if(t&&t!=='open')panel.classList.add('gvbsToolOpen')},true);
-const panelObserver=new MutationObserver(()=>{if(!panel.classList.contains('open'))panel.classList.remove('gvbsToolOpen')});panelObserver.observe(panel,{attributes:true,attributeFilter:['class']});
-function syncReady(){const ready=rail.classList.contains('ready');toggle.classList.toggle('ready',ready);if(!ready)setOpen(false)}
-new MutationObserver(syncReady).observe(rail,{attributes:true,attributeFilter:['class']});setInterval(syncReady,1000);syncReady();
-addEventListener('resize',()=>{if(!open)return;const r=rail.getBoundingClientRect();if(r.right>innerWidth||r.bottom>innerHeight){rail.style.left=clamp(r.left,4,Math.max(4,innerWidth-r.width-4))+'px';rail.style.top=clamp(r.top,4,Math.max(4,innerHeight-r.height-4))+'px';savePos()}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&open)setOpen(false)});
-window.GVAULT_BLOP_RAIL_INFO=Object.freeze({schema:'GVAULT_BLOP_RAIL_INFO_V2_2',drawer:true,draggable:true,positionPersistence:'local-non-secret',inspector:'collapsed-until-tool'});
-})();
-</script>
-
-
-<!-- GVAULT_BLOP_THEME_MINIATURES_V2_3 -->
-<style data-gvault-blop-theme-miniatures="GVAULT_BLOP_THEME_MINIATURES_V2_3">
-:root{--gvbr-accent:#c8a95a;--gvbr-text:#efe8d5;--gvbr-muted:#918a76;--gvbr-bg:rgba(4,6,5,.88);--gvbr-bg2:rgba(13,16,12,.96);--gvbr-border:rgba(200,169,90,.34);--gvbr-glow:rgba(200,169,90,.18)}
-body[data-theme="obsidian"]{--gvbr-accent:#66e6ff;--gvbr-text:#eef4fb;--gvbr-muted:#8f9aad;--gvbr-bg:rgba(7,11,17,.90);--gvbr-bg2:rgba(14,22,31,.96);--gvbr-border:rgba(102,230,255,.34);--gvbr-glow:rgba(102,230,255,.20)}
-body[data-theme="vault"]{--gvbr-accent:#c8a95a;--gvbr-text:#efe8d5;--gvbr-muted:#918a76;--gvbr-bg:rgba(4,6,5,.88);--gvbr-bg2:rgba(13,16,12,.96);--gvbr-border:rgba(200,169,90,.34);--gvbr-glow:rgba(200,169,90,.18)}
-body[data-theme="light"]{--gvbr-accent:#087d9c;--gvbr-text:#17212d;--gvbr-muted:#667483;--gvbr-bg:rgba(250,253,255,.94);--gvbr-bg2:rgba(233,241,247,.98);--gvbr-border:rgba(8,125,156,.28);--gvbr-glow:rgba(8,125,156,.16)}
-body[data-theme="neon"]{--gvbr-accent:#4ff6ff;--gvbr-text:#f6f0ff;--gvbr-muted:#b096c1;--gvbr-bg:rgba(12,6,19,.92);--gvbr-bg2:rgba(25,10,34,.98);--gvbr-border:rgba(79,246,255,.34);--gvbr-glow:rgba(255,79,216,.22)}
-body[data-theme="terminal"]{--gvbr-accent:#61ff85;--gvbr-text:#c9ffd4;--gvbr-muted:#6ea57b;--gvbr-bg:rgba(1,9,4,.94);--gvbr-bg2:rgba(3,15,6,.98);--gvbr-border:rgba(97,255,133,.34);--gvbr-glow:rgba(97,255,133,.18)}
-body[data-theme="mono"]{--gvbr-accent:#f2f2f2;--gvbr-text:#f2f2f2;--gvbr-muted:#9b9b9b;--gvbr-bg:rgba(5,5,5,.94);--gvbr-bg2:rgba(18,18,18,.98);--gvbr-border:rgba(242,242,242,.26);--gvbr-glow:rgba(255,255,255,.12)}
-#gvBlopRail,#gvBlopRailToggle{border-color:var(--gvbr-border)!important;background:var(--gvbr-bg)!important;color:var(--gvbr-accent)!important;box-shadow:0 8px 30px rgba(0,0,0,.30),0 0 20px var(--gvbr-glow)!important}
-#gvBlopRail{min-width:46px;max-height:min(88vh,720px);overflow:auto;scrollbar-width:thin;scrollbar-color:var(--gvbr-border) transparent}
-#gvBlopRail .gvbrHandle{border-color:var(--gvbr-border)!important}
-#gvBlopRail button{border-color:var(--gvbr-border)!important;background:var(--gvbr-bg2)!important;color:var(--gvbr-muted)!important;transition:width .16s ease,color .16s ease,border-color .16s ease,transform .12s ease,background .16s ease}
-#gvBlopRail button:hover,#gvBlopRail button:focus,#gvBlopRail button.active{color:var(--gvbr-accent)!important;border-color:var(--gvbr-accent)!important;box-shadow:0 0 12px var(--gvbr-glow)}
-#gvBlopRail button[data-gvbs-tool]{display:flex;align-items:center;justify-content:flex-start;gap:7px;overflow:hidden;white-space:nowrap}
-#gvBlopRail.gvbrOpen button[data-gvbs-tool]{width:134px!important;padding:0 7px!important}
-.gvbrToolShort{display:grid;place-items:center;flex:0 0 26px;height:24px;border:1px solid var(--gvbr-border);border-radius:7px;color:var(--gvbr-accent);font:950 8px/1 ui-monospace,monospace;background:color-mix(in srgb,var(--gvbr-bg2) 82%,transparent)}
-.gvbrToolLabel{overflow:hidden;text-overflow:ellipsis;color:var(--gvbr-text);font:850 8px/1 ui-monospace,monospace;letter-spacing:.02em}
-.gvbrTheme{display:grid;gap:4px;padding:5px 2px 7px;border-bottom:1px solid var(--gvbr-border)}
-.gvbrTheme label{display:flex;align-items:center;justify-content:space-between;gap:5px;color:var(--gvbr-muted);font:900 7px/1 ui-monospace,monospace;letter-spacing:.08em}
-.gvbrTheme label::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--gvbr-accent);box-shadow:0 0 9px var(--gvbr-glow)}
-#gvbrThemeSelect{width:134px;max-width:100%;height:30px;border:1px solid var(--gvbr-border);border-radius:8px;background:var(--gvbr-bg2);color:var(--gvbr-text);font:850 8px/1 ui-monospace,monospace;padding:0 6px;outline:none}
-#gvbrThemeSelect:focus{border-color:var(--gvbr-accent);box-shadow:0 0 0 2px var(--gvbr-glow)}
-#gvbrMini{position:fixed;z-index:170;display:none;width:min(220px,62vw);padding:8px;border:1px solid var(--gvbr-border);border-radius:12px;background:var(--gvbr-bg2);color:var(--gvbr-text);box-shadow:0 14px 38px rgba(0,0,0,.38),0 0 22px var(--gvbr-glow);pointer-events:none;backdrop-filter:blur(8px)}
-#gvbrMini.show{display:grid;grid-template-columns:58px minmax(0,1fr);gap:8px;align-items:center;animation:gvbrMiniIn .18s ease-out}
-.gvbrMiniStage{position:relative;width:58px;height:46px;border:1px solid var(--gvbr-border);border-radius:9px;overflow:hidden;background:var(--gvbr-bg)}
-.gvbrMiniStage i{position:absolute;display:block;background:var(--gvbr-accent);box-shadow:0 0 8px var(--gvbr-glow)}
-.gvbrMiniTitle{font:950 9px/1.15 ui-monospace,monospace;color:var(--gvbr-accent);letter-spacing:.06em}.gvbrMiniDesc{margin-top:4px;font:750 7px/1.35 ui-monospace,monospace;color:var(--gvbr-muted)}
-@keyframes gvbrMiniIn{from{opacity:0;transform:translateY(5px) scale(.96)}to{opacity:1;transform:none}}
-.gvbrMiniStage[data-kind="mount"] i{width:14px;height:11px;border-radius:2px}.gvbrMiniStage[data-kind="mount"] i:nth-child(1){left:7px;top:8px;animation:gvbrBlock 1s infinite alternate}.gvbrMiniStage[data-kind="mount"] i:nth-child(2){left:23px;top:18px;animation:gvbrBlock 1s .16s infinite alternate}.gvbrMiniStage[data-kind="mount"] i:nth-child(3){left:39px;top:28px;animation:gvbrBlock 1s .32s infinite alternate}
-@keyframes gvbrBlock{to{transform:translateY(-6px);opacity:.45}}
-.gvbrMiniStage[data-kind="analysis"] i{left:8px;width:42px;height:3px}.gvbrMiniStage[data-kind="analysis"] i:nth-child(1){top:10px}.gvbrMiniStage[data-kind="analysis"] i:nth-child(2){top:20px;width:31px}.gvbrMiniStage[data-kind="analysis"] i:nth-child(3){top:30px;width:38px}.gvbrMiniStage[data-kind="analysis"] i:nth-child(4){top:4px;bottom:4px;width:2px;height:auto;animation:gvbrScan 1.1s linear infinite}
-@keyframes gvbrScan{from{left:6px}to{left:50px}}
-.gvbrMiniStage[data-kind="dissection"] i{top:9px;width:12px;height:28px;border-radius:2px;animation:gvbrSplit 1s infinite alternate}.gvbrMiniStage[data-kind="dissection"] i:nth-child(1){left:8px}.gvbrMiniStage[data-kind="dissection"] i:nth-child(2){left:23px;animation-delay:.14s}.gvbrMiniStage[data-kind="dissection"] i:nth-child(3){left:38px;animation-delay:.28s}
-@keyframes gvbrSplit{to{transform:scaleY(.55);opacity:.42}}
-.gvbrMiniStage[data-kind="reference"] i{width:8px;height:8px;border-radius:50%;animation:gvbrNode 1s infinite alternate}.gvbrMiniStage[data-kind="reference"] i:nth-child(1){left:8px;top:18px}.gvbrMiniStage[data-kind="reference"] i:nth-child(2){left:25px;top:8px;animation-delay:.15s}.gvbrMiniStage[data-kind="reference"] i:nth-child(3){left:42px;top:27px;animation-delay:.3s}.gvbrMiniStage[data-kind="reference"] i:nth-child(4){left:14px;top:22px;width:34px;height:1px;border-radius:0;transform:rotate(12deg);transform-origin:left}
-@keyframes gvbrNode{to{transform:scale(1.5);opacity:.48}}
-.gvbrMiniStage[data-kind="exam"] i{background:transparent;border:1px solid var(--gvbr-accent);border-radius:50%;left:17px;top:11px;width:24px;height:24px;animation:gvbrPulse 1s infinite}.gvbrMiniStage[data-kind="exam"] i:nth-child(2){left:28px;top:5px;width:1px;height:36px;border:0;background:var(--gvbr-accent);border-radius:0}.gvbrMiniStage[data-kind="exam"] i:nth-child(3){left:10px;top:22px;width:38px;height:1px;border:0;background:var(--gvbr-accent);border-radius:0}
-@keyframes gvbrPulse{50%{transform:scale(.72);opacity:.35}}
-.gvbrMiniStage[data-kind="complement"] i{width:5px;height:5px;border-radius:50%;left:27px;top:20px}.gvbrMiniStage[data-kind="complement"] i:nth-child(2){animation:gvbrOrbit 1.2s linear infinite;transform-origin:2px 2px}.gvbrMiniStage[data-kind="complement"] i:nth-child(3){animation:gvbrOrbit 1.2s .4s linear infinite;transform-origin:2px 2px}@keyframes gvbrOrbit{from{transform:rotate(0) translateX(17px)}to{transform:rotate(360deg) translateX(17px)}}
-.gvbrMiniStage[data-kind="gforge"] i{left:9px;height:3px}.gvbrMiniStage[data-kind="gforge"] i:nth-child(1){top:10px;width:31px}.gvbrMiniStage[data-kind="gforge"] i:nth-child(2){top:19px;width:40px}.gvbrMiniStage[data-kind="gforge"] i:nth-child(3){top:28px;width:25px}.gvbrMiniStage[data-kind="gforge"] i:nth-child(4){left:43px;top:27px;width:7px;height:7px;transform:rotate(45deg);animation:gvbrSpark .8s infinite}@keyframes gvbrSpark{50%{transform:rotate(225deg) scale(1.5);opacity:.35}}
-.gvbrMiniStage[data-kind="ladybug"] i:nth-child(1){left:17px;top:8px;width:24px;height:30px;border-radius:50%}.gvbrMiniStage[data-kind="ladybug"] i:nth-child(n+2){width:5px;height:5px;border-radius:50%;background:var(--gvbr-bg2);box-shadow:none}.gvbrMiniStage[data-kind="ladybug"] i:nth-child(2){left:22px;top:16px}.gvbrMiniStage[data-kind="ladybug"] i:nth-child(3){left:32px;top:25px}.gvbrMiniStage[data-kind="ladybug"] i:nth-child(4){left:27px;top:8px;width:1px;height:30px;border-radius:0;animation:gvbrWing 1s infinite alternate}@keyframes gvbrWing{to{transform:rotate(12deg)}}
-.gvbrMiniStage[data-kind="wand"] i:nth-child(1){left:16px;top:28px;width:31px;height:3px;transform:rotate(-42deg);transform-origin:left;animation:gvbrWand 1s infinite alternate}.gvbrMiniStage[data-kind="wand"] i:nth-child(n+2){width:5px;height:5px;transform:rotate(45deg)}.gvbrMiniStage[data-kind="wand"] i:nth-child(2){left:39px;top:8px}.gvbrMiniStage[data-kind="wand"] i:nth-child(3){left:48px;top:17px}.gvbrMiniStage[data-kind="wand"] i:nth-child(4){left:32px;top:3px}@keyframes gvbrWand{to{transform:rotate(-30deg) translateX(3px)}}
-.gvbrMiniStage[data-kind="gadmin"] i{width:16px;height:12px;border-radius:2px;animation:gvbrDash 1.2s infinite alternate}.gvbrMiniStage[data-kind="gadmin"] i:nth-child(1){left:9px;top:8px}.gvbrMiniStage[data-kind="gadmin"] i:nth-child(2){left:31px;top:8px;animation-delay:.15s}.gvbrMiniStage[data-kind="gadmin"] i:nth-child(3){left:9px;top:26px;animation-delay:.3s}.gvbrMiniStage[data-kind="gadmin"] i:nth-child(4){left:31px;top:26px;animation-delay:.45s}@keyframes gvbrDash{to{opacity:.3;transform:scale(.82)}}
-@media(max-width:760px){#gvBlopRail.gvbrOpen button[data-gvbs-tool],#gvbrThemeSelect{width:min(132px,42vw)!important}.gvbrToolLabel{font-size:7px}#gvbrMini{width:min(205px,72vw)}}
-@media(pointer:coarse){#gvBlopRail button[data-gvbs-tool]{min-height:44px!important}.gvbrToolShort{height:30px}}
-@media(prefers-reduced-motion:reduce){#gvbrMini,#gvbrMini *{animation:none!important;transition:none!important}}
-</style>
-<script data-gvault-blop-theme-miniatures-runtime="GVAULT_BLOP_THEME_MINIATURES_V2_3">
-(()=>{'use strict';
-const MARK='GVAULT_BLOP_THEME_MINIATURES_V2_3',rail=document.querySelector('#gvBlopRail'),sasTheme=document.querySelector('#entryTheme');if(!rail||!sasTheme)return;
-const THEMES=[['obsidian','OBSIDIAN'],['vault','COFFRE-FORT'],['light','CLAIR'],['neon','NÉON RÉTRO'],['terminal','TERMINAL'],['mono','MONO']];
-const TOOL_META={
- open:{short:'B',label:'BLOP',desc:'Ouvrir ou fermer le terminal de montage.',kind:'mount'},
- analysis:{short:'A',label:'ANALYSE',desc:'Scanner structure, fichiers et signaux du projet.',kind:'analysis'},
- dissection:{short:'D',label:'DISSECTION',desc:'Découper le projet en composants observables.',kind:'dissection'},
- reference:{short:'R',label:'RÉFÉRENCES',desc:'Produire des repères fichier et ligne.',kind:'reference'},
- exam:{short:'E',label:'EXAMEN',desc:'Lancer l’examen complet factuel.',kind:'exam'},
- complement:{short:'+',label:'COMPLÉMENT',desc:'Chercher les anomalies et angles complémentaires.',kind:'complement'},
- gforge:{short:'GF',label:'GFORGE',desc:'Générer un prompt GForge depuis le projet.',kind:'gforge'},
- ladybug:{short:'LB',label:'LADYBUG',desc:'Produire le rapport de session et de diagnostic.',kind:'ladybug'},
- wand:{short:'✦',label:'BAGUETTE',desc:'Prévisualiser une correction de rendu en mémoire.',kind:'wand'},
- gadmin:{short:'GA',label:'GADMIN',desc:'Ouvrir le contrôle, registre et configuration.',kind:'gadmin'}
-};
-const handle=rail.querySelector('.gvbrHandle');
-const themeBox=document.createElement('div');themeBox.className='gvbrTheme';themeBox.innerHTML='<label for="gvbrThemeSelect">THÈME SAS</label><select id="gvbrThemeSelect" aria-label="Thème BLOP synchronisé avec le SAS">'+THEMES.map(([v,l])=>'<option value="'+v+'">'+l+'</option>').join('')+'</select>';handle?.insertAdjacentElement('afterend',themeBox);
-const themeSelect=themeBox.querySelector('#gvbrThemeSelect');
-for(const b of rail.querySelectorAll('[data-gvbs-tool]')){const m=TOOL_META[b.dataset.gvbsTool];if(!m)continue;b.textContent='';b.setAttribute('aria-label',m.label);b.title=m.label+' · '+m.desc;const s=document.createElement('span');s.className='gvbrToolShort';s.textContent=m.short;const l=document.createElement('span');l.className='gvbrToolLabel';l.textContent=m.label;b.append(s,l)}
-const mini=document.createElement('div');mini.id='gvbrMini';mini.setAttribute('aria-live','polite');mini.innerHTML='<div class="gvbrMiniStage"><i></i><i></i><i></i><i></i></div><div><div class="gvbrMiniTitle"></div><div class="gvbrMiniDesc"></div></div>';document.body.appendChild(mini);
-let hideTimer=0;
-function validTheme(v){return THEMES.some(x=>x[0]===v)}
-function runtimeTheme(v){try{const d=document.querySelector('#gvaultRuntime')?.contentDocument;if(!d)return;const t=d.querySelector('#entryTheme');if(t&&t.value!==v){t.value=v;t.dispatchEvent(new Event('change',{bubbles:true}))}else if(d.body)d.body.dataset.theme=v}catch{}}
-function applyTheme(v,origin='rail'){if(!validTheme(v))return;document.body.dataset.theme=v;if(themeSelect.value!==v)themeSelect.value=v;if(origin!=='sas'&&sasTheme.value!==v){sasTheme.value=v;sasTheme.dispatchEvent(new Event('change',{bubbles:true}))}runtimeTheme(v);window.dispatchEvent(new CustomEvent('gvault:blop-theme-change',{detail:{theme:v,origin}}))}
-function syncFromBody(){const v=document.body.dataset.theme||sasTheme.value||'vault';if(validTheme(v)&&themeSelect.value!==v)themeSelect.value=v}
-themeSelect.value=validTheme(sasTheme.value)?sasTheme.value:(document.body.dataset.theme||'vault');
-themeSelect.addEventListener('change',e=>applyTheme(e.target.value,'rail'));
-sasTheme.addEventListener('change',e=>applyTheme(e.target.value,'sas'));
-new MutationObserver(syncFromBody).observe(document.body,{attributes:true,attributeFilter:['data-theme']});syncFromBody();
-function showMini(btn){const m=TOOL_META[btn.dataset.gvbsTool];if(!m)return;const stage=mini.querySelector('.gvbrMiniStage');stage.dataset.kind=m.kind;mini.querySelector('.gvbrMiniTitle').textContent=m.label;mini.querySelector('.gvbrMiniDesc').textContent=m.desc;const rr=rail.getBoundingClientRect(),w=220;let left=rr.left-w-8;if(left<6)left=Math.min(innerWidth-w-6,rr.right+8);let top=Math.max(6,Math.min(innerHeight-78,btn.getBoundingClientRect().top-8));mini.style.left=Math.max(6,left)+'px';mini.style.top=top+'px';mini.classList.remove('show');void mini.offsetWidth;mini.classList.add('show');clearTimeout(hideTimer);hideTimer=setTimeout(()=>mini.classList.remove('show'),1450)}
-rail.addEventListener('click',e=>{const b=e.target.closest('[data-gvbs-tool]');if(b)showMini(b)},true);
-document.querySelector('#gvBlopRailToggle')?.addEventListener('click',()=>setTimeout(()=>{if(rail.classList.contains('gvbrOpen'))syncFromBody()},0));
-addEventListener('resize',()=>mini.classList.remove('show'));
-window.GVAULT_BLOP_THEME_INFO=Object.freeze({schema:'GVAULT_BLOP_THEME_INFO_V2_3',sourceOfTruth:'SAS entryTheme + body[data-theme]',themes:THEMES.map(x=>x[0]),railSelector:true,animatedToolMiniatures:true,toolLabels:true});
-})();
-</script>
-
-</body>');
+ const at=source.toLowerCase().lastIndexOf('</body>');
  const wrapped=at>=0?source.slice(0,at)+bridge+source.slice(at):source+bridge;
  return {blob:new Blob([wrapped],{type:'text/html;charset=utf-8'}),nonce};
 }
@@ -2071,5 +1941,157 @@ window.GVAULT_BLOP_TERMINAL_INFO=Object.freeze({schema:'GVAULT_BLOP_TERMINAL_INF
 log('suite.ready',{marker:MARK,registry:FUNCTION_REGISTRY.length});
 })();
 </script>
+<!-- GVAULT_BLOP_RAIL_DRAWER_V2_2 -->
+<style data-gvault-blop-rail-drawer="GVAULT_BLOP_RAIL_DRAWER_V2_2">
+#gvBlopRail{display:none!important;touch-action:none;user-select:none}
+#gvBlopRail.ready.gvbrOpen{display:flex!important}
+#gvBlopRailToggle{position:fixed;right:max(6px,env(safe-area-inset-right));top:50%;transform:translateY(-50%);z-index:166;display:none;width:38px;height:38px;place-items:center;padding:0;border:1px solid rgba(200,169,90,.30);border-radius:11px;background:rgba(4,6,5,.82);color:#c8a95a;box-shadow:0 8px 28px rgba(0,0,0,.30);backdrop-filter:blur(7px);font:950 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;cursor:pointer}
+#gvBlopRailToggle.ready{display:grid}#gvBlopRailToggle.open{border-color:rgba(200,169,90,.72);background:rgba(15,14,10,.94)}
+#gvBlopRail .gvbrHandle{display:flex;gap:4px;align-items:center;justify-content:space-between;padding-bottom:3px;border-bottom:1px solid rgba(200,169,90,.12)}
+#gvBlopRail .gvbrHandle button{height:24px!important;min-height:24px!important;width:auto!important;min-width:28px!important;padding:0 6px!important;font-size:9px!important}
+#gvBlopRail .gvbrDrag{cursor:grab!important;touch-action:none}#gvBlopRail .gvbrDrag:active{cursor:grabbing!important}
+#gvBlopInspector{display:none}
+#gvBlopPanel.gvbsToolOpen #gvBlopInspector{display:block}
+#gvBlopPanel.gvbsOn:not(.gvbsToolOpen) .gvbBody{grid-template-columns:minmax(170px,28%) minmax(0,1fr)}
+#gvBlopPanel.gvbsOn.gvbsToolOpen .gvbBody{grid-template-columns:minmax(170px,24%) minmax(0,1fr) minmax(230px,30%)}
+@media(max-width:760px){#gvBlopRailToggle{right:max(4px,env(safe-area-inset-right));width:40px;height:40px}#gvBlopPanel.gvbsOn:not(.gvbsToolOpen) .gvbBody{grid-template-columns:1fr;grid-template-rows:minmax(150px,34%) minmax(0,1fr)}#gvBlopPanel.gvbsOn.gvbsToolOpen .gvbBody{grid-template-columns:1fr;grid-template-rows:minmax(125px,24%) minmax(200px,43%) minmax(130px,33%)}}
+@media(pointer:coarse){#gvBlopRailToggle{width:44px;height:44px}#gvBlopRail .gvbrHandle button{min-height:38px!important;min-width:38px!important}}
+</style>
+<script data-gvault-blop-rail-drawer-runtime="GVAULT_BLOP_RAIL_DRAWER_V2_2">
+(()=>{'use strict';
+const MARK='GVAULT_BLOP_RAIL_DRAWER_V2_2',POS_KEY='gvault_blop_rail_pos_v22';
+const rail=document.querySelector('#gvBlopRail'),panel=document.querySelector('#gvBlopPanel');if(!rail||!panel)return;
+const toggle=document.createElement('button');toggle.id='gvBlopRailToggle';toggle.type='button';toggle.textContent='B';toggle.title='Déployer les outils BLOP';toggle.setAttribute('aria-label','Déployer les outils BLOP');toggle.setAttribute('aria-controls','gvBlopRail');toggle.setAttribute('aria-expanded','false');document.body.appendChild(toggle);
+const handle=document.createElement('div');handle.className='gvbrHandle';handle.innerHTML='<button type="button" class="gvbrDrag" title="Déplacer la barre" aria-label="Déplacer la barre">↕</button><button type="button" class="gvbrClose" title="Replier la barre" aria-label="Replier la barre">×</button>';rail.insertBefore(handle,rail.firstChild);
+const drag=handle.querySelector('.gvbrDrag'),close=handle.querySelector('.gvbrClose');
+let open=false,moving=false,pointerId=null,dx=0,dy=0;
+function clamp(n,min,max){return Math.max(min,Math.min(max,n))}
+function savePos(){const r=rail.getBoundingClientRect();try{localStorage.setItem(POS_KEY,JSON.stringify({x:Math.round(r.left),y:Math.round(r.top)}))}catch{}}
+function restorePos(){try{const p=JSON.parse(localStorage.getItem(POS_KEY)||'null');if(!p||!Number.isFinite(p.x)||!Number.isFinite(p.y))return;requestAnimationFrame(()=>{const r=rail.getBoundingClientRect(),x=clamp(p.x,4,Math.max(4,innerWidth-r.width-4)),y=clamp(p.y,4,Math.max(4,innerHeight-r.height-4));rail.style.left=x+'px';rail.style.top=y+'px';rail.style.right='auto';rail.style.transform='none'})}catch{}}
+function setOpen(v){open=!!v;rail.classList.toggle('gvbrOpen',open);toggle.classList.toggle('open',open);toggle.setAttribute('aria-expanded',String(open));toggle.textContent=open?'×':'B';if(open)restorePos()}
+toggle.addEventListener('click',()=>setOpen(!open));close.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();setOpen(false)});
+function startDrag(e){if(e.button!==undefined&&e.button!==0)return;e.preventDefault();e.stopPropagation();const r=rail.getBoundingClientRect();moving=true;pointerId=e.pointerId;dx=e.clientX-r.left;dy=e.clientY-r.top;rail.style.left=r.left+'px';rail.style.top=r.top+'px';rail.style.right='auto';rail.style.transform='none';drag.setPointerCapture?.(pointerId)}
+function moveDrag(e){if(!moving||e.pointerId!==pointerId)return;e.preventDefault();const r=rail.getBoundingClientRect(),x=clamp(e.clientX-dx,4,Math.max(4,innerWidth-r.width-4)),y=clamp(e.clientY-dy,4,Math.max(4,innerHeight-r.height-4));rail.style.left=x+'px';rail.style.top=y+'px'}
+function endDrag(e){if(!moving||e.pointerId!==pointerId)return;moving=false;try{drag.releasePointerCapture?.(pointerId)}catch{}pointerId=null;savePos()}
+drag.addEventListener('pointerdown',startDrag);drag.addEventListener('pointermove',moveDrag);drag.addEventListener('pointerup',endDrag);drag.addEventListener('pointercancel',endDrag);drag.addEventListener('dblclick',()=>{try{localStorage.removeItem(POS_KEY)}catch{}rail.style.left='';rail.style.top='50%';rail.style.right='max(5px,env(safe-area-inset-right))';rail.style.transform='translateY(-50%)'});
+rail.addEventListener('click',e=>{const b=e.target.closest('[data-gvbs-tool]');if(!b)return;const t=b.dataset.gvbsTool;if(t&&t!=='open')panel.classList.add('gvbsToolOpen')},true);
+const panelObserver=new MutationObserver(()=>{if(!panel.classList.contains('open'))panel.classList.remove('gvbsToolOpen')});panelObserver.observe(panel,{attributes:true,attributeFilter:['class']});
+function syncReady(){const ready=rail.classList.contains('ready');toggle.classList.add('ready');rail.classList.toggle('gv24PreSas',!ready)}
+new MutationObserver(syncReady).observe(rail,{attributes:true,attributeFilter:['class']});setInterval(syncReady,1000);syncReady();
+addEventListener('resize',()=>{if(!open)return;const r=rail.getBoundingClientRect();if(r.right>innerWidth||r.bottom>innerHeight){rail.style.left=clamp(r.left,4,Math.max(4,innerWidth-r.width-4))+'px';rail.style.top=clamp(r.top,4,Math.max(4,innerHeight-r.height-4))+'px';savePos()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&open)setOpen(false)});
+window.GVAULT_BLOP_RAIL_INFO=Object.freeze({schema:'GVAULT_BLOP_RAIL_INFO_V2_2',drawer:true,draggable:true,positionPersistence:'local-non-secret',inspector:'collapsed-until-tool'});
+})();
+</script>
+
+
+<!-- GVAULT_BLOP_THEME_MINIATURES_V2_3 -->
+<style data-gvault-blop-theme-miniatures="GVAULT_BLOP_THEME_MINIATURES_V2_3">
+:root{--gvbr-accent:#c8a95a;--gvbr-text:#efe8d5;--gvbr-muted:#918a76;--gvbr-bg:rgba(4,6,5,.88);--gvbr-bg2:rgba(13,16,12,.96);--gvbr-border:rgba(200,169,90,.34);--gvbr-glow:rgba(200,169,90,.18)}
+body[data-theme="obsidian"]{--gvbr-accent:#66e6ff;--gvbr-text:#eef4fb;--gvbr-muted:#8f9aad;--gvbr-bg:rgba(7,11,17,.90);--gvbr-bg2:rgba(14,22,31,.96);--gvbr-border:rgba(102,230,255,.34);--gvbr-glow:rgba(102,230,255,.20)}
+body[data-theme="vault"]{--gvbr-accent:#c8a95a;--gvbr-text:#efe8d5;--gvbr-muted:#918a76;--gvbr-bg:rgba(4,6,5,.88);--gvbr-bg2:rgba(13,16,12,.96);--gvbr-border:rgba(200,169,90,.34);--gvbr-glow:rgba(200,169,90,.18)}
+body[data-theme="light"]{--gvbr-accent:#087d9c;--gvbr-text:#17212d;--gvbr-muted:#667483;--gvbr-bg:rgba(250,253,255,.94);--gvbr-bg2:rgba(233,241,247,.98);--gvbr-border:rgba(8,125,156,.28);--gvbr-glow:rgba(8,125,156,.16)}
+body[data-theme="neon"]{--gvbr-accent:#4ff6ff;--gvbr-text:#f6f0ff;--gvbr-muted:#b096c1;--gvbr-bg:rgba(12,6,19,.92);--gvbr-bg2:rgba(25,10,34,.98);--gvbr-border:rgba(79,246,255,.34);--gvbr-glow:rgba(255,79,216,.22)}
+body[data-theme="terminal"]{--gvbr-accent:#61ff85;--gvbr-text:#c9ffd4;--gvbr-muted:#6ea57b;--gvbr-bg:rgba(1,9,4,.94);--gvbr-bg2:rgba(3,15,6,.98);--gvbr-border:rgba(97,255,133,.34);--gvbr-glow:rgba(97,255,133,.18)}
+body[data-theme="mono"]{--gvbr-accent:#f2f2f2;--gvbr-text:#f2f2f2;--gvbr-muted:#9b9b9b;--gvbr-bg:rgba(5,5,5,.94);--gvbr-bg2:rgba(18,18,18,.98);--gvbr-border:rgba(242,242,242,.26);--gvbr-glow:rgba(255,255,255,.12)}
+#gvBlopRail,#gvBlopRailToggle{border-color:var(--gvbr-border)!important;background:var(--gvbr-bg)!important;color:var(--gvbr-accent)!important;box-shadow:0 8px 30px rgba(0,0,0,.30),0 0 20px var(--gvbr-glow)!important}
+#gvBlopRail{min-width:46px;max-height:min(88vh,720px);overflow:auto;scrollbar-width:thin;scrollbar-color:var(--gvbr-border) transparent}
+#gvBlopRail .gvbrHandle{border-color:var(--gvbr-border)!important}
+#gvBlopRail button{border-color:var(--gvbr-border)!important;background:var(--gvbr-bg2)!important;color:var(--gvbr-muted)!important;transition:width .16s ease,color .16s ease,border-color .16s ease,transform .12s ease,background .16s ease}
+#gvBlopRail button:hover,#gvBlopRail button:focus,#gvBlopRail button.active{color:var(--gvbr-accent)!important;border-color:var(--gvbr-accent)!important;box-shadow:0 0 12px var(--gvbr-glow)}
+#gvBlopRail button[data-gvbs-tool]{display:flex;align-items:center;justify-content:flex-start;gap:7px;overflow:hidden;white-space:nowrap}
+#gvBlopRail.gvbrOpen button[data-gvbs-tool]{width:134px!important;padding:0 7px!important}
+.gvbrToolShort{display:grid;place-items:center;flex:0 0 26px;height:24px;border:1px solid var(--gvbr-border);border-radius:7px;color:var(--gvbr-accent);font:950 8px/1 ui-monospace,monospace;background:color-mix(in srgb,var(--gvbr-bg2) 82%,transparent)}
+.gvbrToolLabel{overflow:hidden;text-overflow:ellipsis;color:var(--gvbr-text);font:850 8px/1 ui-monospace,monospace;letter-spacing:.02em}
+.gvbrTheme{display:grid;gap:4px;padding:5px 2px 7px;border-bottom:1px solid var(--gvbr-border)}
+.gvbrTheme label{display:flex;align-items:center;justify-content:space-between;gap:5px;color:var(--gvbr-muted);font:900 7px/1 ui-monospace,monospace;letter-spacing:.08em}
+.gvbrTheme label::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--gvbr-accent);box-shadow:0 0 9px var(--gvbr-glow)}
+#gvbrThemeSelect{width:134px;max-width:100%;height:30px;border:1px solid var(--gvbr-border);border-radius:8px;background:var(--gvbr-bg2);color:var(--gvbr-text);font:850 8px/1 ui-monospace,monospace;padding:0 6px;outline:none}
+#gvbrThemeSelect:focus{border-color:var(--gvbr-accent);box-shadow:0 0 0 2px var(--gvbr-glow)}
+#gvbrMini{position:fixed;z-index:170;display:none;width:min(220px,62vw);padding:8px;border:1px solid var(--gvbr-border);border-radius:12px;background:var(--gvbr-bg2);color:var(--gvbr-text);box-shadow:0 14px 38px rgba(0,0,0,.38),0 0 22px var(--gvbr-glow);pointer-events:none;backdrop-filter:blur(8px)}
+#gvbrMini.show{display:grid;grid-template-columns:58px minmax(0,1fr);gap:8px;align-items:center;animation:gvbrMiniIn .18s ease-out}
+.gvbrMiniStage{position:relative;width:58px;height:46px;border:1px solid var(--gvbr-border);border-radius:9px;overflow:hidden;background:var(--gvbr-bg)}
+.gvbrMiniStage i{position:absolute;display:block;background:var(--gvbr-accent);box-shadow:0 0 8px var(--gvbr-glow)}
+.gvbrMiniTitle{font:950 9px/1.15 ui-monospace,monospace;color:var(--gvbr-accent);letter-spacing:.06em}.gvbrMiniDesc{margin-top:4px;font:750 7px/1.35 ui-monospace,monospace;color:var(--gvbr-muted)}
+@keyframes gvbrMiniIn{from{opacity:0;transform:translateY(5px) scale(.96)}to{opacity:1;transform:none}}
+.gvbrMiniStage[data-kind="mount"] i{width:14px;height:11px;border-radius:2px}.gvbrMiniStage[data-kind="mount"] i:nth-child(1){left:7px;top:8px;animation:gvbrBlock 1s infinite alternate}.gvbrMiniStage[data-kind="mount"] i:nth-child(2){left:23px;top:18px;animation:gvbrBlock 1s .16s infinite alternate}.gvbrMiniStage[data-kind="mount"] i:nth-child(3){left:39px;top:28px;animation:gvbrBlock 1s .32s infinite alternate}
+@keyframes gvbrBlock{to{transform:translateY(-6px);opacity:.45}}
+.gvbrMiniStage[data-kind="analysis"] i{left:8px;width:42px;height:3px}.gvbrMiniStage[data-kind="analysis"] i:nth-child(1){top:10px}.gvbrMiniStage[data-kind="analysis"] i:nth-child(2){top:20px;width:31px}.gvbrMiniStage[data-kind="analysis"] i:nth-child(3){top:30px;width:38px}.gvbrMiniStage[data-kind="analysis"] i:nth-child(4){top:4px;bottom:4px;width:2px;height:auto;animation:gvbrScan 1.1s linear infinite}
+@keyframes gvbrScan{from{left:6px}to{left:50px}}
+.gvbrMiniStage[data-kind="dissection"] i{top:9px;width:12px;height:28px;border-radius:2px;animation:gvbrSplit 1s infinite alternate}.gvbrMiniStage[data-kind="dissection"] i:nth-child(1){left:8px}.gvbrMiniStage[data-kind="dissection"] i:nth-child(2){left:23px;animation-delay:.14s}.gvbrMiniStage[data-kind="dissection"] i:nth-child(3){left:38px;animation-delay:.28s}
+@keyframes gvbrSplit{to{transform:scaleY(.55);opacity:.42}}
+.gvbrMiniStage[data-kind="reference"] i{width:8px;height:8px;border-radius:50%;animation:gvbrNode 1s infinite alternate}.gvbrMiniStage[data-kind="reference"] i:nth-child(1){left:8px;top:18px}.gvbrMiniStage[data-kind="reference"] i:nth-child(2){left:25px;top:8px;animation-delay:.15s}.gvbrMiniStage[data-kind="reference"] i:nth-child(3){left:42px;top:27px;animation-delay:.3s}.gvbrMiniStage[data-kind="reference"] i:nth-child(4){left:14px;top:22px;width:34px;height:1px;border-radius:0;transform:rotate(12deg);transform-origin:left}
+@keyframes gvbrNode{to{transform:scale(1.5);opacity:.48}}
+.gvbrMiniStage[data-kind="exam"] i{background:transparent;border:1px solid var(--gvbr-accent);border-radius:50%;left:17px;top:11px;width:24px;height:24px;animation:gvbrPulse 1s infinite}.gvbrMiniStage[data-kind="exam"] i:nth-child(2){left:28px;top:5px;width:1px;height:36px;border:0;background:var(--gvbr-accent);border-radius:0}.gvbrMiniStage[data-kind="exam"] i:nth-child(3){left:10px;top:22px;width:38px;height:1px;border:0;background:var(--gvbr-accent);border-radius:0}
+@keyframes gvbrPulse{50%{transform:scale(.72);opacity:.35}}
+.gvbrMiniStage[data-kind="complement"] i{width:5px;height:5px;border-radius:50%;left:27px;top:20px}.gvbrMiniStage[data-kind="complement"] i:nth-child(2){animation:gvbrOrbit 1.2s linear infinite;transform-origin:2px 2px}.gvbrMiniStage[data-kind="complement"] i:nth-child(3){animation:gvbrOrbit 1.2s .4s linear infinite;transform-origin:2px 2px}@keyframes gvbrOrbit{from{transform:rotate(0) translateX(17px)}to{transform:rotate(360deg) translateX(17px)}}
+.gvbrMiniStage[data-kind="gforge"] i{left:9px;height:3px}.gvbrMiniStage[data-kind="gforge"] i:nth-child(1){top:10px;width:31px}.gvbrMiniStage[data-kind="gforge"] i:nth-child(2){top:19px;width:40px}.gvbrMiniStage[data-kind="gforge"] i:nth-child(3){top:28px;width:25px}.gvbrMiniStage[data-kind="gforge"] i:nth-child(4){left:43px;top:27px;width:7px;height:7px;transform:rotate(45deg);animation:gvbrSpark .8s infinite}@keyframes gvbrSpark{50%{transform:rotate(225deg) scale(1.5);opacity:.35}}
+.gvbrMiniStage[data-kind="ladybug"] i:nth-child(1){left:17px;top:8px;width:24px;height:30px;border-radius:50%}.gvbrMiniStage[data-kind="ladybug"] i:nth-child(n+2){width:5px;height:5px;border-radius:50%;background:var(--gvbr-bg2);box-shadow:none}.gvbrMiniStage[data-kind="ladybug"] i:nth-child(2){left:22px;top:16px}.gvbrMiniStage[data-kind="ladybug"] i:nth-child(3){left:32px;top:25px}.gvbrMiniStage[data-kind="ladybug"] i:nth-child(4){left:27px;top:8px;width:1px;height:30px;border-radius:0;animation:gvbrWing 1s infinite alternate}@keyframes gvbrWing{to{transform:rotate(12deg)}}
+.gvbrMiniStage[data-kind="wand"] i:nth-child(1){left:16px;top:28px;width:31px;height:3px;transform:rotate(-42deg);transform-origin:left;animation:gvbrWand 1s infinite alternate}.gvbrMiniStage[data-kind="wand"] i:nth-child(n+2){width:5px;height:5px;transform:rotate(45deg)}.gvbrMiniStage[data-kind="wand"] i:nth-child(2){left:39px;top:8px}.gvbrMiniStage[data-kind="wand"] i:nth-child(3){left:48px;top:17px}.gvbrMiniStage[data-kind="wand"] i:nth-child(4){left:32px;top:3px}@keyframes gvbrWand{to{transform:rotate(-30deg) translateX(3px)}}
+.gvbrMiniStage[data-kind="gadmin"] i{width:16px;height:12px;border-radius:2px;animation:gvbrDash 1.2s infinite alternate}.gvbrMiniStage[data-kind="gadmin"] i:nth-child(1){left:9px;top:8px}.gvbrMiniStage[data-kind="gadmin"] i:nth-child(2){left:31px;top:8px;animation-delay:.15s}.gvbrMiniStage[data-kind="gadmin"] i:nth-child(3){left:9px;top:26px;animation-delay:.3s}.gvbrMiniStage[data-kind="gadmin"] i:nth-child(4){left:31px;top:26px;animation-delay:.45s}@keyframes gvbrDash{to{opacity:.3;transform:scale(.82)}}
+@media(max-width:760px){#gvBlopRail.gvbrOpen button[data-gvbs-tool],#gvbrThemeSelect{width:min(132px,42vw)!important}.gvbrToolLabel{font-size:7px}#gvbrMini{width:min(205px,72vw)}}
+@media(pointer:coarse){#gvBlopRail button[data-gvbs-tool]{min-height:44px!important}.gvbrToolShort{height:30px}}
+@media(prefers-reduced-motion:reduce){#gvbrMini,#gvbrMini *{animation:none!important;transition:none!important}}
+</style>
+<script data-gvault-blop-theme-miniatures-runtime="GVAULT_BLOP_THEME_MINIATURES_V2_3">
+(()=>{'use strict';
+const MARK='GVAULT_BLOP_THEME_MINIATURES_V2_3',rail=document.querySelector('#gvBlopRail'),sasTheme=document.querySelector('#entryTheme');if(!rail||!sasTheme)return;
+const THEMES=[['obsidian','OBSIDIAN'],['vault','COFFRE-FORT'],['light','CLAIR'],['neon','NÉON RÉTRO'],['terminal','TERMINAL'],['mono','MONO']];
+const TOOL_META={
+ open:{short:'B',label:'BLOP',desc:'Ouvrir ou fermer le terminal de montage.',kind:'mount'},
+ analysis:{short:'A',label:'ANALYSE',desc:'Scanner structure, fichiers et signaux du projet.',kind:'analysis'},
+ dissection:{short:'D',label:'DISSECTION',desc:'Découper le projet en composants observables.',kind:'dissection'},
+ reference:{short:'R',label:'RÉFÉRENCES',desc:'Produire des repères fichier et ligne.',kind:'reference'},
+ exam:{short:'E',label:'EXAMEN',desc:'Lancer l’examen complet factuel.',kind:'exam'},
+ complement:{short:'+',label:'COMPLÉMENT',desc:'Chercher les anomalies et angles complémentaires.',kind:'complement'},
+ gforge:{short:'GF',label:'GFORGE',desc:'Générer un prompt GForge depuis le projet.',kind:'gforge'},
+ ladybug:{short:'LB',label:'LADYBUG',desc:'Produire le rapport de session et de diagnostic.',kind:'ladybug'},
+ wand:{short:'✦',label:'BAGUETTE',desc:'Prévisualiser une correction de rendu en mémoire.',kind:'wand'},
+ gadmin:{short:'GA',label:'GADMIN',desc:'Ouvrir le contrôle, registre et configuration.',kind:'gadmin'}
+};
+const handle=rail.querySelector('.gvbrHandle');
+const themeBox=document.createElement('div');themeBox.className='gvbrTheme';themeBox.innerHTML='<label for="gvbrThemeSelect">THÈME SAS</label><select id="gvbrThemeSelect" aria-label="Thème BLOP synchronisé avec le SAS">'+THEMES.map(([v,l])=>'<option value="'+v+'">'+l+'</option>').join('')+'</select>';handle?.insertAdjacentElement('afterend',themeBox);
+const themeSelect=themeBox.querySelector('#gvbrThemeSelect');
+for(const b of rail.querySelectorAll('[data-gvbs-tool]')){const m=TOOL_META[b.dataset.gvbsTool];if(!m)continue;b.textContent='';b.setAttribute('aria-label',m.label);b.title=m.label+' · '+m.desc;const s=document.createElement('span');s.className='gvbrToolShort';s.textContent=m.short;const l=document.createElement('span');l.className='gvbrToolLabel';l.textContent=m.label;b.append(s,l)}
+const mini=document.createElement('div');mini.id='gvbrMini';mini.setAttribute('aria-live','polite');mini.innerHTML='<div class="gvbrMiniStage"><i></i><i></i><i></i><i></i></div><div><div class="gvbrMiniTitle"></div><div class="gvbrMiniDesc"></div></div>';document.body.appendChild(mini);
+let hideTimer=0;
+function validTheme(v){return THEMES.some(x=>x[0]===v)}
+function runtimeTheme(v){try{const d=document.querySelector('#gvaultRuntime')?.contentDocument;if(!d)return;const t=d.querySelector('#entryTheme');if(t&&t.value!==v){t.value=v;t.dispatchEvent(new Event('change',{bubbles:true}))}else if(d.body)d.body.dataset.theme=v}catch{}}
+function applyTheme(v,origin='rail'){if(!validTheme(v))return;document.body.dataset.theme=v;if(themeSelect.value!==v)themeSelect.value=v;if(origin!=='sas'&&sasTheme.value!==v){sasTheme.value=v;sasTheme.dispatchEvent(new Event('change',{bubbles:true}))}runtimeTheme(v);window.dispatchEvent(new CustomEvent('gvault:blop-theme-change',{detail:{theme:v,origin}}))}
+function syncFromBody(){const v=document.body.dataset.theme||sasTheme.value||'vault';if(validTheme(v)&&themeSelect.value!==v)themeSelect.value=v}
+themeSelect.value=validTheme(sasTheme.value)?sasTheme.value:(document.body.dataset.theme||'vault');
+themeSelect.addEventListener('change',e=>applyTheme(e.target.value,'rail'));
+sasTheme.addEventListener('change',e=>applyTheme(e.target.value,'sas'));
+new MutationObserver(syncFromBody).observe(document.body,{attributes:true,attributeFilter:['data-theme']});syncFromBody();
+function showMini(btn){const m=TOOL_META[btn.dataset.gvbsTool];if(!m)return;const stage=mini.querySelector('.gvbrMiniStage');stage.dataset.kind=m.kind;mini.querySelector('.gvbrMiniTitle').textContent=m.label;mini.querySelector('.gvbrMiniDesc').textContent=m.desc;const rr=rail.getBoundingClientRect(),w=220;let left=rr.left-w-8;if(left<6)left=Math.min(innerWidth-w-6,rr.right+8);let top=Math.max(6,Math.min(innerHeight-78,btn.getBoundingClientRect().top-8));mini.style.left=Math.max(6,left)+'px';mini.style.top=top+'px';mini.classList.remove('show');void mini.offsetWidth;mini.classList.add('show');clearTimeout(hideTimer);hideTimer=setTimeout(()=>mini.classList.remove('show'),1450)}
+rail.addEventListener('click',e=>{const b=e.target.closest('[data-gvbs-tool]');if(b)showMini(b)},true);
+document.querySelector('#gvBlopRailToggle')?.addEventListener('click',()=>setTimeout(()=>{if(rail.classList.contains('gvbrOpen'))syncFromBody()},0));
+addEventListener('resize',()=>mini.classList.remove('show'));
+window.GVAULT_BLOP_THEME_INFO=Object.freeze({schema:'GVAULT_BLOP_THEME_INFO_V2_3',sourceOfTruth:'SAS entryTheme + body[data-theme]',themes:THEMES.map(x=>x[0]),railSelector:true,animatedToolMiniatures:true,toolLabels:true});
+})();
+</script>
+
+<!-- GVAULT_PUBLIC_GATEWAY_SAFETY_V2_4 -->
+<style data-gvault-public-safety="GVAULT_PUBLIC_GATEWAY_SAFETY_V2_4">
+#gvBlopRailToggle{display:grid!important}
+#gvBlopRail.gv24PreSas.gvbrOpen{display:flex!important}
+#gvBlopRail.gv24PreSas [data-gvbs-tool]{opacity:.42!important;filter:saturate(.35);cursor:not-allowed!important}
+#gvBlopRail.gv24PreSas .gvbrTheme,#gvBlopRail.gv24PreSas .gvbrHandle{opacity:1!important;filter:none;pointer-events:auto}
+#gvBlopRail .gv24Phase{padding:4px 5px;border:1px solid var(--gvbr-border,rgba(200,169,90,.28));border-radius:7px;color:var(--gvbr-muted,#918a76);font:850 6px/1.25 ui-monospace,monospace;text-align:center;letter-spacing:.05em}
+#gvBlopRail:not(.gv24PreSas) .gv24Phase{color:var(--gvbr-accent,#c8a95a)}
+</style>
+<script data-gvault-public-safety-runtime="GVAULT_PUBLIC_GATEWAY_SAFETY_V2_4">
+(()=>{'use strict';
+const rail=document.querySelector('#gvBlopRail'),toggle=document.querySelector('#gvBlopRailToggle');if(!rail||!toggle)return;
+let phase=document.createElement('div');phase.className='gv24Phase';const theme=rail.querySelector('.gvbrTheme');(theme||rail.firstElementChild)?.insertAdjacentElement('afterend',phase);
+function ready(){return !!document.querySelector('#gvaultRuntime')?.classList.contains('ready')}
+function sync(){const ok=ready();toggle.classList.add('ready');rail.classList.toggle('gv24PreSas',!ok);phase.textContent=ok?'BLOP · SESSION OUVERTE':'SAS · OUTILS VERROUILLÉS';for(const b of rail.querySelectorAll('[data-gvbs-tool]')){if(b.dataset.gvbsTool==='open'){b.disabled=!ok;continue}b.disabled=!ok}}
+try{Object.defineProperty(window,'__GVAULT_PROJECT_STORE_PASSWORD__',{get(){return undefined},set(){throw new Error('Global SAS password exposure is forbidden on public gateway.');},configurable:false,enumerable:false})}catch{}
+window.addEventListener('gvault:blop-theme-change',e=>{const v=e.detail?.theme;try{const d=document.querySelector('#gvaultRuntime')?.contentDocument,t=d?.querySelector('#entryTheme');if(t&&v&&t.value!==v){t.value=v;t.dispatchEvent(new Event('change',{bubbles:true}))}}catch{}});
+new MutationObserver(sync).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});setInterval(sync,750);sync();
+window.GVAULT_PUBLIC_SAFETY_INFO=Object.freeze({schema:'GVAULT_PUBLIC_GATEWAY_SAFETY_V2_4',scriptLeakRepair:true,preSasRail:true,preSasSensitiveToolsLocked:true,passwordGlobal:'forbidden',csp:true,referrer:'no-referrer'});
+})();
+</script>
+
 </body>
 </html>
