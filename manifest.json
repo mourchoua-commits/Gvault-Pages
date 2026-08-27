@@ -33,7 +33,7 @@
   },
   "officialRefs": {
     "schema": "GVAULT_PUBLIC_OFFICIAL_REFS_V1",
-    "generatedAt": "2026-08-26T23:12:22.729Z",
+    "generatedAt": "2026-08-27T00:38:12.501Z",
     "authority": "PRIVATE_ROOTS_SANITIZED_REFERENCES",
     "releases": [
       {
@@ -53,7 +53,13 @@
             "Historique sélectable des trois dernières itérations du Vault."
           ]
         },
-        "availability": "PRIVATE_ROOT_REFERENCE"
+        "availability": "PRIVATE_ROOT_REFERENCE",
+        "preview": {
+          "schema": "GVAULT_OFFICIAL_PREVIEW_REF_V1",
+          "transport": "PUBLIC_CIPHERTEXT_SAS_MEMORY_ONLY",
+          "manifest": "previews/581a0a74068f28ef4b471f6b093499f1b6324b5a6cc286cfdf8e912f3c6b5a14/manifest.json",
+          "purpose": "MEMORY_BLOB_PREVIEW_ONLY"
+        }
       },
       {
         "releaseId": "R5.6.2",
@@ -92,8 +98,21 @@
             "r3 · catalyse: refresh Gactu + Admin in GVAULT runtime"
           ]
         },
-        "availability": "PRIVATE_ROOT_REFERENCE"
+        "availability": "PRIVATE_ROOT_REFERENCE",
+        "preview": {
+          "schema": "GVAULT_OFFICIAL_PREVIEW_REF_V1",
+          "transport": "PUBLIC_CIPHERTEXT_SAS_MEMORY_ONLY",
+          "manifest": "previews/793fa9995a053acb71c41721d21126d99775e53ab4a9bf64eacf47d95e2f77bc/manifest.json",
+          "purpose": "MEMORY_BLOB_PREVIEW_ONLY"
+        }
       }
-    ]
+    ],
+    "previewTransport": {
+      "schema": "GVAULT_PUBLIC_ENCRYPTED_PREVIEW_TRANSPORT_V1",
+      "plaintextPolicy": "NEVER_PERSIST_PUBLICLY_MEMORY_ONLY_AFTER_SAS",
+      "cipher": "AES-256-GCM",
+      "kdf": "PBKDF2-HMAC-SHA256",
+      "packetCount": 2
+    }
   }
 }
