@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>GVAULT · BLOP ESSAI r5</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#070907;color:#e7e1d2}body{padding:10px}.shell{display:grid;grid-template-rows:auto minmax(420px,1fr);gap:8px;min-height:100vh}.bar{display:grid;gap:7px;padding:9px;border:1px solid #4c4b40;border-radius:12px;background:#0d100d}.title{font-weight:950;color:#c8a95a}.meta{font-size:9px;color:#969080;line-height:1.45}.checks{display:flex;gap:5px;flex-wrap:wrap}.chip{padding:4px 7px;border:1px solid #555;border-radius:999px;font-size:8px}.pass{border-color:#528764;color:#a8dfb7}.fail{border-color:#9b5353;color:#ffaaa0}.wait{border-color:#8c7847;color:#e1c77d}.buttons{display:flex;gap:6px;flex-wrap:wrap}button{min-height:38px;padding:0 10px;border:1px solid #655d43;border-radius:9px;background:#11150f;color:#dfd7c2;font:850 9px ui-monospace,monospace}button.primary{border-color:#7c9b65;color:#c7edb2}button:disabled{opacity:.45}.sendState{font-size:9px;line-height:1.4;color:#c8a95a}.sendState.bad{color:#ffaaa0}.sendState.good{color:#a8dfb7}iframe{width:100%;height:100%;min-height:620px;border:1px solid #4c4b40;border-radius:12px;background:#000}.tools{font-size:8px;line-height:1.5;white-space:pre-wrap;color:#b9b29f}
+</style>
+</head>
+<body>
+<div class="shell">
+<section class="bar">
+ <div class="title">BLOP · ESSAI r5 · RAPPORT EXPLICITE</div>
+ <div class="meta">Base testée : ESSAI r3 · c21f79621543c4e9d805d95da23930bccaae618f · r4 préservé · GvaultStable non modifié. Aucun clic n’est transmis tant que tu n’appuies pas sur ENVOYER RAPPORT.</div>
+ <div class="buttons"><button id="reload">RECHARGER</button><button id="base">BASE</button><button id="smoke">SMOKE</button><button id="blop">BLOP + DIAG</button><button id="copy">COPIER RAPPORT</button><button id="send" class="primary">ENVOYER RAPPORT</button></div>
+ <div id="sendState" class="sendState">Rapport local uniquement · reconnecte le privé dans BLOP pour autoriser un envoi explicite.</div>
+ <div id="checks" class="checks"><span class="chip wait">initialisation…</span></div>
+ <div id="tools" class="tools"></div>
+</section>
+<iframe id="target" title="GVAULT ESSAI r3"></iframe>
+</div>
+<script>
+(()=>{'use strict';
+const ROOT='../../';
+const PRIVATE_REPO='mourchoua-commits/Gvault',PRIVATE_BRANCH='vigie-state';
+const EXPECTED=['open','analysis','dissection','reference','exam','complement','gforge','ladybug','wand','gadmin'];
+const f=document.querySelector('#target'),checks=document.querySelector('#checks'),tools=document.querySelector('#tools'),sendState=document.querySelector('#sendState'),sendBtn=document.querySelector('#send');
+const events=[];let reportToken='',boundDoc=null,lastInspect=null,sending=false;
+function url(mode){if(mode==='base')return ROOT+'?r=5-base';if(mode==='smoke')return ROOT+'?essai-debug=1&r=5-smoke';return ROOT+'?essai-blop=1&essai-debug=1&r=5-blop'}
+function load(mode='blop'){reportToken='';boundDoc=null;events.length=0;setSendState('Rapport local uniquement · reconnecte le privé dans BLOP pour autoriser un envoi explicite.');f.src=url(mode)}
+function chip(name,ok,detail=''){const s=document.createElement('span');s.className='chip '+(ok===null?'wait':ok?'pass':'fail');s.textContent=(ok===null?'… ':ok?'✓ ':'✕ ')+name+(detail?' · '+detail:'');return s}
+function render(list){checks.replaceChildren(...list.map(x=>chip(x[0],x[1],x[2]||'')))}
+function setSendState(t,kind=''){sendState.textContent=t;sendState.className='sendState '+kind}
+function redact(v){return String(v??'').replace(/github_pat_[A-Za-z0-9_]+/g,'[REDACTED_TOKEN]').replace(/gh[pousr]_[A-Za-z0-9]+/g,'[REDACTED_TOKEN]').replace(/Bearer\s+[A-Za-z0-9._-]+/gi,'Bearer [REDACTED]').replace(/("?(?:password|token|authorization)"?\s*[:=]\s*)[^\s,;}]+/gi,'$1[REDACTED]').slice(0,2400)}
+function addEvent(type,detail={}){events.push({at:new Date().toISOString(),type,detail:Object.fromEntries(Object.entries(detail).map(([k,v])=>[k,redact(v)]))});if(events.length>240)events.splice(0,events.length-240)}
+function bindCapture(d,w){if(!d||boundDoc===d)return;boundDoc=d;
+ const connect=d.querySelector('#gvBlopConnect'),token=d.querySelector('#gvBlopToken'),disconnect=d.querySelector('#gvBlopDisconnect');
+ connect?.addEventListener('click',()=>{const v=token?.value?.trim()||'';if(v){reportToken=v;setSendState('Session privée détectée en mémoire · ENVOYER RAPPORT est disponible.','good');addEvent('private_session.capture',{state:'memory-only'})}},true);
+ disconnect?.addEventListener('click',()=>{reportToken='';setSendState('Session privée effacée · aucun jeton conservé.');addEvent('private_session.erase')},true);
+ d.addEventListener('click',e=>{const b=e.target?.closest?.('#gvBlopRail [data-gvbs-tool]');if(!b)return;const tool=b.dataset.gvbsTool||'unknown';addEvent('tool.click',{tool,disabled:b.disabled,ready:!!d.querySelector('#gvaultRuntime')?.classList.contains('ready')});setTimeout(()=>{addEvent('tool.after',{tool,status:d.querySelector('#gvBlopStatus')?.textContent||'',report:d.querySelector('#gvbsReport')?.textContent||''})},500)},true);
+ w.addEventListener('error',e=>addEvent('window.error',{message:e.message||'',source:e.filename||'',line:e.lineno||0,col:e.colno||0}));
+ w.addEventListener('unhandledrejection',e=>addEvent('promise.rejection',{reason:e.reason?.message||String(e.reason||'unknown')}));
+}
+async function inspect(){let w,d;try{w=f.contentWindow;d=f.contentDocument}catch{return render([['same_origin',false,'iframe inaccessible']])}bindCapture(d,w);const out=[];out.push(['baseline',w.GVAULT_ESSAI_BASELINE?.sourceCommit==='bb36cd4d328ca8c4ee94aae6fd1a2e5c63bac4e1',w.GVAULT_ESSAI_BASELINE?.sourceCommit?.slice(0,12)||'absent']);const graft=w.GVAULT_ESSAI_BLOP_GRAFT;out.push(['graft',graft?.status==='PASS',graft?.status||'absent']);const info=w.GVAULT_BLOP_TERMINAL_INFO;out.push(['memory_only',info?.authPersistence==='memory-only',info?.authPersistence||'absent']);out.push(['private_persist_none',info?.privateSourcePersistence==='none',info?.privateSourcePersistence||'absent']);const safety=w.GVAULT_PUBLIC_SAFETY_INFO;out.push(['safety_targeted',safety?.targetedObserver===true,safety?.schema||'absent']);out.push(['subtree_observer_off',safety?.subtreeObserver===false,String(safety?.subtreeObserver)]);const buttons=[...d.querySelectorAll('#gvBlopRail [data-gvbs-tool]')];const names=buttons.map(b=>b.dataset.gvbsTool);out.push(['tools_10',EXPECTED.every(x=>names.includes(x))&&names.length>=10,names.length+' outils']);const preSas=!d.querySelector('#gvaultRuntime')?.classList.contains('ready');if(preSas){const sensitive=buttons.filter(b=>b.dataset.gvbsTool!=='open');out.push(['pre_sas_locked',sensitive.length>0&&sensitive.every(b=>b.disabled),sensitive.filter(b=>b.disabled).length+'/'+sensitive.length])}else out.push(['runtime_ready',true,'session ouverte']);const reg=Array.isArray(info?.registry)?info.registry:[];out.push(['registry',reg.length>0,reg.length+' entrées']);render(out);tools.textContent='OUTILS DOM : '+names.join(' · ')+'\nREGISTRE : '+reg.map(x=>x.id||x.name||'?').join(' · ');lastInspect={at:new Date().toISOString(),checks:out,tools:names,registry:reg.map(x=>x.id||x.name||'?'),smoke:w.GVAULT_ESSAI_SMOKE||null,graft:graft||null,safety:safety||null,terminal:info?{schema:info.schema,authPersistence:info.authPersistence,privateSourcePersistence:info.privateSourcePersistence,maxFiles:info.maxFiles,maxBytes:info.maxBytes}:null};window.GVAULT_BLOP_R5_REPORT=Object.freeze({schema:'GVAULT_BLOP_R5_HARNESS_V1',...lastInspect,events:events.slice()})}
+function buildReport(){let href='';try{href=f.contentWindow?.location?.href||''}catch{}return {schema:'GVAULT_BLOP_ESSAI_EXPLICIT_REPORT_V1',capturedAt:new Date().toISOString(),consent:'explicit_send_button',source:{publicRepository:'mourchoua-commits/Gvault-Pages',harness:'essai/blop-r5',rootCheckpoint:'c21f79621543c4e9d805d95da23930bccaae618f',r4Checkpoint:'0bdf9cf6015bf3d3a3d1f580987e2e2cec9b9d0f',page:href.replace(/[?&](?:token|password)=[^&]*/gi,'')},device:{viewport:{width:innerWidth,height:innerHeight},userAgent:redact(navigator.userAgent)},inspection:lastInspect,events:events.slice(),privacy:{passiveTelemetry:false,tokenSerialized:false,passwordCaptured:false,inputValuesCaptured:false,privateDestination:true}}}
+function b64utf8(s){const bytes=new TextEncoder().encode(s);let bin='';for(const b of bytes)bin+=String.fromCharCode(b);return btoa(bin)}
+async function copyReport(){const txt=JSON.stringify(buildReport(),null,2);try{await navigator.clipboard.writeText(txt);setSendState('Rapport copié localement. Aucun envoi réseau effectué.','good')}catch{setSendState('Copie impossible dans ce navigateur.','bad')}}
+async function sendReport(){if(sending)return;if(!reportToken){setSendState('ENVOI REFUSÉ · reconnecte d’abord le dépôt privé dans BLOP. Aucun jeton n’est stocké.','bad');return}sending=true;sendBtn.disabled=true;try{await inspect();const report=buildReport(),stamp=new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14),rand=Math.random().toString(36).slice(2,8),path='modules/vigie/essai-reports/'+stamp+'-'+rand+'.json',apiPath=path.split('/').map(encodeURIComponent).join('/');const r=await fetch('https://api.github.com/repos/'+PRIVATE_REPO+'/contents/'+apiPath,{method:'PUT',headers:{'Accept':'application/vnd.github+json','Authorization':'Bearer '+reportToken,'X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'},body:JSON.stringify({message:'vigie: ingest explicit Gvault-Pages ESSAI report\n\nCHOUFF: explicit user-triggered report\nGVAULT-Public-Effect: none',content:b64utf8(JSON.stringify(report,null,2)),branch:PRIVATE_BRANCH})});let body={};try{body=await r.json()}catch{}if(!r.ok)throw new Error('GitHub '+r.status+(body?.message?' · '+body.message:''));const sha=body?.commit?.sha||'';addEvent('report.sent',{path,commit:sha});setSendState('RAPPORT ENVOYÉ · '+path+(sha?' · '+sha.slice(0,12):''),'good');window.GVAULT_BLOP_R5_LAST_SEND={path,commit:sha,at:new Date().toISOString()}}catch(e){addEvent('report.send_error',{message:e.message||String(e)});setSendState('ÉCHEC ENVOI · '+redact(e.message||String(e))+' · utilise COPIER RAPPORT si le jeton est lecture seule.','bad')}finally{sending=false;sendBtn.disabled=false}}
+f.addEventListener('load',()=>{render([['iframe_loaded',true,'attente runtime']]);let n=0;const t=setInterval(()=>{n++;inspect();if(n>=16)clearInterval(t)},500)});
+document.querySelector('#reload').onclick=()=>load('blop');document.querySelector('#base').onclick=()=>load('base');document.querySelector('#smoke').onclick=()=>load('smoke');document.querySelector('#blop').onclick=()=>load('blop');document.querySelector('#copy').onclick=copyReport;sendBtn.onclick=sendReport;window.addEventListener('pagehide',()=>{reportToken='';events.length=0},{once:true});load('blop');
+})();
+</script>
+</body>
+</html>
