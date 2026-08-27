@@ -1895,6 +1895,9 @@ function setOnline(v){online=!!v;const sw=$('#gvbsPortability'),mode=$('#gvbsMod
 $('#gvbsPortability')?.addEventListener('change',e=>setOnline(e.target.checked));
 function networkGuard(e){if(online)return;if(e.target===connect||e.target===load){e.preventDefault();e.stopImmediatePropagation();setStatusSuite('Portabilité en ligne désactivée : aucune nouvelle lecture privée. Le projet déjà monté reste examinable hors ligne.',true);log('network.blocked',{control:e.target.id})}}
 connect?.addEventListener('click',e=>{if(tokenEl?.value) suiteToken=tokenEl.value.trim();networkGuard(e);if(online&&suiteToken)setTimeout(refreshSuiteTree,350)},true);load?.addEventListener('click',networkGuard,true);
+// GVAULT_BLOP_SESSION_ERASE_FIX_V2_1 — EFFACER SESSION destroys Suite V2 RAM and reloads to destroy V1 private blob URLs/closures too.
+const disconnectV2=$('#gvBlopDisconnect');
+disconnectV2?.addEventListener('click',()=>{suiteToken='';suiteTree=[];snapshot=null;lastReport=null;audit=[];for(const u of suiteUrls){try{URL.revokeObjectURL(u)}catch{}}suiteUrls=[];frameCopies=new WeakMap();preview.querySelectorAll('iframe.gvbPreviewFrame').forEach(f=>f.remove());log('session.erase',{scope:'V1+V2',reload:true});setTimeout(()=>location.reload(),60)},true);
 function ghHeaders(){if(!suiteToken)throw new Error('Jeton de session absent. Reconnecte le privé.');return {'Accept':'application/vnd.github+json','Authorization':'Bearer '+suiteToken,'X-GitHub-Api-Version':'2022-11-28'}}
 async function gh(url){if(!online)throw new Error('Portabilité en ligne OFF.');const r=await fetch(url,{headers:ghHeaders(),cache:'no-store'});if(!r.ok){let m='';try{m=(await r.json()).message||''}catch{}throw new Error('GitHub '+r.status+(m?' · '+m:''))}return r.json()}
 function cleanRepo(){const v=(repoEl?.value||'').trim();if(!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(v))throw new Error('Dépôt owner/repo invalide.');return v}
