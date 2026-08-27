@@ -1,17 +1,27 @@
 {
-  "schema": "GVAULT_PAGES_ESSAI_BASELINE_V1",
+  "schema": "GVAULT_PAGES_ESSAI_BASELINE_V2",
   "role": "ESSAI_PUBLIC_TEST_SURFACE",
-  "source": {
+  "stableSource": {
     "repository": "mourchoua-commits/GvaultStable",
     "commit": "bb36cd4d328ca8c4ee94aae6fd1a2e5c63bac4e1",
     "indexBlob": "960e9dd347ea7aa65d5a630ce532d68dc7ac6812"
   },
   "execution": "Gvault-Pages origin with pinned Stable runtime mirror",
-  "localAssetsAlreadyIdentical": ["manifest.json", "previews/", "vault.ff479f09629ce5795a82643b213efa9da68bbbc7f423bff1f9944f33d6ba6422.bin"],
-  "bridgedPinnedAssets": ["private-catalog/manifest.json", "private-catalog/catalog.23243b824fe7935796256982ebb1982f22477edcd0e6d339a74bc69c705eecdc.bin"],
+  "localAssetsIdenticalToStable": ["manifest.json", "previews/", "vault.ff479f09629ce5795a82643b213efa9da68bbbc7f423bff1f9944f33d6ba6422.bin"],
+  "stablePinnedBridge": ["private-catalog/manifest.json", "private-catalog/catalog.23243b824fe7935796256982ebb1982f22477edcd0e6d339a74bc69c705eecdc.bin"],
+  "optionalModes": {
+    "smoke": "?essai-debug=1",
+    "blop": "?essai-blop=1",
+    "blopWithSmoke": "?essai-blop=1&essai-debug=1"
+  },
+  "blopSource": {
+    "repository": "mourchoua-commits/Gvault-Pages",
+    "commit": "05a1a25eeae7375e955fb71e0b0e7d9390337f32",
+    "selectionPolicy": "only top-level BLOP/public-safety/SAS-first-action marked blocks and gvBlop roots"
+  },
   "stableMutation": false,
   "chouffPreserved": true,
   "rollbackBranch": "rollback/pre-gvaultstable-sync-20260827-2231",
   "rollbackCommit": "05a1a25eeae7375e955fb71e0b0e7d9390337f32",
-  "note": "GvaultStable remains frozen. Gvault-Pages is the evolvable ESSAI surface."
+  "note": "Default route remains Stable baseline. BLOP is an explicit ESSAI graft and does not mutate GvaultStable."
 }
