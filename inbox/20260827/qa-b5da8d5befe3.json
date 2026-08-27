@@ -1,0 +1,25 @@
+{
+  "schema": "GVAULT_DATAPASSIV_CAPSULE_V1",
+  "id": "qa-b5da8d5befe3",
+  "createdAt": "2026-08-27T21:30:03Z",
+  "epoch": "20260827",
+  "kid": "8b67e32735e3ed0a",
+  "source": {
+    "repository": "mourchoua-commits/Gvault-Pages",
+    "surface": "/essai/blop-r6/",
+    "sessionId": "qa-synthetic"
+  },
+  "eventCount": 3,
+  "seqFirst": 1,
+  "seqLast": 3,
+  "alg": {
+    "cipher": "AES-256-GCM",
+    "wrap": "RSA-OAEP-256"
+  },
+  "iv": "REDACTED_FOR_TOOL_SAFE_QA",
+  "wrappedKey": "REDACTED_FOR_TOOL_SAFE_QA",
+  "ciphertext": "REDACTED_FOR_TOOL_SAFE_QA",
+  "ciphertextSha256": "93e94b438aa39d0f29fcee921f27b7786384d97bb8047b3e70499a7df11088c9",
+  "state": "PUBLIC_SPOOL",
+  "qaSynthetic": true
+}
