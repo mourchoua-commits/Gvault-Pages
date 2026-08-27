@@ -1,6 +1,6 @@
 {
   "schema": "GVAULT_BIG_BOY_PUBLIC_V1",
-  "version": "7.1.0",
+  "version": "7.2.0",
   "role": "declared-health-observer-identity-surface",
   "identity": "bigboy.identity.json",
   "runtimePublic": false,
@@ -9,20 +9,32 @@
   "capabilities": [
     "declared read-only health observation",
     "RSS/Atom/JSON Feed observation",
-    "same-origin feed auto-discovery",
-    "robots.txt Sitemap discovery",
-    "standard public health/status discovery"
+    "authorized-scope feed auto-discovery",
+    "robots.txt and Sitemap discovery",
+    "standard public health/readiness/status discovery",
+    "authorized subdomain discovery",
+    "bounded redirect following",
+    "bounded depth discovery crawl"
   ],
   "discoveryPolicy": {
-    "sameOriginOnly": true,
+    "scopeModel": "AUTHORIZED_SCOPE",
+    "sameOriginOnly": false,
+    "subdomainsConfigurable": true,
+    "additionalAllowedHostsConfigurable": true,
+    "maxRedirectsDefault": 3,
+    "maxDepthDefault": 2,
+    "maxPagesPerSeedDefault": 30,
+    "requestBudgetPerSeedDefault": 80,
     "portScanning": false,
     "bruteForcePaths": false,
-    "deepCrawl": false,
-    "privateNetworksByDefault": false
+    "unboundedCrawl": false,
+    "privateNetworksByDefault": false,
+    "robotsRespectedByDefault": true
   },
   "notes": [
     "Public surface contains identity and capability metadata only.",
     "Scout runtime and Little Boy collector remain outside this public directory.",
-    "BIG BOY declares read-only health-check intent in its User-Agent and X-BigBoy headers."
+    "BIG BOY declares read-only health-check intent in its User-Agent and X-BigBoy headers.",
+    "Extended scope is configurable but remains bounded to explicitly authorized hosts."
   ]
 }
