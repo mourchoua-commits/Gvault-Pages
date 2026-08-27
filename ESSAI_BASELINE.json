@@ -1,0 +1,17 @@
+{
+  "schema": "GVAULT_PAGES_ESSAI_BASELINE_V1",
+  "role": "ESSAI_PUBLIC_TEST_SURFACE",
+  "source": {
+    "repository": "mourchoua-commits/GvaultStable",
+    "commit": "bb36cd4d328ca8c4ee94aae6fd1a2e5c63bac4e1",
+    "indexBlob": "960e9dd347ea7aa65d5a630ce532d68dc7ac6812"
+  },
+  "execution": "Gvault-Pages origin with pinned Stable runtime mirror",
+  "localAssetsAlreadyIdentical": ["manifest.json", "previews/", "vault.ff479f09629ce5795a82643b213efa9da68bbbc7f423bff1f9944f33d6ba6422.bin"],
+  "bridgedPinnedAssets": ["private-catalog/manifest.json", "private-catalog/catalog.23243b824fe7935796256982ebb1982f22477edcd0e6d339a74bc69c705eecdc.bin"],
+  "stableMutation": false,
+  "chouffPreserved": true,
+  "rollbackBranch": "rollback/pre-gvaultstable-sync-20260827-2231",
+  "rollbackCommit": "05a1a25eeae7375e955fb71e0b0e7d9390337f32",
+  "note": "GvaultStable remains frozen. Gvault-Pages is the evolvable ESSAI surface."
+}
