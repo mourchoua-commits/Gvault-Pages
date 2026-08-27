@@ -1607,7 +1607,7 @@ window.GVaultOfficialRefs=Object.freeze({schema:'GVAULT_PRIVATE_OFFICIAL_REFS_V2
 <style id="gvault-official-preview-blob-style">
 #gvaultOfficialPreviewShell{position:fixed;inset:0;z-index:2147483500;background:#000;display:none;overflow:hidden}
 #gvaultOfficialPreviewShell.open{display:block}
-#gvaultOfficialPreviewFrame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;display:block}
+#gvaultOfficialPreviewFrame{position:absolute;inset:0;z-index:2147483550;width:100%;height:100%;border:0;background:#000;display:block}
 #gvaultOfficialPreviewExit{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));z-index:2147483647;width:56px;height:56px;min-width:56px;min-height:56px;border:2px solid #ff6b6b;border-radius:50%;background:#8f0d14;color:#fff;font:900 30px/1 ui-monospace,SFMono-Regular,Menlo,monospace;display:none;place-items:center;box-shadow:0 0 0 3px rgba(0,0,0,.72),0 8px 24px rgba(0,0,0,.45);cursor:pointer;touch-action:manipulation}
 #gvaultOfficialPreviewExit.show{display:grid}
 #gvaultOfficialPreviewExit:focus-visible{outline:3px solid #fff;outline-offset:3px}
@@ -1620,7 +1620,7 @@ body.gvaultOfficialPreviewOpen{overflow:hidden!important}
 </div>
 <button id="gvaultOfficialPreviewExit" type="button" aria-label="Quitter la prévisualisation de mise à jour" title="Quitter la prévisualisation">×</button>
 <div id="gvaultOfficialPreviewState" role="status" aria-live="polite"></div>
-<script id="gvault-official-preview-blob-v1" data-gvault-official-preview="GVAULT_OFFICIAL_PREVIEW_BLOB_V1">
+<script id="gvault-official-preview-blob-v1" data-gvault-official-preview="GVAULT_OFFICIAL_PREVIEW_BLOB_V1" data-gvault-encrypted-preview-transport="GVAULT_PUBLIC_ENCRYPTED_PREVIEW_TRANSPORT_V1">
 (()=>{
 'use strict';
 const CONTRACT='GVAULT_OFFICIAL_PREVIEW_BLOB_V1';
@@ -1628,6 +1628,7 @@ const q=s=>document.querySelector(s);
 const shell=q('#gvaultOfficialPreviewShell'),frame=q('#gvaultOfficialPreviewFrame'),exit=q('#gvaultOfficialPreviewExit'),previewState=q('#gvaultOfficialPreviewState');
 let provider=null,currentUrl='',currentItem=null,busy=false;
 const hex=b=>Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,'0')).join('');
+const b64=s=>Uint8Array.from(atob(String(s||'')),c=>c.charCodeAt(0));
 const sha256=async b=>hex(await crypto.subtle.digest('SHA-256',b));
 function state(text,show=true){if(previewState){previewState.textContent=String(text||'');previewState.classList.toggle('show',!!show&&!!text)}const s=q('#vaultUpdateState');if(s&&text)s.textContent=String(text)}
 function cleanup(){
@@ -1645,15 +1646,42 @@ async function normalize(payload,item){
  else if(typeof payload?.html==='string')blob=new Blob([payload.html],{type:'text/html;charset=utf-8'});
  else if(payload?.bytes instanceof ArrayBuffer)blob=new Blob([payload.bytes],{type:'text/html;charset=utf-8'});
  else if(ArrayBuffer.isView(payload?.bytes))blob=new Blob([payload.bytes],{type:'text/html;charset=utf-8'});
- if(!blob)throw new Error('Le transport privé n’a fourni aucun HTML prévisualisable.');
+ if(!blob)throw new Error('Le transport de prévisualisation n’a fourni aucun HTML prévisualisable.');
  const bytes=await blob.arrayBuffer();
- if(Number(item.sourceSize)!==bytes.byteLength)throw new Error('Taille de la racine privée différente de la référence publique.');
+ if(Number(item.sourceSize)!==bytes.byteLength)throw new Error('Taille de la racine privée différente de la référence OFFICIELLE.');
  const digest=await sha256(bytes);
- if(digest!==String(item.sourceSha256||''))throw new Error('SHA-256 de la racine privée différent de la référence publique.');
+ if(digest!==String(item.sourceSha256||''))throw new Error('SHA-256 de la racine privée différent de la référence OFFICIELLE.');
  return new Blob([bytes],{type:'text/html;charset=utf-8'});
+}
+async function decryptPublicPacket(item){
+ const ref=item?.preview;
+ if(ref?.schema!=='GVAULT_OFFICIAL_PREVIEW_REF_V1'||ref?.transport!=='PUBLIC_CIPHERTEXT_SAS_MEMORY_ONLY'||!ref?.manifest)throw new Error('Transport privé de prévisualisation indisponible.');
+ const password=window.__GVAULT_PROJECT_STORE_PASSWORD__;
+ if(!password)throw new Error('Session SAS indisponible · ouvrez d’abord GVAULT avec le mot de passe.');
+ state('Téléchargement chiffré de '+(item.releaseId||'OFFICIELLE')+'…');
+ const manifestUrl=new URL(ref.manifest,location.href);manifestUrl.searchParams.set('preview',Date.now());
+ const r=await fetch(manifestUrl.href,{cache:'no-store'});if(!r.ok)throw new Error('Manifest de prévisualisation HTTP '+r.status);
+ const m=await r.json();
+ if(m?.schema!=='GVAULT_OFFICIAL_PREVIEW_ENCRYPTED_V1'||m?.purpose!=='MEMORY_BLOB_PREVIEW_ONLY')throw new Error('Manifest de prévisualisation incompatible.');
+ if(String(m.releaseId||'')!==String(item.releaseId||''))throw new Error('Identité de version de prévisualisation incohérente.');
+ if(String(m.source?.sha256||'')!==String(item.sourceSha256||'')||Number(m.source?.size)!==Number(item.sourceSize))throw new Error('Racine chiffrée différente de la référence OFFICIELLE.');
+ const payloadUrl=new URL(m.payload?.path||'',manifestUrl);payloadUrl.search='';
+ const cr=await fetch(payloadUrl.href,{cache:'force-cache'});if(!cr.ok)throw new Error('Payload chiffré HTTP '+cr.status);
+ const cipher=await cr.arrayBuffer();
+ if(cipher.byteLength!==Number(m.payload?.size))throw new Error('Taille du payload chiffré invalide.');
+ if(await sha256(cipher)!==String(m.payload?.sha256||''))throw new Error('SHA du payload chiffré invalide.');
+ state('Déchiffrement mémoire de '+(item.releaseId||'OFFICIELLE')+'…');
+ const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveKey']);
+ const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(m.crypto?.saltB64),iterations:Number(m.crypto?.iterations),hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+ let plain;
+ try{plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(m.crypto?.ivB64)},key,cipher)}catch{throw new Error('Déchiffrement impossible · mot de passe/session invalide ou paquet altéré.');}
+ if(plain.byteLength!==Number(item.sourceSize))throw new Error('Taille déchiffrée invalide.');
+ if(await sha256(plain)!==String(item.sourceSha256||''))throw new Error('SHA déchiffré différent de la racine OFFICIELLE.');
+ return {bytes:plain};
 }
 async function request(item){
  if(provider)return provider(Object.freeze({...item}));
+ if(item?.preview?.manifest)return decryptPublicPacket(item);
  return new Promise((resolve,reject)=>{
   let settled=false;
   const done=v=>{if(settled)return;settled=true;clearTimeout(timer);resolve(v)};
@@ -1666,7 +1694,7 @@ async function open(item){
  if(busy)return;
  if(!item||item.sourceSha256===window.GVaultOfficialRefs?.currentSha?.())return;
  busy=true;currentItem={...item};
- state('Récupération privée de '+(item.releaseId||'OFFICIELLE')+'…');
+ state('Préparation de '+(item.releaseId||'OFFICIELLE')+'…');
  try{
   const payload=await request(item);
   const blob=await normalize(payload,item);
@@ -1698,7 +1726,7 @@ exit?.addEventListener('click',close);
 window.addEventListener('keydown',e=>{if(e.key==='Escape'&&shell?.classList.contains('open')){e.preventDefault();close()}},true);
 const list=q('#vaultVersionList');if(list)new MutationObserver(enhance).observe(list,{childList:true,subtree:true});
 queueMicrotask(enhance);
-window.GVaultOfficialPreviewTransport=Object.freeze({schema:'GVAULT_OFFICIAL_PREVIEW_TRANSPORT_V1',installProvider,hasProvider:()=>!!provider});
+window.GVaultOfficialPreviewTransport=Object.freeze({schema:'GVAULT_OFFICIAL_PREVIEW_TRANSPORT_V2',installProvider,hasProvider:()=>!!provider,hasEncryptedPacket:item=>!!item?.preview?.manifest});
 window.GVaultOfficialPreview=Object.freeze({schema:CONTRACT,open,close,isOpen:()=>!!shell?.classList.contains('open'),current:()=>currentItem?{...currentItem}:null});
 })();
 </script>
