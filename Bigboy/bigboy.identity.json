@@ -1,9 +1,9 @@
 {
   "schema": "GVAULT_BIG_BOY_IDENTITY_V1",
-  "version": "7.1.0",
+  "version": "7.2.0",
   "name": "GVAULT BIG BOY",
   "role": "declared-health-observer",
-  "purpose": "health-check-change-observation-and-declared-source-discovery",
+  "purpose": "health-check-change-observation-and-authorized-scope-discovery",
   "mode": "read-only",
   "collects": [
     "feed metadata",
@@ -13,23 +13,46 @@
     "ETag/Last-Modified",
     "content fingerprints",
     "declared public health/status fields",
-    "same-origin feed links declared by the page",
-    "same-origin Sitemap references declared by robots.txt"
+    "feed links declared by pages inside the authorized scope",
+    "Sitemap references declared by robots.txt",
+    "standard readiness/liveness/status surfaces",
+    "bounded links whose host remains inside the authorized scope"
   ],
   "discovery": {
-    "sameOriginOnly": true,
+    "scopeModel": "AUTHORIZED_SCOPE",
+    "sameOriginOnly": false,
+    "subdomainsConfigurable": true,
+    "additionalAllowedHostsConfigurable": true,
+    "defaultMaxDepth": 2,
+    "defaultMaxRedirects": 3,
+    "defaultRequestBudgetPerSeed": 80,
     "standardPaths": [
       "/robots.txt",
       "/sitemap.xml",
+      "/sitemap_index.xml",
+      "/feed",
+      "/feed.xml",
+      "/rss",
+      "/rss.xml",
+      "/atom.xml",
+      "/index.xml",
       "/.well-known/security.txt",
+      "/.well-known/assetlinks.json",
       "/health",
       "/healthz",
+      "/ready",
+      "/readyz",
+      "/live",
+      "/livez",
       "/status",
-      "/api/health"
+      "/api/health",
+      "/api/status",
+      "/version"
     ],
     "portScanning": false,
     "bruteForcePaths": false,
-    "deepCrawl": false
+    "unboundedCrawl": false,
+    "robotsRespectedByDefault": true
   },
   "doesNotCollect": [
     "passwords",
@@ -41,5 +64,5 @@
     "raw credential material"
   ],
   "contact": "GVAULT / BIG BOY",
-  "optOut": "Remove the source from Little Boy scout registry or deny the declared User-Agent."
+  "optOut": "Remove the source from Little Boy scout registry, narrow its authorized scope, or deny the declared User-Agent."
 }
