@@ -1,13 +1,27 @@
 {
   "schema": "GVAULT_BIG_BOY_PUBLIC_V1",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "role": "declared-health-observer-identity-surface",
   "identity": "bigboy.identity.json",
   "runtimePublic": false,
   "secretsPublic": false,
   "littleBoyDataPublic": false,
+  "capabilities": [
+    "declared read-only health observation",
+    "RSS/Atom/JSON Feed observation",
+    "same-origin feed auto-discovery",
+    "robots.txt Sitemap discovery",
+    "standard public health/status discovery"
+  ],
+  "discoveryPolicy": {
+    "sameOriginOnly": true,
+    "portScanning": false,
+    "bruteForcePaths": false,
+    "deepCrawl": false,
+    "privateNetworksByDefault": false
+  },
   "notes": [
-    "Public surface contains identity only.",
+    "Public surface contains identity and capability metadata only.",
     "Scout runtime and Little Boy collector remain outside this public directory.",
     "BIG BOY declares read-only health-check intent in its User-Agent and X-BigBoy headers."
   ]
