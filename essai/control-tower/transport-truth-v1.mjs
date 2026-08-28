@@ -19,16 +19,17 @@ function ensureAuxHost(){
 function setUnknownKpis(){
  if(live()||applying)return;
  applying=true;
- for(const id of KPI_IDS){const n=$('#'+id);if(n){n.textContent='—';n.title=snapshotReady?'Snapshot disponible mais pas encore déchiffré':'Transport en attente : valeur source non mesurée';}}
- const ec=$('#eventCount');if(ec){ec.textContent='—';ec.title='Valeur inconnue tant que le feed n’est pas LIVE';}
+ for(const id of KPI_IDS){const n=$('#'+id);if(n){if(n.textContent!=='—')n.textContent='—';n.title=snapshotReady?'Snapshot disponible mais pas encore déchiffré':'Transport en attente : valeur source non mesurée';}}
+ const ec=$('#eventCount');if(ec){if(ec.textContent!=='—')ec.textContent='—';ec.title='Valeur inconnue tant que le feed n’est pas LIVE';}
  applying=false;
 }
 function rewriteNotice(){
  const n=$('#feedWaitNotice');if(!n||live())return;
  const sas=sessionActive()?'SAS PRINCIPAL ✓':'SAS PRINCIPAL NON ACTIF';
- n.textContent=snapshotReady
+ const text=snapshotReady
   ?`${sas} · SNAPSHOT CHIFFRÉ DISPONIBLE · les compteurs restent inconnus jusqu’au déchiffrement LIVE. COMMIT WATCH et VFS restent actifs sur le ciphertext.`
   :`${sas} · TRANSPORT EN ATTENTE · les sources privées ne sont pas mesurées par cet écran pour l’instant. COMMIT WATCH reste prêt à ingérer automatiquement le prochain snapshot chiffré dans le VFS.`;
+ if(n.textContent!==text)n.textContent=text;
 }
 function applyTruth(){ensureAuxHost();if(!live())setUnknownKpis();rewriteNotice()}
 async function probe(){
