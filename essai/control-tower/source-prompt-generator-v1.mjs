@@ -21,3 +21,4 @@ window.addEventListener('gvault:control-tower-feed-decrypted',e=>{lastFeed=e.det
 window.addEventListener('gvault:private-tool-session-expired',()=>{lastFeed=null;render()});
 ensureUi();render();
 window.GVAULT_CONTROL_TOWER_SOURCE_PROMPT_V1=Object.freeze({schema:'GVAULT_CONTROL_TOWER_ARCHIVE_DELIVERY_PROMPT_V3_1',generate:()=>generate(false),copy:()=>generate(true),getState:()=>({hasFullFeed:!!lastFeed,lastGeneratedAt:lastGeneratedAt?.toISOString()||null,coverage:coverage(),archiveContract:ARCHIVE_CONTRACT,archiveLatest:ARCHIVE_LATEST,preferredDeliverable:'control-tower-source-drop.json'})});
+import('./archive-weekly-lever-v1.mjs?v=1').catch(e=>console.warn('CONTROL_TOWER_WEEKLY_LEVER_LOAD_FAILED',e));
