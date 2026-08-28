@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "84f74ea1b6bec37febc09fefc9ccd82da394d3ab",
+  "parentSha": "f86fbb332883b06a1d37249c94acf769f0a3021f",
+  "committedAt": "2026-08-28T22:31:08+02:00",
+  "summary": {
+    "subject": "control-tower: cache-bust QRS bootstrap atlas v2",
+    "intent": "Ensure browsers load the real ctqrb QRSprite-tile bootstrap instead of any earlier ciphertext-only bootstrap module.",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "paths": [
+      "essai/control-tower/v2.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "magnitude": 2,
+    "committedAt": "2026-08-28T22:31:08+02:00",
+    "parentSha": "f86fbb332883b06a1d37249c94acf769f0a3021f"
+  },
+  "pulseKey": "CTP1:84f74ea1b6bec37febc09fefc9ccd82da394d3ab:b6f6801b0906667d",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "c7679ca5eae62250c1ad42c1fc99914c9291d2e12f00990261aab49e7440d162",
+  "typedKeys": {
+    "commit": "gitc:84f74ea1b6bec37febc09fefc9ccd82da394d3ab",
+    "parent": "gitc:f86fbb332883b06a1d37249c94acf769f0a3021f",
+    "pulse": "ctp1:84f74ea1b6bec37febc09fefc9ccd82da394d3ab:b6f6801b0906667d",
+    "translation": "cttrans:c7679ca5eae62250c1ad42c1fc99914c9291d2e12f00990261aab49e7440d162",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "84f74ea1b6bec37febc09fefc9ccd82da394d3ab",
+    "parentSha": "f86fbb332883b06a1d37249c94acf769f0a3021f",
+    "committedAt": "2026-08-28T22:31:08+02:00",
+    "summary": {
+      "subject": "control-tower: cache-bust QRS bootstrap atlas v2",
+      "intent": "Ensure browsers load the real ctqrb QRSprite-tile bootstrap instead of any earlier ciphertext-only bootstrap module.",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "paths": [
+        "essai/control-tower/v2.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "magnitude": 2,
+      "committedAt": "2026-08-28T22:31:08+02:00",
+      "parentSha": "f86fbb332883b06a1d37249c94acf769f0a3021f"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/84f74ea1b6bec37febc09fefc9ccd82da394d3ab.json",
+      "vfsKey": "CTP1:84f74ea1b6bec37febc09fefc9ccd82da394d3ab:b6f6801b0906667d",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/84f74ea1b6bec37febc09fefc9ccd82da394d3ab.json"
+}
