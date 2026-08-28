@@ -1,4 +1,4 @@
-const VERSION='gvault-shell-v1-20260828d';
+const VERSION='gvault-shell-v1-20260828e';
 const SHELL_CACHE=`${VERSION}-shell`;
 const API_CACHE=`${VERSION}-public-api`;
 const SCOPE=self.registration.scope;
@@ -58,7 +58,8 @@ async function networkFirst(request,cacheName=SHELL_CACHE,ms=4500){
 }
 async function staleWhileRevalidate(request){
   const c=await caches.open(SHELL_CACHE);
-  const old=await c.match(request,{ignoreSearch:true});
+  // Module/style cache-busters are semantic version selectors: never collapse ?v=A and ?v=B.
+  const old=await c.match(request,{ignoreSearch:false});
   const fresh=fetch(request).then(r=>{if(isGood(r))void c.put(request,r.clone());return r}).catch(()=>null);
   if(old)return old;
   const r=await fresh;
@@ -92,8 +93,6 @@ self.addEventListener('fetch',event=>{
   const req=event.request;
   if(req.method!=='GET')return;
   const url=new URL(req.url);
-  // Authentication and encrypted data must always come from the network as one coherent version.
-  // Never serve an old SAS manifest/blob from the offline shell cache.
   if(isPrivateData(url)||isAuthCritical(url))return;
   if(isGitHubPublicApi(url)){event.respondWith(networkFirst(req,API_CACHE,7000));return}
   if(isBaseline(url)){event.respondWith(networkFirst(req,SHELL_CACHE,5000));return}
