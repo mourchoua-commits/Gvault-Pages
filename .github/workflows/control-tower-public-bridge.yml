@@ -1,0 +1,137 @@
+name: Control Tower public-runner encrypted bridge
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/control-tower-public-bridge.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gvault-control-tower-public-runner-bridge
+  cancel-in-progress: true
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      PRIVATE_READ_TOKEN: ${{ secrets.GVAULT_PAGES_TOKEN || secrets.GVAULT_STABLE_TOKEN }}
+      GVAULT_PUBLICATION_PASSWORD: ${{ secrets.GVAULT_PUBLICATION_PASSWORD }}
+      GVAULT_PBKDF2_ITERATIONS: "900000"
+      TARGET_DIR: essai/control-tower/data
+    steps:
+      - name: Checkout public projection repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Server-secret capability probe
+        id: preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "${PRIVATE_READ_TOKEN:-}" ] && [ -n "${GVAULT_PUBLICATION_PASSWORD:-}" ]; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+            echo 'SERVER_BRIDGE_SECRETS_AVAILABLE'
+          else
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            echo 'SERVER_BRIDGE_SECRETS_MISSING'
+          fi
+
+      - name: Clone private source planes quietly
+        if: steps.preflight.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASIC="$(printf 'x-access-token:%s' "$PRIVATE_READ_TOKEN" | base64 -w0)"
+          hdr="AUTHORIZATION: basic $BASIC"
+          git -c http.https://github.com/.extraheader="$hdr" clone --quiet --branch main --depth 160 https://github.com/mourchoua-commits/Gvault.git main-state
+          git -c http.https://github.com/.extraheader="$hdr" clone --quiet --branch vigie-state --depth 30 https://github.com/mourchoua-commits/Gvault.git vigie-state
+          git -c http.https://github.com/.extraheader="$hdr" clone --quiet --branch intake-state --depth 30 https://github.com/mourchoua-commits/Gvault.git intake-state
+          node --check main-state/scripts/build-control-tower-snapshot-v2.mjs >/dev/null
+
+      - name: Build encrypted content-addressed snapshot without logging private SHAs
+        id: build
+        if: steps.preflight.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/control-tower-feed-dist
+          previous="$GITHUB_WORKSPACE/$TARGET_DIR/latest.json"
+          node main-state/scripts/build-control-tower-snapshot-v2.mjs main-state vigie-state intake-state /tmp/control-tower-feed-dist "$previous" >/tmp/control-tower-build-private.json
+          test -s /tmp/control-tower-feed-dist/build-result.json
+          changed="$(node -e "const x=require('/tmp/control-tower-feed-dist/build-result.json');process.stdout.write(String(!!x.changed))")"
+          snapshot="$(node -e "const x=require('/tmp/control-tower-feed-dist/build-result.json');process.stdout.write(x.snapshotChainSha256||x.previousSnapshotSha256||'')")"
+          payload="$(node -e "const x=require('/tmp/control-tower-feed-dist/build-result.json');process.stdout.write(x.payloadSha256||'')")"
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+          echo "snapshot=$snapshot" >> "$GITHUB_OUTPUT"
+          echo "payload=$payload" >> "$GITHUB_OUTPUT"
+          if [ "$changed" = true ]; then
+            test -s /tmp/control-tower-feed-dist/data/latest.json
+            test -s /tmp/control-tower-feed-dist/data/manifest.json
+            mkdir -p "$TARGET_DIR"
+            cp -R /tmp/control-tower-feed-dist/data/. "$TARGET_DIR/"
+          fi
+
+      - name: Prove public payload is opaque
+        if: steps.preflight.outputs.ready == 'true' && steps.build.outputs.changed == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs=require('fs'),path=require('path'),crypto=require('crypto');
+          const base='essai/control-tower/data';
+          const l=JSON.parse(fs.readFileSync(path.join(base,'latest.json'),'utf8'));
+          const m=JSON.parse(fs.readFileSync(path.join(base,l.manifestPath),'utf8'));
+          const bin=fs.readFileSync(path.join(base,l.payloadPath));
+          const h=x=>crypto.createHash('sha256').update(x).digest('hex');
+          const pub=JSON.stringify({l,m});
+          if(l.schema!=='GVAULT_CONTROL_TOWER_LATEST_V2')process.exit(1);
+          if(h(bin)!==l.payloadSha256||h(bin)!==m.payload.sha256)process.exit(2);
+          if(h(Buffer.from(m.snapshot.chainInput,'utf8'))!==l.snapshotChainSha256)process.exit(3);
+          if(/gh[pousr]_|github_pat_|Bearer /i.test(pub))process.exit(4);
+          if(/mainCommit|vigieCommit|intakeCommit|privateRepository/i.test(pub))process.exit(5);
+          NODE
+
+      - name: Commit ciphertext-only snapshot
+        if: steps.preflight.outputs.ready == 'true' && steps.build.outputs.changed == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add "$TARGET_DIR"
+          changed_paths="$(git diff --cached --name-only)"
+          while IFS= read -r p; do
+            [ -z "$p" ] && continue
+            case "$p" in "$TARGET_DIR"/*) ;; *) echo "FORBIDDEN_PUBLIC_MUTATION"; exit 1;; esac
+          done <<< "$changed_paths"
+          git config user.name 'GVAULT Public Runner Bridge'
+          git config user.email 'actions@users.noreply.github.com'
+          git commit -m "observability: snapshot ${{ steps.build.outputs.snapshot }}" >/dev/null
+          git push origin HEAD:main >/dev/null
+
+      - name: Missing server-side bridge secrets
+        if: steps.preflight.outputs.ready != 'true'
+        shell: bash
+        run: |
+          echo 'Public runner is healthy, but the public repository does not currently expose the required server-side secret pair to this workflow.'
+          echo 'No secret value was printed or copied.'
+          exit 1
+
+      - name: Summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo '## CONTROL TOWER PUBLIC-RUNNER BRIDGE'
+            echo "- server secret pair available: ${{ steps.preflight.outputs.ready }}"
+            echo "- snapshot changed: ${{ steps.build.outputs.changed }}"
+            echo "- snapshot chain: ${{ steps.build.outputs.snapshot }}"
+            echo "- payload hash: ${{ steps.build.outputs.payload }}"
+            echo '- private commit SHAs intentionally suppressed from public workflow output'
+            echo '- plaintext private feed never copied into Gvault-Pages'
+            echo '- browser credential: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
