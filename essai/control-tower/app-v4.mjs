@@ -21,6 +21,7 @@ window.fetch=async function(input,init){
  return nativeFetch(input,init);
 };
 await import('./app-v3.mjs');
+void import('./commit-capsule-vfs-v1.mjs?v=keytypes1').catch(e=>console.error('[Control Tower commit image loader]',e));
 function armAcceptedHead(){const n=document.querySelector('#connectionState');if(!n)return;const accept=()=>{if(!/^LIVE\b/.test(String(n.textContent||''))||lastHead?.version!==2)return;try{window.GVAULT_CONTENT_ADDRESSED_FEED_V2?.markAccepted?.(lastHead.manifest)}catch{}};const o=new MutationObserver(accept);o.observe(n,{childList:true,subtree:true,characterData:true});accept();window.addEventListener('pagehide',()=>o.disconnect(),{once:true})}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',armAcceptedHead,{once:true});else armAcceptedHead();
 window.GVAULT_CONTROL_TOWER_CHAIN_V2=Object.freeze({schema:'GVAULT_CONTROL_TOWER_CHAIN_GATE_V2',getState:()=>structuredClone(window.__GVAULT_CONTROL_TOWER_PUBLIC_HEAD__||{version:lastHead?.version||null,source:window.GVAULT_CONTENT_ADDRESSED_FEED_V2?.getSource?.()||null})});
