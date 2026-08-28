@@ -1,4 +1,4 @@
-const VERSION='gvault-shell-v1-20260828c';
+const VERSION='gvault-shell-v1-20260828d';
 const SHELL_CACHE=`${VERSION}-shell`;
 const API_CACHE=`${VERSION}-public-api`;
 const SCOPE=self.registration.scope;
@@ -15,9 +15,19 @@ const SHELL=[
 ].map(u);
 
 const BASELINE='https://raw.githubusercontent.com/mourchoua-commits/Gvault-Pages/fb5ab4a1d9e7f8d1dc382ce3ac89248c4c44a07d/index.html';
-const isPrivateData=url=>url.origin===new URL(SCOPE).origin&&url.pathname.includes('/essai/control-tower/data/');
+const scopeOrigin=new URL(SCOPE).origin;
+const isPrivateData=url=>url.origin===scopeOrigin&&url.pathname.includes('/essai/control-tower/data/');
 const isGitHubPublicApi=url=>url.origin==='https://api.github.com'&&/^\/repos\/mourchoua-commits\/(?:Gvault-Pages|GvaultStable)(?:\/|$)/.test(url.pathname);
 const isBaseline=url=>url.href.split('?')[0]===BASELINE;
+const isAuthCritical=url=>{
+  if(url.origin!==scopeOrigin)return false;
+  const p=url.pathname;
+  return /(?:^|\/)manifest\.json$/i.test(p)
+    || /(?:^|\/)release-index\.json$/i.test(p)
+    || /\.bin$/i.test(p)
+    || p.includes('/previews/')
+    || p.includes('/private-catalog/');
+};
 const isGood=r=>!!r&&r.ok&&r.status>=200&&r.status<400;
 
 async function putSafe(cacheName,key,response){
@@ -82,10 +92,12 @@ self.addEventListener('fetch',event=>{
   const req=event.request;
   if(req.method!=='GET')return;
   const url=new URL(req.url);
-  if(isPrivateData(url))return;
+  // Authentication and encrypted data must always come from the network as one coherent version.
+  // Never serve an old SAS manifest/blob from the offline shell cache.
+  if(isPrivateData(url)||isAuthCritical(url))return;
   if(isGitHubPublicApi(url)){event.respondWith(networkFirst(req,API_CACHE,7000));return}
   if(isBaseline(url)){event.respondWith(networkFirst(req,SHELL_CACHE,5000));return}
-  if(url.origin!==new URL(SCOPE).origin)return;
+  if(url.origin!==scopeOrigin)return;
   if(req.mode==='navigate'){event.respondWith(networkFirst(req,SHELL_CACHE,3500));return}
   if(['script','style','worker','font'].includes(req.destination)){event.respondWith(staleWhileRevalidate(req));return}
   event.respondWith(networkFirst(req,SHELL_CACHE,4500));
