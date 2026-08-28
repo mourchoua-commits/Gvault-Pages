@@ -1,0 +1,23 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_CONTRACT_V1",
+  "version": "0.1.0",
+  "status": "CANDIDATE_E2E_PENDING",
+  "publicSurface": "Gvault-Pages/essai/control-tower/",
+  "privateRepository": "mourchoua-commits/Gvault",
+  "primaryEventPlane": "vigie-state",
+  "trackRegistry": "vigie-state:modules/vigie/control_tower_tracks.json",
+  "tokenPersistence": "memory-only",
+  "tracking": {
+    "idPrefix": "TRACK-",
+    "anchors": ["ledgerId","workId","projectId","actionId","project","workflow","issue","pullRequest","branch"],
+    "catchUpOnRefresh": true,
+    "rawEventPersistence": false
+  },
+  "invariants": [
+    "no_private_data_baked_into_public_page",
+    "no_token_persistence",
+    "sources_remain_authoritative",
+    "track_timeline_is_derived_and_reconstructible",
+    "no_false_pass"
+  ]
+}
