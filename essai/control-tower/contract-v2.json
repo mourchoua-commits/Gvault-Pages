@@ -1,6 +1,6 @@
 {
   "schema": "GVAULT_CONTROL_TOWER_CONTRACT_V2",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "status": "CANDIDATE_E2E_PENDING",
   "publicSurface": "Gvault-Pages/essai/control-tower/v2.html",
   "privateRepository": "mourchoua-commits/Gvault",
@@ -15,11 +15,22 @@
     "directNavigationWithoutAssertion": "RETURN_TO_GVAULT",
     "securityBoundary": "CLIENT_SIDE_NAVIGATION_GATE_NOT_SERVER_AUTHORIZATION"
   },
-  "privateDataSas": {
+  "unifiedSas": {
+    "recurringUserGate": "GVAULT_SAS_ONLY",
+    "githubPasswordReuse": false,
+    "reason": "GitHub API requires a token, not the GVAULT password",
+    "firstDeviceSetup": "paste fine-grained GitHub token once after GVAULT SAS",
+    "credentialAtRest": "AES-GCM encrypted IndexedDB capsule",
+    "wrappingKey": "non-extractable WebCrypto AES-GCM CryptoKey stored in IndexedDB",
+    "automaticRestore": "only after a valid GVAULT session assertion",
+    "plaintextTokenPersistence": false,
+    "forgetDeviceControl": true,
+    "newDeviceRequiresSetup": true,
+    "fallbackIfIndexedDbOrCryptoKeyStorageUnavailable": "manual token entry for that session; never persist plaintext"
+  },
+  "privateDataCredential": {
     "kind": "GitHub fine-grained personal access token",
     "purpose": "read private Gvault event planes and write Control Tower track registry",
-    "passwordChosen": false,
-    "tokenPersistence": "memory-only",
     "recommendedRepositoryScope": "mourchoua-commits/Gvault",
     "recommendedContentsPermission": "read-and-write",
     "mustNeverBeBakedIntoPublicSource": true
@@ -38,7 +49,9 @@
   "invariants": [
     "no_private_data_baked_into_public_page",
     "no_gvault_password_transfer_to_control_tower",
-    "no_token_persistence",
+    "no_plaintext_token_persistence",
+    "github_token_setup_is_one_time_per_device_when_supported",
+    "normal_recurring_entry_requires_only_the_existing_gvault_sas",
     "control_tower_button_hidden_until_gvault_runtime_ready",
     "direct_navigation_redirected_without_same_tab_session_assertion",
     "client_side_gate_is_not_claimed_as_server_side_security",
