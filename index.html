@@ -10,6 +10,11 @@
 <body>
 <div class="boot"><b>GVAULT · ESSAI</b><div class="state" id="state">Chargement du runtime Stable épinglé…</div></div>
 <script>
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw-gvault-v1.js',{scope:'./',updateViaCache:'none'}).catch(e=>console.warn('GVAULT shell worker non installé',e));
+}
+</script>
+<script>
 (async()=>{
 'use strict';
 const BASE_COMMIT='fb5ab4a1d9e7f8d1dc382ce3ac89248c4c44a07d';
