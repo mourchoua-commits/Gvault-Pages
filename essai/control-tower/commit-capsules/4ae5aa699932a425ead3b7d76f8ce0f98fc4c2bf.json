@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "4ae5aa699932a425ead3b7d76f8ce0f98fc4c2bf",
+  "parentSha": "06988469a094c5c2c1226b6a522a655ba943120e",
+  "committedAt": "2026-08-28T23:16:16+02:00",
+  "summary": {
+    "subject": "control-tower: allow replay of SAS-encrypted local source drops",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 2,
+    "deletions": 1,
+    "paths": [
+      "essai/private-tool-session-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 2,
+    "deletions": 1,
+    "magnitude": 3,
+    "committedAt": "2026-08-28T23:16:16+02:00",
+    "parentSha": "06988469a094c5c2c1226b6a522a655ba943120e"
+  },
+  "pulseKey": "CTP1:4ae5aa699932a425ead3b7d76f8ce0f98fc4c2bf:de281a0afca9c993",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "3c7abcb245100313b2141c97bb57f3688927582ce7e8885e60702d7d31a3cd70",
+  "typedKeys": {
+    "commit": "gitc:4ae5aa699932a425ead3b7d76f8ce0f98fc4c2bf",
+    "parent": "gitc:06988469a094c5c2c1226b6a522a655ba943120e",
+    "pulse": "ctp1:4ae5aa699932a425ead3b7d76f8ce0f98fc4c2bf:de281a0afca9c993",
+    "translation": "cttrans:3c7abcb245100313b2141c97bb57f3688927582ce7e8885e60702d7d31a3cd70",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "4ae5aa699932a425ead3b7d76f8ce0f98fc4c2bf",
+    "parentSha": "06988469a094c5c2c1226b6a522a655ba943120e",
+    "committedAt": "2026-08-28T23:16:16+02:00",
+    "summary": {
+      "subject": "control-tower: allow replay of SAS-encrypted local source drops",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 1,
+      "paths": [
+        "essai/private-tool-session-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 1,
+      "magnitude": 3,
+      "committedAt": "2026-08-28T23:16:16+02:00",
+      "parentSha": "06988469a094c5c2c1226b6a522a655ba943120e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/4ae5aa699932a425ead3b7d76f8ce0f98fc4c2bf.json",
+      "vfsKey": "CTP1:4ae5aa699932a425ead3b7d76f8ce0f98fc4c2bf:de281a0afca9c993",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/4ae5aa699932a425ead3b7d76f8ce0f98fc4c2bf.json"
+}
