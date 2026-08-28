@@ -1,0 +1,41 @@
+name: Control Tower Commit Capsule
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: control-tower-commit-capsule-main
+  cancel-in-progress: false
+
+jobs:
+  capsule:
+    if: ${{ github.event_name == 'workflow_dispatch' || !startsWith(github.event.head_commit.message, 'control-tower-capsule:') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Build capsule for triggering commit
+        run: node scripts/build-control-tower-commit-capsule.mjs "${GITHUB_SHA}"
+      - name: Commit previous-commit image
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "gvault-control-tower-capsule"
+          git config user.email "actions@users.noreply.github.com"
+          git add essai/control-tower/commit-capsules/
+          if git diff --cached --quiet; then
+            echo "Capsule already present"
+            exit 0
+          fi
+          short="${GITHUB_SHA:0:12}"
+          git commit -m "control-tower-capsule: summarize ${short}" -m "GVAULT-Intent: Carry the previous commit summary + pulse into the following commit so Control Tower can reconstruct its image from the known SHA."
+          git push origin HEAD:main

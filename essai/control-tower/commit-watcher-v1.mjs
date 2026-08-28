@@ -1,3 +1,4 @@
+import './commit-capsule-vfs-v1.mjs';
 import {parseSnapshotCommit,classifyIngestion,retryDelayMs} from './commit-watcher-core-v1.mjs';
 
 const REPO='mourchoua-commits/Gvault-Pages';

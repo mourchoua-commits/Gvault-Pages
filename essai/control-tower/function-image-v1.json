@@ -1,0 +1,36 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_FUNCTION_IMAGE_V1",
+  "version": "1.0.0",
+  "status": "CANDIDATE_E2E_PENDING",
+  "role": "VERSIONED_FUNCTION_MAP_USED_BY_CONTROL_TOWER",
+  "publicSurface": "essai/control-tower/v2.html",
+  "functions": [
+    {"id":"SOURCE_ROUTING","runtime":"source-router-v1.mjs","modes":["PRIVATE_MASTER_PROJECTION","LOCAL_VFS","REMOTE_COMPATIBLE_SOURCE"]},
+    {"id":"PUBLIC_ACTIVITY","runtime":"public-live-v1.mjs","authority":"NON_AUTHORITATIVE_PUBLIC_OBSERVATION"},
+    {"id":"PULSE","runtime":"pulse-sampler-v1.mjs","core":"pulse-core-v1.mjs","truthRule":"PREDICTION_NEVER_REPLACES_OBSERVATION"},
+    {"id":"COMMIT_WATCH","runtime":"commit-watcher-v1.mjs","role":"HEAD_CHANGE_DETECTION"},
+    {"id":"ENCRYPTED_VFS","runtime":"encrypted-vfs-v2.mjs","role":"CIPHERTEXT_SNAPSHOT_MEMORY"},
+    {"id":"COMMIT_IMAGE_VFS","runtime":"commit-capsule-vfs-v1.mjs","role":"SHA_KEYED_TRANSLATION_MEMORY"},
+    {"id":"SHA_CHAIN","runtime":"content-addressed-feed-v2.mjs","role":"CONTENT_ADDRESSED_CONTINUITY"},
+    {"id":"SAS_HANDOFF","runtime":"../private-tool-session-v1.mjs","role":"LIVE_PRINCIPAL_SAS_ONLY"},
+    {"id":"SHELL_RESILIENCE","runtime":"shell-resilience-v1.mjs","role":"CACHE_AND_ORIGIN_DEGRADATION_VISIBILITY"}
+  ],
+  "commitImage": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+    "lookup": "commit-capsules/<previousCommitSha>.json",
+    "rule": "commit N+1 carries a deterministic capsule summarizing commit N",
+    "pulseKey": "CTP1:<commitSha>:<pulseDigest16>",
+    "translationVfs": "IndexedDB gvault-control-tower-vfs-translation-v1",
+    "translationLookup": ["commitSha", "pulseKey"],
+    "reconstruction": "known commit SHA -> capsule -> verified pulseKey -> local VFS translation -> Control Tower image",
+    "oneCommitLag": true
+  },
+  "invariants": [
+    "a commit cannot self-address its own SHA before creation",
+    "therefore the following commit carries the previous commit capsule",
+    "pulse is evidence metadata, not authority",
+    "translation is cached locally and can be replayed without re-reading the full activity stream",
+    "private data must not be emitted into public capsules",
+    "function image version is explicit and independently versioned"
+  ]
+}
