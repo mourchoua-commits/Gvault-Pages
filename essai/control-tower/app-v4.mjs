@@ -10,13 +10,9 @@ window.fetch=async function(input,init){
  try{
    const head=await ca.fetchHead();
    lastHead=head;
-   if(head.version===2)ca.markAccepted(head.manifest);
    window.__GVAULT_CONTROL_TOWER_PUBLIC_HEAD__={version:head.version,continuity:head.continuity,snapshotChainSha256:head.manifest?.snapshot?.snapshotChainSha256||null,previousSnapshotSha256:head.manifest?.snapshot?.previousSnapshotSha256||null,sourceMarker:head.manifest?.snapshot?.sourceMarker||null,generatedAt:head.manifest?.generatedAt||null};
    return new Response(JSON.stringify(head.manifest),{status:200,headers:{'content-type':'application/json','cache-control':'no-store','x-gvault-feed-version':String(head.version)}});
- }catch(e){
-   console.error('[Control Tower chain gate]',e);
-   throw e;
- }
+ }catch(e){console.error('[Control Tower chain gate]',e);throw e}
 };
 await import('./app-v3.mjs');
 window.GVAULT_CONTROL_TOWER_CHAIN_V2=Object.freeze({schema:'GVAULT_CONTROL_TOWER_CHAIN_GATE_V2',getState:()=>structuredClone(window.__GVAULT_CONTROL_TOWER_PUBLIC_HEAD__||{version:lastHead?.version||null})});
