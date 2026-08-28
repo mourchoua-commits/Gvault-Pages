@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "cfd12179c365772df1e0c535deb28ba8d46e234b",
+  "parentSha": "dc095a58762c71bd2bb4424c02f2a2f775ab9d48",
+  "committedAt": "2026-08-28T22:26:42+02:00",
+  "summary": {
+    "subject": "control-tower: add encrypted private catalog bootstrap VFS",
+    "intent": "Feed Control Tower from the already-published encrypted private catalog without private Actions, while keeping ciphertext in VFS and plaintext memory-only.",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 25,
+    "deletions": 0,
+    "paths": [
+      "essai/control-tower/catalog-bootstrap-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 25,
+    "deletions": 0,
+    "magnitude": 25,
+    "committedAt": "2026-08-28T22:26:42+02:00",
+    "parentSha": "dc095a58762c71bd2bb4424c02f2a2f775ab9d48"
+  },
+  "pulseKey": "CTP1:cfd12179c365772df1e0c535deb28ba8d46e234b:a1f6f84c4322b29c",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "7561d870e2bc368a0dba162745d88474ac155e8f0420f01558a5ac0b3380cf71",
+  "typedKeys": {
+    "commit": "gitc:cfd12179c365772df1e0c535deb28ba8d46e234b",
+    "parent": "gitc:dc095a58762c71bd2bb4424c02f2a2f775ab9d48",
+    "pulse": "ctp1:cfd12179c365772df1e0c535deb28ba8d46e234b:a1f6f84c4322b29c",
+    "translation": "cttrans:7561d870e2bc368a0dba162745d88474ac155e8f0420f01558a5ac0b3380cf71",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "cfd12179c365772df1e0c535deb28ba8d46e234b",
+    "parentSha": "dc095a58762c71bd2bb4424c02f2a2f775ab9d48",
+    "committedAt": "2026-08-28T22:26:42+02:00",
+    "summary": {
+      "subject": "control-tower: add encrypted private catalog bootstrap VFS",
+      "intent": "Feed Control Tower from the already-published encrypted private catalog without private Actions, while keeping ciphertext in VFS and plaintext memory-only.",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 25,
+      "deletions": 0,
+      "paths": [
+        "essai/control-tower/catalog-bootstrap-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 25,
+      "deletions": 0,
+      "magnitude": 25,
+      "committedAt": "2026-08-28T22:26:42+02:00",
+      "parentSha": "dc095a58762c71bd2bb4424c02f2a2f775ab9d48"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/cfd12179c365772df1e0c535deb28ba8d46e234b.json",
+      "vfsKey": "CTP1:cfd12179c365772df1e0c535deb28ba8d46e234b:a1f6f84c4322b29c",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/cfd12179c365772df1e0c535deb28ba8d46e234b.json"
+}
