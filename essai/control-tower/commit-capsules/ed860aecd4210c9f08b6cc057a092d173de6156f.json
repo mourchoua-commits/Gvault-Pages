@@ -1,0 +1,65 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "ed860aecd4210c9f08b6cc057a092d173de6156f",
+  "parentSha": "48d006b0858eefc80df04e4ac4d650f778090455",
+  "committedAt": "2026-08-28T21:34:22+02:00",
+  "summary": {
+    "subject": "control-tower: bind commit-image VFS to versioned function image",
+    "intent": "Make Control Tower load and verify FUNCTION IMAGE V1 before accepting SHA-keyed commit capsules, so the stored image is tied to an explicit functional contract version.",
+    "workSpecial": "GADMIN-CONTROL-TOWER",
+    "changedFiles": 1,
+    "additions": 5,
+    "deletions": 4,
+    "paths": [
+      "essai/control-tower/commit-capsule-vfs-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 5,
+    "deletions": 4,
+    "magnitude": 9,
+    "committedAt": "2026-08-28T21:34:22+02:00",
+    "parentSha": "48d006b0858eefc80df04e4ac4d650f778090455"
+  },
+  "pulseKey": "CTP1:ed860aecd4210c9f08b6cc057a092d173de6156f:203175ee0cd42836",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "a156de206b5a3dce38e225fc067a9c590cdc806299b0df889a24505dc9189d58",
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "ed860aecd4210c9f08b6cc057a092d173de6156f",
+    "parentSha": "48d006b0858eefc80df04e4ac4d650f778090455",
+    "committedAt": "2026-08-28T21:34:22+02:00",
+    "summary": {
+      "subject": "control-tower: bind commit-image VFS to versioned function image",
+      "intent": "Make Control Tower load and verify FUNCTION IMAGE V1 before accepting SHA-keyed commit capsules, so the stored image is tied to an explicit functional contract version.",
+      "workSpecial": "GADMIN-CONTROL-TOWER",
+      "changedFiles": 1,
+      "additions": 5,
+      "deletions": 4,
+      "paths": [
+        "essai/control-tower/commit-capsule-vfs-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 5,
+      "deletions": 4,
+      "magnitude": 9,
+      "committedAt": "2026-08-28T21:34:22+02:00",
+      "parentSha": "48d006b0858eefc80df04e4ac4d650f778090455"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/ed860aecd4210c9f08b6cc057a092d173de6156f.json",
+      "vfsKey": "CTP1:ed860aecd4210c9f08b6cc057a092d173de6156f:203175ee0cd42836",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/ed860aecd4210c9f08b6cc057a092d173de6156f.json"
+}
