@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {normalizeEvent,extractAnchors,buildTrack,trackMatchScore,applyEventsToTracks,dedupeEvents} from './core.mjs';
+const e1=normalizeEvent({event_id:'a',created_at:'2026-08-28T10:00:00Z',type:'conversation',ledgerId:'CVL-123',message:'one',sha:'s1'},'conversation-ledger','x');
+const e2=normalizeEvent({event_id:'b',created_at:'2026-08-28T10:01:00Z',type:'conversation',ledgerId:'CVL-123',message:'two',sha:'s2'},'conversation-ledger','x');
+const e3=normalizeEvent({event_id:'c',created_at:'2026-08-28T10:02:00Z',type:'conversation',ledgerId:'CVL-999',message:'other'},'conversation-ledger','x');
+assert.equal(extractAnchors(e1).find(x=>x.key==='ledgerId').value,'CVL-123');
+const t=buildTrack(e1,'ledger follow','');
+assert.equal(trackMatchScore(t,e2).match,true);
+assert.equal(trackMatchScore(t,e3).match,false);
+assert.equal(applyEventsToTracks([t],[e1,e2,e3]),true);
+assert.equal(t.matches.length,2);
+assert.equal(dedupeEvents([e1,e1]).length,1);
+console.log('CONTROL_TOWER_CORE_TEST PASS 5/5');
