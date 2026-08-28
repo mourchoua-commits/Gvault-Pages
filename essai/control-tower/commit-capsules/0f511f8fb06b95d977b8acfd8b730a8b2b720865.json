@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "0f511f8fb06b95d977b8acfd8b730a8b2b720865",
+  "parentSha": "0bdee5f8cbf0b552a1854fbda0dda96a26f9d249",
+  "committedAt": "2026-08-28T22:30:31+02:00",
+  "summary": {
+    "subject": "control-tower: store encrypted catalog bootstrap as real QRSprite tiles",
+    "intent": "Make ctqrb a deterministic ciphertext bitplane atlas in VFS, reconstructing and hash-verifying the encrypted catalog byte-for-byte before SAS decrypt.",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 13,
+    "deletions": 8,
+    "paths": [
+      "essai/control-tower/catalog-bootstrap-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 13,
+    "deletions": 8,
+    "magnitude": 21,
+    "committedAt": "2026-08-28T22:30:31+02:00",
+    "parentSha": "0bdee5f8cbf0b552a1854fbda0dda96a26f9d249"
+  },
+  "pulseKey": "CTP1:0f511f8fb06b95d977b8acfd8b730a8b2b720865:e74fd019b5f4bff8",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "32f968a753692f9882442157123eeb8dae75560da990a71bb2630fd3ed124261",
+  "typedKeys": {
+    "commit": "gitc:0f511f8fb06b95d977b8acfd8b730a8b2b720865",
+    "parent": "gitc:0bdee5f8cbf0b552a1854fbda0dda96a26f9d249",
+    "pulse": "ctp1:0f511f8fb06b95d977b8acfd8b730a8b2b720865:e74fd019b5f4bff8",
+    "translation": "cttrans:32f968a753692f9882442157123eeb8dae75560da990a71bb2630fd3ed124261",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "0f511f8fb06b95d977b8acfd8b730a8b2b720865",
+    "parentSha": "0bdee5f8cbf0b552a1854fbda0dda96a26f9d249",
+    "committedAt": "2026-08-28T22:30:31+02:00",
+    "summary": {
+      "subject": "control-tower: store encrypted catalog bootstrap as real QRSprite tiles",
+      "intent": "Make ctqrb a deterministic ciphertext bitplane atlas in VFS, reconstructing and hash-verifying the encrypted catalog byte-for-byte before SAS decrypt.",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 13,
+      "deletions": 8,
+      "paths": [
+        "essai/control-tower/catalog-bootstrap-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 13,
+      "deletions": 8,
+      "magnitude": 21,
+      "committedAt": "2026-08-28T22:30:31+02:00",
+      "parentSha": "0bdee5f8cbf0b552a1854fbda0dda96a26f9d249"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/0f511f8fb06b95d977b8acfd8b730a8b2b720865.json",
+      "vfsKey": "CTP1:0f511f8fb06b95d977b8acfd8b730a8b2b720865:e74fd019b5f4bff8",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/0f511f8fb06b95d977b8acfd8b730a8b2b720865.json"
+}
