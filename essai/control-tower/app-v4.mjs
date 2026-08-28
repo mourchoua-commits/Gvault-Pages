@@ -20,6 +20,8 @@ window.fetch=async function(input,init){
  }
  return nativeFetch(input,init);
 };
+await import('./qrsprite-input-v1.mjs?v=qrs-full-input-1');
+for(let i=0;i<40&&!window.GVAULT_CONTROL_TOWER_QRSPRITE_INPUT_V1;i++)await new Promise(r=>setTimeout(r,50));
 await import('./app-v3.mjs');
 void import('./commit-capsule-vfs-v1.mjs?v=keytypes1').catch(e=>console.error('[Control Tower commit image loader]',e));
 function armAcceptedHead(){const n=document.querySelector('#connectionState');if(!n)return;const accept=()=>{if(!/^LIVE\b/.test(String(n.textContent||''))||lastHead?.version!==2)return;try{window.GVAULT_CONTENT_ADDRESSED_FEED_V2?.markAccepted?.(lastHead.manifest)}catch{}};const o=new MutationObserver(accept);o.observe(n,{childList:true,subtree:true,characterData:true});accept();window.addEventListener('pagehide',()=>o.disconnect(),{once:true})}
