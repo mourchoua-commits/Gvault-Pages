@@ -23,6 +23,39 @@ const r=await fetch(BASE_URL,{cache:'no-store',credentials:'omit'});
 if(!r.ok)throw new Error('Baseline gateway HTTP '+r.status);
 let h=await r.text();
 if(!/^\s*<!doctype html>/i.test(h)||!/<\/html>\s*$/i.test(h))throw new Error('Baseline gateway incomplet');
+let reconstructedCatalog=[];
+try{
+ const parts=await Promise.all([1,2,3,4].map(async n=>{const x=await fetch(`./essai/project-catalog/catalog-part-${n}.v2.json`,{cache:'no-store',credentials:'omit'});if(!x.ok)throw new Error(`catalog ${n} HTTP ${x.status}`);return x.json()}));
+ reconstructedCatalog=parts.sort((a,b)=>a.part-b.part).flatMap(x=>Array.isArray(x.entries)?x.entries:[]);
+}catch(e){console.warn('GVAULT project reconstruction catalog unavailable',e)}
+const projectMarker='const changelogBlueprints={';
+if(reconstructedCatalog.length&&h.includes(projectMarker)){
+ const accents=['#c8a95a','#67e8f9','#a98bff','#82c89a','#fb7185','#f59e0b'];
+ const publicLaunchable=x=>!!x.publicPath&&!/^(control-tower|gadmin)$/.test(x.id);
+ const recovered=reconstructedCatalog.map((x,i)=>({
+   id:x.id,
+   name:x.name,
+   subtitle:`RECONSTRUCTION · ${x.kind||'trace'} · ${(x.proof||[]).join(' + ')||'preuve indexée'}`,
+   version:x.version||'TRACE RECONSTRUITE',
+   date:'29 août 2026',
+   lastModified:'2026-08-29T00:52:00+02:00',
+   modifiedSource:'reconstruction probante · archives + changelogs + ONOU + artefacts + Git',
+   status:publicLaunchable(x)?'active':'candidate',
+   confidence:(x.confidence||0)>=.98?'confirmed':'reconstructed',
+   canonicalUser:true,
+   playable:publicLaunchable(x),
+   conversationProject:true,
+   category:x.category||String(x.kind||'TRACE').toUpperCase(),
+   accent:accents[i%accents.length],
+   file:publicLaunchable(x)?x.publicPath:'',
+   summary:x.summary||'Trace de projet reconstruite.',
+   focus:'Conserver la filiation et approfondir les preuves dans le catalogue reconstruit ; aucune absence de build ne doit effacer la trace.',
+   branches:['PROJECT CATALOG V2',...(x.proof||[]).slice(0,4)],
+   report:`Projection publique sanitisée · état source ${x.status||'reconstructed'} · confiance ${Math.round((x.confidence||0)*100)}% · aucun verbatim privé publié.`
+ }));
+ const injection=`try{const __gvaultRecoveredProjects=${JSON.stringify(recovered)};for(const rp of __gvaultRecoveredProjects){if(!projects.some(p=>p.id===rp.id))projects.push(rp)}}catch(e){console.warn('project reconstruction graft skipped',e)}\n${projectMarker}`;
+ h=h.replace(projectMarker,injection);
+}
 const needle='const nativeFetch=window.fetch.bind(window);';
 const graft=`const nativeFetch=window.fetch.bind(window);
 try{sessionStorage.removeItem('gvault.controlTower.entry.v1');sessionStorage.removeItem('gvault.gadmin.entry.v1')}catch{}
