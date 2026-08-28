@@ -1,39 +1,51 @@
 {
   "schema": "GVAULT_CONTROL_TOWER_CONTRACT_V2",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "status": "CANDIDATE_E2E_PENDING",
   "publicSurface": "Gvault-Pages/essai/control-tower/v2.html",
+  "runtime": "Gvault-Pages/essai/control-tower/app-v3.mjs",
   "privateRepository": "mourchoua-commits/Gvault",
   "primaryEventPlane": "vigie-state",
-  "trackRegistry": "vigie-state:modules/vigie/control_tower_tracks.json",
+  "remoteTrackRegistry": "vigie-state:modules/vigie/control_tower_tracks.json",
   "entryGate": {
     "requiresGvaultSasSession": true,
     "principalCredential": "existing GVAULT SAS password",
-    "passwordTransferToControlTower": false,
     "sessionAssertion": "sessionStorage:gvault.controlTower.entry.v1",
     "assertionMaxAgeHours": 8,
     "directNavigationWithoutAssertion": "RETURN_TO_GVAULT",
     "securityBoundary": "CLIENT_SIDE_NAVIGATION_GATE_NOT_SERVER_AUTHORIZATION"
   },
-  "unifiedSas": {
-    "recurringUserGate": "GVAULT_SAS_ONLY",
-    "githubPasswordReuse": false,
-    "reason": "GitHub API requires a token, not the GVAULT password",
-    "firstDeviceSetup": "paste fine-grained GitHub token once after GVAULT SAS",
-    "credentialAtRest": "AES-GCM encrypted IndexedDB capsule",
-    "wrappingKey": "non-extractable WebCrypto AES-GCM CryptoKey stored in IndexedDB",
-    "automaticRestore": "only after a valid GVAULT session assertion",
-    "plaintextTokenPersistence": false,
-    "forgetDeviceControl": true,
-    "newDeviceRequiresSetup": true,
-    "fallbackIfIndexedDbOrCryptoKeyStorageUnavailable": "manual token entry for that session; never persist plaintext"
+  "secondGate": {
+    "kept": true,
+    "credential": "SAME_GVAULT_SAS_PASSWORD",
+    "purpose": "decrypt Control Tower encrypted feed",
+    "passwordPersistence": "memory-only until page close/lock",
+    "githubTokenPrompt": false
   },
-  "privateDataCredential": {
-    "kind": "GitHub fine-grained personal access token",
-    "purpose": "read private Gvault event planes and write Control Tower track registry",
-    "recommendedRepositoryScope": "mourchoua-commits/Gvault",
-    "recommendedContentsPermission": "read-and-write",
-    "mustNeverBeBakedIntoPublicSource": true
+  "encryptedFeed": {
+    "manifest": "essai/control-tower/data/manifest.json",
+    "schema": "GVAULT_CONTROL_TOWER_ENCRYPTED_FEED_V1",
+    "builder": "Gvault:scripts/build-control-tower-feed.mjs",
+    "workflow": "Gvault:.github/workflows/control-tower-encrypted-feed.yml",
+    "serverSecrets": ["GVAULT_PUBLICATION_PASSWORD", "GVAULT_PAGES_TOKEN"],
+    "crypto": "AES-256-GCM + PBKDF2-HMAC-SHA256",
+    "pbkdf2Iterations": 900000,
+    "browserGitHubTokenRequired": false,
+    "rawSecretsIncluded": false
+  },
+  "legacyPatRepair": {
+    "sasUnifierDeleted": true,
+    "legacyIndexedDb": "gvault-control-tower-credential-v1",
+    "cleanupOnV3Load": "deleteDatabase",
+    "tokenWasBakedIntoPublicSource": false,
+    "reason": "The browser PAT/IndexedDB route duplicated existing server-side credentials and was not the intended architecture."
+  },
+  "trackWritePath": {
+    "remoteRegistryRead": "included in encrypted feed when available",
+    "newBrowserMutations": "LOCAL_OUTBOX_PENDING_SERVER_BRIDGE",
+    "localOutbox": "localStorage:gvault.controlTower.trackOutbox.v1",
+    "falsePrivateSyncClaimForbidden": true,
+    "nextRequiredComponent": "authenticated server-side write bridge using existing GitHub credentials without exposing them to the browser"
   },
   "swarmContamination": {
     "idPrefix": "SWARM-",
@@ -44,20 +56,19 @@
     "ambiguousLineage": "BRANCH_SOURCE_REQUIRED_NO_AUTO_MARK",
     "gitAncestryAlone": "INSUFFICIENT",
     "workProtocol": "WORK_SPECIAL",
-    "workBindingPersistedInTrackRegistry": true
+    "newBrowserWorkBindingPersistence": "LOCAL_OUTBOX_PENDING_SERVER_BRIDGE"
   },
   "invariants": [
-    "no_private_data_baked_into_public_page",
-    "no_gvault_password_transfer_to_control_tower",
-    "no_plaintext_token_persistence",
-    "github_token_setup_is_one_time_per_device_when_supported",
-    "normal_recurring_entry_requires_only_the_existing_gvault_sas",
+    "no_plaintext_private_data_baked_into_public_page",
+    "no_github_token_baked_into_public_source",
+    "no_browser_pat_required_for_read_path",
+    "same_gvault_password_used_by_second_control_tower_sas",
+    "legacy_pat_indexeddb_is_deleted_on_v3_load",
     "control_tower_button_hidden_until_gvault_runtime_ready",
     "direct_navigation_redirected_without_same_tab_session_assertion",
     "client_side_gate_is_not_claimed_as_server_side_security",
+    "track_mutations_must_not_claim_private_sync_until_server_bridge_ack",
     "sources_remain_authoritative",
-    "swarm_marks_are_reversible_but_history_is_preserved",
-    "unrelated_git_descendants_do_not_inherit_work_special",
     "ambiguous_lineage_fails_closed",
     "no_false_pass"
   ]
