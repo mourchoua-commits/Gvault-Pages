@@ -1,26 +1,32 @@
 {
   "schema": "GVAULT_CONTROL_TOWER_CONTRACT_V2",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "status": "CANDIDATE_E2E_PENDING",
   "publicSurface": "Gvault-Pages/essai/control-tower/v2.html",
   "runtime": "Gvault-Pages/essai/control-tower/app-v3.mjs",
+  "sessionBridge": "Gvault-Pages/essai/private-tool-session-v1.mjs",
   "privateRepository": "mourchoua-commits/Gvault",
   "primaryEventPlane": "vigie-state",
   "remoteTrackRegistry": "vigie-state:modules/vigie/control_tower_tracks.json",
   "entryGate": {
-    "requiresGvaultSasSession": true,
+    "requiresLivePrincipalGvaultSas": true,
     "principalCredential": "existing GVAULT SAS password",
-    "sessionAssertion": "sessionStorage:gvault.controlTower.entry.v1",
-    "assertionMaxAgeHours": 8,
-    "directNavigationWithoutAssertion": "RETURN_TO_GVAULT",
-    "securityBoundary": "CLIENT_SIDE_NAVIGATION_GATE_NOT_SERVER_AUTHORIZATION"
+    "principalSecretSource": "window.__GVAULT_PROJECT_STORE_PASSWORD__ memory-only after successful principal SAS unlock",
+    "buttonVisibilityRequires": ["#gvaultRuntime.ready", "principal SAS secret currently present in memory"],
+    "authorizationTransport": "fresh same-origin opener + 128-bit nonce + postMessage handoff",
+    "persistedAuthorizationAssertion": "FORBIDDEN",
+    "sessionStorageAuthorization": "FORBIDDEN",
+    "directNavigation": "LOCKED_AND_RETURN_TO_GVAULT",
+    "refreshOrBookmarkWithoutLiveOpenerHandoff": "LOCKED_AND_RETURN_TO_GVAULT",
+    "consoleVisibilityBeforeHandoff": "HIDDEN",
+    "handoffTimeoutMs": 5000,
+    "securityBoundary": "CLIENT_SIDE_GATE_ON_STATIC_GITHUB_PAGES; PUBLIC_SOURCE_REMAINS_FETCHABLE; PRIVATE_DATA_REMAINS_ENCRYPTED"
   },
-  "secondGate": {
-    "kept": true,
-    "credential": "SAME_GVAULT_SAS_PASSWORD",
-    "purpose": "decrypt Control Tower encrypted feed",
-    "passwordPersistence": "memory-only until page close/lock",
-    "githubTokenPrompt": false
+  "secondaryPasswordEntry": {
+    "present": false,
+    "rule": "Control Tower must never ask the user to type the GVAULT password again after the principal SAS has been unlocked.",
+    "ui": "connection/session/feed status only",
+    "secretPersistence": "memory-only in principal and child page while active"
   },
   "encryptedFeed": {
     "manifest": "essai/control-tower/data/manifest.json",
@@ -31,14 +37,15 @@
     "crypto": "AES-256-GCM + PBKDF2-HMAC-SHA256",
     "pbkdf2Iterations": 900000,
     "browserGitHubTokenRequired": false,
-    "rawSecretsIncluded": false
+    "rawSecretsIncluded": false,
+    "decryptCredential": "inherited principal SAS secret in memory"
   },
-  "legacyPatRepair": {
-    "sasUnifierDeleted": true,
+  "legacyRepairs": {
+    "browserPatRuntimeDeleted": true,
+    "secondPasswordValidatorDeleted": true,
     "legacyIndexedDb": "gvault-control-tower-credential-v1",
-    "cleanupOnV3Load": "deleteDatabase",
-    "tokenWasBakedIntoPublicSource": false,
-    "reason": "The browser PAT/IndexedDB route duplicated existing server-side credentials and was not the intended architecture."
+    "legacySessionStorageKeysRemovedOnPrincipalPageLoad": ["gvault.controlTower.entry.v1", "gvault.gadmin.entry.v1"],
+    "tokenWasBakedIntoPublicSource": false
   },
   "trackWritePath": {
     "remoteRegistryRead": "included in encrypted feed when available",
@@ -59,13 +66,14 @@
     "newBrowserWorkBindingPersistence": "LOCAL_OUTBOX_PENDING_SERVER_BRIDGE"
   },
   "invariants": [
+    "no_console_render_before_fresh_live_sas_handoff",
+    "no_persisted_assertion_can_authorize_entry",
+    "no_direct_or_bookmark_access_without_live_principal_sas",
+    "private_tool_buttons_hidden_without_current_principal_sas_secret",
+    "no_second_password_entry",
     "no_plaintext_private_data_baked_into_public_page",
     "no_github_token_baked_into_public_source",
     "no_browser_pat_required_for_read_path",
-    "same_gvault_password_used_by_second_control_tower_sas",
-    "legacy_pat_indexeddb_is_deleted_on_v3_load",
-    "control_tower_button_hidden_until_gvault_runtime_ready",
-    "direct_navigation_redirected_without_same_tab_session_assertion",
     "client_side_gate_is_not_claimed_as_server_side_security",
     "track_mutations_must_not_claim_private_sync_until_server_bridge_ack",
     "sources_remain_authoritative",
