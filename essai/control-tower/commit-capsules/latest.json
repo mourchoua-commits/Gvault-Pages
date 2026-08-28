@@ -1,10 +1,10 @@
 {
   "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_LATEST_V1",
-  "commitSha": "f60e7b7d0ce0d5f5cd34b7c5a73fbb0548cafe5c",
-  "parentSha": "de3dd1f694a1195550024c4107f9d9bece32a4d1",
-  "pulseKey": "CTP1:f60e7b7d0ce0d5f5cd34b7c5a73fbb0548cafe5c:f0c9e37296f7b7b7",
+  "commitSha": "b2a91ef07fbe3e8b57dfec7ad148f58f1bb89889",
+  "parentSha": "7bafe2b47c537f4f3c7b582c02bcd8fd6726250f",
+  "pulseKey": "CTP1:b2a91ef07fbe3e8b57dfec7ad148f58f1bb89889:38975d49dbfa9446",
   "functionImageVersion": "1.0.0",
-  "capsulePath": "commit-capsules/f60e7b7d0ce0d5f5cd34b7c5a73fbb0548cafe5c.json",
-  "translationSha256": "dd168a827c8e9629b0482c040e4b459da85f64933a25382f7259b1149c407df0",
-  "committedAt": "2026-08-28T21:43:23+02:00"
+  "capsulePath": "commit-capsules/b2a91ef07fbe3e8b57dfec7ad148f58f1bb89889.json",
+  "translationSha256": "fd107e7ffc1b2d002f1136f96619897f5514320710337fd3b13b2520f9cbd458",
+  "committedAt": "2026-08-28T21:46:11+02:00"
 }
