@@ -5,6 +5,8 @@ on:
     paths:
       - 'essai/control-tower/archive-weekly-lever-v1.mjs'
       - 'essai/control-tower/archive-weekly-lever-v1.test.mjs'
+      - 'essai/control-tower/public-vfs-weekly-v1.mjs'
+      - 'essai/control-tower/public-vfs-weekly-v1.test.mjs'
       - '.github/workflows/control-tower-weekly-lever-test.yml'
   workflow_dispatch:
 
@@ -21,6 +23,10 @@ jobs:
         with:
           node-version: '22'
       - name: Syntax check
-        run: node --check essai/control-tower/archive-weekly-lever-v1.mjs
+        run: |
+          node --check essai/control-tower/archive-weekly-lever-v1.mjs
+          node --check essai/control-tower/public-vfs-weekly-v1.mjs
       - name: Deterministic SAS / weekly replay
         run: node essai/control-tower/archive-weekly-lever-v1.test.mjs
+      - name: Deterministic encrypted public VFS client
+        run: node essai/control-tower/public-vfs-weekly-v1.test.mjs
