@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "0bd7611af7a82c18f0cf75865f83d6f33b9d880f",
+  "parentSha": "5abb1f52eecbd90840fe71ed75a6ecb48cb9e9b6",
+  "committedAt": "2026-08-28T22:31:40+02:00",
+  "summary": {
+    "subject": "control-tower: anchor PULSE to ctqrb without persisting private plaintext",
+    "intent": "Let PULSE count public signals newer than the encrypted private baseline using only public ctqrb metadata, never decoded private catalog items in localStorage.",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 11,
+    "deletions": 49,
+    "paths": [
+      "essai/control-tower/pulse-sampler-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 11,
+    "deletions": 49,
+    "magnitude": 60,
+    "committedAt": "2026-08-28T22:31:40+02:00",
+    "parentSha": "5abb1f52eecbd90840fe71ed75a6ecb48cb9e9b6"
+  },
+  "pulseKey": "CTP1:0bd7611af7a82c18f0cf75865f83d6f33b9d880f:59f320657a90b63a",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "7b277bbe3fd83411703ca2ba3bf946054546a207c77a120b178bfc70377df785",
+  "typedKeys": {
+    "commit": "gitc:0bd7611af7a82c18f0cf75865f83d6f33b9d880f",
+    "parent": "gitc:5abb1f52eecbd90840fe71ed75a6ecb48cb9e9b6",
+    "pulse": "ctp1:0bd7611af7a82c18f0cf75865f83d6f33b9d880f:59f320657a90b63a",
+    "translation": "cttrans:7b277bbe3fd83411703ca2ba3bf946054546a207c77a120b178bfc70377df785",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "0bd7611af7a82c18f0cf75865f83d6f33b9d880f",
+    "parentSha": "5abb1f52eecbd90840fe71ed75a6ecb48cb9e9b6",
+    "committedAt": "2026-08-28T22:31:40+02:00",
+    "summary": {
+      "subject": "control-tower: anchor PULSE to ctqrb without persisting private plaintext",
+      "intent": "Let PULSE count public signals newer than the encrypted private baseline using only public ctqrb metadata, never decoded private catalog items in localStorage.",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 11,
+      "deletions": 49,
+      "paths": [
+        "essai/control-tower/pulse-sampler-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 11,
+      "deletions": 49,
+      "magnitude": 60,
+      "committedAt": "2026-08-28T22:31:40+02:00",
+      "parentSha": "5abb1f52eecbd90840fe71ed75a6ecb48cb9e9b6"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/0bd7611af7a82c18f0cf75865f83d6f33b9d880f.json",
+      "vfsKey": "CTP1:0bd7611af7a82c18f0cf75865f83d6f33b9d880f:59f320657a90b63a",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/0bd7611af7a82c18f0cf75865f83d6f33b9d880f.json"
+}
