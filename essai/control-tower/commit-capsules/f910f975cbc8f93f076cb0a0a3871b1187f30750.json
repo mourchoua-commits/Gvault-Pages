@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "f910f975cbc8f93f076cb0a0a3871b1187f30750",
+  "parentSha": "85fdd3f4b579e46dcf3d2410869440da1d96232b",
+  "committedAt": "2026-08-28T22:00:32+02:00",
+  "summary": {
+    "subject": "control-tower: register QRSprite full-input as additive function extension",
+    "intent": "Add private-generated encrypted QRSprite full-input transport without invalidating existing FUNCTION IMAGE 1.0.0 commit capsules.",
+    "workSpecial": "GADMIN-CONTROL-TOWER",
+    "changedFiles": 1,
+    "additions": 27,
+    "deletions": 0,
+    "paths": [
+      "essai/control-tower/function-image.qrsprite-input.extension.v1.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 27,
+    "deletions": 0,
+    "magnitude": 27,
+    "committedAt": "2026-08-28T22:00:32+02:00",
+    "parentSha": "85fdd3f4b579e46dcf3d2410869440da1d96232b"
+  },
+  "pulseKey": "CTP1:f910f975cbc8f93f076cb0a0a3871b1187f30750:7b277099e4f2b657",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "76fe83ee29bf47f405b899099b55ed445a8e41ee53ceef1c0fa699034a3fa69e",
+  "typedKeys": {
+    "commit": "gitc:f910f975cbc8f93f076cb0a0a3871b1187f30750",
+    "parent": "gitc:85fdd3f4b579e46dcf3d2410869440da1d96232b",
+    "pulse": "ctp1:f910f975cbc8f93f076cb0a0a3871b1187f30750:7b277099e4f2b657",
+    "translation": "cttrans:76fe83ee29bf47f405b899099b55ed445a8e41ee53ceef1c0fa699034a3fa69e",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "f910f975cbc8f93f076cb0a0a3871b1187f30750",
+    "parentSha": "85fdd3f4b579e46dcf3d2410869440da1d96232b",
+    "committedAt": "2026-08-28T22:00:32+02:00",
+    "summary": {
+      "subject": "control-tower: register QRSprite full-input as additive function extension",
+      "intent": "Add private-generated encrypted QRSprite full-input transport without invalidating existing FUNCTION IMAGE 1.0.0 commit capsules.",
+      "workSpecial": "GADMIN-CONTROL-TOWER",
+      "changedFiles": 1,
+      "additions": 27,
+      "deletions": 0,
+      "paths": [
+        "essai/control-tower/function-image.qrsprite-input.extension.v1.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 27,
+      "deletions": 0,
+      "magnitude": 27,
+      "committedAt": "2026-08-28T22:00:32+02:00",
+      "parentSha": "85fdd3f4b579e46dcf3d2410869440da1d96232b"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/f910f975cbc8f93f076cb0a0a3871b1187f30750.json",
+      "vfsKey": "CTP1:f910f975cbc8f93f076cb0a0a3871b1187f30750:7b277099e4f2b657",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/f910f975cbc8f93f076cb0a0a3871b1187f30750.json"
+}
