@@ -1,0 +1,30 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_CONTRACT_V2",
+  "version": "0.2.0",
+  "status": "CANDIDATE_E2E_PENDING",
+  "publicSurface": "Gvault-Pages/essai/control-tower/v2.html",
+  "privateRepository": "mourchoua-commits/Gvault",
+  "primaryEventPlane": "vigie-state",
+  "trackRegistry": "vigie-state:modules/vigie/control_tower_tracks.json",
+  "tokenPersistence": "memory-only",
+  "swarmContamination": {
+    "idPrefix": "SWARM-",
+    "toggleByReclick": true,
+    "preserveHistoryWhenStopped": true,
+    "propagation": "PROVEN_LINEAGE_ONLY",
+    "transitiveNewRamifications": true,
+    "ambiguousLineage": "BRANCH_SOURCE_REQUIRED_NO_AUTO_MARK",
+    "gitAncestryAlone": "INSUFFICIENT",
+    "workProtocol": "WORK_SPECIAL",
+    "workBindingPersistedInTrackRegistry": true
+  },
+  "invariants": [
+    "no_private_data_baked_into_public_page",
+    "no_token_persistence",
+    "sources_remain_authoritative",
+    "swarm_marks_are_reversible_but_history_is_preserved",
+    "unrelated_git_descendants_do_not_inherit_work_special",
+    "ambiguous_lineage_fails_closed",
+    "no_false_pass"
+  ]
+}
