@@ -1,0 +1,27 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_FUNCTION_IMAGE_EXTENSION_V1",
+  "extensionId": "QRSPRITE_FULL_INPUT_V1",
+  "baseFunctionImage": "ctfunc:1.0.0",
+  "status": "CANDIDATE_E2E_PENDING",
+  "function": {
+    "id": "QRSPRITE_FULL_INPUT",
+    "runtime": "qrsprite-input-v1.mjs",
+    "authority": "PRIVATE_GVAULT",
+    "inputSchema": "GVAULT_CONTROL_TOWER_FEED_V1",
+    "transport": "PRIVATE_GENERATED_ENCRYPTED_QRSPRITE",
+    "vfs": "gvault-control-tower-qrsprite-vfs-v1",
+    "typedKey": "ctqr:<previousPublicCommit40>:<cipherSha256_64>",
+    "hydration": "QRSprite reconstructs the normal encrypted feed manifest+ciphertext; existing Control Tower SAS/feed logic consumes it unchanged."
+  },
+  "security": {
+    "publicPlaintextPrivateData": false,
+    "vfsPlaintextPrivateData": false,
+    "sasMemoryOnly": true,
+    "browserGitHubCredential": false
+  },
+  "compatibility": {
+    "invalidatesBaseFunctionImage": false,
+    "invalidatesExistingCommitCapsules": false,
+    "fallbacksPreserved": ["PRIVATE_MASTER_PROJECTION", "LOCAL_VFS", "REMOTE_COMPATIBLE_SOURCE", "PUBLIC_DIRECT"]
+  }
+}
