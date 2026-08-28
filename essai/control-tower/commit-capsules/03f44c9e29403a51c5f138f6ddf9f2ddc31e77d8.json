@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "03f44c9e29403a51c5f138f6ddf9f2ddc31e77d8",
+  "parentSha": "463d3a4d2f31e770c989c81e51a21126c77c849f",
+  "committedAt": "2026-08-28T23:20:48+02:00",
+  "summary": {
+    "subject": "control-tower: distinguish local source-upload QRSprite keys",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 3,
+    "deletions": 1,
+    "paths": [
+      "essai/control-tower/key-types-v1.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 3,
+    "deletions": 1,
+    "magnitude": 4,
+    "committedAt": "2026-08-28T23:20:48+02:00",
+    "parentSha": "463d3a4d2f31e770c989c81e51a21126c77c849f"
+  },
+  "pulseKey": "CTP1:03f44c9e29403a51c5f138f6ddf9f2ddc31e77d8:ed4fb4a3fb3a979c",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "42eb1cde7856fa85481b5d80ccb12a3761a34fd9dbc80730765919ba9baa0964",
+  "typedKeys": {
+    "commit": "gitc:03f44c9e29403a51c5f138f6ddf9f2ddc31e77d8",
+    "parent": "gitc:463d3a4d2f31e770c989c81e51a21126c77c849f",
+    "pulse": "ctp1:03f44c9e29403a51c5f138f6ddf9f2ddc31e77d8:ed4fb4a3fb3a979c",
+    "translation": "cttrans:42eb1cde7856fa85481b5d80ccb12a3761a34fd9dbc80730765919ba9baa0964",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "03f44c9e29403a51c5f138f6ddf9f2ddc31e77d8",
+    "parentSha": "463d3a4d2f31e770c989c81e51a21126c77c849f",
+    "committedAt": "2026-08-28T23:20:48+02:00",
+    "summary": {
+      "subject": "control-tower: distinguish local source-upload QRSprite keys",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 3,
+      "deletions": 1,
+      "paths": [
+        "essai/control-tower/key-types-v1.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 3,
+      "deletions": 1,
+      "magnitude": 4,
+      "committedAt": "2026-08-28T23:20:48+02:00",
+      "parentSha": "463d3a4d2f31e770c989c81e51a21126c77c849f"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/03f44c9e29403a51c5f138f6ddf9f2ddc31e77d8.json",
+      "vfsKey": "CTP1:03f44c9e29403a51c5f138f6ddf9f2ddc31e77d8:ed4fb4a3fb3a979c",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/03f44c9e29403a51c5f138f6ddf9f2ddc31e77d8.json"
+}
