@@ -20,7 +20,8 @@ export function computePulse(previous={},observed={}){
   const confidence=clamp((0.35+0.65*maturity)*fit);
   const nextTrend=Number((trend*0.65+observedDelta*0.35).toFixed(3));
   const nextChangeProbability=Number(clamp(priorChangeProb*0.7+(headChanged?1:0)*0.3).toFixed(3));
-  const mode=residualScore>=6||confidence<0.25?'FULL_SYNC_RECOMMENDED':residualScore>=2||confidence<0.55?'WIDE':'MICRO';
+  const mature=samples>=3;
+  const mode=residualScore>=6?'FULL_SYNC_RECOMMENDED':residualScore>=2||(mature&&confidence<0.45)?'WIDE':'MICRO';
   const sampleSize=mode==='MICRO'?4:mode==='WIDE'?12:48;
   return {
     schema:'GVAULT_CONTROL_TOWER_PULSE_STATE_V1',
