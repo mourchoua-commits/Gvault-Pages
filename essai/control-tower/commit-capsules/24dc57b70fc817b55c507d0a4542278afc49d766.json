@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "24dc57b70fc817b55c507d0a4542278afc49d766",
+  "parentSha": "eddc7fb1c4aaf31aa67910c71294971d3542d56e",
+  "committedAt": "2026-08-28T22:27:42+02:00",
+  "summary": {
+    "subject": "control-tower: fuse encrypted private baseline with public observations",
+    "intent": "Show PRIVATE_CATALOG_BASELINE and PUBLIC_DIRECT together when no real private MASTER feed is live, without promoting the historical baseline to current truth.",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 13,
+    "deletions": 8,
+    "paths": [
+      "essai/control-tower/public-flow-bridge-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 13,
+    "deletions": 8,
+    "magnitude": 21,
+    "committedAt": "2026-08-28T22:27:42+02:00",
+    "parentSha": "eddc7fb1c4aaf31aa67910c71294971d3542d56e"
+  },
+  "pulseKey": "CTP1:24dc57b70fc817b55c507d0a4542278afc49d766:7a9174750fb6991f",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "dadf473d218e80077dc8c508f635f83122035d4aa7dacd7b120cd8b4c498fbc6",
+  "typedKeys": {
+    "commit": "gitc:24dc57b70fc817b55c507d0a4542278afc49d766",
+    "parent": "gitc:eddc7fb1c4aaf31aa67910c71294971d3542d56e",
+    "pulse": "ctp1:24dc57b70fc817b55c507d0a4542278afc49d766:7a9174750fb6991f",
+    "translation": "cttrans:dadf473d218e80077dc8c508f635f83122035d4aa7dacd7b120cd8b4c498fbc6",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "24dc57b70fc817b55c507d0a4542278afc49d766",
+    "parentSha": "eddc7fb1c4aaf31aa67910c71294971d3542d56e",
+    "committedAt": "2026-08-28T22:27:42+02:00",
+    "summary": {
+      "subject": "control-tower: fuse encrypted private baseline with public observations",
+      "intent": "Show PRIVATE_CATALOG_BASELINE and PUBLIC_DIRECT together when no real private MASTER feed is live, without promoting the historical baseline to current truth.",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 13,
+      "deletions": 8,
+      "paths": [
+        "essai/control-tower/public-flow-bridge-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 13,
+      "deletions": 8,
+      "magnitude": 21,
+      "committedAt": "2026-08-28T22:27:42+02:00",
+      "parentSha": "eddc7fb1c4aaf31aa67910c71294971d3542d56e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/24dc57b70fc817b55c507d0a4542278afc49d766.json",
+      "vfsKey": "CTP1:24dc57b70fc817b55c507d0a4542278afc49d766:7a9174750fb6991f",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/24dc57b70fc817b55c507d0a4542278afc49d766.json"
+}
