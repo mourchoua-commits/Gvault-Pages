@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "6aaa0d1952fafa37a74298f3915ed25d57442030",
+  "parentSha": "e1171920975aa6a0497bcd45aeca8ffad0582245",
+  "committedAt": "2026-08-29T01:57:10+02:00",
+  "summary": {
+    "subject": "control-tower: add weekly public VFS deterministic tests",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 20,
+    "deletions": 0,
+    "paths": [
+      "essai/control-tower/public-vfs-weekly-v1.test.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 20,
+    "deletions": 0,
+    "magnitude": 20,
+    "committedAt": "2026-08-29T01:57:10+02:00",
+    "parentSha": "e1171920975aa6a0497bcd45aeca8ffad0582245"
+  },
+  "pulseKey": "CTP1:6aaa0d1952fafa37a74298f3915ed25d57442030:f57b76c1f0141eb4",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "c802a5fec8051dac9a58051511861acbd9be67de912ff85299a97a1a98bfedcd",
+  "typedKeys": {
+    "commit": "gitc:6aaa0d1952fafa37a74298f3915ed25d57442030",
+    "parent": "gitc:e1171920975aa6a0497bcd45aeca8ffad0582245",
+    "pulse": "ctp1:6aaa0d1952fafa37a74298f3915ed25d57442030:f57b76c1f0141eb4",
+    "translation": "cttrans:c802a5fec8051dac9a58051511861acbd9be67de912ff85299a97a1a98bfedcd",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "6aaa0d1952fafa37a74298f3915ed25d57442030",
+    "parentSha": "e1171920975aa6a0497bcd45aeca8ffad0582245",
+    "committedAt": "2026-08-29T01:57:10+02:00",
+    "summary": {
+      "subject": "control-tower: add weekly public VFS deterministic tests",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 20,
+      "deletions": 0,
+      "paths": [
+        "essai/control-tower/public-vfs-weekly-v1.test.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 20,
+      "deletions": 0,
+      "magnitude": 20,
+      "committedAt": "2026-08-29T01:57:10+02:00",
+      "parentSha": "e1171920975aa6a0497bcd45aeca8ffad0582245"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/6aaa0d1952fafa37a74298f3915ed25d57442030.json",
+      "vfsKey": "CTP1:6aaa0d1952fafa37a74298f3915ed25d57442030:f57b76c1f0141eb4",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/6aaa0d1952fafa37a74298f3915ed25d57442030.json"
+}
