@@ -1,4 +1,4 @@
-const VERSION='gvault-shell-v1-20260828';
+const VERSION='gvault-shell-v1-20260828b';
 const SHELL_CACHE=`${VERSION}-shell`;
 const API_CACHE=`${VERSION}-public-api`;
 const SCOPE=self.registration.scope;
@@ -10,19 +10,8 @@ const SHELL=[
   './essai/private-tool-session-v1.mjs',
   './essai/control-tower/v2.html',
   './essai/control-tower/index.html',
-  './essai/control-tower/app-v4.mjs',
-  './essai/control-tower/core-v2.mjs',
-  './essai/control-tower/encrypted-vfs-v2.mjs',
-  './essai/control-tower/source-controls-v1.mjs',
-  './essai/control-tower/source-router-v1.mjs',
-  './essai/control-tower/public-live-v1.mjs',
-  './essai/control-tower/transport-truth-v1.mjs',
-  './essai/control-tower/commit-watcher-v1.mjs',
-  './essai/control-tower/commit-watcher-core-v1.mjs',
   './essai/gadmin/',
-  './essai/gadmin/index.html',
-  './essai/gadmin/app.mjs',
-  './essai/gadmin/sas-feedback-v2.mjs'
+  './essai/gadmin/index.html'
 ].map(u);
 
 const BASELINE='https://raw.githubusercontent.com/mourchoua-commits/Gvault-Pages/fb5ab4a1d9e7f8d1dc382ce3ac89248c4c44a07d/index.html';
@@ -93,7 +82,7 @@ self.addEventListener('fetch',event=>{
   const req=event.request;
   if(req.method!=='GET')return;
   const url=new URL(req.url);
-  if(isPrivateData(url))return; // encrypted snapshot/VFS path owns its own policy
+  if(isPrivateData(url))return;
   if(isGitHubPublicApi(url)){event.respondWith(networkFirst(req,API_CACHE,7000));return}
   if(isBaseline(url)){event.respondWith(networkFirst(req,SHELL_CACHE,5000));return}
   if(url.origin!==new URL(SCOPE).origin)return;
