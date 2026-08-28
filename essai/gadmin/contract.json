@@ -1,0 +1,54 @@
+{
+  "schema": "GVAULT_GADMIN_CONTRACT_V1",
+  "version": "0.1.0",
+  "status": "CANDIDATE_CAPACITY_BLOCKED_BROWSER_E2E_PENDING",
+  "surface": "Gvault-Pages/essai/gadmin/",
+  "entry": {
+    "mainButton": "vaultGAdminFab",
+    "buttonOrder": ["GADMIN", "CONTROL_TOWER", "WAND"],
+    "visibleOnlyAfterGvaultRuntimeReady": true,
+    "sessionAssertion": "sessionStorage:gvault.gadmin.entry.v1",
+    "directNavigationWithoutAssertion": "RETURN_TO_GVAULT",
+    "clientSideGateNotServerAuthorization": true
+  },
+  "auth": {
+    "principalGate": "existing GVAULT SAS",
+    "secondGateKept": true,
+    "secondGateCredential": "SAME_GVAULT_SAS_PASSWORD",
+    "browserGitHubToken": false,
+    "passwordPersistence": "memory-only",
+    "passwordTransferToGitHub": false
+  },
+  "data": {
+    "transport": "shared Control Tower / GAdmin encrypted feed",
+    "manifest": "Gvault-Pages/essai/control-tower/data/manifest.json",
+    "crypto": "AES-256-GCM + PBKDF2-HMAC-SHA256",
+    "pbkdf2Iterations": 900000,
+    "sources": ["gadmin-policy", "gadmin-intake", "gadmin-official", "vigie", "continuity", "actions-capacity", "project-review", "changelog-decision"],
+    "serverSecretsRemainServerSide": true
+  },
+  "admin": {
+    "canonicalPolicy": "Gvault:private-projects/admin-policy.json",
+    "canonicalIntake": "Gvault@intake-state:private-intake/index.json",
+    "canonicalOfficialRegistry": "Gvault:private-projects/official/registry.json",
+    "readPath": "encrypted feed",
+    "browserWritePath": "LOCAL_OUTBOX_PENDING_SERVER_BRIDGE",
+    "localOutbox": "localStorage:gvault.gadmin.actionOutbox.v1",
+    "remoteWriteClaimBeforeAck": "FORBIDDEN"
+  },
+  "capacity": {
+    "state": "ACTIONS_CAPACITY_EXHAUSTED",
+    "feedWorkflow": "workflow_dispatch-only",
+    "missingFeedUi": "FEED_CHIFFRE_EN_ATTENTE_NOT_PASSWORD_ERROR"
+  },
+  "invariants": [
+    "NO_BROWSER_GITHUB_PAT",
+    "NO_SECRET_IN_PUBLIC_SOURCE",
+    "SAME_GVAULT_PASSWORD_FOR_SECOND_GATE",
+    "GADMIN_LEFT_OF_CONTROL_TOWER",
+    "BOTH_BUTTONS_HIDDEN_BEFORE_SAS_READY",
+    "NO_FALSE_REMOTE_ADMIN_ACTION",
+    "STABLE_UNCHANGED",
+    "NO_FALSE_PASS"
+  ]
+}
