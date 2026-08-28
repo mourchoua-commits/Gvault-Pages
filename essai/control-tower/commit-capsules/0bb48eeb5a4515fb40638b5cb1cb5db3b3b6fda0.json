@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "0bb48eeb5a4515fb40638b5cb1cb5db3b3b6fda0",
+  "parentSha": "fe6b90f27151abc48e66549392ebc83de7e6f4c5",
+  "committedAt": "2026-08-28T22:32:12+02:00",
+  "summary": {
+    "subject": "control-tower: load PULSE ctqrb anchor in V8.9",
+    "intent": "Cache-bust the PULSE sampler that counts public signals newer than the encrypted baseline without persisting decoded private catalog data.",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "paths": [
+      "essai/control-tower/v2.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "magnitude": 2,
+    "committedAt": "2026-08-28T22:32:12+02:00",
+    "parentSha": "fe6b90f27151abc48e66549392ebc83de7e6f4c5"
+  },
+  "pulseKey": "CTP1:0bb48eeb5a4515fb40638b5cb1cb5db3b3b6fda0:fc405e02f9f6206c",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "7870a1499b93b014967f6b1a9f8cbfa122f78ee9cc3f6a01097860053e5c7ca3",
+  "typedKeys": {
+    "commit": "gitc:0bb48eeb5a4515fb40638b5cb1cb5db3b3b6fda0",
+    "parent": "gitc:fe6b90f27151abc48e66549392ebc83de7e6f4c5",
+    "pulse": "ctp1:0bb48eeb5a4515fb40638b5cb1cb5db3b3b6fda0:fc405e02f9f6206c",
+    "translation": "cttrans:7870a1499b93b014967f6b1a9f8cbfa122f78ee9cc3f6a01097860053e5c7ca3",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "0bb48eeb5a4515fb40638b5cb1cb5db3b3b6fda0",
+    "parentSha": "fe6b90f27151abc48e66549392ebc83de7e6f4c5",
+    "committedAt": "2026-08-28T22:32:12+02:00",
+    "summary": {
+      "subject": "control-tower: load PULSE ctqrb anchor in V8.9",
+      "intent": "Cache-bust the PULSE sampler that counts public signals newer than the encrypted baseline without persisting decoded private catalog data.",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "paths": [
+        "essai/control-tower/v2.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "magnitude": 2,
+      "committedAt": "2026-08-28T22:32:12+02:00",
+      "parentSha": "fe6b90f27151abc48e66549392ebc83de7e6f4c5"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/0bb48eeb5a4515fb40638b5cb1cb5db3b3b6fda0.json",
+      "vfsKey": "CTP1:0bb48eeb5a4515fb40638b5cb1cb5db3b3b6fda0:fc405e02f9f6206c",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/0bb48eeb5a4515fb40638b5cb1cb5db3b3b6fda0.json"
+}
