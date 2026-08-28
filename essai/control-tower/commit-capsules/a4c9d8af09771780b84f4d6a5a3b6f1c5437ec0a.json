@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "a4c9d8af09771780b84f4d6a5a3b6f1c5437ec0a",
+  "parentSha": "2d0ac4044da00e4c8f2210e29bac61d539814f73",
+  "committedAt": "2026-08-28T23:15:27+02:00",
+  "summary": {
+    "subject": "control-tower: add SAS-local encryption capability for source drop QRSprites",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 4,
+    "deletions": 2,
+    "paths": [
+      "essai/private-tool-session-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 4,
+    "deletions": 2,
+    "magnitude": 6,
+    "committedAt": "2026-08-28T23:15:27+02:00",
+    "parentSha": "2d0ac4044da00e4c8f2210e29bac61d539814f73"
+  },
+  "pulseKey": "CTP1:a4c9d8af09771780b84f4d6a5a3b6f1c5437ec0a:de50a72e6abceb9d",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "c751a3b636b0ee48c988d00d5a1ce4aa1398365b4058d3220e43788b39eb1f0a",
+  "typedKeys": {
+    "commit": "gitc:a4c9d8af09771780b84f4d6a5a3b6f1c5437ec0a",
+    "parent": "gitc:2d0ac4044da00e4c8f2210e29bac61d539814f73",
+    "pulse": "ctp1:a4c9d8af09771780b84f4d6a5a3b6f1c5437ec0a:de50a72e6abceb9d",
+    "translation": "cttrans:c751a3b636b0ee48c988d00d5a1ce4aa1398365b4058d3220e43788b39eb1f0a",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "a4c9d8af09771780b84f4d6a5a3b6f1c5437ec0a",
+    "parentSha": "2d0ac4044da00e4c8f2210e29bac61d539814f73",
+    "committedAt": "2026-08-28T23:15:27+02:00",
+    "summary": {
+      "subject": "control-tower: add SAS-local encryption capability for source drop QRSprites",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 4,
+      "deletions": 2,
+      "paths": [
+        "essai/private-tool-session-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 4,
+      "deletions": 2,
+      "magnitude": 6,
+      "committedAt": "2026-08-28T23:15:27+02:00",
+      "parentSha": "2d0ac4044da00e4c8f2210e29bac61d539814f73"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/a4c9d8af09771780b84f4d6a5a3b6f1c5437ec0a.json",
+      "vfsKey": "CTP1:a4c9d8af09771780b84f4d6a5a3b6f1c5437ec0a:de50a72e6abceb9d",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/a4c9d8af09771780b84f4d6a5a3b6f1c5437ec0a.json"
+}
