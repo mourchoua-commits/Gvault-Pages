@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "fede8e569069396204bd6dfce75edaa550a1dfbf",
+  "parentSha": "b560caa3462a3bbf56dc2cdf5faf3f242543e9fe",
+  "committedAt": "2026-08-28T22:27:11+02:00",
+  "summary": {
+    "subject": "control-tower: allow typed private-catalog decrypt within inherited SAS",
+    "intent": "Reuse the existing in-memory SAS closure to decrypt the already-published encrypted private catalog without exposing or persisting the password.",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 5,
+    "deletions": 2,
+    "paths": [
+      "essai/private-tool-session-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 5,
+    "deletions": 2,
+    "magnitude": 7,
+    "committedAt": "2026-08-28T22:27:11+02:00",
+    "parentSha": "b560caa3462a3bbf56dc2cdf5faf3f242543e9fe"
+  },
+  "pulseKey": "CTP1:fede8e569069396204bd6dfce75edaa550a1dfbf:89bf271e64e5cc2a",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "5d1d91179c280f70fde35d4df5748ffaf9c8fa8869186e3e8456e573556b4c11",
+  "typedKeys": {
+    "commit": "gitc:fede8e569069396204bd6dfce75edaa550a1dfbf",
+    "parent": "gitc:b560caa3462a3bbf56dc2cdf5faf3f242543e9fe",
+    "pulse": "ctp1:fede8e569069396204bd6dfce75edaa550a1dfbf:89bf271e64e5cc2a",
+    "translation": "cttrans:5d1d91179c280f70fde35d4df5748ffaf9c8fa8869186e3e8456e573556b4c11",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "fede8e569069396204bd6dfce75edaa550a1dfbf",
+    "parentSha": "b560caa3462a3bbf56dc2cdf5faf3f242543e9fe",
+    "committedAt": "2026-08-28T22:27:11+02:00",
+    "summary": {
+      "subject": "control-tower: allow typed private-catalog decrypt within inherited SAS",
+      "intent": "Reuse the existing in-memory SAS closure to decrypt the already-published encrypted private catalog without exposing or persisting the password.",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 5,
+      "deletions": 2,
+      "paths": [
+        "essai/private-tool-session-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 5,
+      "deletions": 2,
+      "magnitude": 7,
+      "committedAt": "2026-08-28T22:27:11+02:00",
+      "parentSha": "b560caa3462a3bbf56dc2cdf5faf3f242543e9fe"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/fede8e569069396204bd6dfce75edaa550a1dfbf.json",
+      "vfsKey": "CTP1:fede8e569069396204bd6dfce75edaa550a1dfbf:89bf271e64e5cc2a",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/fede8e569069396204bd6dfce75edaa550a1dfbf.json"
+}
