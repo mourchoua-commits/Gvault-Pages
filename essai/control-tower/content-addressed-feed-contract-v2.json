@@ -1,0 +1,64 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_CONTENT_ADDRESSED_FEED_CONTRACT_V2",
+  "version": "2.0.0",
+  "status": "CANDIDATE_FIRST_REAL_SNAPSHOT_PENDING",
+  "transport": {
+    "publicRepository": "mourchoua-commits/Gvault-Pages",
+    "root": "essai/control-tower/data/",
+    "pointer": "latest.json",
+    "immutableManifest": "manifests/<snapshotChainSha256>.json",
+    "immutableCiphertext": "snapshots/<payloadSha256>.bin",
+    "compatibilityPointer": "manifest.json",
+    "publicCommitMessage": "opaque snapshot-chain prefix + ciphertext prefix only"
+  },
+  "privacy": {
+    "plaintextPublic": false,
+    "privateCommitShasPublic": false,
+    "privateCommitShasInsideCiphertext": true,
+    "publicSourceMarker": "HMAC-SHA256 opaque marker derived from source heads and SAS publication secret",
+    "githubTokenInBrowser": false,
+    "sasSecretAtRest": false,
+    "cipher": "AES-256-GCM",
+    "kdf": "PBKDF2-HMAC-SHA256",
+    "iterations": 900000,
+    "perSnapshotRandomSalt": true,
+    "perSnapshotRandomIv": true
+  },
+  "chain": {
+    "algorithm": "SHA-256",
+    "input": "previousSnapshotSha256 + LF + snapshotId + LF + sourceMarker + LF + payloadSha256 + LF + generatedAt",
+    "genesis": "GENESIS",
+    "retainHistoricalManifests": true,
+    "retainHistoricalCiphertexts": true,
+    "missedSnapshots": "walk backwards through immutable manifests until accepted head is found",
+    "rollbackOrFork": "FAIL_CLOSED",
+    "publisherHeadMoved": "PUBLIC_HEAD_MOVED_REBUILD_REQUIRED"
+  },
+  "tower": {
+    "poll": "existing Control Tower 30-second refresh",
+    "liveLeaseMs": 300000,
+    "acceptHeadOnlyAfter": "successful SAS decrypt + plaintext integrity + feed parse -> LIVE",
+    "legacyV1Fallback": true
+  },
+  "vfs": {
+    "database": "gvault-control-tower-vfs-v1",
+    "version": 2,
+    "atRest": "ciphertext + public manifest only",
+    "sync": "backfill up to 48 public immutable snapshots per sync",
+    "consult": "requires active SAS lease",
+    "deleteLocal": true,
+    "deletePublicGitHistory": false
+  },
+  "automation": {
+    "desired": "new relevant private source head -> new encrypted snapshot",
+    "current": "workflow_dispatch only because private Actions capacity is exhausted",
+    "restoreAutomaticTriggersAfterCapacityRecovery": true
+  },
+  "promotion": {
+    "sourceAlgorithmTests": "6/6 PASS",
+    "pagesDeployment": "PASS",
+    "firstRealV2Snapshot": "PENDING",
+    "androidBrowserE2E": "PENDING",
+    "stable": "NOT_TOUCHED"
+  }
+}
