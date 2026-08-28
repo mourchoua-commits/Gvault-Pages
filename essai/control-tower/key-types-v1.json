@@ -1,9 +1,10 @@
 {
   "schema": "GVAULT_CONTROL_TOWER_KEY_TYPES_V1",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "rules": {
     "GIT_COMMIT": {"prefix": "gitc:", "rawPattern": "^[a-f0-9]{40}$", "meaning": "Git commit object id only"},
     "PULSE": {"prefix": "ctp1:", "rawPattern": "^[a-f0-9]{40}:[a-f0-9]{16}$", "meaning": "Control Tower pulse identity bound to one Git commit"},
+    "SOURCE_ARCHIVE": {"prefix": "ctarc:", "rawPattern": "^[a-f0-9]{64}$", "meaning": "Immutable private Control Tower source-archive snapshot root over the registry-selected descriptor set and private source heads"},
     "QRSPRITE_INPUT": {"prefix": "ctqr:", "rawPattern": "^[a-f0-9]{40}:[a-f0-9]{64}$", "meaning": "Private-generated encrypted QRSprite carrying the complete Control Tower input and anchored to the previous public Git commit"},
     "QRSPRITE_BOOTSTRAP": {"prefix": "ctqrb:", "rawPattern": "^[a-f0-9]{40}:[a-f0-9]{64}$", "meaning": "Historical Control Tower bootstrap derived from an already-published encrypted private catalog; never equivalent to ctqr FULL INPUT or MASTER LIVE"},
     "QRSPRITE_UPLOAD": {"prefix": "ctqru:", "rawPattern": "^[a-f0-9]{64}:[a-f0-9]{64}$", "meaning": "Local SAS-encrypted QRSprite created from manually uploaded Control Tower source-drop data; first digest identifies the plaintext drop, second identifies ciphertext; never equivalent to ctqr canonical private input"},
@@ -16,6 +17,7 @@
   "invariants": [
     "raw hexadecimal shape is never sufficient to infer semantic type",
     "Git commit ids are exactly 40 hex in this contract",
+    "ctarc identifies a private archive snapshot and is never a ciphertext, Git commit, QRSprite, or source marker",
     "QRSprite full-input keys bind exactly one previous public commit to exactly one encrypted payload digest",
     "ctqrb historical bootstrap keys can never be substituted for ctqr full-input keys",
     "ctqru local upload keys can never be substituted for ctqr full-input keys or ctqrb bootstrap keys",
