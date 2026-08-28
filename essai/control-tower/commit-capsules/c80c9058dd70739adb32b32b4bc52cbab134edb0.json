@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "c80c9058dd70739adb32b32b4bc52cbab134edb0",
+  "parentSha": "cf00339fa330ea85456ab2bf403f64d0f8a7a96b",
+  "committedAt": "2026-08-28T21:59:54+02:00",
+  "summary": {
+    "subject": "control-tower: add semantic key type for full-input QRSprites",
+    "intent": "Distinguish encrypted QRSprite full-input identities from commits, pulse keys, translations, snapshots and ciphertext blobs.",
+    "workSpecial": "GADMIN-CONTROL-TOWER",
+    "changedFiles": 1,
+    "additions": 3,
+    "deletions": 1,
+    "paths": [
+      "essai/control-tower/key-types-v1.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 3,
+    "deletions": 1,
+    "magnitude": 4,
+    "committedAt": "2026-08-28T21:59:54+02:00",
+    "parentSha": "cf00339fa330ea85456ab2bf403f64d0f8a7a96b"
+  },
+  "pulseKey": "CTP1:c80c9058dd70739adb32b32b4bc52cbab134edb0:8b5a70b1cf247ded",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "4aa6bb54a43d97a1ace69041cd4c7a822dd9bb6b65d42fa13ebe0407dd4bfe97",
+  "typedKeys": {
+    "commit": "gitc:c80c9058dd70739adb32b32b4bc52cbab134edb0",
+    "parent": "gitc:cf00339fa330ea85456ab2bf403f64d0f8a7a96b",
+    "pulse": "ctp1:c80c9058dd70739adb32b32b4bc52cbab134edb0:8b5a70b1cf247ded",
+    "translation": "cttrans:4aa6bb54a43d97a1ace69041cd4c7a822dd9bb6b65d42fa13ebe0407dd4bfe97",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "c80c9058dd70739adb32b32b4bc52cbab134edb0",
+    "parentSha": "cf00339fa330ea85456ab2bf403f64d0f8a7a96b",
+    "committedAt": "2026-08-28T21:59:54+02:00",
+    "summary": {
+      "subject": "control-tower: add semantic key type for full-input QRSprites",
+      "intent": "Distinguish encrypted QRSprite full-input identities from commits, pulse keys, translations, snapshots and ciphertext blobs.",
+      "workSpecial": "GADMIN-CONTROL-TOWER",
+      "changedFiles": 1,
+      "additions": 3,
+      "deletions": 1,
+      "paths": [
+        "essai/control-tower/key-types-v1.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 3,
+      "deletions": 1,
+      "magnitude": 4,
+      "committedAt": "2026-08-28T21:59:54+02:00",
+      "parentSha": "cf00339fa330ea85456ab2bf403f64d0f8a7a96b"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/c80c9058dd70739adb32b32b4bc52cbab134edb0.json",
+      "vfsKey": "CTP1:c80c9058dd70739adb32b32b4bc52cbab134edb0:8b5a70b1cf247ded",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/c80c9058dd70739adb32b32b4bc52cbab134edb0.json"
+}
