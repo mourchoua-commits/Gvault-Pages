@@ -1,9 +1,10 @@
 {
   "schema": "GVAULT_CONTROL_TOWER_KEY_TYPES_V1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "rules": {
     "GIT_COMMIT": {"prefix": "gitc:", "rawPattern": "^[a-f0-9]{40}$", "meaning": "Git commit object id only"},
     "PULSE": {"prefix": "ctp1:", "rawPattern": "^[a-f0-9]{40}:[a-f0-9]{16}$", "meaning": "Control Tower pulse identity bound to one Git commit"},
+    "QRSPRITE_INPUT": {"prefix": "ctqr:", "rawPattern": "^[a-f0-9]{40}:[a-f0-9]{64}$", "meaning": "Private-generated encrypted QRSprite carrying the complete Control Tower input and anchored to the previous public Git commit"},
     "TRANSLATION": {"prefix": "cttrans:", "rawPattern": "^[a-f0-9]{64}$", "meaning": "SHA-256 of canonical Control Tower translation"},
     "SNAPSHOT_CHAIN": {"prefix": "ctsnap:", "rawPattern": "^[a-f0-9]{64}$", "meaning": "Control Tower snapshot-chain SHA-256"},
     "PAYLOAD": {"prefix": "ctblob:", "rawPattern": "^[a-f0-9]{64}$", "meaning": "Encrypted payload SHA-256"},
@@ -13,6 +14,7 @@
   "invariants": [
     "raw hexadecimal shape is never sufficient to infer semantic type",
     "Git commit ids are exactly 40 hex in this contract",
+    "QRSprite full-input keys bind exactly one previous public commit to exactly one encrypted payload digest",
     "SHA-256 families are exactly 64 hex but remain semantically distinct",
     "typed keys are additive aliases; legacy raw fields remain for compatibility",
     "cross-type substitution must fail closed"
