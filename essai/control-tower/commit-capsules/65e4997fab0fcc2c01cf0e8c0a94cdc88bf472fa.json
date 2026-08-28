@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "65e4997fab0fcc2c01cf0e8c0a94cdc88bf472fa",
+  "parentSha": "e7da68361c543bab885605298912bb31d1a97d52",
+  "committedAt": "2026-08-28T22:27:58+02:00",
+  "summary": {
+    "subject": "control-tower: distinguish ctqrb historical bootstrap keys",
+    "intent": "Give encrypted-catalog bootstrap images their own semantic key namespace so they cannot be confused with private-generated ctqr FULL INPUT.",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 3,
+    "deletions": 1,
+    "paths": [
+      "essai/control-tower/key-types-v1.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 3,
+    "deletions": 1,
+    "magnitude": 4,
+    "committedAt": "2026-08-28T22:27:58+02:00",
+    "parentSha": "e7da68361c543bab885605298912bb31d1a97d52"
+  },
+  "pulseKey": "CTP1:65e4997fab0fcc2c01cf0e8c0a94cdc88bf472fa:6a8f8d70797222a8",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "ddc79a140787aa5591281e21990fce6df428ce4e7f63b2be089d8a748095124f",
+  "typedKeys": {
+    "commit": "gitc:65e4997fab0fcc2c01cf0e8c0a94cdc88bf472fa",
+    "parent": "gitc:e7da68361c543bab885605298912bb31d1a97d52",
+    "pulse": "ctp1:65e4997fab0fcc2c01cf0e8c0a94cdc88bf472fa:6a8f8d70797222a8",
+    "translation": "cttrans:ddc79a140787aa5591281e21990fce6df428ce4e7f63b2be089d8a748095124f",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "65e4997fab0fcc2c01cf0e8c0a94cdc88bf472fa",
+    "parentSha": "e7da68361c543bab885605298912bb31d1a97d52",
+    "committedAt": "2026-08-28T22:27:58+02:00",
+    "summary": {
+      "subject": "control-tower: distinguish ctqrb historical bootstrap keys",
+      "intent": "Give encrypted-catalog bootstrap images their own semantic key namespace so they cannot be confused with private-generated ctqr FULL INPUT.",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 3,
+      "deletions": 1,
+      "paths": [
+        "essai/control-tower/key-types-v1.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 3,
+      "deletions": 1,
+      "magnitude": 4,
+      "committedAt": "2026-08-28T22:27:58+02:00",
+      "parentSha": "e7da68361c543bab885605298912bb31d1a97d52"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/65e4997fab0fcc2c01cf0e8c0a94cdc88bf472fa.json",
+      "vfsKey": "CTP1:65e4997fab0fcc2c01cf0e8c0a94cdc88bf472fa:6a8f8d70797222a8",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/65e4997fab0fcc2c01cf0e8c0a94cdc88bf472fa.json"
+}
