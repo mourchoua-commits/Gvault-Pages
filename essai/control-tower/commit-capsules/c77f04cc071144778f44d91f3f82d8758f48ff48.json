@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "c77f04cc071144778f44d91f3f82d8758f48ff48",
+  "parentSha": "a2cbaa1b55efac44370195d270e9c8ba4afa73e7",
+  "committedAt": "2026-08-28T23:18:59+02:00",
+  "summary": {
+    "subject": "control-tower: add source upload to encrypted QRSprite VFS in V9.2",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "paths": [
+      "essai/control-tower/v2.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "magnitude": 2,
+    "committedAt": "2026-08-28T23:18:59+02:00",
+    "parentSha": "a2cbaa1b55efac44370195d270e9c8ba4afa73e7"
+  },
+  "pulseKey": "CTP1:c77f04cc071144778f44d91f3f82d8758f48ff48:53b0de835d89f0c4",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "e7fa77652922cb17fcab1fc452459430ed38220b04e0acbcc9537745b2401304",
+  "typedKeys": {
+    "commit": "gitc:c77f04cc071144778f44d91f3f82d8758f48ff48",
+    "parent": "gitc:a2cbaa1b55efac44370195d270e9c8ba4afa73e7",
+    "pulse": "ctp1:c77f04cc071144778f44d91f3f82d8758f48ff48:53b0de835d89f0c4",
+    "translation": "cttrans:e7fa77652922cb17fcab1fc452459430ed38220b04e0acbcc9537745b2401304",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "c77f04cc071144778f44d91f3f82d8758f48ff48",
+    "parentSha": "a2cbaa1b55efac44370195d270e9c8ba4afa73e7",
+    "committedAt": "2026-08-28T23:18:59+02:00",
+    "summary": {
+      "subject": "control-tower: add source upload to encrypted QRSprite VFS in V9.2",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "paths": [
+        "essai/control-tower/v2.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "magnitude": 2,
+      "committedAt": "2026-08-28T23:18:59+02:00",
+      "parentSha": "a2cbaa1b55efac44370195d270e9c8ba4afa73e7"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/c77f04cc071144778f44d91f3f82d8758f48ff48.json",
+      "vfsKey": "CTP1:c77f04cc071144778f44d91f3f82d8758f48ff48:53b0de835d89f0c4",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/c77f04cc071144778f44d91f3f82d8758f48ff48.json"
+}
