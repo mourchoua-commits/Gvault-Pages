@@ -1,0 +1,38 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_PULSE_FRAGMENT_CONTRACT_V1",
+  "status": "CANDIDATE_SOURCE_TESTED_BROWSER_E2E_PENDING",
+  "purpose": "Use tiny pulse observations and content-addressed encrypted fragments to reduce origin/API pressure while measuring prediction error over time.",
+  "principles": {
+    "predictionIsAuthority": false,
+    "observationWins": true,
+    "noSilentGapFill": true,
+    "noExtraRequestForLocalPulse": true,
+    "privatePlaintextInPublic": false
+  },
+  "clientPulse": {
+    "module": "pulse-sampler-v1.mjs",
+    "core": "pulse-core-v1.mjs",
+    "inputs": ["already-fetched PUBLIC_DIRECT events", "Commit Watcher head", "VFS ingestion events"],
+    "sequence": ["predict", "sample fragment", "observe", "compute residual", "update confidence", "choose next sample width"],
+    "modes": {
+      "MICRO": {"sampleSize": 4},
+      "WIDE": {"sampleSize": 12},
+      "FULL_SYNC_RECOMMENDED": {"sampleSize": 48}
+    },
+    "display": ["predicted delta", "observed delta", "residual", "confidence", "sample width"]
+  },
+  "futureEncryptedFragmentTransport": {
+    "pulsePath": "essai/control-tower/data/pulse/latest.json",
+    "rule": "One tiny pulse manifest advertises opaque fragment hashes. Unchanged fragment hash means no payload fetch. Only changed encrypted fragments are fetched.",
+    "fragmentAtRest": "ciphertext-only",
+    "fragmentIdentity": "SHA-256 content-addressed",
+    "predictionLocation": "client-local by default",
+    "privateNamesInPublicManifest": "FORBIDDEN_USE_OPAQUE_FRAGMENT_IDS",
+    "fullSnapshotFallback": "allowed only after residual/escalation or explicit user refresh"
+  },
+  "rateLimitBehavior": {
+    "pulseMustNotIncreaseCurrentPublicPolling": true,
+    "reuseExistingObservations": true,
+    "originThrottling": "prefer cached shell + LOCAL VFS; prediction never substitutes missing observation"
+  }
+}
