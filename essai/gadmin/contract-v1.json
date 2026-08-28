@@ -1,0 +1,37 @@
+{
+  "schema": "GVAULT_GADMIN_CONTRACT_V1",
+  "version": "1.0.0",
+  "status": "CANDIDATE_E2E_PENDING",
+  "publicSurface": "Gvault-Pages/essai/gadmin/",
+  "runtime": "Gvault-Pages/essai/gadmin/app.mjs",
+  "sessionBridge": "Gvault-Pages/essai/private-tool-session-v1.mjs",
+  "entryGate": {
+    "requiresLivePrincipalGvaultSas": true,
+    "principalSecretSource": "window.__GVAULT_PROJECT_STORE_PASSWORD__ memory-only after successful principal SAS unlock",
+    "buttonVisibilityRequires": ["#gvaultRuntime.ready", "principal SAS secret currently present in memory"],
+    "authorizationTransport": "fresh same-origin opener + 128-bit nonce + postMessage handoff",
+    "persistedAuthorizationAssertion": "FORBIDDEN",
+    "directNavigation": "LOCKED_AND_RETURN_TO_GVAULT",
+    "refreshOrBookmarkWithoutLiveOpenerHandoff": "LOCKED_AND_RETURN_TO_GVAULT",
+    "consoleVisibilityBeforeHandoff": "HIDDEN",
+    "handoffTimeoutMs": 5000
+  },
+  "secondaryPasswordEntry": {
+    "present": false,
+    "ui": "principal SAS / feed / admin connection status only"
+  },
+  "privateMutationBoundary": {
+    "browserDirectGitHubCredential": false,
+    "newAdminMutations": "LOCAL_PENDING_SERVER_BRIDGE",
+    "falsePrivateSyncClaimForbidden": true
+  },
+  "invariants": [
+    "no_console_render_before_fresh_live_sas_handoff",
+    "no_persisted_assertion_can_authorize_entry",
+    "no_direct_or_bookmark_access_without_live_principal_sas",
+    "gadmin_button_hidden_without_current_principal_sas_secret",
+    "no_second_password_entry",
+    "no_browser_pat",
+    "no_false_pass"
+  ]
+}
