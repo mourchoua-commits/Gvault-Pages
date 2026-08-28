@@ -69,3 +69,4 @@ window.addEventListener('online',()=>catchup('ONLINE_CATCHUP'));
 window.addEventListener('gvault:private-tool-session-active',onSasActive);
 window.addEventListener('gvault:private-tool-session-expired',render);
 window.GVAULT_CONTROL_TOWER_ARCHIVE_WEEKLY_LEVER_V1=Object.freeze({schema:'GVAULT_CONTROL_TOWER_ARCHIVE_WEEKLY_LEVER_V2',periodMs:WEEK_MS,run,forceTest,isDue,onSasActive,getState:()=>({...read(),sasActive:activeSession(),nextDueAt:iso(dueAt(read()))})});
+import('./public-vfs-weekly-v1.mjs?v=1').catch(e=>console.warn('CONTROL_TOWER_PUBLIC_VFS_WEEKLY_LOAD_FAILED',e));
