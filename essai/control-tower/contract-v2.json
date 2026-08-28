@@ -1,6 +1,6 @@
 {
   "schema": "GVAULT_CONTROL_TOWER_CONTRACT_V2",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "status": "CANDIDATE_E2E_PENDING",
   "publicSurface": "Gvault-Pages/essai/control-tower/v2.html",
   "runtime": "Gvault-Pages/essai/control-tower/app-v4.mjs",
@@ -20,6 +20,27 @@
     "acceptedHeadIsolation": "PER_SOURCE_ID",
     "silentAuthorityMerge": "FORBIDDEN",
     "sourceIdentityVisible": true
+  },
+  "publicDirect": {
+    "runtime": "essai/control-tower/public-live-v1.mjs",
+    "role": "NON_AUTHORITATIVE_PUBLIC_OBSERVABILITY_WHILE_PRIVATE_MASTER_TRANSPORT_IS_PENDING",
+    "sources": ["Gvault-Pages commits", "Gvault-Pages Actions runs", "GvaultStable commits"],
+    "pollMs": 600000,
+    "browserTokenRequired": false,
+    "privateData": false,
+    "privateKpiContribution": "FORBIDDEN",
+    "ui": "PUBLIC DIRECT · OBSERVABILITÉ RÉELLE"
+  },
+  "publicRunnerBridgeProbe": {
+    "workflow": ".github/workflows/control-tower-public-bridge.yml",
+    "runnerAllocation": "PROVEN_WORKING",
+    "probeRunId": 33199284483,
+    "requiredServerSecrets": ["GVAULT_PAGES_TOKEN or GVAULT_STABLE_TOKEN", "GVAULT_PUBLICATION_PASSWORD"],
+    "serverSecretPairAvailableInPublicRepo": false,
+    "privateClone": "SKIPPED_FAIL_CLOSED",
+    "plaintextPublication": "NONE",
+    "privateShaPublication": "NONE",
+    "browserCredential": "NONE"
   },
   "entryGate": {
     "requiresLivePrincipalGvaultSas": true,
@@ -87,6 +108,7 @@
   },
   "invariants": [
     "private_master_is_default_not_exclusive",
+    "public_direct_is_non_authoritative_and_must_not_fake_private_kpis",
     "local_vfs_mode_is_permanent_capability",
     "remote_compatible_source_mode_is_permanent_capability",
     "accepted_sha_heads_are_isolated_per_source",
