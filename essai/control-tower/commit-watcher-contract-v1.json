@@ -1,0 +1,56 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_WATCHER_CONTRACT_V1",
+  "version": "1.0.0",
+  "status": "CANDIDATE_REAL_SNAPSHOT_E2E_PENDING",
+  "watch": {
+    "repository": "mourchoua-commits/Gvault-Pages",
+    "branch": "main",
+    "path": "essai/control-tower/data/latest.json",
+    "source": "GitHub public commits API",
+    "pollMs": 120000,
+    "focusWake": true,
+    "singleTabLeader": true,
+    "leaderLeaseMs": 45000,
+    "githubTokenRequired": false
+  },
+  "commitToVfs": {
+    "signal": "new public commit SHA touching latest.json",
+    "snapshotHint": "parse public commit message: observability: snapshot <chain-prefix>",
+    "action": "GVAULT_CONTROL_TOWER_VFS_V2.syncChain",
+    "ingestion": "ciphertext + immutable manifests only",
+    "sasRequiredForIngestion": false,
+    "sasRequiredForDecryption": true,
+    "acknowledgeCommitOnlyAfter": "VFS sync succeeds and ingested headChain matches snapshot prefix when present",
+    "pagesPropagationRace": "retry after 30 seconds; do not persist false acknowledgment"
+  },
+  "security": {
+    "privateRepositoryReadFromBrowser": false,
+    "githubCredentialInBrowser": false,
+    "plaintextAtRest": false,
+    "ciphertextMayContinueIngestingAfterFiveMinuteLease": true,
+    "inspectArchiveAfterLease": "DENY_UNTIL_FRESH_PRINCIPAL_SAS",
+    "acceptedCryptographicHead": "unchanged: only persisted by Tower after successful SAS decrypt and plaintext integrity verification"
+  },
+  "rateLimit": {
+    "normalRequestsPerHourPerLeaderTab": 30,
+    "multipleTabs": "leader election avoids duplicate polling in normal operation",
+    "rateLimitResponse": "back off until reset / at least 5 minutes",
+    "otherErrors": "5 minute backoff",
+    "pagesPropagationRetry": "30 seconds"
+  },
+  "vfs": {
+    "startupSyncWithoutSas": true,
+    "watcherSyncWithoutSas": true,
+    "maxBackfillPerSync": 48,
+    "snapshotTrustBeforeSas": "CIPHERTEXT_HASH_VERIFIED_SAS_NOT_REQUIRED",
+    "snapshotTrustAfterSuccessfulInspect": "SAS_DECRYPTED_AND_PLAINTEXT_VERIFIED",
+    "privateMirror": "LOCAL_PENDING_PRIVATE_MIRROR until server write bridge exists"
+  },
+  "truth": {
+    "sourceImplemented": true,
+    "realPublicSnapshotCommitObserved": false,
+    "realCommitTriggeredVfsIngestionObserved": false,
+    "reason": "first V2 encrypted snapshot publication is still blocked by private Actions capacity exhaustion",
+    "stableTouched": false
+  }
+}
