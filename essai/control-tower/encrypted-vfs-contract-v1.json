@@ -1,0 +1,53 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_ENCRYPTED_VFS_CONTRACT_V1",
+  "version": "1.0.0",
+  "status": "CANDIDATE_BROWSER_E2E_PENDING",
+  "session": {
+    "authorization": "LIVE_PRINCIPAL_SAS_HANDOFF_ONLY",
+    "plaintextLeaseMs": 300000,
+    "secretPersistence": "MEMORY_ONLY",
+    "onExpiry": ["wipe inherited secret", "lock live Control Tower feed", "keep ciphertext archives", "require fresh principal SAS handoff to consult archives"]
+  },
+  "vfs": {
+    "location": "IndexedDB on Gvault-Pages browser origin",
+    "database": "gvault-control-tower-vfs-v1",
+    "snapshotStore": "snapshots",
+    "content": "EXACT_ENCRYPTED_FEED_MANIFEST_AND_CIPHERTEXT_ONLY",
+    "plaintextAtRest": false,
+    "keyAtRest": false,
+    "dedupe": "payload SHA-256",
+    "consultation": "requires active 5-minute SAS capability",
+    "autoArchive": "archive latest available encrypted feed when SAS lease activates",
+    "manualArchive": true
+  },
+  "deletion": {
+    "deleteOne": true,
+    "deleteAllButton": true,
+    "confirmationRequired": true,
+    "remoteMirrorDeletionIntent": true
+  },
+  "privateMirror": {
+    "desiredDestination": "Gvault private / Vigie-side Control Tower VFS mirror",
+    "currentTransport": "LOCAL MIRROR OUTBOX",
+    "state": "SERVER_WRITE_BRIDGE_PENDING",
+    "falseRemoteSyncClaimForbidden": true,
+    "operations": ["UPSERT_ENCRYPTED_SNAPSHOT", "DELETE_SNAPSHOT", "DELETE_ALL_SNAPSHOTS"],
+    "note": "The browser cannot write to the private repository without a server-side authenticated bridge. Until that bridge exists, mirror operations remain local and explicit."
+  },
+  "security": {
+    "githubTokenInBrowser": false,
+    "directPrivateRepoAccessFromBrowser": false,
+    "publicRepositoryPlaintext": false,
+    "publicVfsMeaning": "browser storage attached to the public Gvault-Pages origin, not plaintext files committed into the public repository"
+  },
+  "promotionTests": [
+    "no SAS -> Control Tower content invisible",
+    "principal SAS -> 5:00 lease starts without second prompt",
+    "available encrypted feed -> live data opens and ciphertext snapshot auto-archives",
+    "lease expiry -> live plaintext/feed locks and secret is wiped",
+    "fresh principal SAS -> existing VFS snapshot decrypts and can be inspected",
+    "delete one removes local snapshot and creates mirror deletion intent",
+    "VIDER VFS removes all local snapshots and creates DELETE_ALL mirror intent",
+    "no plaintext/password/token persists in IndexedDB/localStorage/sessionStorage"
+  ]
+}
