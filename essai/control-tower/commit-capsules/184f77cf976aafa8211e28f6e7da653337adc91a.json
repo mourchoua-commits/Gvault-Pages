@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "184f77cf976aafa8211e28f6e7da653337adc91a",
+  "parentSha": "51a9494093aac5bb9988335bbae5a4bb5a109276",
+  "committedAt": "2026-08-28T22:28:33+02:00",
+  "summary": {
+    "subject": "control-tower: enable encrypted baseline bootstrap in V8.9",
+    "intent": "Load the mixed flow bridge and encrypted private-catalog bootstrap so Control Tower can eat a real private baseline without private Actions, while distinguishing historical ctqrb from live ctqr.",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "paths": [
+      "essai/control-tower/v2.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "magnitude": 2,
+    "committedAt": "2026-08-28T22:28:33+02:00",
+    "parentSha": "51a9494093aac5bb9988335bbae5a4bb5a109276"
+  },
+  "pulseKey": "CTP1:184f77cf976aafa8211e28f6e7da653337adc91a:8860dc08585ec61e",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "0045a92983f638a2ed0ea9d3f50df5c22812183c281ed1af6485946640dfdef7",
+  "typedKeys": {
+    "commit": "gitc:184f77cf976aafa8211e28f6e7da653337adc91a",
+    "parent": "gitc:51a9494093aac5bb9988335bbae5a4bb5a109276",
+    "pulse": "ctp1:184f77cf976aafa8211e28f6e7da653337adc91a:8860dc08585ec61e",
+    "translation": "cttrans:0045a92983f638a2ed0ea9d3f50df5c22812183c281ed1af6485946640dfdef7",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "184f77cf976aafa8211e28f6e7da653337adc91a",
+    "parentSha": "51a9494093aac5bb9988335bbae5a4bb5a109276",
+    "committedAt": "2026-08-28T22:28:33+02:00",
+    "summary": {
+      "subject": "control-tower: enable encrypted baseline bootstrap in V8.9",
+      "intent": "Load the mixed flow bridge and encrypted private-catalog bootstrap so Control Tower can eat a real private baseline without private Actions, while distinguishing historical ctqrb from live ctqr.",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "paths": [
+        "essai/control-tower/v2.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "magnitude": 2,
+      "committedAt": "2026-08-28T22:28:33+02:00",
+      "parentSha": "51a9494093aac5bb9988335bbae5a4bb5a109276"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/184f77cf976aafa8211e28f6e7da653337adc91a.json",
+      "vfsKey": "CTP1:184f77cf976aafa8211e28f6e7da653337adc91a:8860dc08585ec61e",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/184f77cf976aafa8211e28f6e7da653337adc91a.json"
+}
