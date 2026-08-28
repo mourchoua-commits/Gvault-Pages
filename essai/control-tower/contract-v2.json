@@ -1,12 +1,29 @@
 {
   "schema": "GVAULT_CONTROL_TOWER_CONTRACT_V2",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "status": "CANDIDATE_E2E_PENDING",
   "publicSurface": "Gvault-Pages/essai/control-tower/v2.html",
   "privateRepository": "mourchoua-commits/Gvault",
   "primaryEventPlane": "vigie-state",
   "trackRegistry": "vigie-state:modules/vigie/control_tower_tracks.json",
-  "tokenPersistence": "memory-only",
+  "entryGate": {
+    "requiresGvaultSasSession": true,
+    "principalCredential": "existing GVAULT SAS password",
+    "passwordTransferToControlTower": false,
+    "sessionAssertion": "sessionStorage:gvault.controlTower.entry.v1",
+    "assertionMaxAgeHours": 8,
+    "directNavigationWithoutAssertion": "RETURN_TO_GVAULT",
+    "securityBoundary": "CLIENT_SIDE_NAVIGATION_GATE_NOT_SERVER_AUTHORIZATION"
+  },
+  "privateDataSas": {
+    "kind": "GitHub fine-grained personal access token",
+    "purpose": "read private Gvault event planes and write Control Tower track registry",
+    "passwordChosen": false,
+    "tokenPersistence": "memory-only",
+    "recommendedRepositoryScope": "mourchoua-commits/Gvault",
+    "recommendedContentsPermission": "read-and-write",
+    "mustNeverBeBakedIntoPublicSource": true
+  },
   "swarmContamination": {
     "idPrefix": "SWARM-",
     "toggleByReclick": true,
@@ -20,7 +37,11 @@
   },
   "invariants": [
     "no_private_data_baked_into_public_page",
+    "no_gvault_password_transfer_to_control_tower",
     "no_token_persistence",
+    "control_tower_button_hidden_until_gvault_runtime_ready",
+    "direct_navigation_redirected_without_same_tab_session_assertion",
+    "client_side_gate_is_not_claimed_as_server_side_security",
     "sources_remain_authoritative",
     "swarm_marks_are_reversible_but_history_is_preserved",
     "unrelated_git_descendants_do_not_inherit_work_special",
