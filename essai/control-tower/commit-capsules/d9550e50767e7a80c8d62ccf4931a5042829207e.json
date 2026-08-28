@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "d9550e50767e7a80c8d62ccf4931a5042829207e",
+  "parentSha": "c25fe4a7717e24b421eadd9779dab2089534b8d7",
+  "committedAt": "2026-08-28T23:17:46+02:00",
+  "summary": {
+    "subject": "control-tower: fold uploaded QRSprite VFS markers into Pulse observations",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 9,
+    "deletions": 7,
+    "paths": [
+      "essai/control-tower/pulse-sampler-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 9,
+    "deletions": 7,
+    "magnitude": 16,
+    "committedAt": "2026-08-28T23:17:46+02:00",
+    "parentSha": "c25fe4a7717e24b421eadd9779dab2089534b8d7"
+  },
+  "pulseKey": "CTP1:d9550e50767e7a80c8d62ccf4931a5042829207e:05b4bfc12b262513",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "9c229ae2435fc0e602b07c6c799b6b0a6f51940363d8fa80eb79f7aa35df3f49",
+  "typedKeys": {
+    "commit": "gitc:d9550e50767e7a80c8d62ccf4931a5042829207e",
+    "parent": "gitc:c25fe4a7717e24b421eadd9779dab2089534b8d7",
+    "pulse": "ctp1:d9550e50767e7a80c8d62ccf4931a5042829207e:05b4bfc12b262513",
+    "translation": "cttrans:9c229ae2435fc0e602b07c6c799b6b0a6f51940363d8fa80eb79f7aa35df3f49",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "d9550e50767e7a80c8d62ccf4931a5042829207e",
+    "parentSha": "c25fe4a7717e24b421eadd9779dab2089534b8d7",
+    "committedAt": "2026-08-28T23:17:46+02:00",
+    "summary": {
+      "subject": "control-tower: fold uploaded QRSprite VFS markers into Pulse observations",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 9,
+      "deletions": 7,
+      "paths": [
+        "essai/control-tower/pulse-sampler-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 9,
+      "deletions": 7,
+      "magnitude": 16,
+      "committedAt": "2026-08-28T23:17:46+02:00",
+      "parentSha": "c25fe4a7717e24b421eadd9779dab2089534b8d7"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/d9550e50767e7a80c8d62ccf4931a5042829207e.json",
+      "vfsKey": "CTP1:d9550e50767e7a80c8d62ccf4931a5042829207e:05b4bfc12b262513",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/d9550e50767e7a80c8d62ccf4931a5042829207e.json"
+}
