@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "e1659a31a9a41966304fdcee0d6a6fe59f0f7319",
+  "parentSha": "923642f27aad7a97f7ad606d6ad51d1760e4e44f",
+  "committedAt": "2026-08-29T01:41:29+02:00",
+  "summary": {
+    "subject": "control-tower: add weekly archive catch-up lever",
+    "intent": "Add a browser-local weekly scheduler/catch-up lever that replays the encrypted local QRSprite when possible and emits an explicit private-refresh request without persisting credentials or pretending to refresh private authority.",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 58,
+    "deletions": 0,
+    "paths": [
+      "essai/control-tower/archive-weekly-lever-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 58,
+    "deletions": 0,
+    "magnitude": 58,
+    "committedAt": "2026-08-29T01:41:29+02:00",
+    "parentSha": "923642f27aad7a97f7ad606d6ad51d1760e4e44f"
+  },
+  "pulseKey": "CTP1:e1659a31a9a41966304fdcee0d6a6fe59f0f7319:ad66db3fdffce2d8",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "cbae6fcb4ec5258b7108972885320b381012706a6d9e220f752afaa8b30a8dd5",
+  "typedKeys": {
+    "commit": "gitc:e1659a31a9a41966304fdcee0d6a6fe59f0f7319",
+    "parent": "gitc:923642f27aad7a97f7ad606d6ad51d1760e4e44f",
+    "pulse": "ctp1:e1659a31a9a41966304fdcee0d6a6fe59f0f7319:ad66db3fdffce2d8",
+    "translation": "cttrans:cbae6fcb4ec5258b7108972885320b381012706a6d9e220f752afaa8b30a8dd5",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "e1659a31a9a41966304fdcee0d6a6fe59f0f7319",
+    "parentSha": "923642f27aad7a97f7ad606d6ad51d1760e4e44f",
+    "committedAt": "2026-08-29T01:41:29+02:00",
+    "summary": {
+      "subject": "control-tower: add weekly archive catch-up lever",
+      "intent": "Add a browser-local weekly scheduler/catch-up lever that replays the encrypted local QRSprite when possible and emits an explicit private-refresh request without persisting credentials or pretending to refresh private authority.",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 58,
+      "deletions": 0,
+      "paths": [
+        "essai/control-tower/archive-weekly-lever-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 58,
+      "deletions": 0,
+      "magnitude": 58,
+      "committedAt": "2026-08-29T01:41:29+02:00",
+      "parentSha": "923642f27aad7a97f7ad606d6ad51d1760e4e44f"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/e1659a31a9a41966304fdcee0d6a6fe59f0f7319.json",
+      "vfsKey": "CTP1:e1659a31a9a41966304fdcee0d6a6fe59f0f7319:ad66db3fdffce2d8",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/e1659a31a9a41966304fdcee0d6a6fe59f0f7319.json"
+}
