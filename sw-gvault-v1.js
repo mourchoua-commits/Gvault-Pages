@@ -1,4 +1,4 @@
-const VERSION='gvault-shell-v1-20260828b';
+const VERSION='gvault-shell-v1-20260828c';
 const SHELL_CACHE=`${VERSION}-shell`;
 const API_CACHE=`${VERSION}-public-api`;
 const SCOPE=self.registration.scope;
