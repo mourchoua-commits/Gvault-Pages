@@ -1,13 +1,26 @@
 {
   "schema": "GVAULT_CONTROL_TOWER_CONTRACT_V2",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "status": "CANDIDATE_E2E_PENDING",
   "publicSurface": "Gvault-Pages/essai/control-tower/v2.html",
-  "runtime": "Gvault-Pages/essai/control-tower/app-v3.mjs",
+  "runtime": "Gvault-Pages/essai/control-tower/app-v4.mjs",
   "sessionBridge": "Gvault-Pages/essai/private-tool-session-v1.mjs",
   "privateRepository": "mourchoua-commits/Gvault",
   "primaryEventPlane": "vigie-state",
   "remoteTrackRegistry": "vigie-state:modules/vigie/control_tower_tracks.json",
+  "sourceRouter": {
+    "runtime": "essai/control-tower/source-router-v1.mjs",
+    "default": "PRIVATE_MASTER_PROJECTION",
+    "modes": ["PRIVATE_MASTER_PROJECTION", "LOCAL_VFS", "REMOTE_COMPATIBLE_SOURCE"],
+    "master": "canonical Gvault private master projected as encrypted SHA chain",
+    "local": "encrypted IndexedDB VFS snapshots, network-independent once archived",
+    "remote": "compatible encrypted latest.json + manifests + ciphertext endpoint",
+    "remoteBrowserCredentials": "FORBIDDEN_BY_DEFAULT",
+    "remoteRequirements": ["HTTPS or explicit localhost", "CORS-readable", "encrypted payload", "SHA-chain compatible"],
+    "acceptedHeadIsolation": "PER_SOURCE_ID",
+    "silentAuthorityMerge": "FORBIDDEN",
+    "sourceIdentityVisible": true
+  },
   "entryGate": {
     "requiresLivePrincipalGvaultSas": true,
     "principalCredential": "existing GVAULT SAS password",
@@ -18,27 +31,34 @@
     "sessionStorageAuthorization": "FORBIDDEN",
     "directNavigation": "LOCKED_AND_RETURN_TO_GVAULT",
     "refreshOrBookmarkWithoutLiveOpenerHandoff": "LOCKED_AND_RETURN_TO_GVAULT",
-    "consoleVisibilityBeforeHandoff": "HIDDEN",
-    "handoffTimeoutMs": 5000,
-    "securityBoundary": "CLIENT_SIDE_GATE_ON_STATIC_GITHUB_PAGES; PUBLIC_SOURCE_REMAINS_FETCHABLE; PRIVATE_DATA_REMAINS_ENCRYPTED"
+    "consoleVisibilityBeforeHandoff": "OPAQUE_SESSION_GATE_ONLY",
+    "handoffTimeoutMs": 10000,
+    "parentHandshakeWindowMs": 25000,
+    "securityBoundary": "CLIENT_SIDE_GATE_ON_STATIC_GITHUB_PAGES; PUBLIC_SOURCE_REMAINS_FETCHABLE; PRIVATE_DATA REMAINS ENCRYPTED"
   },
   "secondaryPasswordEntry": {
     "present": false,
     "rule": "Control Tower must never ask the user to type the GVAULT password again after the principal SAS has been unlocked.",
-    "ui": "connection/session/feed status only",
+    "ui": "connection/session/feed/source status only",
     "secretPersistence": "memory-only in principal and child page while active"
   },
   "encryptedFeed": {
     "manifest": "essai/control-tower/data/manifest.json",
     "schema": "GVAULT_CONTROL_TOWER_ENCRYPTED_FEED_V1",
-    "builder": "Gvault:scripts/build-control-tower-feed.mjs",
-    "workflow": "Gvault:.github/workflows/control-tower-encrypted-feed.yml",
-    "serverSecrets": ["GVAULT_PUBLICATION_PASSWORD", "GVAULT_PAGES_TOKEN"],
+    "builder": "Gvault:scripts/build-control-tower-snapshot-v2.mjs",
     "crypto": "AES-256-GCM + PBKDF2-HMAC-SHA256",
     "pbkdf2Iterations": 900000,
     "browserGitHubTokenRequired": false,
     "rawSecretsIncluded": false,
-    "decryptCredential": "inherited principal SAS secret in memory"
+    "decryptCredential": "inherited principal SAS secret in memory",
+    "contentAddressing": "SHA256_CHAIN_V2"
+  },
+  "localVfs": {
+    "database": "gvault-control-tower-vfs-v1",
+    "ciphertextOnlyAtRest": true,
+    "fullSourceMode": "LOCAL_VFS",
+    "decryptRequiresLiveSas": true,
+    "deleteAllAvailable": true
   },
   "legacyRepairs": {
     "browserPatRuntimeDeleted": true,
@@ -66,6 +86,11 @@
     "newBrowserWorkBindingPersistence": "LOCAL_OUTBOX_PENDING_SERVER_BRIDGE"
   },
   "invariants": [
+    "private_master_is_default_not_exclusive",
+    "local_vfs_mode_is_permanent_capability",
+    "remote_compatible_source_mode_is_permanent_capability",
+    "accepted_sha_heads_are_isolated_per_source",
+    "no_silent_merge_between_source_authorities",
     "no_console_render_before_fresh_live_sas_handoff",
     "no_persisted_assertion_can_authorize_entry",
     "no_direct_or_bookmark_access_without_live_principal_sas",
