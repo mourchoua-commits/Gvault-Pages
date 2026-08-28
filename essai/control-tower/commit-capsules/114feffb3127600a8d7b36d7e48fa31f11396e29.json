@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "114feffb3127600a8d7b36d7e48fa31f11396e29",
+  "parentSha": "c264c6fe86ecd5b9faca11a9d13adc5568d4c4a4",
+  "committedAt": "2026-08-28T23:51:47+02:00",
+  "summary": {
+    "subject": "control-tower: V9.4 cache-bust archive freshness and PULSE provenance hardening",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "paths": [
+      "essai/control-tower/v2.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "magnitude": 2,
+    "committedAt": "2026-08-28T23:51:47+02:00",
+    "parentSha": "c264c6fe86ecd5b9faca11a9d13adc5568d4c4a4"
+  },
+  "pulseKey": "CTP1:114feffb3127600a8d7b36d7e48fa31f11396e29:7a92a9f4365fa627",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "c6d317d8c3e21c9433ad769159e153d3dfdb4c21625b31bd94b7e90e52506f3a",
+  "typedKeys": {
+    "commit": "gitc:114feffb3127600a8d7b36d7e48fa31f11396e29",
+    "parent": "gitc:c264c6fe86ecd5b9faca11a9d13adc5568d4c4a4",
+    "pulse": "ctp1:114feffb3127600a8d7b36d7e48fa31f11396e29:7a92a9f4365fa627",
+    "translation": "cttrans:c6d317d8c3e21c9433ad769159e153d3dfdb4c21625b31bd94b7e90e52506f3a",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "114feffb3127600a8d7b36d7e48fa31f11396e29",
+    "parentSha": "c264c6fe86ecd5b9faca11a9d13adc5568d4c4a4",
+    "committedAt": "2026-08-28T23:51:47+02:00",
+    "summary": {
+      "subject": "control-tower: V9.4 cache-bust archive freshness and PULSE provenance hardening",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "paths": [
+        "essai/control-tower/v2.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "magnitude": 2,
+      "committedAt": "2026-08-28T23:51:47+02:00",
+      "parentSha": "c264c6fe86ecd5b9faca11a9d13adc5568d4c4a4"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/114feffb3127600a8d7b36d7e48fa31f11396e29.json",
+      "vfsKey": "CTP1:114feffb3127600a8d7b36d7e48fa31f11396e29:7a92a9f4365fa627",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/114feffb3127600a8d7b36d7e48fa31f11396e29.json"
+}
