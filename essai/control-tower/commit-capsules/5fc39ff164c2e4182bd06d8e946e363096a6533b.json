@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "5fc39ff164c2e4182bd06d8e946e363096a6533b",
+  "parentSha": "3664bc89df2451032bb3452ca835088b985fade9",
+  "committedAt": "2026-08-29T01:42:01+02:00",
+  "summary": {
+    "subject": "control-tower: load weekly archive lever from source prompt surface",
+    "intent": "Make the existing Control Tower V9.5 source prompt surface load the weekly local archive/catch-up lever without modifying GvaultStable.",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "paths": [
+      "essai/control-tower/source-prompt-generator-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "magnitude": 1,
+    "committedAt": "2026-08-29T01:42:01+02:00",
+    "parentSha": "3664bc89df2451032bb3452ca835088b985fade9"
+  },
+  "pulseKey": "CTP1:5fc39ff164c2e4182bd06d8e946e363096a6533b:8bf8f23d83f512ed",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "ff90aeb07a1ed0d38970e95a53292cea4ae72583e58d2b74d5c42dbbc568ce22",
+  "typedKeys": {
+    "commit": "gitc:5fc39ff164c2e4182bd06d8e946e363096a6533b",
+    "parent": "gitc:3664bc89df2451032bb3452ca835088b985fade9",
+    "pulse": "ctp1:5fc39ff164c2e4182bd06d8e946e363096a6533b:8bf8f23d83f512ed",
+    "translation": "cttrans:ff90aeb07a1ed0d38970e95a53292cea4ae72583e58d2b74d5c42dbbc568ce22",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "5fc39ff164c2e4182bd06d8e946e363096a6533b",
+    "parentSha": "3664bc89df2451032bb3452ca835088b985fade9",
+    "committedAt": "2026-08-29T01:42:01+02:00",
+    "summary": {
+      "subject": "control-tower: load weekly archive lever from source prompt surface",
+      "intent": "Make the existing Control Tower V9.5 source prompt surface load the weekly local archive/catch-up lever without modifying GvaultStable.",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "paths": [
+        "essai/control-tower/source-prompt-generator-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "magnitude": 1,
+      "committedAt": "2026-08-29T01:42:01+02:00",
+      "parentSha": "3664bc89df2451032bb3452ca835088b985fade9"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/5fc39ff164c2e4182bd06d8e946e363096a6533b.json",
+      "vfsKey": "CTP1:5fc39ff164c2e4182bd06d8e946e363096a6533b:8bf8f23d83f512ed",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/5fc39ff164c2e4182bd06d8e946e363096a6533b.json"
+}
