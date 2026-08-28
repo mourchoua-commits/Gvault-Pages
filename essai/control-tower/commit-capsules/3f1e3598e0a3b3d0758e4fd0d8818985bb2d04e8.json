@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "3f1e3598e0a3b3d0758e4fd0d8818985bb2d04e8",
+  "parentSha": "6b68c04f6cf2aa65edc0eb837c60b7a53f2469f5",
+  "committedAt": "2026-08-28T23:50:45+02:00",
+  "summary": {
+    "subject": "control-tower: make archive delivery prompt self-reference safe",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 5,
+    "deletions": 5,
+    "paths": [
+      "essai/control-tower/source-prompt-generator-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 5,
+    "deletions": 5,
+    "magnitude": 10,
+    "committedAt": "2026-08-28T23:50:45+02:00",
+    "parentSha": "6b68c04f6cf2aa65edc0eb837c60b7a53f2469f5"
+  },
+  "pulseKey": "CTP1:3f1e3598e0a3b3d0758e4fd0d8818985bb2d04e8:33c0d398e8faf4dd",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "ebaa839def23f2a40d4a7a445dc37d59c068ea70b8589490a2386c77586d57c5",
+  "typedKeys": {
+    "commit": "gitc:3f1e3598e0a3b3d0758e4fd0d8818985bb2d04e8",
+    "parent": "gitc:6b68c04f6cf2aa65edc0eb837c60b7a53f2469f5",
+    "pulse": "ctp1:3f1e3598e0a3b3d0758e4fd0d8818985bb2d04e8:33c0d398e8faf4dd",
+    "translation": "cttrans:ebaa839def23f2a40d4a7a445dc37d59c068ea70b8589490a2386c77586d57c5",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "3f1e3598e0a3b3d0758e4fd0d8818985bb2d04e8",
+    "parentSha": "6b68c04f6cf2aa65edc0eb837c60b7a53f2469f5",
+    "committedAt": "2026-08-28T23:50:45+02:00",
+    "summary": {
+      "subject": "control-tower: make archive delivery prompt self-reference safe",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 5,
+      "deletions": 5,
+      "paths": [
+        "essai/control-tower/source-prompt-generator-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 5,
+      "deletions": 5,
+      "magnitude": 10,
+      "committedAt": "2026-08-28T23:50:45+02:00",
+      "parentSha": "6b68c04f6cf2aa65edc0eb837c60b7a53f2469f5"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/3f1e3598e0a3b3d0758e4fd0d8818985bb2d04e8.json",
+      "vfsKey": "CTP1:3f1e3598e0a3b3d0758e4fd0d8818985bb2d04e8:33c0d398e8faf4dd",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/3f1e3598e0a3b3d0758e4fd0d8818985bb2d04e8.json"
+}
