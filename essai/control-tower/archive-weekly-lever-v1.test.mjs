@@ -1,3 +1,4 @@
+// Deterministic proof for weekly due + SAS autonomous execution.
 import assert from 'node:assert/strict';
 
 const store=new Map();
