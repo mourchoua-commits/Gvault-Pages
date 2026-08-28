@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "f8f6540f74c2a5dc622280bda50f9c627a0a697d",
+  "parentSha": "9261a54971f60968dcfd7cd3b064eac86a1283b6",
+  "committedAt": "2026-08-29T01:51:08+02:00",
+  "summary": {
+    "subject": "test: trigger Control Tower weekly lever proof workflow",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "paths": [
+      "essai/control-tower/archive-weekly-lever-v1.test.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "magnitude": 1,
+    "committedAt": "2026-08-29T01:51:08+02:00",
+    "parentSha": "9261a54971f60968dcfd7cd3b064eac86a1283b6"
+  },
+  "pulseKey": "CTP1:f8f6540f74c2a5dc622280bda50f9c627a0a697d:34189e70e0b9e22b",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "0d232a4ed2c1849bc818ae01d4eaf43a65b557871cb6cc10cd8ce540f69ba189",
+  "typedKeys": {
+    "commit": "gitc:f8f6540f74c2a5dc622280bda50f9c627a0a697d",
+    "parent": "gitc:9261a54971f60968dcfd7cd3b064eac86a1283b6",
+    "pulse": "ctp1:f8f6540f74c2a5dc622280bda50f9c627a0a697d:34189e70e0b9e22b",
+    "translation": "cttrans:0d232a4ed2c1849bc818ae01d4eaf43a65b557871cb6cc10cd8ce540f69ba189",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "f8f6540f74c2a5dc622280bda50f9c627a0a697d",
+    "parentSha": "9261a54971f60968dcfd7cd3b064eac86a1283b6",
+    "committedAt": "2026-08-29T01:51:08+02:00",
+    "summary": {
+      "subject": "test: trigger Control Tower weekly lever proof workflow",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "paths": [
+        "essai/control-tower/archive-weekly-lever-v1.test.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "magnitude": 1,
+      "committedAt": "2026-08-29T01:51:08+02:00",
+      "parentSha": "9261a54971f60968dcfd7cd3b064eac86a1283b6"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/f8f6540f74c2a5dc622280bda50f9c627a0a697d.json",
+      "vfsKey": "CTP1:f8f6540f74c2a5dc622280bda50f9c627a0a697d:34189e70e0b9e22b",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/f8f6540f74c2a5dc622280bda50f9c627a0a697d.json"
+}
