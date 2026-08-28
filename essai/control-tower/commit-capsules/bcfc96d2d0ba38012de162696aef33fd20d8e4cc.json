@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "bcfc96d2d0ba38012de162696aef33fd20d8e4cc",
+  "parentSha": "198c3caad705695d7b50ba31411575d4b25d06d6",
+  "committedAt": "2026-08-29T00:01:04+02:00",
+  "summary": {
+    "subject": "control-tower: add dedicated ctarc source archive health panel",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 15,
+    "deletions": 0,
+    "paths": [
+      "essai/control-tower/source-archive-health-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 15,
+    "deletions": 0,
+    "magnitude": 15,
+    "committedAt": "2026-08-29T00:01:04+02:00",
+    "parentSha": "198c3caad705695d7b50ba31411575d4b25d06d6"
+  },
+  "pulseKey": "CTP1:bcfc96d2d0ba38012de162696aef33fd20d8e4cc:ea140234fd78db89",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "7976913a9bc707f4ac7236296337be936ecda8354b545ab29c26fcc28fdd3de3",
+  "typedKeys": {
+    "commit": "gitc:bcfc96d2d0ba38012de162696aef33fd20d8e4cc",
+    "parent": "gitc:198c3caad705695d7b50ba31411575d4b25d06d6",
+    "pulse": "ctp1:bcfc96d2d0ba38012de162696aef33fd20d8e4cc:ea140234fd78db89",
+    "translation": "cttrans:7976913a9bc707f4ac7236296337be936ecda8354b545ab29c26fcc28fdd3de3",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "bcfc96d2d0ba38012de162696aef33fd20d8e4cc",
+    "parentSha": "198c3caad705695d7b50ba31411575d4b25d06d6",
+    "committedAt": "2026-08-29T00:01:04+02:00",
+    "summary": {
+      "subject": "control-tower: add dedicated ctarc source archive health panel",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 15,
+      "deletions": 0,
+      "paths": [
+        "essai/control-tower/source-archive-health-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 15,
+      "deletions": 0,
+      "magnitude": 15,
+      "committedAt": "2026-08-29T00:01:04+02:00",
+      "parentSha": "198c3caad705695d7b50ba31411575d4b25d06d6"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/bcfc96d2d0ba38012de162696aef33fd20d8e4cc.json",
+      "vfsKey": "CTP1:bcfc96d2d0ba38012de162696aef33fd20d8e4cc:ea140234fd78db89",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/bcfc96d2d0ba38012de162696aef33fd20d8e4cc.json"
+}
