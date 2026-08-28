@@ -1,0 +1,41 @@
+export const TTL_SECONDS=7*24*60*60;
+const SRC_DB='gvault-control-tower-source-upload-qrs-v1',SRC_VER=1,SRC_STORE='packets';
+const DB='gvault-control-tower-public-vfs-v1',VER=1,PENDING='pending',RECEIPTS='receipts';
+const STATE_KEY='gvault.controlTower.publicVfsWeekly.v1';
+const $=s=>document.querySelector(s);
+const req=r=>new Promise((res,rej)=>{r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+const hex=u=>[...u].map(x=>x.toString(16).padStart(2,'0')).join('');
+const randomId=()=>hex(crypto.getRandomValues(new Uint8Array(16)));
+function endpoint(){const direct=String(window.GVAULT_PUBLIC_VFS_ENDPOINT||'').replace(/\/+$/,'');if(direct)return direct;const base=String(window.GVAULT_INGRESS_BASE_URL||'').replace(/\/+$/,'');return base?base+'/v1/public-vfs':''}
+function state(patch){let prev={};try{prev=JSON.parse(localStorage.getItem(STATE_KEY)||'{}')}catch{}const next={schema:'GVAULT_CONTROL_TOWER_PUBLIC_VFS_WEEKLY_STATE_V1',version:1,...prev,...patch,updatedAt:new Date().toISOString()};try{localStorage.setItem(STATE_KEY,JSON.stringify(next))}catch{}render();return next}
+function currentState(){try{return JSON.parse(localStorage.getItem(STATE_KEY)||'{}')}catch{return {}}}
+function openDb(name,version,upgrade){return new Promise((res,rej)=>{const r=indexedDB.open(name,version);r.onupgradeneeded=()=>upgrade?.(r.result);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function latestSourceRow(){const db=await openDb(SRC_DB,SRC_VER);if(!db.objectStoreNames.contains(SRC_STORE)){db.close();return null}const rows=await req(db.transaction(SRC_STORE).objectStore(SRC_STORE).getAll());db.close();return rows.sort((a,b)=>String(b.storedAt||'').localeCompare(String(a.storedAt||'')))[0]||null}
+async function vdb(){return openDb(DB,VER,d=>{if(!d.objectStoreNames.contains(PENDING))d.createObjectStore(PENDING,{keyPath:'id'});if(!d.objectStoreNames.contains(RECEIPTS))d.createObjectStore(RECEIPTS,{keyPath:'id'})})}
+async function put(storeName,row){const db=await vdb();await req(db.transaction(storeName,'readwrite').objectStore(storeName).put(row));db.close()}
+async function del(storeName,id){const db=await vdb();await req(db.transaction(storeName,'readwrite').objectStore(storeName).delete(id));db.close()}
+async function all(storeName){const db=await vdb();const rows=await req(db.transaction(storeName).objectStore(storeName).getAll());db.close();return rows}
+export function capsuleFromRow(row,{id=randomId(),now=new Date()}={}){
+ if(row?.schema!=='GVAULT_CONTROL_TOWER_SOURCE_UPLOAD_VFS_ROW_V1')throw new Error('PUBLIC_VFS_SOURCE_ROW_SCHEMA');
+ if(!/^ctqru:[a-f0-9]{64}:[a-f0-9]{64}$/i.test(String(row.qrspriteKey||'')))throw new Error('PUBLIC_VFS_CTQRU_REQUIRED');
+ if(row.manifest?.schema!=='GVAULT_CONTROL_TOWER_LOCAL_QRSPRITE_ENVELOPE_V1')throw new Error('PUBLIC_VFS_MANIFEST_SCHEMA');
+ if(row.sprite?.schema!=='GVAULT_QRSPRITE_SOURCE_UPLOAD_ATLAS_V1')throw new Error('PUBLIC_VFS_SPRITE_SCHEMA');
+ if(String(row.manifest?.payload?.sha256||'')!==String(row.cipherSha256||'')||String(row.sprite?.cipherSha256||'')!==String(row.cipherSha256||''))throw new Error('PUBLIC_VFS_CIPHER_MISMATCH');
+ const createdAt=now.toISOString(),expiresAt=new Date(now.getTime()+TTL_SECONDS*1000).toISOString();
+ return {schema:'GVAULT_CONTROL_TOWER_PUBLIC_VFS_CAPSULE_V1',version:1,id,createdAt,expiresAt,packet:{schema:row.schema,qrspriteKey:row.qrspriteKey,archiveKey:row.archiveKey||null,cipherSha256:row.cipherSha256,manifest:structuredClone(row.manifest),sprite:structuredClone(row.sprite),storedAt:row.storedAt||null,fileCount:Number(row.fileCount||0),cipherBytes:Number(row.cipherBytes||0)},policy:{encryptedAtSource:true,encryptionAuthority:'INHERITED_SAS_SESSION',plaintextAllowed:false,requestedTtlSeconds:TTL_SECONDS,gitHistoryPersistence:false}};
+}
+export async function uploadCapsule(capsule,{url=endpoint(),fetchFn=fetch}={}){
+ if(!url)return {ok:false,status:'PENDING_ENDPOINT',error:'PUBLIC_VFS_ENDPOINT_NOT_CONFIGURED'};
+ let r;try{r=await fetchFn(url,{method:'POST',headers:{'content-type':'application/json'},credentials:'omit',cache:'no-store',body:JSON.stringify(capsule)})}catch(e){return {ok:false,status:'PENDING_NETWORK',error:String(e?.message||e)}}
+ let body={};try{body=await r.json()}catch{}
+ if(!r.ok)return {ok:false,status:'PENDING_SERVER',http:r.status,error:body.error||`HTTP_${r.status}`};
+ return {ok:true,status:'UPLOADED',receipt:body};
+}
+async function queueCapsule(capsule,runId=null){await put(PENDING,{id:capsule.id,capsule,runId,queuedAt:new Date().toISOString(),status:'PENDING_UPLOAD'});state({status:'PENDING_UPLOAD',pendingId:capsule.id,lastRunId:runId,lastQueuedAt:new Date().toISOString(),lastError:null});return capsule}
+async function uploadQueued(row){const result=await uploadCapsule(row.capsule);if(result.ok){await put(RECEIPTS,{id:row.id,runId:row.runId,uploadedAt:new Date().toISOString(),receipt:result.receipt,qrspriteKey:row.capsule.packet.qrspriteKey});await del(PENDING,row.id);state({status:'UPLOADED',pendingId:null,lastUploadedAt:new Date().toISOString(),lastReceipt:result.receipt,lastError:null});window.dispatchEvent(new CustomEvent('gvault:control-tower-public-vfs-uploaded',{detail:{schema:'GVAULT_CONTROL_TOWER_PUBLIC_VFS_UPLOADED_V1',id:row.id,runId:row.runId,receipt:result.receipt}}));return result}state({status:result.status,pendingId:row.id,lastError:result.error||null,lastHttp:result.http||null});return result}
+export async function publishDue(detail={}){if(!window.GVAULT_PRIVATE_TOOL_SESSION_V1?.getState?.().active)return {ok:false,status:'WAITING_FOR_SAS'};const row=await latestSourceRow();if(!row){state({status:'WAITING_FOR_LOCAL_QRSPRITE',lastError:'AUCUN_CTQRU_LOCAL'});return {ok:false,status:'WAITING_FOR_LOCAL_QRSPRITE'}}const capsule=await queueCapsule(capsuleFromRow(row),detail.runId||null);return uploadQueued({id:capsule.id,capsule,runId:detail.runId||null})}
+export async function retryPending(){const rows=(await all(PENDING)).sort((a,b)=>String(a.queuedAt).localeCompare(String(b.queuedAt)));let last={ok:true,status:'NO_PENDING'};for(const row of rows)last=await uploadQueued(row);return last}
+function ensureUi(){if($('#ctPublicVfsWeekly'))return;const anchor=$('#ctArchiveWeeklyLever')||$('#ctSourceUpload')||document.querySelector('.kpis')||document.body,n=document.createElement('section');n.id='ctPublicVfsWeekly';n.innerHTML=`<style>#ctPublicVfsWeekly{margin:0 10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);font:9px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.ctpvHead{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:9px}.ctpvHead b{color:var(--accent);margin-right:auto}.ctpvHead button{min-height:44px}.ctpvMeta{padding:0 9px 9px;color:var(--muted);word-break:break-all}.ctpvState.ok{color:var(--ok)}.ctpvState.warn{color:var(--warn)}@media(max-width:620px){.ctpvHead button{width:100%}}</style><div class="ctpvHead"><b>VFS PUBLIC CHIFFRÉ · TTL 7J</b><span id="ctpvState" class="ctpvState">INIT</span><button id="ctpvRetry">UPLOAD / RETRY</button></div><div id="ctpvMeta" class="ctpvMeta"></div>`;anchor.insertAdjacentElement('afterend',n);$('#ctpvRetry').onclick=()=>retryPending()}
+function render(){ensureUi();const s=currentState(),e=endpoint(),n=$('#ctpvState'),m=$('#ctpvMeta');if(n){n.textContent=s.status||'PRÊT';n.className='ctpvState '+(s.status==='UPLOADED'?'ok':'warn')}if(m)m.textContent=`endpoint ${e||'NON CONFIGURÉ'} · TTL serveur 7 jours · paquet ctqru chiffré uniquement · ${s.pendingId?'pending '+s.pendingId:''}`}
+function init(){ensureUi();render();window.addEventListener('gvault:control-tower-archive-weekly-due',e=>publishDue(e.detail).catch(err=>state({status:'FAILED',lastError:String(err?.message||err)})));window.addEventListener('online',()=>retryPending().catch(()=>{}));window.addEventListener('gvault:private-tool-session-active',()=>retryPending().catch(()=>{}));setInterval(()=>retryPending().catch(()=>{}),15*60*1000);retryPending().catch(()=>{});window.GVAULT_CONTROL_TOWER_PUBLIC_VFS_WEEKLY_V1=Object.freeze({schema:'GVAULT_CONTROL_TOWER_PUBLIC_VFS_WEEKLY_V1',ttlSeconds:TTL_SECONDS,publishDue,retryPending,getState:()=>({...currentState(),endpoint:endpoint()})})}
+if(typeof window!=='undefined'&&typeof document!=='undefined'&&typeof indexedDB!=='undefined')init();
