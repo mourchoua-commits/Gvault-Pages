@@ -1,0 +1,10 @@
+const ID='gvaultShellResilience';
+let lastFallback=null,workerReady=!!navigator.serviceWorker?.controller;
+function host(){return document.querySelector('.brand')||document.querySelector('header')||document.body}
+function ensure(){let n=document.getElementById(ID);if(n)return n;n=document.createElement('span');n.id=ID;n.className='gvaultGateOk';n.style.cssText='font-size:7px;padding:4px 7px;border:1px solid var(--line,#445);border-radius:999px;color:var(--muted,#999);white-space:nowrap';host()?.appendChild(n);return n}
+function render(){const n=ensure();if(!n)return;if(lastFallback){n.textContent='CACHE LOCAL · ORIGINE LIMITÉE';n.style.color='var(--warn,#d8b66b)';n.style.borderColor='var(--warn,#d8b66b)';n.title=`Dernier fallback local: ${lastFallback.at||''} ${lastFallback.status||lastFallback.error||''}`;return}if(!navigator.onLine){n.textContent='CACHE LOCAL · HORS LIGNE';n.style.color='var(--warn,#d8b66b)';n.style.borderColor='var(--warn,#d8b66b)';return}n.textContent=workerReady?'SHELL CACHE ✓':'SHELL CACHE · INIT';n.style.color=workerReady?'var(--ok,#82c89a)':'var(--muted,#999)';n.style.borderColor=workerReady?'var(--ok,#82c89a)':'var(--line,#445)'}
+function onMessage(ev){const d=ev.data||{};if(d.schema==='GVAULT_SW_EVENT_V1'){if(d.type==='CACHE_FALLBACK')lastFallback=d;if(d.type==='READY')workerReady=true;render()}if(d.schema==='GVAULT_SW_STATUS_V1'){workerReady=true;render()}}
+if('serviceWorker' in navigator){navigator.serviceWorker.addEventListener('message',onMessage);navigator.serviceWorker.ready.then(reg=>{workerReady=!!reg.active;render();navigator.serviceWorker.controller?.postMessage({schema:'GVAULT_SW_COMMAND_V1',command:'STATUS'})}).catch(()=>render())}
+window.addEventListener('online',render);window.addEventListener('offline',render);window.addEventListener('pagehide',()=>{try{navigator.serviceWorker?.removeEventListener('message',onMessage)}catch{}},{once:true});
+setTimeout(render,250);
+window.GVAULT_SHELL_RESILIENCE_V1=Object.freeze({schema:'GVAULT_SHELL_RESILIENCE_V1',getState:()=>({workerReady,lastFallback,online:navigator.onLine})});
