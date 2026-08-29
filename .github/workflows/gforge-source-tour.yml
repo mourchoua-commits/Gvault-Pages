@@ -1,0 +1,43 @@
+name: GForge External Source Tour
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/gforge-source-tour.mjs'
+      - '.github/workflows/gforge-source-tour.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tour:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Execute 13-source research and RSS tour
+        run: node scripts/gforge-source-tour.mjs generated/gforge-source-tour
+      - name: Verify source-tour contract
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const r=JSON.parse(fs.readFileSync('generated/gforge-source-tour/source-tour.json'));
+          if(r.status!=='PASS') throw new Error('source tour is not PASS');
+          if(r.summary.configuredSources<12 || r.summary.successfulSources<12) throw new Error('fewer than 12 sources');
+          if(r.summary.globalReferencesSuccessful<2) throw new Error('fewer than two global references');
+          if(r.summary.rssFeedsSuccessful<3) throw new Error('fewer than three RSS feeds');
+          if(r.summary.onetRows<1000) throw new Error('O*NET below 1000 rows');
+          if(r.storagePolicy.rawPageBodiesPersisted || r.storagePolicy.rawRssItemsPersisted) throw new Error('raw copyrighted payload persisted');
+          console.log('GFORGE_SOURCE_TOUR_VERIFY PASS',JSON.stringify(r.summary));
+          NODE
+      - name: Upload research evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: gforge-external-source-tour
+          path: generated/gforge-source-tour/source-tour.json
+          if-no-files-found: error
+          retention-days: 7
