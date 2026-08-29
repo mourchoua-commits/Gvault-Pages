@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "3aebad6ce917d7d37f182cd50154a11415508c3a",
+  "parentSha": "282552a3200c834ca40f71f29f73469ae538c7d0",
+  "committedAt": "2026-08-29T03:06:10+02:00",
+  "summary": {
+    "subject": "gforge: harden global source tour with official fallbacks",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 40,
+    "deletions": 30,
+    "paths": [
+      "scripts/gforge-source-tour.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 40,
+    "deletions": 30,
+    "magnitude": 70,
+    "committedAt": "2026-08-29T03:06:10+02:00",
+    "parentSha": "282552a3200c834ca40f71f29f73469ae538c7d0"
+  },
+  "pulseKey": "CTP1:3aebad6ce917d7d37f182cd50154a11415508c3a:d68b97064c78fb76",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "315d7cec2be366610f657e360314832fd94926e67c301bf3fecf6d5232d812e9",
+  "typedKeys": {
+    "commit": "gitc:3aebad6ce917d7d37f182cd50154a11415508c3a",
+    "parent": "gitc:282552a3200c834ca40f71f29f73469ae538c7d0",
+    "pulse": "ctp1:3aebad6ce917d7d37f182cd50154a11415508c3a:d68b97064c78fb76",
+    "translation": "cttrans:315d7cec2be366610f657e360314832fd94926e67c301bf3fecf6d5232d812e9",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "3aebad6ce917d7d37f182cd50154a11415508c3a",
+    "parentSha": "282552a3200c834ca40f71f29f73469ae538c7d0",
+    "committedAt": "2026-08-29T03:06:10+02:00",
+    "summary": {
+      "subject": "gforge: harden global source tour with official fallbacks",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 40,
+      "deletions": 30,
+      "paths": [
+        "scripts/gforge-source-tour.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 40,
+      "deletions": 30,
+      "magnitude": 70,
+      "committedAt": "2026-08-29T03:06:10+02:00",
+      "parentSha": "282552a3200c834ca40f71f29f73469ae538c7d0"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/3aebad6ce917d7d37f182cd50154a11415508c3a.json",
+      "vfsKey": "CTP1:3aebad6ce917d7d37f182cd50154a11415508c3a:d68b97064c78fb76",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/3aebad6ce917d7d37f182cd50154a11415508c3a.json"
+}
