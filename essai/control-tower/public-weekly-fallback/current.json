@@ -1,0 +1,17 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_PUBLIC_WEEKLY_FALLBACK_V1",
+  "version": 1,
+  "status": "UNMATERIALIZED",
+  "cycleKey": null,
+  "publishedAt": null,
+  "sourceProof": null,
+  "payload": null,
+  "policy": {
+    "encryptedCtqruOrPublicSafeProjectionOnly": true,
+    "plaintextPrivateAllowed": false,
+    "secretsAllowed": false,
+    "sasPasswordAllowed": false,
+    "gitCredentialAllowed": false
+  },
+  "note": "Canonical public Git fallback target. Do not mark CURRENT or PASS until a cycle-matching safe payload and commit are proven."
+}
