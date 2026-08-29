@@ -1,0 +1,78 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "f3953074fbb77d03a3e1038ef351a16846c32a10",
+  "parentSha": "81fb779f7843056656b148dae85c9ea99f26f529",
+  "committedAt": "2026-08-29T16:38:52+02:00",
+  "summary": {
+    "subject": "security: restart public input relay as explicit-only V2",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 4,
+    "additions": 62,
+    "deletions": 29,
+    "paths": [
+      "scripts/gvault-input-relay-key.v2.json",
+      "scripts/gvault-input-relay-public-key.spki.b64",
+      "scripts/gvault-input-relay.js",
+      "sw-gvault-v1.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 4,
+    "additions": 62,
+    "deletions": 29,
+    "magnitude": 91,
+    "committedAt": "2026-08-29T16:38:52+02:00",
+    "parentSha": "81fb779f7843056656b148dae85c9ea99f26f529"
+  },
+  "pulseKey": "CTP1:f3953074fbb77d03a3e1038ef351a16846c32a10:86d272c03475e95b",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "b245f7f07690bb6be6de941f71a4359672906cd4664eb98dacd1fbb02a03b97a",
+  "typedKeys": {
+    "commit": "gitc:f3953074fbb77d03a3e1038ef351a16846c32a10",
+    "parent": "gitc:81fb779f7843056656b148dae85c9ea99f26f529",
+    "pulse": "ctp1:f3953074fbb77d03a3e1038ef351a16846c32a10:86d272c03475e95b",
+    "translation": "cttrans:b245f7f07690bb6be6de941f71a4359672906cd4664eb98dacd1fbb02a03b97a",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "f3953074fbb77d03a3e1038ef351a16846c32a10",
+    "parentSha": "81fb779f7843056656b148dae85c9ea99f26f529",
+    "committedAt": "2026-08-29T16:38:52+02:00",
+    "summary": {
+      "subject": "security: restart public input relay as explicit-only V2",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 4,
+      "additions": 62,
+      "deletions": 29,
+      "paths": [
+        "scripts/gvault-input-relay-key.v2.json",
+        "scripts/gvault-input-relay-public-key.spki.b64",
+        "scripts/gvault-input-relay.js",
+        "sw-gvault-v1.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 4,
+      "additions": 62,
+      "deletions": 29,
+      "magnitude": 91,
+      "committedAt": "2026-08-29T16:38:52+02:00",
+      "parentSha": "81fb779f7843056656b148dae85c9ea99f26f529"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/f3953074fbb77d03a3e1038ef351a16846c32a10.json",
+      "vfsKey": "CTP1:f3953074fbb77d03a3e1038ef351a16846c32a10:86d272c03475e95b",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/f3953074fbb77d03a3e1038ef351a16846c32a10.json"
+}
