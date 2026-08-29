@@ -1,0 +1,12 @@
+{
+  "schema": "GVAULT_PUBLIC_INPUT_RELAY_KEY_V2",
+  "version": 2,
+  "status": "ROTATION_REQUIRED",
+  "kid": null,
+  "spkiB64": null,
+  "algorithm": "RSA-OAEP-SHA256",
+  "revokedKeyIds": [
+    "d5416a7acbedf38a"
+  ],
+  "note": "Public input capture remains fail-closed until a fresh public key is paired with a private key stored only as the private GVAULT Actions secret."
+}
