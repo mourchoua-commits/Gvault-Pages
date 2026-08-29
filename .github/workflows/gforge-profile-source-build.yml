@@ -1,0 +1,49 @@
+name: GForge Public Profile Source Build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/gforge-public-profile-source-build.mjs'
+      - '.github/workflows/gforge-profile-source-build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fetch official O*NET 31.0 occupation data
+        run: |
+          curl --fail --location --retry 3 --retry-delay 2 \
+            'https://www.onetcenter.org/dl_files/database/db_31_0_json/occupation_data.json' \
+            --output /tmp/occupation_data.json
+          node -e "const d=require('/tmp/occupation_data.json'); if(!Array.isArray(d.row)||d.row.length<1000) throw new Error('O*NET source below 1000 rows'); console.log('ONET_ROWS',d.row.length)"
+      - name: Build deterministic GForge reference profiles
+        run: node scripts/gforge-public-profile-source-build.mjs /tmp/occupation_data.json generated/gforge-profile-sources
+      - name: Verify generated source catalog
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const m=JSON.parse(fs.readFileSync('generated/gforge-profile-sources/onet-31.0-manifest.json'));
+          const c=JSON.parse(fs.readFileSync('generated/gforge-profile-sources/onet-31.0-profiles.json'));
+          const ids=new Set(c.profiles.map(x=>x.id));
+          if(m.status!=='PASS_SOURCE_COUNT') throw new Error('source count not PASS');
+          if(c.profiles.length<1000) throw new Error('catalog below 1000');
+          if(ids.size!==c.profiles.length) throw new Error('duplicate IDs');
+          if(c.profiles.some(p=>!p.source?.onetsocCode||!p.source?.url||p.kind!=='REFERENCE_DOMAIN_PROFILE')) throw new Error('provenance gap');
+          console.log('GFORGE_SOURCE_VERIFY PASS',c.profiles.length,'profiles');
+          NODE
+      - name: Upload generated public-source artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gforge-onet-31-profile-source
+          path: generated/gforge-profile-sources/
+          if-no-files-found: error
+          retention-days: 7
