@@ -1,0 +1,17 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_PUBLIC_WEEKLY_CHECKPOINT_V1",
+  "version": 1,
+  "status": "ARMED_NO_PUBLICATION_YET",
+  "contractPath": "essai/control-tower/weekly-shared-checkpoint-contract-v1.json",
+  "scheduleEpochUtc": "2026-08-29T00:17:00.000Z",
+  "periodSeconds": 604800,
+  "lastPublishedCycleKey": null,
+  "lastPublishedAt": null,
+  "lastPublicCommitSha": null,
+  "payloadPath": "essai/control-tower/public-weekly-fallback/current.json",
+  "payloadStatus": "UNMATERIALIZED",
+  "plaintextPrivateAllowed": false,
+  "secretsAllowed": false,
+  "gatewayLiveE2E": "UNPROVEN",
+  "note": "Metadata checkpoint only. A cycle is not CURRENT until a matching public payload/delivery is proven."
+}
