@@ -1,0 +1,37 @@
+name: Control Tower ONOU Observer Lab
+
+on:
+  push:
+    branches:
+      - lab/control-tower-onou-observer
+    paths:
+      - 'essai/control-tower/onou-observer-v1.mjs'
+      - 'essai/control-tower/onou-observer-v1.test.mjs'
+      - 'essai/control-tower/lens-scribe-onou-lab-v1.mjs'
+      - 'essai/control-tower/v2-onou-observer-lab.html'
+      - '.github/workflows/control-tower-onou-observer-lab-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Syntax check ONOU observer
+        run: node --check essai/control-tower/onou-observer-v1.mjs
+      - name: Syntax check Lens scribe lab
+        run: node --check essai/control-tower/lens-scribe-onou-lab-v1.mjs
+      - name: Run ONOU observer deterministic tests
+        run: node essai/control-tower/onou-observer-v1.test.mjs
+      - name: Verify lab wrapper injection anchors
+        run: |
+          grep -F 'commit-watcher-v1.mjs' essai/control-tower/v2.html
+          grep -F 'onou-observer-v1.mjs' essai/control-tower/v2-onou-observer-lab.html
+          grep -F 'lens-scribe-onou-lab-v1.mjs' essai/control-tower/v2-onou-observer-lab.html
