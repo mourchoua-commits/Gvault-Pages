@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "c16c4a07cc588a720b842657156aad313fc9acc6",
+  "parentSha": "b66ddeff760d948137ccbe0b4793cbe9bf5a7cc7",
+  "committedAt": "2026-08-29T23:44:41+02:00",
+  "summary": {
+    "subject": "Remove Xibalba Quetzal anchor from public root",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 0,
+    "deletions": 33,
+    "paths": [
+      "XIBALBA_QUETZAL_ANCHOR.md"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 0,
+    "deletions": 33,
+    "magnitude": 33,
+    "committedAt": "2026-08-29T23:44:41+02:00",
+    "parentSha": "b66ddeff760d948137ccbe0b4793cbe9bf5a7cc7"
+  },
+  "pulseKey": "CTP1:c16c4a07cc588a720b842657156aad313fc9acc6:15d5466a6aceee0a",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "7e29ea3f032263aeb759eaa3415751ddd69f3365e1be44e51eaa8e04c01bb6f3",
+  "typedKeys": {
+    "commit": "gitc:c16c4a07cc588a720b842657156aad313fc9acc6",
+    "parent": "gitc:b66ddeff760d948137ccbe0b4793cbe9bf5a7cc7",
+    "pulse": "ctp1:c16c4a07cc588a720b842657156aad313fc9acc6:15d5466a6aceee0a",
+    "translation": "cttrans:7e29ea3f032263aeb759eaa3415751ddd69f3365e1be44e51eaa8e04c01bb6f3",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "c16c4a07cc588a720b842657156aad313fc9acc6",
+    "parentSha": "b66ddeff760d948137ccbe0b4793cbe9bf5a7cc7",
+    "committedAt": "2026-08-29T23:44:41+02:00",
+    "summary": {
+      "subject": "Remove Xibalba Quetzal anchor from public root",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 0,
+      "deletions": 33,
+      "paths": [
+        "XIBALBA_QUETZAL_ANCHOR.md"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 0,
+      "deletions": 33,
+      "magnitude": 33,
+      "committedAt": "2026-08-29T23:44:41+02:00",
+      "parentSha": "b66ddeff760d948137ccbe0b4793cbe9bf5a7cc7"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/c16c4a07cc588a720b842657156aad313fc9acc6.json",
+      "vfsKey": "CTP1:c16c4a07cc588a720b842657156aad313fc9acc6:15d5466a6aceee0a",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/c16c4a07cc588a720b842657156aad313fc9acc6.json"
+}
