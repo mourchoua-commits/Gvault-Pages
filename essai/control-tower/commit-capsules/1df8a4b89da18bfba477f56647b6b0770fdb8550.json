@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "1df8a4b89da18bfba477f56647b6b0770fdb8550",
+  "parentSha": "18f6737a538f42051488c0153957b2a5b5ef736f",
+  "committedAt": "2026-08-29T02:35:28+02:00",
+  "summary": {
+    "subject": "control-tower: align weekly lever with shared swarm cycle",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 38,
+    "deletions": 20,
+    "paths": [
+      "essai/control-tower/archive-weekly-lever-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 38,
+    "deletions": 20,
+    "magnitude": 58,
+    "committedAt": "2026-08-29T02:35:28+02:00",
+    "parentSha": "18f6737a538f42051488c0153957b2a5b5ef736f"
+  },
+  "pulseKey": "CTP1:1df8a4b89da18bfba477f56647b6b0770fdb8550:ca55cba7bc4a6731",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "ea2a1ee8b14ed0b27dab553e86aa7726bcebb0befa1b9e2d250029f8635cdb06",
+  "typedKeys": {
+    "commit": "gitc:1df8a4b89da18bfba477f56647b6b0770fdb8550",
+    "parent": "gitc:18f6737a538f42051488c0153957b2a5b5ef736f",
+    "pulse": "ctp1:1df8a4b89da18bfba477f56647b6b0770fdb8550:ca55cba7bc4a6731",
+    "translation": "cttrans:ea2a1ee8b14ed0b27dab553e86aa7726bcebb0befa1b9e2d250029f8635cdb06",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "1df8a4b89da18bfba477f56647b6b0770fdb8550",
+    "parentSha": "18f6737a538f42051488c0153957b2a5b5ef736f",
+    "committedAt": "2026-08-29T02:35:28+02:00",
+    "summary": {
+      "subject": "control-tower: align weekly lever with shared swarm cycle",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 38,
+      "deletions": 20,
+      "paths": [
+        "essai/control-tower/archive-weekly-lever-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 38,
+      "deletions": 20,
+      "magnitude": 58,
+      "committedAt": "2026-08-29T02:35:28+02:00",
+      "parentSha": "18f6737a538f42051488c0153957b2a5b5ef736f"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/1df8a4b89da18bfba477f56647b6b0770fdb8550.json",
+      "vfsKey": "CTP1:1df8a4b89da18bfba477f56647b6b0770fdb8550:ca55cba7bc4a6731",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/1df8a4b89da18bfba477f56647b6b0770fdb8550.json"
+}
