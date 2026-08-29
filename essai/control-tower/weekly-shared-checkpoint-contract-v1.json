@@ -1,0 +1,47 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_WEEKLY_SHARED_CHECKPOINT_CONTRACT_V1",
+  "version": 1,
+  "status": "ACTIVE_CONTRACT",
+  "authority": "SCHEDULE_AND_PUBLIC_METADATA_ONLY",
+  "schedule": {
+    "epochUtc": "2026-08-29T00:17:00.000Z",
+    "periodMs": 604800000,
+    "periodSeconds": 604800,
+    "timezoneLabel": "Europe/Paris",
+    "cycleKeyRule": "ctw:<cycle-start ISO-8601 UTC>",
+    "dueRule": "after epoch, the current cycle is DUE iff lastPublishedCycleKey/lastCompletedCycleKey != current cycleKey"
+  },
+  "browser": {
+    "leverStateKey": "gvault.controlTower.archiveWeekly.v1",
+    "publicVfsStateKey": "gvault.controlTower.publicVfsWeekly.v1",
+    "dueEvent": "gvault:control-tower-archive-weekly-due",
+    "waitingEvent": "gvault:control-tower-archive-waiting-for-sas",
+    "uploadedEvent": "gvault:control-tower-public-vfs-uploaded",
+    "cycleFields": ["cycleKey", "cycleStartedAt", "cycleNextAt"]
+  },
+  "swarm": {
+    "provider": "GVAULT_HEALTH",
+    "providerFunction": "CONTROL_TOWER_PUBLIC_WEEKLY_FALLBACK",
+    "fallback": "MAIN",
+    "privateCheckpointPath": "modules/swarm/control/control_tower_public_weekly_checkpoint.v1.json"
+  },
+  "public": {
+    "checkpointPath": "essai/control-tower/public-weekly-checkpoint-v1.json",
+    "fallbackPayloadPath": "essai/control-tower/public-weekly-fallback/current.json",
+    "fallbackPayloadPolicy": "ENCRYPTED_CTQRU_OR_EXPLICIT_PUBLIC_SAFE_PROJECTION_ONLY",
+    "plaintextPrivateAllowed": false,
+    "secretsAllowed": false
+  },
+  "antiDuplicate": {
+    "onePublicationPerCycle": true,
+    "cycleKeyIsIdempotencyKey": true,
+    "runningLeaseOrCheckpointMustBeRespected": true,
+    "neverConsumeDueWithoutProvenDelivery": true
+  },
+  "truthBoundary": {
+    "browserLocalStateIsNotSwarmAuthority": true,
+    "publicCheckpointIsMetadataNotProofOfPrivateSourceFreshness": true,
+    "privateCheckpointPlusObservedPublicCommitIsSwarmDecisionSource": true,
+    "gatewayLivePassRemainsSeparate": true
+  }
+}
