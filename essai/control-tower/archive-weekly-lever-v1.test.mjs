@@ -1,4 +1,4 @@
-// Deterministic proof for weekly due + SAS autonomous execution.
+// Deterministic proof for shared weekly due + SAS autonomous execution.
 import assert from 'node:assert/strict';
 
 const store=new Map();
@@ -22,7 +22,8 @@ const win=new EventTarget();
 globalThis.window=win;
 window.document=document;
 window.GVAULT_PRIVATE_TOOL_SESSION_V1={getState:()=>({active:false})};
-let replayCount=0, replayGate=null;
+let replayCount=0, replayGate=null, dueDetail=null;
+window.addEventListener('gvault:control-tower-archive-weekly-due',e=>{dueDetail=e.detail});
 window.GVAULT_CONTROL_TOWER_SOURCE_UPLOAD_V1={
   getState:()=>({qrspriteKey:'ctqru:test:test',archiveKey:'ctarc:'+'a'.repeat(64)}),
   replay:async()=>{replayCount++; if(replayGate) await replayGate; return {ok:true}}
@@ -36,6 +37,9 @@ await import('./archive-weekly-lever-v1.mjs?test='+Date.now());
 await new Promise(r=>setTimeout(r,0));
 const api=window.GVAULT_CONTROL_TOWER_ARCHIVE_WEEKLY_LEVER_V1;
 assert.ok(api,'API exported');
+assert.equal(api.sharedEpochUtc,'2026-08-29T00:17:00.000Z','shared epoch is canonical');
+const fixed=api.sharedCycleAt(Date.parse('2026-09-05T00:17:00.000Z'));
+assert.equal(fixed.key,'ctw:2026-09-05T00:17:00.000Z','cycle key derives from shared epoch');
 let s=api.getState();
 assert.equal(s.status,'WAITING_FOR_SAS','due without SAS waits');
 assert.equal(s.lastCompletedAt,undefined,'waiting must not consume weekly due');
@@ -48,10 +52,14 @@ await new Promise(r=>setTimeout(r,0));
 s=api.getState();
 assert.equal(s.status,'CHECKPOINT_OK_REFRESH_REQUESTED','SAS activation auto-runs due work');
 assert.equal(replayCount,1,'SAS activation replays local encrypted QRSprite automatically');
-assert.equal(api.isDue(),false,'successful automatic run advances weekly due');
+const current=api.sharedCycleAt(Date.now());
+assert.equal(s.lastCompletedCycleKey,current?.key||null,'browser persists the shared completed cycle key');
+assert.equal(dueDetail?.cycleKey,current?.key||null,'due event carries the same shared cycle key');
+assert.equal(api.isDue(),false,'successful automatic run consumes only the current shared cycle');
+assert.equal(s.sharedContractPath,'essai/control-tower/weekly-shared-checkpoint-contract-v1.json','state exposes shared checkpoint contract');
 
 const stale=new Date(Date.now()-8*24*60*60*1000).toISOString();
-localStorage.setItem(KEY,JSON.stringify({...api.getState(),lastCompletedAt:stale,status:'ARMED'}));
+localStorage.setItem(KEY,JSON.stringify({...api.getState(),lastCompletedAt:stale,lastCompletedCycleKey:'ctw:stale',status:'ARMED'}));
 let release;
 replayGate=new Promise(r=>{release=r});
 const p1=api.run('INTERVAL_CATCHUP',false);
@@ -64,7 +72,7 @@ replayGate=null;
 assert.equal(replayCount,2,'collision produced only one additional replay');
 
 const p3=await api.run('INTERVAL_CATCHUP',false);
-assert.equal(p3.status,'NOT_DUE','fresh state does not rerun');
+assert.equal(p3.status,'NOT_DUE','fresh shared cycle does not rerun');
 assert.equal(replayCount,2,'NOT_DUE causes no replay');
 
-console.log('CONTROL_TOWER_WEEKLY_LEVER_TEST PASS 12 assertions');
+console.log('CONTROL_TOWER_WEEKLY_LEVER_TEST PASS 18 assertions');
