@@ -7,6 +7,7 @@ on:
     paths:
       - 'essai/control-tower/onou-observer-v1.mjs'
       - 'essai/control-tower/onou-observer-v1.test.mjs'
+      - 'essai/control-tower/onou-observer-presence-v1.test.mjs'
       - 'essai/control-tower/lens-scribe-onou-lab-v1.mjs'
       - 'essai/control-tower/v2-onou-observer-lab.html'
       - '.github/workflows/control-tower-onou-observer-lab-test.yml'
@@ -30,6 +31,8 @@ jobs:
         run: node --check essai/control-tower/lens-scribe-onou-lab-v1.mjs
       - name: Run ONOU observer deterministic tests
         run: node essai/control-tower/onou-observer-v1.test.mjs
+      - name: Run ONOU observer presence lease tests
+        run: node essai/control-tower/onou-observer-presence-v1.test.mjs
       - name: Verify lab wrapper injection anchors
         run: |
           grep -F 'commit-watcher-v1.mjs' essai/control-tower/v2.html
