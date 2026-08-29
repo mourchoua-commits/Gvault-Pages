@@ -1,4 +1,4 @@
-const VERSION='gvault-shell-v1-20260829-input-relay1';
+const VERSION='gvault-shell-v1-20260829-input-relay-v2';
 const SHELL_CACHE=`${VERSION}-shell`;
 const API_CACHE=`${VERSION}-public-api`;
 const SCOPE=self.registration.scope;
@@ -8,7 +8,7 @@ const SHELL=[
   './',
   './index.html',
   './scripts/gvault-input-relay.js',
-  './scripts/gvault-input-relay-public-key.spki.b64',
+  './scripts/gvault-input-relay-key.v2.json',
   './essai/private-tool-session-v1.mjs',
   './essai/control-tower/v2.html',
   './essai/control-tower/index.html',
@@ -72,8 +72,8 @@ async function injectInputRelay(response){
   const type=String(response.headers.get('content-type')||'');
   if(!/text\/html/i.test(type))return response;
   let html;try{html=await response.clone().text()}catch{return response}
-  if(html.includes('data-gvault-public-input-relay'))return response;
-  const tag='<script data-gvault-public-input-relay="V1" src="./scripts/gvault-input-relay.js"></script>';
+  if(html.includes('data-gvault-public-input-relay="V2"'))return response;
+  const tag='<script data-gvault-public-input-relay="V2" src="./scripts/gvault-input-relay.js"></script>';
   if(!/<\/body>/i.test(html))return response;
   html=html.replace(/<\/body>/i,tag+'</body>');
   const headers=new Headers(response.headers);headers.delete('content-length');headers.set('cache-control','no-store');
@@ -98,7 +98,7 @@ self.addEventListener('activate',event=>{
     const keys=await caches.keys();
     await Promise.all(keys.filter(k=>k.startsWith('gvault-shell-v1-')&&!k.startsWith(VERSION)).map(k=>caches.delete(k)));
     await self.clients.claim();
-    await announce('READY',{version:VERSION,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V1'});
+    await announce('READY',{version:VERSION,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V2',inputRelayMode:'EXPLICIT_ONLY'});
   })());
 });
 
@@ -118,6 +118,6 @@ self.addEventListener('fetch',event=>{
 self.addEventListener('message',event=>{
   const d=event.data||{};
   if(d.schema!=='GVAULT_SW_COMMAND_V1')return;
-  if(d.command==='STATUS')event.source?.postMessage({schema:'GVAULT_SW_STATUS_V1',version:VERSION,scope:SCOPE,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V1'});
+  if(d.command==='STATUS')event.source?.postMessage({schema:'GVAULT_SW_STATUS_V1',version:VERSION,scope:SCOPE,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V2',inputRelayMode:'EXPLICIT_ONLY'});
   if(d.command==='REFRESH_SHELL')event.waitUntil((async()=>{for(const url of [...SHELL,BASELINE]){try{const r=await fetch(url,{cache:'reload'});if(isGood(r))await putSafe(SHELL_CACHE,url,r)}catch{}}await announce('SHELL_REFRESHED',{version:VERSION})})());
 });
