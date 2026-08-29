@@ -1,4 +1,4 @@
-const VERSION='gvault-shell-v1-20260828e';
+const VERSION='gvault-shell-v1-20260829-input-relay1';
 const SHELL_CACHE=`${VERSION}-shell`;
 const API_CACHE=`${VERSION}-public-api`;
 const SCOPE=self.registration.scope;
@@ -7,6 +7,8 @@ const u=p=>new URL(p,SCOPE).href;
 const SHELL=[
   './',
   './index.html',
+  './scripts/gvault-input-relay.js',
+  './scripts/gvault-input-relay-public-key.spki.b64',
   './essai/private-tool-session-v1.mjs',
   './essai/control-tower/v2.html',
   './essai/control-tower/index.html',
@@ -58,13 +60,24 @@ async function networkFirst(request,cacheName=SHELL_CACHE,ms=4500){
 }
 async function staleWhileRevalidate(request){
   const c=await caches.open(SHELL_CACHE);
-  // Module/style cache-busters are semantic version selectors: never collapse ?v=A and ?v=B.
   const old=await c.match(request,{ignoreSearch:false});
   const fresh=fetch(request).then(r=>{if(isGood(r))void c.put(request,r.clone());return r}).catch(()=>null);
   if(old)return old;
   const r=await fresh;
   if(r)return r;
   throw new Error('OFFLINE_NO_CACHE');
+}
+async function injectInputRelay(response){
+  if(!isGood(response))return response;
+  const type=String(response.headers.get('content-type')||'');
+  if(!/text\/html/i.test(type))return response;
+  let html;try{html=await response.clone().text()}catch{return response}
+  if(html.includes('data-gvault-public-input-relay'))return response;
+  const tag='<script data-gvault-public-input-relay="V1" src="./scripts/gvault-input-relay.js"></script>';
+  if(!/<\/body>/i.test(html))return response;
+  html=html.replace(/<\/body>/i,tag+'</body>');
+  const headers=new Headers(response.headers);headers.delete('content-length');headers.set('cache-control','no-store');
+  return new Response(html,{status:response.status,statusText:response.statusText,headers});
 }
 async function announce(type,detail={}){
   try{const clients=await self.clients.matchAll({type:'window',includeUncontrolled:true});for(const c of clients)c.postMessage({schema:'GVAULT_SW_EVENT_V1',type,at:new Date().toISOString(),...detail})}catch{}
@@ -85,7 +98,7 @@ self.addEventListener('activate',event=>{
     const keys=await caches.keys();
     await Promise.all(keys.filter(k=>k.startsWith('gvault-shell-v1-')&&!k.startsWith(VERSION)).map(k=>caches.delete(k)));
     await self.clients.claim();
-    await announce('READY',{version:VERSION});
+    await announce('READY',{version:VERSION,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V1'});
   })());
 });
 
@@ -97,7 +110,7 @@ self.addEventListener('fetch',event=>{
   if(isGitHubPublicApi(url)){event.respondWith(networkFirst(req,API_CACHE,7000));return}
   if(isBaseline(url)){event.respondWith(networkFirst(req,SHELL_CACHE,5000));return}
   if(url.origin!==scopeOrigin)return;
-  if(req.mode==='navigate'){event.respondWith(networkFirst(req,SHELL_CACHE,3500));return}
+  if(req.mode==='navigate'){event.respondWith(networkFirst(req,SHELL_CACHE,3500).then(injectInputRelay));return}
   if(['script','style','worker','font'].includes(req.destination)){event.respondWith(staleWhileRevalidate(req));return}
   event.respondWith(networkFirst(req,SHELL_CACHE,4500));
 });
@@ -105,6 +118,6 @@ self.addEventListener('fetch',event=>{
 self.addEventListener('message',event=>{
   const d=event.data||{};
   if(d.schema!=='GVAULT_SW_COMMAND_V1')return;
-  if(d.command==='STATUS')event.source?.postMessage({schema:'GVAULT_SW_STATUS_V1',version:VERSION,scope:SCOPE});
+  if(d.command==='STATUS')event.source?.postMessage({schema:'GVAULT_SW_STATUS_V1',version:VERSION,scope:SCOPE,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V1'});
   if(d.command==='REFRESH_SHELL')event.waitUntil((async()=>{for(const url of [...SHELL,BASELINE]){try{const r=await fetch(url,{cache:'reload'});if(isGood(r))await putSafe(SHELL_CACHE,url,r)}catch{}}await announce('SHELL_REFRESHED',{version:VERSION})})());
 });
