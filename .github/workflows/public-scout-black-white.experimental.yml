@@ -49,7 +49,7 @@ jobs:
           fi
           echo 'Power Ranger Noir — charge le Megazord. Intégrité GVault: UNKNOWN. Combat de boss en cours, la barre de chargement fait semblant de gagner.' >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Scan bounded public source
+      - name: Scan bounded public source with tokenless fallbacks
         shell: bash
         env:
           DISPATCH_REQUEST: ${{ github.event.inputs.request_path }}
@@ -124,7 +124,7 @@ jobs:
           if-no-files-found: error
 
   publish-ack:
-    name: Power Ranger Blanc · mise à jour Control Tower
+    name: Power Ranger Blanc + Rouge · Control Tower + ACK
     needs: white-translate
     runs-on: ubuntu-latest
     timeout-minutes: 8
@@ -143,55 +143,109 @@ jobs:
           name: public-scout-white-translated
           path: /tmp/white
 
-      - name: Build public observer state
+      - name: Build sanitized public observer state
         shell: bash
         run: |
           set -euo pipefail
           node --check scripts/public-scout-build-state.mjs
+          node --check scripts/public-scout-build-ack.mjs
           node scripts/public-scout-build-state.mjs \
             --input /tmp/white/public-scout-white.translated.json \
             --out-dir essai/control-tower/public-scout/data \
             --build-result /tmp/public-scout-build-result.json
           test -s /tmp/public-scout-build-result.json
 
-      - name: Publish sanitized state and Power Ranger Git message
+      - name: Commit exact public data tranche without pushing yet
+        id: data
         shell: bash
         run: |
           set -euo pipefail
-          changed="$(node -e "const x=require('/tmp/public-scout-build-result.json');process.stdout.write(String(x.changed))")"
-          if [ "$changed" != true ]; then
-            echo 'Power Ranger Blanc — confirme la prise en compte. Intégrité GVault: PASS. Le Megazord tamponne le reçu et retourne au hangar.' >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          git add essai/control-tower/public-scout/data
-          changed_paths="$(git diff --cached --name-only)"
-          while IFS= read -r p; do
-            [ -n "$p" ] || continue
-            case "$p" in
-              essai/control-tower/public-scout/data/*) ;;
-              *) echo "FORBIDDEN_PUBLIC_SCOUT_WRITE: $p" >&2; exit 1;;
-            esac
-          done <<< "$changed_paths"
-          test -n "$changed_paths"
-          subject="$(node -e "const x=require('/tmp/public-scout-build-result.json');process.stdout.write(x.commitSubject)")"
-          digest="$(node -e "const x=require('/tmp/public-scout-build-result.json');process.stdout.write(x.translationDigest)")"
-          state="$(node -e "const x=require('/tmp/public-scout-build-result.json');process.stdout.write(x.publicStateSha256)")"
           git config user.name 'GVAULT Power Ranger Public Scout'
           git config user.email 'actions@users.noreply.github.com'
-          git commit \
-            -m "$subject" \
-            -m "GVAULT-Public-Scout-Translation: $digest" \
-            -m "GVAULT-Public-Scout-State: $state" \
-            -m "GVAULT-Public-Scout-Raw-Published: false"
-          git push origin "HEAD:${SCOUT_BRANCH}"
-          final="$(git rev-parse HEAD)"
-          echo "Power Ranger Blanc — confirme la prise en compte. Intégrité GVault: PASS. Reçu public ${final:0:12}." >> "$GITHUB_STEP_SUMMARY"
+          changed="$(node -e "const x=require('/tmp/public-scout-build-result.json');process.stdout.write(String(x.changed))")"
+          if [ "$changed" = true ]; then
+            git add essai/control-tower/public-scout/data
+            changed_paths="$(git diff --cached --name-only)"
+            while IFS= read -r p; do
+              [ -n "$p" ] || continue
+              case "$p" in
+                essai/control-tower/public-scout/data/*) ;;
+                *) echo "FORBIDDEN_PUBLIC_SCOUT_DATA_WRITE: $p" >&2; exit 1;;
+              esac
+            done <<< "$changed_paths"
+            test -n "$changed_paths"
+            subject="$(node -e "const x=require('/tmp/public-scout-build-result.json');process.stdout.write(x.commitSubject)")"
+            digest="$(node -e "const x=require('/tmp/public-scout-build-result.json');process.stdout.write(x.translationDigest)")"
+            state="$(node -e "const x=require('/tmp/public-scout-build-result.json');process.stdout.write(x.publicStateSha256)")"
+            git commit \
+              -m "$subject" \
+              -m "GVAULT-Public-Scout-Translation: $digest" \
+              -m "GVAULT-Public-Scout-State: $state" \
+              -m "GVAULT-Public-Scout-Raw-Published: false"
+            data_commit="$(git rev-parse HEAD)"
+            echo "created=true" >> "$GITHUB_OUTPUT"
+          else
+            data_commit="$(git log -1 --format=%H -- essai/control-tower/public-scout/data/latest.json)"
+            test "$(printf '%s' "$data_commit" | wc -c)" = 40
+            echo "created=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "commit=$data_commit" >> "$GITHUB_OUTPUT"
 
-      - name: Verify published public state contains no obvious credential material
+      - name: Build ACK bound to exact data commit
+        id: ackbuild
+        shell: bash
+        env:
+          DATA_COMMIT: ${{ steps.data.outputs.commit }}
+        run: |
+          set -euo pipefail
+          node scripts/public-scout-build-ack.mjs \
+            --state essai/control-tower/public-scout/data/latest.json \
+            --data-commit "$DATA_COMMIT" \
+            --out-dir essai/control-tower/public-scout/ack \
+            --result /tmp/public-scout-ack-result.json
+          test -s /tmp/public-scout-ack-result.json
+          echo "changed=$(node -e "const x=require('/tmp/public-scout-ack-result.json');process.stdout.write(String(x.changed))")" >> "$GITHUB_OUTPUT"
+
+      - name: Commit public ACK and push both tranches once
+        shell: bash
+        env:
+          DATA_CREATED: ${{ steps.data.outputs.created }}
+          ACK_CHANGED: ${{ steps.ackbuild.outputs.changed }}
+        run: |
+          set -euo pipefail
+          if [ "$ACK_CHANGED" = true ]; then
+            git add essai/control-tower/public-scout/ack
+            changed_paths="$(git diff --cached --name-only)"
+            while IFS= read -r p; do
+              [ -n "$p" ] || continue
+              case "$p" in
+                essai/control-tower/public-scout/ack/*) ;;
+                *) echo "FORBIDDEN_PUBLIC_SCOUT_ACK_WRITE: $p" >&2; exit 1;;
+              esac
+            done <<< "$changed_paths"
+            test -n "$changed_paths"
+            subject="$(node -e "const x=require('/tmp/public-scout-ack-result.json');process.stdout.write(x.commitSubject)")"
+            data_commit="$(node -e "const x=require('/tmp/public-scout-ack-result.json');process.stdout.write(x.dataCommitSha)")"
+            ack_digest="$(node -e "const x=require('/tmp/public-scout-ack-result.json');process.stdout.write(x.ackDigest)")"
+            git commit \
+              -m "$subject" \
+              -m "GVAULT-Public-Scout-Data-Commit: $data_commit" \
+              -m "GVAULT-Public-Scout-Ack-Digest: $ack_digest" \
+              -m "GVAULT-Private-Data-Published: false"
+          fi
+          if [ "$DATA_CREATED" = true ] || [ "$ACK_CHANGED" = true ]; then
+            git push origin "HEAD:${SCOUT_BRANCH}"
+            final="$(git rev-parse HEAD)"
+            echo "Power Ranger Rouge — confirme la prise en compte. Intégrité GVault: PASS. Reçu public ${final:0:12}; le Megazord peut ranger le tampon." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'Power Ranger Rouge — confirme la prise en compte. Intégrité GVault: PASS. Rien de neuf, le Megazord avait déjà signé.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Verify published state and ACK remain sanitized
         shell: bash
         run: |
           set -euo pipefail
-          if grep -ERiq 'gh[pousr]_|github_pat_|Bearer[[:space:]]+[A-Za-z0-9._~+/-]{12,}|sk-[A-Za-z0-9_-]{16,}' essai/control-tower/public-scout/data; then
+          if grep -ERiq 'gh[pousr]_|github_pat_|Bearer[[:space:]]+[A-Za-z0-9._~+/-]{12,}|sk-[A-Za-z0-9_-]{16,}' essai/control-tower/public-scout/data essai/control-tower/public-scout/ack; then
             echo 'PUBLIC_SCOUT_PUBLISHED_SECRET_PATTERN' >&2
             exit 1
           fi
