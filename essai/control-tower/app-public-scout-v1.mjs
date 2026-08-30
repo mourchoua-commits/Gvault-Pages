@@ -1,5 +1,6 @@
 import './app.mjs';
 import {startPublicScoutObserver,toControlTowerRawEvents} from './public-scout-observer-v1.mjs';
+import agentBridge from './public-scout-agent-bridge-v1.mjs';
 
 let current=null,controller=null;
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
@@ -13,6 +14,17 @@ function ensurePanel(){
   const anchor=document.querySelector('.kpis')||document.querySelector('main')||document.body.firstChild;
   if(anchor?.parentNode)anchor.parentNode.insertBefore(panel,anchor.nextSibling);else document.body.appendChild(panel);
   return panel;
+}
+function ensureAgentPanel(){
+  let panel=document.querySelector('#publicAgentBridgePanel');if(panel)return panel;
+  panel=document.createElement('section');panel.id='publicAgentBridgePanel';panel.className='tracksWrap';
+  panel.innerHTML='<div class="paneTitle">AGENT IA · RX / TX PUBLIC <span id="publicAgentBridgeState">EN ATTENTE</span></div><div id="publicAgentBridgeBody" class="tracks"></div>';
+  const scout=ensurePanel();scout.parentNode.insertBefore(panel,scout.nextSibling);return panel;
+}
+function renderAgent(){
+  ensureAgentPanel();const s=agentBridge.getState(),label=document.querySelector('#publicAgentBridgeState'),body=document.querySelector('#publicAgentBridgeBody');if(!label||!body)return;
+  label.textContent=`RX ${s.inbox} · TX ${s.outbox}`;
+  body.innerHTML=`<article class="track"><div class="trackTop"><b>RÉCEPTION</b><span>${s.inbox}</span></div><h3>Les états publics prouvés alimentent directement la boîte d’entrée de l’agent.</h3><div class="trackMeta">seulement après hash + ACK + commit exact</div></article><article class="track"><div class="trackTop"><b>PRODUCTION</b><span>${s.writerAttached?'WRITER ATTACHÉ':'SCELLAGE LOCAL'}</span></div><h3>L’agent peut produire un paquet PUBLIC_ONLY signé par SHA-256.</h3><div class="trackMeta">aucun writer réseau ni token embarqué · les secrets détectés sont refusés</div></article>`;
 }
 function render(state){
   ensurePanel();current=state;
@@ -28,12 +40,15 @@ function render(state){
   if(facts.length)cards.push(`<article class="track"><div class="trackTop"><b>INFOS PUBLIQUES</b><span>${facts.length}</span></div>${facts.map(x=>`<div class="trackMeta" style="margin-top:6px">${esc(x.summary||'')}</div>`).join('')}</article>`);
   cards.push(`<article class="track"><div class="trackTop"><b>PREUVE</b><span>ACK</span></div><div class="trackMeta">data commit ${esc(state.publicDataCommitSha||'—')}</div><div class="trackMeta">state ${esc(state.publicStateSha256||'—')}</div><div class="trackMeta">ack ${esc(state.publicAck?.ackDigest||'—')}</div></article>`);
   body.innerHTML=cards.join('');
+  try{agentBridge.ingestVerifiedScoutState(state)}catch(error){console.error('[AI public inbox]',error)}
+  renderAgent();
 }
 function renderError(error){
   ensurePanel();const proof=document.querySelector('#publicScoutProof'),body=document.querySelector('#publicScoutBody');
   if(proof)proof.textContent='DEGRADED';
   if(body)body.innerHTML=`<article class="track"><h3>Power Ranger Rouge — garde la porte.</h3><div class="trackMeta">${esc(String(error?.message||error||'preuve publique indisponible'))}</div></article>`;
+  renderAgent();
 }
-function start(){ensurePanel();controller=startPublicScoutObserver({onUpdate:render,onError:renderError});}
+function start(){ensurePanel();ensureAgentPanel();renderAgent();controller=startPublicScoutObserver({onUpdate:render,onError:renderError});window.addEventListener('gvault:ai-public-inbox',renderAgent);window.addEventListener('gvault:ai-public-outbox',renderAgent);window.addEventListener('gvault:ai-public-produced',renderAgent)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
-window.GVAULT_CONTROL_TOWER_PUBLIC_SCOUT=Object.freeze({schema:'GVAULT_CONTROL_TOWER_PUBLIC_SCOUT_BRIDGE_V1',refresh:()=>controller?.refresh?.(),getState:()=>current?structuredClone(current):null,getEvents:()=>current?toControlTowerRawEvents(current):[],stop:()=>controller?.stop?.()});
+window.GVAULT_CONTROL_TOWER_PUBLIC_SCOUT=Object.freeze({schema:'GVAULT_CONTROL_TOWER_PUBLIC_SCOUT_BRIDGE_V1',refresh:()=>controller?.refresh?.(),getState:()=>current?structuredClone(current):null,getEvents:()=>current?toControlTowerRawEvents(current):[],agent:agentBridge,stop:()=>controller?.stop?.()});
