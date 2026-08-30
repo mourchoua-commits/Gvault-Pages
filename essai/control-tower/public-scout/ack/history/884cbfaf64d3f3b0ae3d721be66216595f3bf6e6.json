@@ -1,0 +1,21 @@
+{
+  "schema": "GVAULT_PUBLIC_SCOUT_PUBLIC_ACK_V1",
+  "version": 1,
+  "status": "ACKNOWLEDGED_PUBLIC_STATE",
+  "translationDigest": "7a683a1736f236d9a16261cdd08d7de10e6da088cfcce963f57ef1c7fbf51b20",
+  "sourceBodySha256": "7e43481935345e7e290ec12a6e8ca02cc4425ba1de2e847b993ffdaa449451c2",
+  "publicStateSha256": "cbd6ac6d976a2e2d54192e4beaf3eb9d45cadf037fccfee378873aec9a4cb68c",
+  "dataCommitSha": "884cbfaf64d3f3b0ae3d721be66216595f3bf6e6",
+  "acceptedAt": "2026-08-30T01:10:59.724Z",
+  "authority": "PUBLIC_ACK_REFERENCES_EXACT_DATA_COMMIT",
+  "rawBodyPublished": false,
+  "privateDataPublished": false,
+  "ranger": {
+    "color": "RED",
+    "phase": "ACK",
+    "integrity": "PASS",
+    "signal": "PR1:RD:A:OK:7a683a1736f2",
+    "message": "Power Ranger Rouge — confirme la prise en compte. Intégrité GVault: PASS. le Megazord tamponne le reçu et retourne au hangar. [PR1:RD:A:OK:7a683a1736f2]"
+  },
+  "ackDigest": "922bef354b69fa319d9e5816177e8013129482aad41a51415e30555f564e9811"
+}
