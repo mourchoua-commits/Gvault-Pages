@@ -1,14 +1,14 @@
 {
   "schema": "GVAULT_PUBLIC_SCOUT_REQUEST_V1",
-  "requestId": "PUBLIC-SCOUT-20260830-GVAULT-PAGES-ACTIVITY-R5",
-  "topic": "gvault-pages-public-activity",
-  "url": "https://api.github.com/repos/mourchoua-commits/Gvault-Pages/commits?sha=main&per_page=10",
+  "requestId": "PUBLIC-SCOUT-20260830-FALLBACK-PROBE-R6",
+  "topic": "gvault-pages-public-fallback-probe",
+  "url": "https://raw.githubusercontent.com/mourchoua-commits/Gvault-Pages/main/__gvault_public_scout_expected_missing__.json",
   "fallbackUrls": [
     "https://raw.githubusercontent.com/mourchoua-commits/Gvault-Pages/main/manifest.json",
     "https://raw.githubusercontent.com/mourchoua-commits/Gvault-Pages/main/CHOUFF.json"
   ],
   "method": "GET",
-  "reason": "Observe the public GVault Pages activity feed without any private credential, with bounded raw-public fallbacks when the public API is rate-limited.",
-  "requestedBy": "EXPERIMENTAL_PUBLIC_SCOUT",
-  "generation": 5
+  "reason": "Forced failure probe: primary source must fail and the tokenless scanner must recover through the first allowed public fallback.",
+  "requestedBy": "EXPERIMENTAL_PUBLIC_SCOUT_COUNTERPROOF",
+  "generation": 6
 }
