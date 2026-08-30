@@ -1,7 +1,7 @@
-const DEFAULT_BRANCH='experiment/power-ranger-public-scout-20260830';
-const LATEST_URL='./public-scout/data/latest.json';
-const COMMITS_API='https://api.github.com/repos/mourchoua-commits/Gvault-Pages/commits';
+const ACK_URL='./public-scout/ack/latest.json';
 const DATA_PATH='essai/control-tower/public-scout/data/latest.json';
+const RAW_REPO='https://raw.githubusercontent.com/mourchoua-commits/Gvault-Pages';
+const COMMIT_VIEW='https://github.com/mourchoua-commits/Gvault-Pages/commit/';
 const POLL_MS=120000;
 
 function stable(value){if(Array.isArray(value))return value.map(stable);if(value&&typeof value==='object')return Object.fromEntries(Object.keys(value).sort().map(k=>[k,stable(value[k])]));return value;}
@@ -16,40 +16,43 @@ async function verifyState(state){
   if(computed!==publicStateSha256)throw new Error('PUBLIC_SCOUT_STATE_HASH_MISMATCH');
   return computed;
 }
-async function fetchPublicCommit(translationDigest,{branch=DEFAULT_BRANCH}={}){
-  const u=new URL(COMMITS_API);
-  u.searchParams.set('sha',branch);u.searchParams.set('path',DATA_PATH);u.searchParams.set('per_page','5');u.searchParams.set('_',String(Date.now()));
-  const r=await fetch(u,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});
-  if(!r.ok)throw new Error(`PUBLIC_SCOUT_COMMIT_HTTP_${r.status}`);
-  const rows=await r.json();
-  const hit=(Array.isArray(rows)?rows:[]).find(c=>String(c?.commit?.message||'').includes(`GVAULT-Public-Scout-Translation: ${translationDigest}`));
-  if(!hit?.sha)throw new Error('PUBLIC_SCOUT_PUBLIC_COMMIT_NOT_PROVEN');
-  return {sha:hit.sha,htmlUrl:hit.html_url||null,committedAt:hit.commit?.committer?.date||null,subject:String(hit.commit?.message||'').split(/\r?\n/)[0]||''};
+async function verifyAck(ack){
+  if(ack?.schema!=='GVAULT_PUBLIC_SCOUT_PUBLIC_ACK_V1'||ack?.status!=='ACKNOWLEDGED_PUBLIC_STATE')throw new Error('PUBLIC_SCOUT_ACK_SCHEMA');
+  if(!/^[a-f0-9]{40}$/i.test(ack.dataCommitSha||''))throw new Error('PUBLIC_SCOUT_ACK_COMMIT_TYPE');
+  if(!/^[a-f0-9]{64}$/i.test(ack.ackDigest||'')||!/^[a-f0-9]{64}$/i.test(ack.translationDigest||'')||!/^[a-f0-9]{64}$/i.test(ack.publicStateSha256||''))throw new Error('PUBLIC_SCOUT_ACK_DIGEST_TYPE');
+  if(ack.rawBodyPublished!==false||ack.privateDataPublished!==false||ack.authority!=='PUBLIC_ACK_REFERENCES_EXACT_DATA_COMMIT')throw new Error('PUBLIC_SCOUT_ACK_POLICY');
+  const {ackDigest,...core}=ack;
+  const computed=await sha256Text(JSON.stringify(stable(core)));
+  if(computed!==ackDigest)throw new Error('PUBLIC_SCOUT_ACK_HASH_MISMATCH');
+  return computed;
 }
-export async function readPublicScoutState({branch=DEFAULT_BRANCH}={}){
-  const latest=new URL(LATEST_URL,location.href);latest.searchParams.set('_',String(Date.now()));
-  const r=await fetch(latest,{cache:'no-store'});if(!r.ok)throw new Error(`PUBLIC_SCOUT_LATEST_HTTP_${r.status}`);
-  const state=await r.json();await verifyState(state);
-  const commit=await fetchPublicCommit(state.translationDigest,{branch});
-  return {...clone(state),publicCommit:commit,observerVerifiedAt:new Date().toISOString(),observerProof:'STATE_HASH_PLUS_PUBLIC_COMMIT_TRAILER'};
+async function fetchJson(url,label){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error(`${label}_HTTP_${r.status}`);return r.json();}
+export async function readPublicScoutState(){
+  const ackUrl=new URL(ACK_URL,location.href);ackUrl.searchParams.set('_',String(Date.now()));
+  const ack=await fetchJson(ackUrl,'PUBLIC_SCOUT_ACK');await verifyAck(ack);
+  const exactStateUrl=`${RAW_REPO}/${ack.dataCommitSha}/${DATA_PATH}`;
+  const state=await fetchJson(`${exactStateUrl}?proof=${encodeURIComponent(ack.ackDigest.slice(0,16))}`,'PUBLIC_SCOUT_EXACT_STATE');await verifyState(state);
+  if(state.translationDigest!==ack.translationDigest||state.publicStateSha256!==ack.publicStateSha256||state.sourceBodySha256!==ack.sourceBodySha256)throw new Error('PUBLIC_SCOUT_ACK_STATE_DIVERGENCE');
+  return {...clone(state),publicAck:clone(ack),publicDataCommitSha:ack.dataCommitSha,publicCommitUrl:`${COMMIT_VIEW}${ack.dataCommitSha}`,observerVerifiedAt:new Date().toISOString(),observerProof:'PUBLIC_ACK_PLUS_EXACT_DATA_COMMIT'};
 }
 export function toControlTowerRawEvents(state){
-  return (state?.observerEvents||[]).map((raw,index)=>({...clone(raw),_publicScoutIndex:index,_publicCommitSha:state.publicCommit?.sha||null,_publicStateSha256:state.publicStateSha256,_translationDigest:state.translationDigest,_observerProof:state.observerProof,html_url:raw.url||state.publicCommit?.htmlUrl||null}));
+  return (state?.observerEvents||[]).map((raw,index)=>({...clone(raw),_publicScoutIndex:index,_publicCommitSha:state.publicDataCommitSha||null,_publicStateSha256:state.publicStateSha256,_translationDigest:state.translationDigest,_ackDigest:state.publicAck?.ackDigest||null,_observerProof:state.observerProof,html_url:raw.url||state.publicCommitUrl||null}));
 }
-export function startPublicScoutObserver({branch=DEFAULT_BRANCH,pollMs=POLL_MS,onUpdate=()=>{},onError=()=>{}}={}){
+export function startPublicScoutObserver({pollMs=POLL_MS,onUpdate=()=>{},onError=()=>{}}={}){
   let stopped=false,timer=null,last=null,busy=false;
   const run=async()=>{
     if(stopped||busy)return;busy=true;
     try{
-      const state=await readPublicScoutState({branch});
-      if(state.publicStateSha256!==last){last=state.publicStateSha256;onUpdate(state);window.dispatchEvent(new CustomEvent('gvault:public-scout-update',{detail:clone(state)}));}
+      const state=await readPublicScoutState();
+      const proofKey=`${state.publicStateSha256}:${state.publicAck?.ackDigest||''}`;
+      if(proofKey!==last){last=proofKey;onUpdate(state);window.dispatchEvent(new CustomEvent('gvault:public-scout-update',{detail:clone(state)}));}
     }catch(error){onError(error);window.dispatchEvent(new CustomEvent('gvault:public-scout-error',{detail:{message:String(error?.message||error),at:new Date().toISOString()}}));}
     finally{busy=false}
   };
   const arm=()=>{if(timer)clearInterval(timer);timer=setInterval(run,Math.max(30000,Number(pollMs)||POLL_MS));};
   void run();arm();
-  const focus=()=>void run();window.addEventListener('focus',focus);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')void run()});
-  return {stop(){stopped=true;if(timer)clearInterval(timer);window.removeEventListener('focus',focus)},refresh:run,getLastDigest:()=>last};
+  const focus=()=>void run();window.addEventListener('focus',focus);const visibility=()=>{if(document.visibilityState==='visible')void run()};document.addEventListener('visibilitychange',visibility);
+  return {stop(){stopped=true;if(timer)clearInterval(timer);window.removeEventListener('focus',focus);document.removeEventListener('visibilitychange',visibility)},refresh:run,getLastProof:()=>last};
 }
 
-window.GVAULT_PUBLIC_SCOUT_OBSERVER_V1=Object.freeze({schema:'GVAULT_PUBLIC_SCOUT_OBSERVER_V1',readPublicScoutState,toControlTowerRawEvents,startPublicScoutObserver,branch:DEFAULT_BRANCH});
+window.GVAULT_PUBLIC_SCOUT_OBSERVER_V1=Object.freeze({schema:'GVAULT_PUBLIC_SCOUT_OBSERVER_V1',readPublicScoutState,toControlTowerRawEvents,startPublicScoutObserver});
