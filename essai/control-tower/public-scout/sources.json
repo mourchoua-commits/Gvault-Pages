@@ -1,0 +1,29 @@
+{
+  "schema": "GVAULT_PUBLIC_SCOUT_SOURCE_POLICY_V1",
+  "version": 1,
+  "allowedHosts": [
+    "api.github.com",
+    "raw.githubusercontent.com",
+    "github.com",
+    "huggingface.co"
+  ],
+  "httpsOnly": true,
+  "allowedPorts": [443],
+  "maxRedirects": 2,
+  "maxBodyBytes": 262144,
+  "timeoutMs": 10000,
+  "acceptedContentTypes": [
+    "application/json",
+    "text/",
+    "application/rss+xml",
+    "application/xml",
+    "text/xml"
+  ],
+  "forbiddenHostFragments": [
+    "localhost",
+    ".local",
+    "metadata.google.internal"
+  ],
+  "privateInputAllowed": false,
+  "credentialsAllowed": false
+}
