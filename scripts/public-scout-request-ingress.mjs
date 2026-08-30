@@ -23,10 +23,17 @@ const urls=[request.url,...(Array.isArray(request.fallbackUrls)?request.fallback
 if(!urls.length||urls.length>8)throw new Error('PUBLIC_REQUEST_SOURCE_COUNT');
 for(const value of urls){const u=new URL(String(value));if(u.protocol!=='https:'||u.username||u.password)throw new Error('PUBLIC_REQUEST_URL_POLICY')}
 
-await fs.mkdir(path.join(outDir,'history'),{recursive:true});
+const historyDir=path.join(outDir,'history');
+await fs.mkdir(historyDir,{recursive:true});
 const requestSha256=sha256(Buffer.from(raw,'utf8'));
-const historyPath=path.join(outDir,'history',`${requestSha256}.json`);
+const historyPath=path.join(historyDir,`${requestSha256}.json`);
 const currentPath=path.join(outDir,'current.json');
+for(const name of await fs.readdir(historyDir)){
+  if(!name.endsWith('.json'))continue;
+  const existingRaw=await readText(path.join(historyDir,name));if(existingRaw===null)continue;
+  let existing;try{existing=JSON.parse(existingRaw)}catch{throw new Error('PUBLIC_REQUEST_EXISTING_HISTORY_BAD_JSON')}
+  if(String(existing?.requestId||'')===String(request.requestId)&&existingRaw!==raw)throw new Error('PUBLIC_REQUEST_ID_COLLISION');
+}
 let historical=await readText(historyPath);
 let historyCreated=false,pointerRestored=false,replayed=false;
 if(historical!==null){
@@ -40,6 +47,6 @@ if(historical!==null){
   catch(error){if(error?.code!=='EEXIST')throw error;historical=await readText(historyPath);if(historical!==raw)throw new Error('PUBLIC_REQUEST_HISTORY_RACE_COLLISION');replayed=true;}
   if(historyCreated)await fs.writeFile(currentPath,raw,'utf8');
 }
-const result={schema:'GVAULT_PUBLIC_SCOUT_REQUEST_INGRESS_RESULT_V1',status:'PASS',changed:historyCreated||pointerRestored,historyCreated,pointerRestored,replayed,requestId:String(request.requestId),requestSha256,utf8Bytes:Buffer.byteLength(raw,'utf8'),historyPath:path.relative(process.cwd(),historyPath).replace(/\\/g,'/'),currentPath:path.relative(process.cwd(),currentPath).replace(/\\/g,'/'),historyFirst:true};
+const result={schema:'GVAULT_PUBLIC_SCOUT_REQUEST_INGRESS_RESULT_V1',status:'PASS',changed:historyCreated||pointerRestored,historyCreated,pointerRestored,replayed,requestId:String(request.requestId),requestSha256,utf8Bytes:Buffer.byteLength(raw,'utf8'),historyPath:path.relative(process.cwd(),historyPath).replace(/\\/g,'/'),currentPath:path.relative(process.cwd(),currentPath).replace(/\\/g,'/'),historyFirst:true,idCollisionChecked:true};
 await fs.writeFile(resultPath,JSON.stringify(result,null,2)+'\n','utf8');
 console.log(JSON.stringify(result,null,2));
