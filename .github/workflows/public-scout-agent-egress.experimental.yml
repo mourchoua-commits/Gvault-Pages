@@ -1,0 +1,136 @@
+name: Public Scout · Agent IA egress
+
+on:
+  push:
+    branches:
+      - experiment/power-ranger-public-scout-20260830
+    paths:
+      - 'essai/control-tower/public-scout/agent/outbound-requests/current.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gvault-ai-public-egress-experimental
+  cancel-in-progress: false
+
+env:
+  BRANCH: experiment/power-ranger-public-scout-20260830
+
+jobs:
+  publish:
+    name: Power Ranger Violet + Rouge · Agent IA TX
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH }}
+          fetch-depth: 0
+      - name: Validate sealed packet and builders
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check scripts/public-scout-agent-publish.mjs
+          node --check scripts/public-scout-agent-build-ack.mjs
+          node scripts/public-scout-agent-bridge.test.mjs
+          test -s essai/control-tower/public-scout/agent/outbound-requests/current.json
+          echo 'Power Ranger Violet — prépare le message IA. Intégrité GVault: UNKNOWN. Le Megazord cherche le timbre, personne ne lui a dit que Git n’en utilise pas.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Build public AI message
+        id: build
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/public-scout-agent-publish.mjs \
+            --input essai/control-tower/public-scout/agent/outbound-requests/current.json \
+            --out-dir essai/control-tower/public-scout/agent/messages \
+            --result /tmp/ai-public-message-result.json
+          echo "changed=$(node -e \"const x=require('/tmp/ai-public-message-result.json');process.stdout.write(String(x.changed))\")" >> "$GITHUB_OUTPUT"
+      - name: Commit exact AI message tranche
+        id: data
+        shell: bash
+        env:
+          CHANGED: ${{ steps.build.outputs.changed }}
+        run: |
+          set -euo pipefail
+          git config user.name 'GVAULT Power Ranger AI Relay'
+          git config user.email 'actions@users.noreply.github.com'
+          if [ "$CHANGED" = true ]; then
+            git add essai/control-tower/public-scout/agent/messages
+            changed_paths="$(git diff --cached --name-only)"
+            while IFS= read -r p; do
+              [ -n "$p" ] || continue
+              case "$p" in essai/control-tower/public-scout/agent/messages/*) ;; *) echo "AI_PUBLIC_FORBIDDEN_MESSAGE_WRITE: $p" >&2; exit 1;; esac
+            done <<< "$changed_paths"
+            subject="$(node -e \"const x=require('/tmp/ai-public-message-result.json');process.stdout.write(x.commitSubject)\")"
+            payload="$(node -e \"const x=require('/tmp/ai-public-message-result.json');process.stdout.write(x.payloadSha256)\")"
+            git commit -m "$subject" -m "GVAULT-AI-Public-Payload: $payload" -m "GVAULT-AI-Raw-Private-Published: false"
+            data_commit="$(git rev-parse HEAD)"
+            echo "created=true" >> "$GITHUB_OUTPUT"
+          else
+            data_commit="$(git log -1 --format=%H -- essai/control-tower/public-scout/agent/messages/latest.json)"
+            test "$(printf '%s' "$data_commit" | wc -c)" = 40
+            echo "created=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "commit=$data_commit" >> "$GITHUB_OUTPUT"
+      - name: Build ACK bound to exact AI message commit
+        id: ack
+        shell: bash
+        env:
+          DATA_COMMIT: ${{ steps.data.outputs.commit }}
+        run: |
+          set -euo pipefail
+          node scripts/public-scout-agent-build-ack.mjs \
+            --state essai/control-tower/public-scout/agent/messages/latest.json \
+            --data-commit "$DATA_COMMIT" \
+            --out-dir essai/control-tower/public-scout/agent/ack \
+            --result /tmp/ai-public-ack-result.json
+          echo "changed=$(node -e \"const x=require('/tmp/ai-public-ack-result.json');process.stdout.write(String(x.changed))\")" >> "$GITHUB_OUTPUT"
+      - name: Commit ACK and safely join moved HEAD
+        shell: bash
+        env:
+          DATA_CREATED: ${{ steps.data.outputs.created }}
+          ACK_CHANGED: ${{ steps.ack.outputs.changed }}
+        run: |
+          set -euo pipefail
+          if [ "$ACK_CHANGED" = true ]; then
+            git add essai/control-tower/public-scout/agent/ack
+            changed_paths="$(git diff --cached --name-only)"
+            while IFS= read -r p; do
+              [ -n "$p" ] || continue
+              case "$p" in essai/control-tower/public-scout/agent/ack/*) ;; *) echo "AI_PUBLIC_FORBIDDEN_ACK_WRITE: $p" >&2; exit 1;; esac
+            done <<< "$changed_paths"
+            subject="$(node -e \"const x=require('/tmp/ai-public-ack-result.json');process.stdout.write(x.commitSubject)\")"
+            data_commit="$(node -e \"const x=require('/tmp/ai-public-ack-result.json');process.stdout.write(x.dataCommitSha)\")"
+            ack_digest="$(node -e \"const x=require('/tmp/ai-public-ack-result.json');process.stdout.write(x.ackDigest)\")"
+            git commit -m "$subject" -m "GVAULT-AI-Public-Data-Commit: $data_commit" -m "GVAULT-AI-Public-Ack: $ack_digest"
+          fi
+          if [ "$DATA_CREATED" = true ] || [ "$ACK_CHANGED" = true ]; then
+            git fetch origin "$BRANCH"
+            remote_head="$(git rev-parse FETCH_HEAD)"
+            trigger_head="$GITHUB_SHA"
+            if [ "$remote_head" != "$trigger_head" ]; then
+              git merge-base --is-ancestor "$trigger_head" "$remote_head" || { echo 'AI_PUBLIC_REMOTE_HISTORY_DIVERGED' >&2; exit 1; }
+              remote_changed="$(git diff --name-only "$trigger_head..$remote_head")"
+              while IFS= read -r p; do
+                [ -n "$p" ] || continue
+                case "$p" in
+                  essai/control-tower/public-scout/agent/messages/*|essai/control-tower/public-scout/agent/ack/*)
+                    echo "AI_PUBLIC_REMOTE_MESSAGE_MOVED_REBUILD_REQUIRED: $p" >&2; exit 1;;
+                esac
+              done <<< "$remote_changed"
+              payload="$(node -e \"const x=require('/tmp/ai-public-ack-result.json');process.stdout.write(x.payloadSha256.slice(0,12))\")"
+              git merge --no-ff "$remote_head" -m "Power Ranger Rouge — réconcilie le courrier IA. Intégrité GVault: PASS. Le Megazord remet les enveloppes dans l’ordre. [PR1:RD:A:OK:${payload}]"
+            fi
+            git push origin "HEAD:${BRANCH}"
+          fi
+      - name: Verify public AI output is bounded
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -ERiq 'gh[pousr]_|github_pat_|Bearer[[:space:]]+[A-Za-z0-9._~+/-]{12,}|sk-[A-Za-z0-9_-]{16,}' essai/control-tower/public-scout/agent/messages essai/control-tower/public-scout/agent/ack; then
+            echo 'AI_PUBLIC_OUTPUT_SECRET_PATTERN' >&2
+            exit 1
+          fi
+          echo 'Power Ranger Rouge — message IA publié et accusé. Intégrité GVault: PASS. Le Megazord peut enfin arrêter de lécher les timbres imaginaires.' >> "$GITHUB_STEP_SUMMARY"
