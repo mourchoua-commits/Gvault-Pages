@@ -8,8 +8,10 @@ on:
       - 'essai/control-tower/public-scout-agent-core-v1.mjs'
       - 'essai/control-tower/public-scout-agent-bridge-v1.mjs'
       - 'essai/control-tower/public-scout-agent-message-observer-v1.mjs'
+      - 'essai/control-tower/public-scout-agent-private-writer-v1.mjs'
       - 'essai/control-tower/app-public-scout-v1.mjs'
       - 'scripts/public-scout-agent-bridge.test.mjs'
+      - 'scripts/public-scout-agent-private-writer.test.mjs'
       - '.github/workflows/public-scout-agent-bridge.experimental.yml'
   workflow_dispatch:
 
@@ -34,13 +36,20 @@ jobs:
           node --check essai/control-tower/public-scout-agent-core-v1.mjs
           node --check essai/control-tower/public-scout-agent-bridge-v1.mjs
           node --check essai/control-tower/public-scout-agent-message-observer-v1.mjs
+          node --check essai/control-tower/public-scout-agent-private-writer-v1.mjs
           node --check essai/control-tower/app-public-scout-v1.mjs
-          if grep -Eiq 'GITHUB_TOKEN|secrets\.|Authorization[[:space:]]*:|node:https|node:http' essai/control-tower/public-scout-agent-core-v1.mjs essai/control-tower/public-scout-agent-bridge-v1.mjs; then
-            echo 'AGENT_PUBLIC_BRIDGE_NETWORK_OR_SECRET_REFERENCE_FORBIDDEN' >&2
+          if grep -Eiq 'GITHUB_TOKEN|secrets\.|node:https|node:http' essai/control-tower/public-scout-agent-core-v1.mjs essai/control-tower/public-scout-agent-bridge-v1.mjs; then
+            echo 'AGENT_PUBLIC_BRIDGE_SECRET_OR_NODE_NETWORK_REFERENCE_FORBIDDEN' >&2
+            exit 1
+          fi
+          if grep -Eiq 'repos/[^/]+/[^/]+/(issues|pulls|actions|branches)|/contents/(?!ops/public-scout/agent-outbox)' essai/control-tower/public-scout-agent-private-writer-v1.mjs 2>/dev/null; then
+            echo 'AGENT_PRIVATE_WRITER_UNEXPECTED_API_SURFACE' >&2
             exit 1
           fi
       - name: RX/TX regression
         run: node scripts/public-scout-agent-bridge.test.mjs
+      - name: Bounded private writer regression
+        run: node scripts/public-scout-agent-private-writer.test.mjs
       - name: Summary
         if: always()
         run: |
@@ -48,7 +57,9 @@ jobs:
           echo '- receive scout: verified public state only' >> "$GITHUB_STEP_SUMMARY"
           echo '- receive agent messages: exact message commit + ACK + hashes' >> "$GITHUB_STEP_SUMMARY"
           echo '- produce: PUBLIC_ONLY packet + SHA-256' >> "$GITHUB_STEP_SUMMARY"
+          echo '- writer: private experimental outbox only' >> "$GITHUB_STEP_SUMMARY"
+          echo '- writer durability: immutable pending packet before current pointer' >> "$GITHUB_STEP_SUMMARY"
+          echo '- writer failure: sealed local outbox fallback' >> "$GITHUB_STEP_SUMMARY"
           echo '- secret patterns: rejected before writer' >> "$GITHUB_STEP_SUMMARY"
-          echo '- embedded network writer: NONE' >> "$GITHUB_STEP_SUMMARY"
           echo '- private raw data allowed: false' >> "$GITHUB_STEP_SUMMARY"
-          echo '- Megazord status: le facteur a désormais un sas, un casque et un accusé de réception.' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Megazord status: courrier scellé, casier privé, accusé de réception; personne ne court avec le token dans le couloir.' >> "$GITHUB_STEP_SUMMARY"
