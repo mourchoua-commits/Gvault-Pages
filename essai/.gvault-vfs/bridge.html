@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GVAULT</title>
+<style>html,body{margin:0;width:1px;height:1px;overflow:hidden;background:transparent}</style>
+</head>
+<body aria-hidden="true">
+<script type="module">
+import '../../lib/public-checkpoint-handoff.mjs';
+const ready={schema:'GVAULT_PUBLIC_CHECKPOINT_BRIDGE_READY_V1'};
+try{if(window.parent&&window.parent!==window)window.parent.postMessage(ready,'*')}catch{}
+try{if(window.opener)window.opener.postMessage(ready,'*')}catch{}
+</script>
+</body>
+</html>
