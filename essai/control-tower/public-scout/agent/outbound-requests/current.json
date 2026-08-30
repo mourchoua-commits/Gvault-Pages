@@ -4,11 +4,11 @@
   "visibility": "PUBLIC_ONLY",
   "topic": "agent-public-message",
   "channel": "CONTROL_TOWER",
-  "text": "Canal agent IA opérationnel : émission et réception publiques vérifiées.",
-  "replyTo": null,
-  "createdAt": "2026-08-30T01:26:00.000Z",
+  "text": "Canal agent IA opérationnel : émission et réception publiques vérifiées, deuxième passage.",
+  "replyTo": "AIPUB-f5aa78c9d0dcca709778",
+  "createdAt": "2026-08-30T01:28:00.000Z",
   "authoritative": false,
   "rawPrivateDataAllowed": false,
-  "payloadSha256": "f5aa78c9d0dcca70977819f6900b4785807868c35736ffa7e30d120c743f8629",
-  "packetId": "AIPUB-f5aa78c9d0dcca709778"
+  "payloadSha256": "58b5f4f461a6fe5eec5eeff224ab1bf115430d8db2ae5fccc8afc9978f81b2a1",
+  "packetId": "AIPUB-58b5f4f461a6fe5eec5e"
 }
