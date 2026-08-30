@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import crypto,{webcrypto} from 'node:crypto';
+if(!globalThis.crypto)globalThis.crypto=webcrypto;
+import {sealAgentPublicOutbound} from '../essai/control-tower/public-scout-agent-core-v1.mjs';
+import {verifyAgentMessageAck,verifyAgentMessageState} from '../essai/control-tower/public-scout-agent-message-observer-v1.mjs';
+function stable(value){if(Array.isArray(value))return value.map(stable);if(value&&typeof value==='object')return Object.fromEntries(Object.keys(value).sort().map(k=>[k,stable(value[k])]));return value}
+const sha=value=>crypto.createHash('sha256').update(JSON.stringify(stable(value))).digest('hex');
+const packet=await sealAgentPublicOutbound({text:'Réponse publique vérifiée.',createdAt:'2026-08-30T01:40:00Z'});
+const core={schema:'GVAULT_AI_PUBLIC_MESSAGE_V1',version:1,status:'PASS',packet,publishedAt:'2026-08-30T01:40:01Z',integrity:{state:'PASS',packetVerified:true,rawPrivateDataPublished:false,secretPatternRejectedUpstream:true},ranger:{color:'VIOLET',phase:'AGENT_TX',integrity:'PASS',signal:`PR1:VT:TX:OK:${packet.payloadSha256.slice(0,12)}`,message:'Power Ranger Violet — transmet la réponse.'}};
+const state={...core,publicMessageSha256:sha(core)};
+const ackBase={schema:'GVAULT_AI_PUBLIC_MESSAGE_ACK_V1',version:1,status:'ACKNOWLEDGED_PUBLIC_AI_MESSAGE',packetId:packet.packetId,payloadSha256:packet.payloadSha256,publicMessageSha256:state.publicMessageSha256,dataCommitSha:'a'.repeat(40),acceptedAt:'2026-08-30T01:40:02Z',authority:'PUBLIC_ACK_REFERENCES_EXACT_AI_MESSAGE_COMMIT',rawPrivateDataPublished:false,ranger:{color:'RED',phase:'ACK',integrity:'PASS',signal:`PR1:RD:A:OK:${packet.payloadSha256.slice(0,12)}`,message:'Power Ranger Rouge — ACK.'}};
+const ack={...ackBase,ackDigest:sha(ackBase)};
+assert.equal((await verifyAgentMessageAck(ack)).status,'PASS');
+assert.equal((await verifyAgentMessageState(state,ack)).status,'PASS');
+await assert.rejects(()=>verifyAgentMessageAck({...ack,ackDigest:'0'.repeat(64)}),/ACK_HASH_MISMATCH/);
+const privateAckBase={...ackBase,rawPrivateDataPublished:true};const privateAck={...privateAckBase,ackDigest:sha(privateAckBase)};
+await assert.rejects(()=>verifyAgentMessageAck(privateAck),/PRIVATE_DATA_POLICY/);
+const tamperedState={...state,packet:{...packet,text:'réponse altérée'}};
+await assert.rejects(()=>verifyAgentMessageState(tamperedState,ack),/OUTBOUND_HASH_MISMATCH|HASH_MISMATCH/);
+const reboundAckBase={...ackBase,packetId:'AIPUB-'+'f'.repeat(20)};const reboundAck={...reboundAckBase,ackDigest:sha(reboundAckBase)};
+assert.equal((await verifyAgentMessageAck(reboundAck)).status,'PASS');
+await assert.rejects(()=>verifyAgentMessageState(state,reboundAck),/ACK_BINDING_MISMATCH/);
+const privateStateCore={...core,integrity:{...core.integrity,rawPrivateDataPublished:true}};const privateState={...privateStateCore,publicMessageSha256:sha(privateStateCore)};
+await assert.rejects(()=>verifyAgentMessageState(privateState,ack),/STATE_PRIVATE_DATA_POLICY/);
+console.log(JSON.stringify({schema:'GVAULT_AI_PUBLIC_MESSAGE_OBSERVER_TEST_V1',status:'PASS',assertions:8,packetId:packet.packetId,dataCommitSha:ack.dataCommitSha},null,2));
