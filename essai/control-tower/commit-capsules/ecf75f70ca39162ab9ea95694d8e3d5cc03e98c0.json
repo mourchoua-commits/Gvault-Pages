@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "ecf75f70ca39162ab9ea95694d8e3d5cc03e98c0",
+  "parentSha": "1a590a302e4372dc5bb6a90df742303a7c6930b1",
+  "committedAt": "2026-08-31T01:29:10+02:00",
+  "summary": {
+    "subject": "Add public checkpoint cadence regression test",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 39,
+    "deletions": 0,
+    "paths": [
+      "lib/public-checkpoint-vfs.test.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 39,
+    "deletions": 0,
+    "magnitude": 39,
+    "committedAt": "2026-08-31T01:29:10+02:00",
+    "parentSha": "1a590a302e4372dc5bb6a90df742303a7c6930b1"
+  },
+  "pulseKey": "CTP1:ecf75f70ca39162ab9ea95694d8e3d5cc03e98c0:72eacaea16d76a14",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "ab3449bd5453e6655aa1920bed38b533aa74412267ee0a198696d6f0534fe4a3",
+  "typedKeys": {
+    "commit": "gitc:ecf75f70ca39162ab9ea95694d8e3d5cc03e98c0",
+    "parent": "gitc:1a590a302e4372dc5bb6a90df742303a7c6930b1",
+    "pulse": "ctp1:ecf75f70ca39162ab9ea95694d8e3d5cc03e98c0:72eacaea16d76a14",
+    "translation": "cttrans:ab3449bd5453e6655aa1920bed38b533aa74412267ee0a198696d6f0534fe4a3",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "ecf75f70ca39162ab9ea95694d8e3d5cc03e98c0",
+    "parentSha": "1a590a302e4372dc5bb6a90df742303a7c6930b1",
+    "committedAt": "2026-08-31T01:29:10+02:00",
+    "summary": {
+      "subject": "Add public checkpoint cadence regression test",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 39,
+      "deletions": 0,
+      "paths": [
+        "lib/public-checkpoint-vfs.test.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 39,
+      "deletions": 0,
+      "magnitude": 39,
+      "committedAt": "2026-08-31T01:29:10+02:00",
+      "parentSha": "1a590a302e4372dc5bb6a90df742303a7c6930b1"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/ecf75f70ca39162ab9ea95694d8e3d5cc03e98c0.json",
+      "vfsKey": "CTP1:ecf75f70ca39162ab9ea95694d8e3d5cc03e98c0:72eacaea16d76a14",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/ecf75f70ca39162ab9ea95694d8e3d5cc03e98c0.json"
+}
