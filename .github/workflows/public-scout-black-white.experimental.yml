@@ -1,0 +1,198 @@
+name: Power Ranger Noir + Blanc · Public Scout
+
+on:
+  push:
+    branches:
+      - experiment/power-ranger-public-scout-20260830
+    paths:
+      - 'essai/control-tower/public-scout/requests/current.json'
+  workflow_dispatch:
+    inputs:
+      request_path:
+        description: Public scout request file inside essai/control-tower/public-scout/requests/
+        required: false
+        default: essai/control-tower/public-scout/requests/current.json
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gvault-public-scout-black-white-experimental
+  cancel-in-progress: false
+
+env:
+  SCOUT_BRANCH: experiment/power-ranger-public-scout-20260830
+
+jobs:
+  black-scan:
+    name: Power Ranger Noir · scan public
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout public experiment without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SCOUT_BRANCH }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Validate tokenless scanner boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check scripts/public-scout-black.mjs
+          if grep -Eiq 'GITHUB_TOKEN|secrets\.|Authorization[[:space:]]*:' scripts/public-scout-black.mjs; then
+            echo 'BLACK_SCANNER_CREDENTIAL_REFERENCE_FORBIDDEN' >&2
+            exit 1
+          fi
+          echo 'Power Ranger Noir — charge le Megazord. Intégrité GVault: UNKNOWN. Combat de boss en cours, la barre de chargement fait semblant de gagner.' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Scan bounded public source
+        shell: bash
+        env:
+          DISPATCH_REQUEST: ${{ github.event.inputs.request_path }}
+        run: |
+          set -euo pipefail
+          req="${DISPATCH_REQUEST:-essai/control-tower/public-scout/requests/current.json}"
+          case "$req" in
+            essai/control-tower/public-scout/requests/*.json) ;;
+            *) echo 'REQUEST_PATH_OUTSIDE_ALLOWED_PREFIX' >&2; exit 1;;
+          esac
+          node scripts/public-scout-black.mjs \
+            --request "$req" \
+            --policy essai/control-tower/public-scout/sources.json \
+            --out /tmp/public-scout-black.raw.json
+          test -s /tmp/public-scout-black.raw.json
+
+      - name: Pass quarantined raw envelope to White
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-scout-black-raw
+          path: /tmp/public-scout-black.raw.json
+          retention-days: 1
+          if-no-files-found: error
+
+  white-translate:
+    name: Power Ranger Blanc · traduction hors réseau
+    needs: black-scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout translator without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SCOUT_BRANCH }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Download Black quarantine artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: public-scout-black-raw
+          path: /tmp/black
+
+      - name: Prove White translator has no network implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check scripts/public-scout-white.mjs
+          if grep -Eiq '\bfetch[[:space:]]*\(|node:https|node:http|https://' scripts/public-scout-white.mjs; then
+            echo 'WHITE_TRANSLATOR_NETWORK_REFERENCE_FORBIDDEN' >&2
+            exit 1
+          fi
+
+      - name: Translate and sanitize
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/public-scout-white.mjs \
+            --input /tmp/black/public-scout-black.raw.json \
+            --out /tmp/public-scout-white.translated.json
+          test -s /tmp/public-scout-white.translated.json
+          echo 'Power Ranger Blanc — traduit les signaux. Intégrité GVault: PASS. Le boss parlait JSON, mauvaise idée.' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Pass sanitized translation to publisher
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-scout-white-translated
+          path: /tmp/public-scout-white.translated.json
+          retention-days: 1
+          if-no-files-found: error
+
+  publish-ack:
+    name: Power Ranger Blanc · mise à jour Control Tower
+    needs: white-translate
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout public experiment for bounded publication
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SCOUT_BRANCH }}
+          fetch-depth: 0
+
+      - name: Download White translation only
+        uses: actions/download-artifact@v4
+        with:
+          name: public-scout-white-translated
+          path: /tmp/white
+
+      - name: Build public observer state
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check scripts/public-scout-build-state.mjs
+          node scripts/public-scout-build-state.mjs \
+            --input /tmp/white/public-scout-white.translated.json \
+            --out-dir essai/control-tower/public-scout/data \
+            --build-result /tmp/public-scout-build-result.json
+          test -s /tmp/public-scout-build-result.json
+
+      - name: Publish sanitized state and Power Ranger Git message
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed="$(node -e "const x=require('/tmp/public-scout-build-result.json');process.stdout.write(String(x.changed))")"
+          if [ "$changed" != true ]; then
+            echo 'Power Ranger Blanc — confirme la prise en compte. Intégrité GVault: PASS. Le Megazord tamponne le reçu et retourne au hangar.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git add essai/control-tower/public-scout/data
+          changed_paths="$(git diff --cached --name-only)"
+          while IFS= read -r p; do
+            [ -n "$p" ] || continue
+            case "$p" in
+              essai/control-tower/public-scout/data/*) ;;
+              *) echo "FORBIDDEN_PUBLIC_SCOUT_WRITE: $p" >&2; exit 1;;
+            esac
+          done <<< "$changed_paths"
+          test -n "$changed_paths"
+          subject="$(node -e "const x=require('/tmp/public-scout-build-result.json');process.stdout.write(x.commitSubject)")"
+          digest="$(node -e "const x=require('/tmp/public-scout-build-result.json');process.stdout.write(x.translationDigest)")"
+          state="$(node -e "const x=require('/tmp/public-scout-build-result.json');process.stdout.write(x.publicStateSha256)")"
+          git config user.name 'GVAULT Power Ranger Public Scout'
+          git config user.email 'actions@users.noreply.github.com'
+          git commit \
+            -m "$subject" \
+            -m "GVAULT-Public-Scout-Translation: $digest" \
+            -m "GVAULT-Public-Scout-State: $state" \
+            -m "GVAULT-Public-Scout-Raw-Published: false"
+          git push origin "HEAD:${SCOUT_BRANCH}"
+          final="$(git rev-parse HEAD)"
+          echo "Power Ranger Blanc — confirme la prise en compte. Intégrité GVault: PASS. Reçu public ${final:0:12}." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Verify published public state contains no obvious credential material
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -ERiq 'gh[pousr]_|github_pat_|Bearer[[:space:]]+[A-Za-z0-9._~+/-]{12,}|sk-[A-Za-z0-9_-]{16,}' essai/control-tower/public-scout/data; then
+            echo 'PUBLIC_SCOUT_PUBLISHED_SECRET_PATTERN' >&2
+            exit 1
+          fi
+          node scripts/public-scout.pipeline.test.mjs
