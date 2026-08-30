@@ -1,10 +1,14 @@
 {
   "schema": "GVAULT_PUBLIC_SCOUT_REQUEST_V1",
-  "requestId": "PUBLIC-SCOUT-20260830-GVAULT-PAGES-ACTIVITY-R2",
+  "requestId": "PUBLIC-SCOUT-20260830-GVAULT-PAGES-ACTIVITY-R3",
   "topic": "gvault-pages-public-activity",
   "url": "https://api.github.com/repos/mourchoua-commits/Gvault-Pages/commits?sha=main&per_page=10",
+  "fallbackUrls": [
+    "https://raw.githubusercontent.com/mourchoua-commits/Gvault-Pages/main/manifest.json",
+    "https://raw.githubusercontent.com/mourchoua-commits/Gvault-Pages/main/CHOUFF.json"
+  ],
   "method": "GET",
-  "reason": "Observe the public GVault Pages activity feed without any private credential.",
+  "reason": "Observe the public GVault Pages activity feed without any private credential, with bounded raw-public fallbacks when the public API is rate-limited.",
   "requestedBy": "EXPERIMENTAL_PUBLIC_SCOUT",
-  "generation": 2
+  "generation": 3
 }
