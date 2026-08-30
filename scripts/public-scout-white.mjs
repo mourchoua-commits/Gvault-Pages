@@ -61,7 +61,9 @@ const translationBase={
   version:1,
   requestId:cap(raw.request?.requestId,120),
   topic:cap(raw.request?.topic,120),
-  sourceUrl:safeUrl(raw.request?.url),
+  sourceUrl:safeUrl(raw.request?.selectedUrl||raw.request?.url||raw.request?.requestedUrl),
+  scanSourceIndex:Number.isInteger(raw.request?.sourceIndex)?raw.request.sourceIndex:null,
+  scanAttemptCount:Array.isArray(raw.attempts)?raw.attempts.length:1,
   sourceBodySha256:raw.fetch.bodySha256,
   sourceUtf8Bytes:raw.fetch.utf8Bytes,
   sourceContentType:cap(raw.fetch.contentType,120),
@@ -82,4 +84,4 @@ const translationDigest=sha256(Buffer.from(serialized,'utf8'));
 const translated={...translationBase,translationDigest};
 await fs.mkdir(path.dirname(output),{recursive:true});
 await fs.writeFile(output,JSON.stringify(translated,null,2)+'\n','utf8');
-console.log(JSON.stringify({schema:translated.schema,status:'PASS',requestId:translated.requestId,facts:facts.length,sourceBodySha256:translated.sourceBodySha256,translationDigest,rawBodyPublished:false,networkUsed:false},null,2));
+console.log(JSON.stringify({schema:translated.schema,status:'PASS',requestId:translated.requestId,facts:facts.length,sourceUrl:translated.sourceUrl,scanSourceIndex:translated.scanSourceIndex,scanAttemptCount:translated.scanAttemptCount,sourceBodySha256:translated.sourceBodySha256,translationDigest,rawBodyPublished:false,networkUsed:false},null,2));
