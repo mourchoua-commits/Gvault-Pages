@@ -1,0 +1,50 @@
+name: Power Ranger Bleu · Public Runner1 parity audit
+run-name: "Power Ranger Bleu · Runner1 parity · ${{ github.sha }}"
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - experiment/power-ranger-public-scout-20260830
+    paths:
+      - '.github/workflows/public-scout-runner1-parity-audit.experimental.yml'
+      - 'scripts/public-scout-runner1-parity.test.mjs'
+      - 'scripts/public-scout-request-ingress.mjs'
+      - 'scripts/public-scout-agent-ingress.mjs'
+      - 'scripts/public-scout-agent-publish.mjs'
+      - 'scripts/public-scout-agent-build-ack.mjs'
+      - 'scripts/public-scout-build-ack.mjs'
+      - 'essai/control-tower/public-scout-agent-core-v1.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: experiment/power-ranger-public-scout-20260830
+          persist-credentials: false
+      - name: Syntax check exact branch blobs
+        run: |
+          set -euo pipefail
+          node --check scripts/public-scout-request-ingress.mjs
+          node --check scripts/public-scout-agent-ingress.mjs
+          node --check scripts/public-scout-agent-publish.mjs
+          node --check scripts/public-scout-agent-build-ack.mjs
+          node --check scripts/public-scout-build-ack.mjs
+          node --check scripts/public-scout-runner1-parity.test.mjs
+      - name: Replay collision and immutability counterproofs
+        run: node scripts/public-scout-runner1-parity.test.mjs
+      - name: Power Ranger result
+        if: always()
+        run: |
+          echo '## Power Ranger Bleu · Runner1 parity' >> "$GITHUB_STEP_SUMMARY"
+          echo '- event history before pointer: tested' >> "$GITHUB_STEP_SUMMARY"
+          echo '- old replay pointer rollback: tested' >> "$GITHUB_STEP_SUMMARY"
+          echo '- requestId collision: tested fail-closed' >> "$GITHUB_STEP_SUMMARY"
+          echo '- message/ACK historical tamper: tested fail-closed' >> "$GITHUB_STEP_SUMMARY"
+          echo '- architecture dependency on this workflow: NONE' >> "$GITHUB_STEP_SUMMARY"
