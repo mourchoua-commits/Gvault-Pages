@@ -1,0 +1,50 @@
+{
+  "schema": "GVAULT_PUBLIC_CAPTURE_PRIVATE_PARITY_V1",
+  "version": 1,
+  "status": "EXPERIMENTAL_NOT_PROMOTED",
+  "privateReferenceAnchors": [
+    "6f129c032e2244a59fcdbfb6632b5604a698dcc2",
+    "2a8e0cc92b14d42e8c0db7d236bcfa0fe6594b43",
+    "780e4c2cc7df81ede3b23f9c527cea33c0243f0d",
+    "84725ea46ae54d5038582777d7163ea8689fab64",
+    "46ae72b7d467465b311ff5a4e465027dda45f4e4"
+  ],
+  "referenceOnly": true,
+  "publicTopology": [
+    "PUBLIC_EVENT",
+    "PUBLIC_CAPTURE_GATE",
+    "IMMUTABLE_PUBLIC_HISTORY",
+    "EXACT_BYTE_SHA256_READBACK",
+    "APPEND_ONLY_PUBLIC_INDEX",
+    "CURRENT_POINTER",
+    "DOWNSTREAM_NOIR_BLANC_JETSET"
+  ],
+  "requiredInvariants": {
+    "writeAloneIsNeverPass": true,
+    "exactReadbackBeforeIndex": true,
+    "indexBeforeDownstream": true,
+    "historyAppendOnly": true,
+    "oldReplayCannotRollbackCurrent": true,
+    "sameIdentityDifferentPayloadFailClosed": true,
+    "crashHistoryWithoutIndexIsRecoverable": true,
+    "firstTurnGateNameForbiddenOnPublic": true,
+    "gthinkLedgerAuthorityForbiddenOnPublic": true,
+    "privateMutationForbidden": true,
+    "toolInvocationClassification": false,
+    "githubActionsRequired": false
+  },
+  "separation": {
+    "privateRepo": "mourchoua-commits/Gvault",
+    "publicRepo": "mourchoua-commits/Gvault-Pages",
+    "publicMayTriggerPrivate": false,
+    "publicMayWritePrivate": false,
+    "publicMayActivatePrivateLedger": false,
+    "privatePullsPublicEvidence": true,
+    "sharedSemantics": "CAPTURE_READBACK_INDEX_DISCIPLINE_ONLY"
+  },
+  "activeIngressAdapters": [
+    "scripts/public-scout-request-ingress.mjs",
+    "scripts/public-scout-agent-ingress.mjs"
+  ],
+  "kernel": "scripts/public-capture-gate-v1.mjs"
+}
