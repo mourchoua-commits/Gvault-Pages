@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {webcrypto} from 'node:crypto';
+if(!globalThis.crypto)globalThis.crypto=webcrypto;
+import {inboxFromVerifiedScoutState,sealAgentPublicOutbound,verifyAgentPublicOutbound} from '../essai/control-tower/public-scout-agent-core-v1.mjs';
+let n=0;const ok=(name,fn)=>Promise.resolve().then(fn).then(()=>{n++;console.log(`PASS ${n} ${name}`)});
+const state={observerProof:'STATE_HASH_PLUS_PUBLIC_ACK_EXACT_COMMIT',integrity:{state:'PASS'},publicAck:{status:'ACKNOWLEDGED_PUBLIC_STATE',ackDigest:'a'.repeat(64)},publicDataCommitSha:'b'.repeat(40),publicStateSha256:'c'.repeat(64),translationDigest:'d'.repeat(64),publishedAt:'2026-08-30T01:00:00Z',observerEvents:[{id:'evt-1',type:'public_scan',engine:'public-scout-black',summary:'Power Ranger Noir — PASS',proofRefs:['body-sha256:'+ 'e'.repeat(64)]}]};
+await ok('verified scout state becomes AI inbox',()=>{const rows=inboxFromVerifiedScoutState(state);assert.equal(rows.length,2);assert.equal(rows[0].visibility,'PUBLIC');assert.equal(rows[1].summary,'Power Ranger Noir — PASS');assert.equal(rows[0].publicDataCommitSha,'b'.repeat(40))});
+await ok('unverified scout state rejected',()=>assert.throws(()=>inboxFromVerifiedScoutState({...state,observerProof:'WEAK'}),/UNVERIFIED/));
+await ok('agent can seal public output',async()=>{const p=await sealAgentPublicOutbound({text:'Control Tower publique synchronisée.',createdAt:'2026-08-30T01:02:00Z'});assert.equal(p.visibility,'PUBLIC_ONLY');assert.equal(p.rawPrivateDataAllowed,false);assert.match(p.packetId,/^AIPUB-[a-f0-9]{20}$/);assert.equal((await verifyAgentPublicOutbound(p)).status,'PASS')});
+await ok('secret-like output rejected before writer',async()=>{await assert.rejects(()=>sealAgentPublicOutbound({text:'token=ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'}),/SECRET_PATTERN/)});
+await ok('oversized output rejected',async()=>{await assert.rejects(()=>sealAgentPublicOutbound({text:'x'.repeat(1401)}),/TOO_LARGE/)});
+await ok('tampered sealed packet rejected',async()=>{const p=await sealAgentPublicOutbound({text:'message public',createdAt:'2026-08-30T01:02:00Z'});p.text='message changé';await assert.rejects(()=>verifyAgentPublicOutbound(p),/HASH_MISMATCH/)});
+console.log(`RESULT ${n}/6 PASS`);
