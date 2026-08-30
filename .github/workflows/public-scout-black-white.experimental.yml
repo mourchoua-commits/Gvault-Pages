@@ -206,7 +206,7 @@ jobs:
           test -s /tmp/public-scout-ack-result.json
           echo "changed=$(node -e "const x=require('/tmp/public-scout-ack-result.json');process.stdout.write(String(x.changed))")" >> "$GITHUB_OUTPUT"
 
-      - name: Commit public ACK and push both tranches once
+      - name: Commit public ACK and safely join moved public HEAD
         shell: bash
         env:
           DATA_CREATED: ${{ steps.data.outputs.created }}
@@ -234,6 +234,24 @@ jobs:
               -m "GVAULT-Private-Data-Published: false"
           fi
           if [ "$DATA_CREATED" = true ] || [ "$ACK_CHANGED" = true ]; then
+            git fetch origin "$SCOUT_BRANCH"
+            remote_head="$(git rev-parse FETCH_HEAD)"
+            trigger_head="$GITHUB_SHA"
+            if [ "$remote_head" != "$trigger_head" ]; then
+              git merge-base --is-ancestor "$trigger_head" "$remote_head" || { echo 'PUBLIC_SCOUT_REMOTE_HISTORY_DIVERGED' >&2; exit 1; }
+              remote_changed="$(git diff --name-only "$trigger_head..$remote_head")"
+              while IFS= read -r p; do
+                [ -n "$p" ] || continue
+                case "$p" in
+                  essai/control-tower/public-scout/data/*|essai/control-tower/public-scout/ack/*)
+                    echo "PUBLIC_SCOUT_REMOTE_DATA_MOVED_REBUILD_REQUIRED: $p" >&2
+                    exit 1
+                    ;;
+                esac
+              done <<< "$remote_changed"
+              translation="$(node -e "const x=require('/tmp/public-scout-ack-result.json');process.stdout.write(x.translationDigest.slice(0,12))")"
+              git merge --no-ff "$remote_head" -m "Power Ranger Rouge — réconcilie le HEAD public. Intégrité GVault: PASS. Le Megazord remet les wagons dans le bon ordre. [PR1:RD:A:OK:${translation}]"
+            fi
             git push origin "HEAD:${SCOUT_BRANCH}"
             final="$(git rev-parse HEAD)"
             echo "Power Ranger Rouge — confirme la prise en compte. Intégrité GVault: PASS. Reçu public ${final:0:12}; le Megazord peut ranger le tampon." >> "$GITHUB_STEP_SUMMARY"
