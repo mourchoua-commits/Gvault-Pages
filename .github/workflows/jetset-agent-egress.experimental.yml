@@ -1,0 +1,148 @@
+name: JetSet · Agent IA egress
+
+on:
+  push:
+    branches:
+      - experiment/gteamcolor-jetset-20260830
+    paths:
+      - 'essai/control-tower/public-scout/agent/outbound-requests/current.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gvault-jetset-ai-public-egress-experimental
+  cancel-in-progress: false
+
+env:
+  BRANCH: experiment/gteamcolor-jetset-20260830
+
+jobs:
+  publish:
+    name: JetSet · Violet + Rouge · Agent IA TX
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH }}
+          fetch-depth: 0
+      - name: Validate sealed packet builders and JetSet buffer
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check scripts/public-scout-agent-publish.mjs
+          node --check scripts/public-scout-agent-build-ack.mjs
+          node --check scripts/public-scout-jetset-buffer.mjs
+          node scripts/public-scout-agent-bridge.test.mjs
+          node scripts/public-scout-jetset-buffer.test.mjs
+          test -s essai/control-tower/public-scout/agent/outbound-requests/current.json
+      - name: Build public AI message
+        id: build
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/public-scout-agent-publish.mjs \
+            --input essai/control-tower/public-scout/agent/outbound-requests/current.json \
+            --out-dir essai/control-tower/public-scout/agent/messages \
+            --result /tmp/ai-public-message-result.json
+          changed="$(node -p 'String(require("/tmp/ai-public-message-result.json").changed)')"
+          printf 'changed=%s\n' "$changed" >> "$GITHUB_OUTPUT"
+      - name: Refresh bounded JetSet context buffer
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/public-scout-jetset-buffer.mjs --root "$GITHUB_WORKSPACE"
+          test -s essai/control-tower/public-scout/agent/jetset/buffer.latest.json
+      - name: Commit exact AI message and JetSet buffer tranche
+        id: data
+        shell: bash
+        env:
+          CHANGED: ${{ steps.build.outputs.changed }}
+        run: |
+          set -euo pipefail
+          git config user.name 'GVAULT JetSet AI Relay'
+          git config user.email 'actions@users.noreply.github.com'
+          git add essai/control-tower/public-scout/agent/messages essai/control-tower/public-scout/agent/jetset
+          changed_paths="$(git diff --cached --name-only)"
+          while IFS= read -r p; do
+            [ -n "$p" ] || continue
+            case "$p" in
+              essai/control-tower/public-scout/agent/messages/*|essai/control-tower/public-scout/agent/jetset/*) ;;
+              *) echo "JETSET_PUBLIC_FORBIDDEN_MESSAGE_WRITE: $p" >&2; exit 1;;
+            esac
+          done <<< "$changed_paths"
+          if [ -n "$changed_paths" ]; then
+            subject="$(node -p 'require("/tmp/ai-public-message-result.json").commitSubject')"
+            payload="$(node -p 'require("/tmp/ai-public-message-result.json").payloadSha256')"
+            git commit -m "$subject" -m "GVAULT-JetSet-Public-Payload: $payload" -m "GVAULT-JetSet-Raw-Private-Published: false"
+            data_commit="$(git rev-parse HEAD)"
+            printf 'created=true\n' >> "$GITHUB_OUTPUT"
+          else
+            data_commit="$(git log -1 --format=%H -- essai/control-tower/public-scout/agent/messages/latest.json)"
+            test "$(printf '%s' "$data_commit" | wc -c)" = 40
+            printf 'created=false\n' >> "$GITHUB_OUTPUT"
+          fi
+          printf 'commit=%s\n' "$data_commit" >> "$GITHUB_OUTPUT"
+      - name: Build ACK bound to exact AI message commit
+        id: ack
+        shell: bash
+        env:
+          DATA_COMMIT: ${{ steps.data.outputs.commit }}
+        run: |
+          set -euo pipefail
+          node scripts/public-scout-agent-build-ack.mjs \
+            --state essai/control-tower/public-scout/agent/messages/latest.json \
+            --data-commit "$DATA_COMMIT" \
+            --out-dir essai/control-tower/public-scout/agent/ack \
+            --result /tmp/ai-public-ack-result.json
+          changed="$(node -p 'String(require("/tmp/ai-public-ack-result.json").changed)')"
+          printf 'changed=%s\n' "$changed" >> "$GITHUB_OUTPUT"
+      - name: Commit ACK and safely join moved HEAD
+        shell: bash
+        env:
+          DATA_CREATED: ${{ steps.data.outputs.created }}
+          ACK_CHANGED: ${{ steps.ack.outputs.changed }}
+        run: |
+          set -euo pipefail
+          if [ "$ACK_CHANGED" = true ]; then
+            git add essai/control-tower/public-scout/agent/ack
+            changed_paths="$(git diff --cached --name-only)"
+            while IFS= read -r p; do
+              [ -n "$p" ] || continue
+              case "$p" in essai/control-tower/public-scout/agent/ack/*) ;; *) echo "JETSET_PUBLIC_FORBIDDEN_ACK_WRITE: $p" >&2; exit 1;; esac
+            done <<< "$changed_paths"
+            subject="$(node -p 'require("/tmp/ai-public-ack-result.json").commitSubject')"
+            data_commit="$(node -p 'require("/tmp/ai-public-ack-result.json").dataCommitSha')"
+            ack_digest="$(node -p 'require("/tmp/ai-public-ack-result.json").ackDigest')"
+            git commit -m "$subject" -m "GVAULT-JetSet-Public-Data-Commit: $data_commit" -m "GVAULT-JetSet-Public-Ack: $ack_digest"
+          fi
+          if [ "$DATA_CREATED" = true ] || [ "$ACK_CHANGED" = true ]; then
+            git fetch origin "$BRANCH"
+            remote_head="$(git rev-parse FETCH_HEAD)"
+            trigger_head="$GITHUB_SHA"
+            if [ "$remote_head" != "$trigger_head" ]; then
+              git merge-base --is-ancestor "$trigger_head" "$remote_head" || { echo 'JETSET_PUBLIC_REMOTE_HISTORY_DIVERGED' >&2; exit 1; }
+              remote_changed="$(git diff --name-only "$trigger_head..$remote_head")"
+              while IFS= read -r p; do
+                [ -n "$p" ] || continue
+                case "$p" in
+                  essai/control-tower/public-scout/agent/messages/*|essai/control-tower/public-scout/agent/ack/*|essai/control-tower/public-scout/agent/jetset/*)
+                    echo "JETSET_PUBLIC_REMOTE_AGENT_MOVED_REBUILD_REQUIRED: $p" >&2; exit 1;;
+                esac
+              done <<< "$remote_changed"
+              payload="$(node -p 'require("/tmp/ai-public-ack-result.json").payloadSha256.slice(0,12)')"
+              git merge --no-ff "$remote_head" -m "JetSet Rouge — réconcilie le courrier IA. Intégrité GVault: PASS. [JS:RD:A:OK:${payload}]"
+            fi
+            git push origin "HEAD:${BRANCH}"
+          fi
+      - name: Verify public AI and JetSet output are bounded
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -ERiq 'gh[pousr]_|github_pat_|Bearer[[:space:]]+[A-Za-z0-9._~+/-]{12,}|sk-[A-Za-z0-9_-]{16,}' essai/control-tower/public-scout/agent/messages essai/control-tower/public-scout/agent/ack essai/control-tower/public-scout/agent/jetset; then
+            echo 'JETSET_PUBLIC_OUTPUT_SECRET_PATTERN' >&2
+            exit 1
+          fi
+          node -e "const b=require('./essai/control-tower/public-scout/agent/jetset/buffer.latest.json'); if(!b.publicOnly||!b.sanitizedOnly||b.rawPrivateDataAllowed!==false||b.entryCount>b.capacity||b.capacity>12) process.exit(1)"

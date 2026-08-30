@@ -1,0 +1,141 @@
+name: JetSet · Noir + Blanc Public Scout
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - experiment/gteamcolor-jetset-20260830
+    paths:
+      - 'essai/control-tower/public-scout/requests/current.json'
+      - 'essai/control-tower/public-scout/requests/history/**'
+      - 'scripts/public-scout-black.mjs'
+      - 'scripts/public-scout-white.mjs'
+      - '.github/workflows/jetset-black-white.experimental.yml'
+
+permissions:
+  contents: read
+
+env:
+  BRANCH: experiment/gteamcolor-jetset-20260830
+
+concurrency:
+  group: jetset-black-white-experimental
+  cancel-in-progress: false
+
+jobs:
+  black:
+    name: JetSet · Noir · scan public
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH }}
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Scan bounded public source
+        run: |
+          set -euo pipefail
+          node --check scripts/public-scout-black.mjs
+          if grep -Eiq 'GITHUB_TOKEN|secrets\.|Authorization[[:space:]]*:' scripts/public-scout-black.mjs; then exit 1; fi
+          node scripts/public-scout-black.mjs --request essai/control-tower/public-scout/requests/current.json --policy essai/control-tower/public-scout/sources.json --out /tmp/black.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jetset-black-raw
+          path: /tmp/black.json
+          retention-days: 1
+
+  white:
+    name: JetSet · Blanc · traduction/sanitation hors réseau
+    needs: black
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH }}
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: jetset-black-raw
+          path: /tmp/black
+      - name: Prove White boundary and sanitize
+        run: |
+          set -euo pipefail
+          node --check scripts/public-scout-white.mjs
+          if grep -Eiq '\bfetch[[:space:]]*\(|node:https|node:http|https://' scripts/public-scout-white.mjs; then echo WHITE_NETWORK_FORBIDDEN >&2; exit 1; fi
+          node scripts/public-scout-white.mjs --input /tmp/black/black.json --out /tmp/white.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jetset-white-sanitized
+          path: /tmp/white.json
+          retention-days: 1
+
+  publish:
+    name: JetSet · Rouge · publication + ACK exact
+    needs: white
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH }}
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: jetset-white-sanitized
+          path: /tmp/white
+      - name: Build public state
+        id: state
+        run: |
+          set -euo pipefail
+          node scripts/public-scout-build-state.mjs --input /tmp/white/white.json --out-dir essai/control-tower/public-scout/data --build-result /tmp/state.json
+          echo "changed=$(node -p 'String(require("/tmp/state.json").changed)')" >> "$GITHUB_OUTPUT"
+      - name: Commit exact state before ACK
+        id: data
+        run: |
+          set -euo pipefail
+          git config user.name 'GVAULT JetSet Public Scout'
+          git config user.email 'actions@users.noreply.github.com'
+          if [ '${{ steps.state.outputs.changed }}' = true ]; then
+            git add essai/control-tower/public-scout/data
+            for p in $(git diff --cached --name-only); do case "$p" in essai/control-tower/public-scout/data/*) ;; *) exit 1;; esac; done
+            git commit -m "$(node -p 'require("/tmp/state.json").commitSubject')"
+            data_commit="$(git rev-parse HEAD)"
+          else
+            data_commit="$(git log -1 --format=%H -- essai/control-tower/public-scout/data/latest.json)"
+          fi
+          echo "commit=$data_commit" >> "$GITHUB_OUTPUT"
+      - name: Build exact ACK
+        id: ack
+        run: |
+          set -euo pipefail
+          node scripts/public-scout-build-ack.mjs --state essai/control-tower/public-scout/data/latest.json --data-commit '${{ steps.data.outputs.commit }}' --out-dir essai/control-tower/public-scout/ack --result /tmp/ack.json
+          echo "changed=$(node -p 'String(require("/tmp/ack.json").changed)')" >> "$GITHUB_OUTPUT"
+      - name: Commit ACK and merge moved unrelated HEAD
+        run: |
+          set -euo pipefail
+          if [ '${{ steps.ack.outputs.changed }}' = true ]; then
+            git add essai/control-tower/public-scout/ack
+            for p in $(git diff --cached --name-only); do case "$p" in essai/control-tower/public-scout/ack/*) ;; *) exit 1;; esac; done
+            git commit -m "$(node -p 'require("/tmp/ack.json").commitSubject')"
+          fi
+          if ! git diff --quiet HEAD "$GITHUB_SHA" || [ '${{ steps.ack.outputs.changed }}' = true ]; then
+            git fetch origin "$BRANCH"
+            remote="$(git rev-parse FETCH_HEAD)"
+            if [ "$remote" != "$GITHUB_SHA" ]; then
+              git merge-base --is-ancestor "$GITHUB_SHA" "$remote" || { echo JETSET_PUBLIC_HISTORY_DIVERGED >&2; exit 1; }
+              moved="$(git diff --name-only "$GITHUB_SHA..$remote")"
+              while IFS= read -r p; do
+                [ -n "$p" ] || continue
+                case "$p" in essai/control-tower/public-scout/data/*|essai/control-tower/public-scout/ack/*) echo JETSET_PUBLIC_STATE_MOVED_REBUILD_REQUIRED >&2; exit 1;; esac
+              done <<< "$moved"
+              git merge --no-ff "$remote" -m 'JetSet Rouge: merge unrelated public HEAD before publish'
+            fi
+            git push origin "HEAD:${BRANCH}"
+          fi
+      - name: Sanitation regression
+        run: |
+          set -euo pipefail
+          if grep -ERiq 'gh[pousr]_|github_pat_|Bearer[[:space:]]+[A-Za-z0-9._~+/-]{12,}|sk-[A-Za-z0-9_-]{16,}' essai/control-tower/public-scout/data essai/control-tower/public-scout/ack; then exit 1; fi
+          node scripts/public-scout.pipeline.test.mjs

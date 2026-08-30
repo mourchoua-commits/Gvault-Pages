@@ -1,0 +1,9 @@
+{
+  "schema": "GVAULT_JETSET_BUFFER_CONFIG_V1",
+  "version": 1,
+  "need": "AUTO",
+  "capacities": {"LOW": 4, "NORMAL": 8, "HIGH": 12},
+  "absoluteMax": 12,
+  "maxExcerptChars": 900,
+  "autoPolicy": "reply-linked public agent exchange => HIGH; short isolated context => LOW; otherwise NORMAL"
+}

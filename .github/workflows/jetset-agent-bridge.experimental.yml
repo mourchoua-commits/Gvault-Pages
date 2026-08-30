@@ -1,0 +1,30 @@
+name: JetSet · Agent bridge + Runner1 parity
+on:
+  workflow_dispatch:
+  push:
+    branches: [experiment/gteamcolor-jetset-20260830]
+    paths:
+      - 'scripts/public-scout-jetset-buffer.mjs'
+      - 'scripts/public-scout-jetset-buffer.test.mjs'
+      - 'essai/control-tower/public-scout-agent-*.mjs'
+      - '.github/workflows/jetset-agent-bridge.experimental.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: experiment/gteamcolor-jetset-20260830
+          fetch-depth: 0
+          persist-credentials: false
+      - run: |
+          set -euo pipefail
+          node scripts/public-scout-agent-bridge.test.mjs
+          node scripts/public-scout-agent-private-writer.test.mjs
+          node scripts/public-scout-agent-message-observer.test.mjs
+          node scripts/public-scout-jetset-buffer.test.mjs
+          node scripts/public-scout-runner1-parity.test.mjs
+          node scripts/public-scout-event-history-audit.test.mjs
+          if grep -Eiq '\bfetch[[:space:]]*\(|node:https|node:http|https://' scripts/public-scout-white.mjs; then echo WHITE_NETWORK_FORBIDDEN >&2; exit 1; fi

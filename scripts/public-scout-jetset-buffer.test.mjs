@@ -1,0 +1,28 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import {spawnSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+
+const here=path.dirname(fileURLToPath(import.meta.url));
+const script=path.join(here,'public-scout-jetset-buffer.mjs');
+const root=fs.mkdtempSync(path.join(os.tmpdir(),'jetset-'));
+const j=p=>path.join(root,p);
+fs.mkdirSync(j('essai/control-tower/public-scout/requests/history'),{recursive:true});
+fs.mkdirSync(j('essai/control-tower/public-scout/agent/messages/history'),{recursive:true});
+fs.mkdirSync(j('essai/control-tower/public-scout/agent/jetset'),{recursive:true});
+fs.writeFileSync(j('essai/control-tower/public-scout/agent/jetset/config.json'),JSON.stringify({schema:'GVAULT_JETSET_BUFFER_CONFIG_V1',need:'LOW',capacities:{LOW:4,NORMAL:8,HIGH:12},absoluteMax:12,maxExcerptChars:300}));
+for(let i=0;i<5;i++)fs.writeFileSync(j(`essai/control-tower/public-scout/requests/history/r${i}.json`),JSON.stringify({schema:'GVAULT_PUBLIC_SCOUT_REQUEST_V1',requestId:`R${i}`,topic:`topic${i}`,reason:i===4?'token=SUPERSECRET':'safe'}));
+for(let i=0;i<3;i++)fs.writeFileSync(j(`essai/control-tower/public-scout/agent/messages/history/m${i}.json`),JSON.stringify({schema:'GVAULT_AI_PUBLIC_MESSAGE_V1',status:'PASS',packet:{visibility:'PUBLIC_ONLY',rawPrivateDataAllowed:false,packetId:`M${i}`,text:`hello${i}`,createdAt:`2026-08-30T0${i}:00:00Z`}}));
+const r=spawnSync(process.execPath,[script,'--root',root],{encoding:'utf8'});
+assert.equal(r.status,0,r.stderr);
+const out=JSON.parse(fs.readFileSync(j('essai/control-tower/public-scout/agent/jetset/buffer.latest.json'),'utf8'));
+assert.equal(out.teamName,'JetSet');
+assert.equal(out.capacity,4);
+assert.equal(out.entryCount,4);
+assert.equal(out.rawPrivateDataAllowed,false);
+assert.ok(!JSON.stringify(out).includes('SUPERSECRET'));
+const before=fs.readFileSync(j('essai/control-tower/public-scout/agent/jetset/buffer.latest.json'),'utf8');
+const r2=spawnSync(process.execPath,[script,'--root',root],{encoding:'utf8'});assert.equal(r2.status,0,r2.stderr);assert.equal(JSON.parse(r2.stdout).changed,false);assert.equal(fs.readFileSync(j('essai/control-tower/public-scout/agent/jetset/buffer.latest.json'),'utf8'),before);
+console.log('public scout jetset buffer tests: PASS');
