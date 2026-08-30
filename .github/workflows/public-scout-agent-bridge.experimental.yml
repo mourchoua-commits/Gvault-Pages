@@ -12,6 +12,7 @@ on:
       - 'essai/control-tower/app-public-scout-v1.mjs'
       - 'scripts/public-scout-agent-bridge.test.mjs'
       - 'scripts/public-scout-agent-private-writer.test.mjs'
+      - 'scripts/public-scout-agent-message-observer.test.mjs'
       - '.github/workflows/public-scout-agent-bridge.experimental.yml'
   workflow_dispatch:
 
@@ -42,7 +43,8 @@ jobs:
             echo 'AGENT_PUBLIC_BRIDGE_SECRET_OR_NODE_NETWORK_REFERENCE_FORBIDDEN' >&2
             exit 1
           fi
-          if grep -Eiq 'repos/[^/]+/[^/]+/(issues|pulls|actions|branches)|/contents/(?!ops/public-scout/agent-outbox)' essai/control-tower/public-scout-agent-private-writer-v1.mjs 2>/dev/null; then
+          grep -q "OUTBOX_ROOT='ops/public-scout/agent-outbox'" essai/control-tower/public-scout-agent-private-writer-v1.mjs
+          if grep -Eiq '/issues|/pulls|/actions|/branches' essai/control-tower/public-scout-agent-private-writer-v1.mjs; then
             echo 'AGENT_PRIVATE_WRITER_UNEXPECTED_API_SURFACE' >&2
             exit 1
           fi
@@ -50,12 +52,15 @@ jobs:
         run: node scripts/public-scout-agent-bridge.test.mjs
       - name: Bounded private writer regression
         run: node scripts/public-scout-agent-private-writer.test.mjs
+      - name: Exact-commit receive tamper regression
+        run: node scripts/public-scout-agent-message-observer.test.mjs
       - name: Summary
         if: always()
         run: |
           echo '## Power Ranger Violet · Agent IA RX/TX' >> "$GITHUB_STEP_SUMMARY"
           echo '- receive scout: verified public state only' >> "$GITHUB_STEP_SUMMARY"
           echo '- receive agent messages: exact message commit + ACK + hashes' >> "$GITHUB_STEP_SUMMARY"
+          echo '- receive tamper tests: ACK/message/binding/private-data rejection' >> "$GITHUB_STEP_SUMMARY"
           echo '- produce: PUBLIC_ONLY packet + SHA-256' >> "$GITHUB_STEP_SUMMARY"
           echo '- writer: private experimental outbox only' >> "$GITHUB_STEP_SUMMARY"
           echo '- writer durability: immutable pending packet before current pointer' >> "$GITHUB_STEP_SUMMARY"
