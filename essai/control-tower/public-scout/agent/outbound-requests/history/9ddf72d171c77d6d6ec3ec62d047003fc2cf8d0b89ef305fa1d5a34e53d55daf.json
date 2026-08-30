@@ -1,0 +1,14 @@
+{
+  "schema": "GVAULT_AI_PUBLIC_OUTBOUND_V1",
+  "version": 1,
+  "visibility": "PUBLIC_ONLY",
+  "topic": "agent-public-message",
+  "channel": "CONTROL_TOWER",
+  "text": "Boucle agent IA privée vers publique validée : le relais transmet uniquement le paquet public scellé.",
+  "replyTo": "AIPUB-58b5f4f461a6fe5eec5e",
+  "createdAt": "2026-08-30T01:31:00.000Z",
+  "authoritative": false,
+  "rawPrivateDataAllowed": false,
+  "payloadSha256": "9ddf72d171c77d6d6ec3ec62d047003fc2cf8d0b89ef305fa1d5a34e53d55daf",
+  "packetId": "AIPUB-9ddf72d171c77d6d6ec3"
+}
