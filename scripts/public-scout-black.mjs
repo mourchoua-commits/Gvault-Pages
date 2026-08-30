@@ -30,6 +30,7 @@ function acceptedType(value=''){
   const t=String(value).split(';')[0].trim().toLowerCase();
   return (policy.acceptedContentTypes||[]).some(rule=>String(rule).endsWith('/')?t.startsWith(String(rule)):t===String(rule));
 }
+function safeError(error){return String(error?.message||error||'PUBLIC_SCOUT_FETCH_FAILED').replace(/[\r\n\t]+/g,' ').slice(0,180);}
 async function fetchBounded(initial){
   let u=validateUrl(initial);
   const redirects=Number(policy.maxRedirects??2);
@@ -37,7 +38,7 @@ async function fetchBounded(initial){
     const controller=new AbortController();
     const timer=setTimeout(()=>controller.abort(),Number(policy.timeoutMs||10000));
     let response;
-    try{response=await fetch(u,{method:'GET',redirect:'manual',signal:controller.signal,headers:{Accept:'application/json,text/plain,text/html,application/rss+xml,application/xml;q=0.9,*/*;q=0.1','User-Agent':'GVAULT-Public-Scout-Black/1.0'}});}finally{clearTimeout(timer)}
+    try{response=await fetch(u,{method:'GET',redirect:'manual',signal:controller.signal,headers:{Accept:'application/json,text/plain,text/html,application/rss+xml,application/xml;q=0.9,*/*;q=0.1','User-Agent':'GVAULT-Public-Scout-Black/1.1'}});}finally{clearTimeout(timer)}
     if(response.status>=300&&response.status<400){
       const location=response.headers.get('location');
       if(!location)throw new Error('PUBLIC_SCOUT_REDIRECT_WITHOUT_LOCATION');
@@ -61,19 +62,33 @@ async function fetchBounded(initial){
 if(request.schema!=='GVAULT_PUBLIC_SCOUT_REQUEST_V1')throw new Error('PUBLIC_SCOUT_REQUEST_SCHEMA');
 if(String(request.method||'GET').toUpperCase()!=='GET')throw new Error('PUBLIC_SCOUT_GET_ONLY');
 if(policy.credentialsAllowed!==false)throw new Error('PUBLIC_SCOUT_POLICY_MUST_FORBID_CREDENTIALS');
-const result=await fetchBounded(request.url);
+const candidates=[request.url,...(Array.isArray(request.fallbackUrls)?request.fallbackUrls:[])].filter(Boolean);
+if(!candidates.length)throw new Error('PUBLIC_SCOUT_NO_SOURCE_URL');
+if(candidates.length>8)throw new Error('PUBLIC_SCOUT_TOO_MANY_FALLBACKS');
+const attempts=[];let result=null,sourceIndex=-1;
+for(let i=0;i<candidates.length;i++){
+  let validated;
+  try{validated=validateUrl(candidates[i]);}
+  catch(error){attempts.push({index:i,url:String(candidates[i]||'').slice(0,500),status:'REJECTED_BY_POLICY',error:safeError(error)});continue;}
+  try{
+    const fetched=await fetchBounded(validated.href);
+    attempts.push({index:i,url:fetched.url,status:'PASS',httpStatus:fetched.status,utf8Bytes:fetched.bytes.length,bodySha256:sha256(fetched.bytes)});
+    result=fetched;sourceIndex=i;break;
+  }catch(error){attempts.push({index:i,url:validated.href,status:'FETCH_FAILED',error:safeError(error)});}
+}
+if(!result)throw new Error(`PUBLIC_SCOUT_ALL_SOURCES_FAILED: ${attempts.map(x=>`${x.index}:${x.status}:${x.error||''}`).join('|').slice(0,900)}`);
 const bodySha256=sha256(result.bytes);
 const envelope={
   schema:'GVAULT_PUBLIC_SCOUT_BLACK_RAW_V1',
   version:1,
-  request:{requestId:String(request.requestId||''),topic:String(request.topic||'public-research').slice(0,120),url:result.url,method:'GET'},
+  request:{requestId:String(request.requestId||''),topic:String(request.topic||'public-research').slice(0,120),requestedUrl:String(request.url||''),selectedUrl:result.url,sourceIndex,method:'GET'},
+  attempts,
   fetch:{status:result.status,contentType:result.contentType,utf8Bytes:result.bytes.length,bodySha256,fetchedAt:new Date().toISOString(),safeHeaders:result.headers},
-  body:textSafe(result.text),
+  body:String(result.text??''),
   trust:'UNTRUSTED_PUBLIC_INPUT',
   translationPerformed:false,
   credentialsObservedByScanner:false
 };
-function textSafe(v){return String(v??'')}
 await fs.mkdir(path.dirname(outPath),{recursive:true});
 await fs.writeFile(outPath,JSON.stringify(envelope,null,2)+'\n','utf8');
-console.log(JSON.stringify({schema:envelope.schema,status:'PASS',requestId:envelope.request.requestId,host:new URL(result.url).hostname,utf8Bytes:result.bytes.length,bodySha256,translationPerformed:false,credentialsObservedByScanner:false},null,2));
+console.log(JSON.stringify({schema:envelope.schema,status:'PASS',requestId:envelope.request.requestId,selectedHost:new URL(result.url).hostname,sourceIndex,attemptCount:attempts.length,utf8Bytes:result.bytes.length,bodySha256,translationPerformed:false,credentialsObservedByScanner:false},null,2));
