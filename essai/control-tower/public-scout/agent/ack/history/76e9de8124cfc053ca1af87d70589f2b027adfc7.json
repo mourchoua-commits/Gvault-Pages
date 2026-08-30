@@ -1,0 +1,20 @@
+{
+  "schema": "GVAULT_AI_PUBLIC_MESSAGE_ACK_V1",
+  "version": 1,
+  "status": "ACKNOWLEDGED_PUBLIC_AI_MESSAGE",
+  "packetId": "AIPUB-58b5f4f461a6fe5eec5e",
+  "payloadSha256": "58b5f4f461a6fe5eec5eeff224ab1bf115430d8db2ae5fccc8afc9978f81b2a1",
+  "publicMessageSha256": "30a8b5d3056608c970a2627a9eaf96959814c7f08140704bca30da17bd52ae9b",
+  "dataCommitSha": "76e9de8124cfc053ca1af87d70589f2b027adfc7",
+  "acceptedAt": "2026-08-30T01:26:38.688Z",
+  "authority": "PUBLIC_ACK_REFERENCES_EXACT_AI_MESSAGE_COMMIT",
+  "rawPrivateDataPublished": false,
+  "ranger": {
+    "color": "RED",
+    "phase": "ACK",
+    "integrity": "PASS",
+    "signal": "PR1:RD:A:OK:58b5f4f461a6",
+    "message": "Power Ranger Rouge — accuse réception du message IA. Intégrité GVault: PASS. Le Megazord a signé le bordereau sans manger le stylo. [PR1:RD:A:OK:58b5f4f461a6]"
+  },
+  "ackDigest": "e78d2e7fcbd02e876e8cfbc0ab66abe11e30a002bb077e85a885410941d438ff"
+}
