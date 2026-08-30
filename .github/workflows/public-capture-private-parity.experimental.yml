@@ -1,0 +1,41 @@
+name: Public Capture · private parity experiment
+run-name: "Public Capture parity · ${{ github.sha }}"
+
+on:
+  push:
+    branches:
+      - experiment/public-capture-private-parity-20260830
+    paths:
+      - 'scripts/public-capture-gate-v1.mjs'
+      - 'scripts/public-scout-request-ingress.mjs'
+      - 'scripts/public-scout-agent-ingress.mjs'
+      - 'scripts/public-capture-private-parity.test.mjs'
+      - 'essai/control-tower/public-scout/requests/index.ndjson'
+      - 'essai/control-tower/public-scout/agent/outbound-requests/index.ndjson'
+      - 'experiments/public-capture-private-parity/**'
+      - '.github/workflows/public-capture-private-parity.experimental.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax
+        run: |
+          node --check scripts/public-capture-gate-v1.mjs
+          node --check scripts/public-scout-request-ingress.mjs
+          node --check scripts/public-scout-agent-ingress.mjs
+          node --check scripts/public-capture-private-parity.test.mjs
+      - name: Private-model parity counterproofs
+        run: node scripts/public-capture-private-parity.test.mjs
+      - name: Existing Runner1 public parity regression
+        run: node scripts/public-scout-runner1-parity.test.mjs
+      - name: Existing event-history regression
+        run: node scripts/public-scout-event-history-audit.test.mjs
+      - name: Existing Noir Blanc pipeline regression
+        run: node scripts/public-scout.pipeline.test.mjs
