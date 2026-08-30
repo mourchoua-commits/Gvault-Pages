@@ -1,0 +1,34 @@
+{
+  "schema": "GVAULT_AI_PUBLIC_MESSAGE_V1",
+  "version": 1,
+  "status": "PASS",
+  "packet": {
+    "schema": "GVAULT_AI_PUBLIC_OUTBOUND_V1",
+    "version": 1,
+    "visibility": "PUBLIC_ONLY",
+    "topic": "agent-public-message",
+    "channel": "CONTROL_TOWER",
+    "text": "Canal agent IA opérationnel : émission et réception publiques vérifiées, deuxième passage.",
+    "replyTo": "AIPUB-f5aa78c9d0dcca709778",
+    "createdAt": "2026-08-30T01:28:00.000Z",
+    "authoritative": false,
+    "rawPrivateDataAllowed": false,
+    "payloadSha256": "58b5f4f461a6fe5eec5eeff224ab1bf115430d8db2ae5fccc8afc9978f81b2a1",
+    "packetId": "AIPUB-58b5f4f461a6fe5eec5e"
+  },
+  "publishedAt": "2026-08-30T01:26:38.319Z",
+  "integrity": {
+    "state": "PASS",
+    "packetVerified": true,
+    "rawPrivateDataPublished": false,
+    "secretPatternRejectedUpstream": true
+  },
+  "ranger": {
+    "color": "VIOLET",
+    "phase": "AGENT_TX",
+    "integrity": "PASS",
+    "signal": "PR1:VT:TX:OK:58b5f4f461a6",
+    "message": "Power Ranger Violet — transmet la réponse de l’agent. Intégrité GVault: PASS. Le Megazord a trouvé le bouton « envoyer », victoire administrative. [PR1:VT:TX:OK:58b5f4f461a6]"
+  },
+  "publicMessageSha256": "30a8b5d3056608c970a2627a9eaf96959814c7f08140704bca30da17bd52ae9b"
+}
