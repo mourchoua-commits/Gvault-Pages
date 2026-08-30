@@ -46,7 +46,8 @@ jobs:
             --input essai/control-tower/public-scout/agent/outbound-requests/current.json \
             --out-dir essai/control-tower/public-scout/agent/messages \
             --result /tmp/ai-public-message-result.json
-          echo "changed=$(node -e \"const x=require('/tmp/ai-public-message-result.json');process.stdout.write(String(x.changed))\")" >> "$GITHUB_OUTPUT"
+          changed="$(node -p 'String(require("/tmp/ai-public-message-result.json").changed)')"
+          printf 'changed=%s\n' "$changed" >> "$GITHUB_OUTPUT"
       - name: Commit exact AI message tranche
         id: data
         shell: bash
@@ -63,17 +64,17 @@ jobs:
               [ -n "$p" ] || continue
               case "$p" in essai/control-tower/public-scout/agent/messages/*) ;; *) echo "AI_PUBLIC_FORBIDDEN_MESSAGE_WRITE: $p" >&2; exit 1;; esac
             done <<< "$changed_paths"
-            subject="$(node -e \"const x=require('/tmp/ai-public-message-result.json');process.stdout.write(x.commitSubject)\")"
-            payload="$(node -e \"const x=require('/tmp/ai-public-message-result.json');process.stdout.write(x.payloadSha256)\")"
+            subject="$(node -p 'require("/tmp/ai-public-message-result.json").commitSubject')"
+            payload="$(node -p 'require("/tmp/ai-public-message-result.json").payloadSha256')"
             git commit -m "$subject" -m "GVAULT-AI-Public-Payload: $payload" -m "GVAULT-AI-Raw-Private-Published: false"
             data_commit="$(git rev-parse HEAD)"
-            echo "created=true" >> "$GITHUB_OUTPUT"
+            printf 'created=true\n' >> "$GITHUB_OUTPUT"
           else
             data_commit="$(git log -1 --format=%H -- essai/control-tower/public-scout/agent/messages/latest.json)"
             test "$(printf '%s' "$data_commit" | wc -c)" = 40
-            echo "created=false" >> "$GITHUB_OUTPUT"
+            printf 'created=false\n' >> "$GITHUB_OUTPUT"
           fi
-          echo "commit=$data_commit" >> "$GITHUB_OUTPUT"
+          printf 'commit=%s\n' "$data_commit" >> "$GITHUB_OUTPUT"
       - name: Build ACK bound to exact AI message commit
         id: ack
         shell: bash
@@ -86,7 +87,8 @@ jobs:
             --data-commit "$DATA_COMMIT" \
             --out-dir essai/control-tower/public-scout/agent/ack \
             --result /tmp/ai-public-ack-result.json
-          echo "changed=$(node -e \"const x=require('/tmp/ai-public-ack-result.json');process.stdout.write(String(x.changed))\")" >> "$GITHUB_OUTPUT"
+          changed="$(node -p 'String(require("/tmp/ai-public-ack-result.json").changed)')"
+          printf 'changed=%s\n' "$changed" >> "$GITHUB_OUTPUT"
       - name: Commit ACK and safely join moved HEAD
         shell: bash
         env:
@@ -101,9 +103,9 @@ jobs:
               [ -n "$p" ] || continue
               case "$p" in essai/control-tower/public-scout/agent/ack/*) ;; *) echo "AI_PUBLIC_FORBIDDEN_ACK_WRITE: $p" >&2; exit 1;; esac
             done <<< "$changed_paths"
-            subject="$(node -e \"const x=require('/tmp/ai-public-ack-result.json');process.stdout.write(x.commitSubject)\")"
-            data_commit="$(node -e \"const x=require('/tmp/ai-public-ack-result.json');process.stdout.write(x.dataCommitSha)\")"
-            ack_digest="$(node -e \"const x=require('/tmp/ai-public-ack-result.json');process.stdout.write(x.ackDigest)\")"
+            subject="$(node -p 'require("/tmp/ai-public-ack-result.json").commitSubject')"
+            data_commit="$(node -p 'require("/tmp/ai-public-ack-result.json").dataCommitSha')"
+            ack_digest="$(node -p 'require("/tmp/ai-public-ack-result.json").ackDigest')"
             git commit -m "$subject" -m "GVAULT-AI-Public-Data-Commit: $data_commit" -m "GVAULT-AI-Public-Ack: $ack_digest"
           fi
           if [ "$DATA_CREATED" = true ] || [ "$ACK_CHANGED" = true ]; then
@@ -120,7 +122,7 @@ jobs:
                     echo "AI_PUBLIC_REMOTE_MESSAGE_MOVED_REBUILD_REQUIRED: $p" >&2; exit 1;;
                 esac
               done <<< "$remote_changed"
-              payload="$(node -e \"const x=require('/tmp/ai-public-ack-result.json');process.stdout.write(x.payloadSha256.slice(0,12))\")"
+              payload="$(node -p 'require("/tmp/ai-public-ack-result.json").payloadSha256.slice(0,12)')"
               git merge --no-ff "$remote_head" -m "Power Ranger Rouge — réconcilie le courrier IA. Intégrité GVault: PASS. Le Megazord remet les enveloppes dans l’ordre. [PR1:RD:A:OK:${payload}]"
             fi
             git push origin "HEAD:${BRANCH}"
