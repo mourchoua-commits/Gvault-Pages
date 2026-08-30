@@ -27,6 +27,9 @@ if(translated.integrity!=='PASS'||translated.rawBodyPublished!==false||translate
 const sourceDigest=String(translated.sourceBodySha256||'');
 if(!/^[a-f0-9]{64}$/i.test(sourceDigest)||!/^[a-f0-9]{64}$/i.test(translationDigest))throw new Error('PUBLIC_SCOUT_DIGEST_TYPE');
 
+let previous=null;try{previous=JSON.parse(await fs.readFile(path.join(outDir,'latest.json'),'utf8'))}catch{}
+const changed=previous?.translationDigest!==translationDigest;
+const publishedAt=changed?new Date().toISOString():(previous?.publishedAt||translated.translatedAt);
 const blackSignal=signal('BK','S','OK',sourceDigest);
 const whiteSignal=signal('WH','T','OK',translationDigest);
 const publishSignal=signal('WH','P','OK',translationDigest);
@@ -39,15 +42,15 @@ const observerEvents=[
   ...(translated.facts||[]).slice(0,40).map((fact,index)=>({id:`public-scout-fact-${translationDigest.slice(0,12)}-${index}`,engine:'public-scout',type:String(fact.kind||'public_fact'),status:'observed',severity:'ok',at:fact.at||translated.translatedAt,summary:String(fact.summary||fact.excerpt||`${fact.key||'fact'}=${fact.value??''}`).slice(0,500),sha:fact.id||translationDigest,proofRefs:[`translation-sha256:${translationDigest}`],raw:fact}))
 ];
 const core={
-  schema:'GVAULT_PUBLIC_SCOUT_LATEST_V1',version:1,status:'PASS',requestId:translated.requestId,topic:translated.topic,sourceUrl:translated.sourceUrl,sourceBodySha256:sourceDigest,translationDigest,publishedAt:new Date().toISOString(),integrity:{state:'PASS',rawBodyPublished:false,privateCredentialRequired:false,translatorNetworkUsed:false},rangers:{black:{color:'BLACK',phase:'SCAN',signal:blackSignal,message:blackMessage},white:{color:'WHITE',phase:'TRANSLATE',signal:whiteSignal,message:whiteMessage},publisher:{color:'WHITE',phase:'PUBLISH',signal:publishSignal,message:publishMessage}},observerEvents,privateAckHint:{authority:'PUBLIC_HEAD_CONTAINING_TRANSLATION_DIGEST',translationDigest,sourceBodySha256:sourceDigest}
+  schema:'GVAULT_PUBLIC_SCOUT_LATEST_V1',version:1,status:'PASS',requestId:translated.requestId,topic:translated.topic,sourceUrl:translated.sourceUrl,sourceBodySha256:sourceDigest,translationDigest,publishedAt,integrity:{state:'PASS',rawBodyPublished:false,privateCredentialRequired:false,translatorNetworkUsed:false},rangers:{black:{color:'BLACK',phase:'SCAN',signal:blackSignal,message:blackMessage},white:{color:'WHITE',phase:'TRANSLATE',signal:whiteSignal,message:whiteMessage},publisher:{color:'WHITE',phase:'PUBLISH',signal:publishSignal,message:publishMessage}},observerEvents,privateAckHint:{authority:'PUBLIC_HEAD_CONTAINING_TRANSLATION_DIGEST',translationDigest,sourceBodySha256:sourceDigest}
 };
 const publicStateSha256=sha256(Buffer.from(canonical(core),'utf8'));
 const latest={...core,publicStateSha256};
-let previous=null;try{previous=JSON.parse(await fs.readFile(path.join(outDir,'latest.json'),'utf8'))}catch{}
-const changed=previous?.translationDigest!==translationDigest||previous?.publicStateSha256!==publicStateSha256;
-await fs.mkdir(path.join(outDir,'history'),{recursive:true});
-await fs.writeFile(path.join(outDir,'latest.json'),JSON.stringify(latest,null,2)+'\n','utf8');
-await fs.writeFile(path.join(outDir,'history',`${translationDigest}.json`),JSON.stringify(latest,null,2)+'\n','utf8');
+if(changed||!previous){
+  await fs.mkdir(path.join(outDir,'history'),{recursive:true});
+  await fs.writeFile(path.join(outDir,'latest.json'),JSON.stringify(latest,null,2)+'\n','utf8');
+  await fs.writeFile(path.join(outDir,'history',`${translationDigest}.json`),JSON.stringify(latest,null,2)+'\n','utf8');
+}
 const buildResult={schema:'GVAULT_PUBLIC_SCOUT_BUILD_RESULT_V1',status:'PASS',changed,translationDigest,sourceBodySha256:sourceDigest,publicStateSha256,commitSubject:publishMessage,allowedWritePrefix:'essai/control-tower/public-scout/data/'};
 await fs.writeFile(buildResultPath,JSON.stringify(buildResult,null,2)+'\n','utf8');
 console.log(JSON.stringify(buildResult,null,2));
