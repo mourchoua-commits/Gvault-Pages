@@ -1,0 +1,281 @@
+{
+  "schema": "GVAULT_PUBLIC_SCOUT_LATEST_V1",
+  "version": 1,
+  "status": "PASS",
+  "requestId": "PUBLIC-SCOUT-20260830-GVAULT-PAGES-ACTIVITY-R3",
+  "topic": "gvault-pages-public-activity",
+  "sourceUrl": null,
+  "sourceBodySha256": "7e43481935345e7e290ec12a6e8ca02cc4425ba1de2e847b993ffdaa449451c2",
+  "translationDigest": "f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801",
+  "publishedAt": "2026-08-30T01:04:05.507Z",
+  "integrity": {
+    "state": "PASS",
+    "rawBodyPublished": false,
+    "privateCredentialRequired": false,
+    "translatorNetworkUsed": false
+  },
+  "rangers": {
+    "black": {
+      "color": "BLACK",
+      "phase": "SCAN",
+      "signal": "PR1:BK:S:OK:7e4348193534",
+      "message": "Power Ranger Noir — scanne le flux public. Intégrité GVault: PASS. le boss public vient de perdre une chaussette réseau. [PR1:BK:S:OK:7e4348193534]"
+    },
+    "white": {
+      "color": "WHITE",
+      "phase": "TRANSLATE",
+      "signal": "PR1:WH:T:OK:f7eebfc3b80a",
+      "message": "Power Ranger Blanc — traduit les signaux. Intégrité GVault: PASS. les octets ont trouvé un interprète en armure. [PR1:WH:T:OK:f7eebfc3b80a]"
+    },
+    "publisher": {
+      "color": "WHITE",
+      "phase": "PUBLISH",
+      "signal": "PR1:WH:P:OK:f7eebfc3b80a",
+      "message": "Power Ranger Blanc — met la tour à jour. Intégrité GVault: PASS. le boss a essayé de déplacer HEAD, il a été prié de patienter. [PR1:WH:P:OK:f7eebfc3b80a]"
+    }
+  },
+  "observerEvents": [
+    {
+      "id": "public-scout-black-7e43481935345e7e",
+      "engine": "public-scout-black",
+      "type": "public_scan",
+      "status": "PASS",
+      "severity": "ok",
+      "at": "2026-08-30T01:03:40.401Z",
+      "summary": "Power Ranger Noir — scanne le flux public. Intégrité GVault: PASS. le boss public vient de perdre une chaussette réseau. [PR1:BK:S:OK:7e4348193534]",
+      "sha": "7e43481935345e7e290ec12a6e8ca02cc4425ba1de2e847b993ffdaa449451c2",
+      "proofRefs": [
+        "body-sha256:7e43481935345e7e290ec12a6e8ca02cc4425ba1de2e847b993ffdaa449451c2"
+      ]
+    },
+    {
+      "id": "public-scout-white-f7eebfc3b80a291a",
+      "engine": "public-scout-white",
+      "type": "public_translation",
+      "status": "PASS",
+      "severity": "ok",
+      "at": "2026-08-30T01:03:53.251Z",
+      "summary": "Power Ranger Blanc — traduit les signaux. Intégrité GVault: PASS. les octets ont trouvé un interprète en armure. [PR1:WH:T:OK:f7eebfc3b80a]",
+      "sha": "f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801",
+      "proofRefs": [
+        "translation-sha256:f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801"
+      ]
+    },
+    {
+      "id": "public-scout-fact-f7eebfc3b80a-0",
+      "engine": "public-scout",
+      "type": "public_git_commit",
+      "status": "observed",
+      "severity": "ok",
+      "at": "2026-08-29T21:44:53Z",
+      "summary": "control-tower-capsule: summarize c16c4a07cc58",
+      "sha": "4e5b7f4c7310f5f10191e00e70f70e942ae18bc7",
+      "proofRefs": [
+        "translation-sha256:f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801"
+      ],
+      "raw": {
+        "kind": "public_git_commit",
+        "index": 0,
+        "id": "4e5b7f4c7310f5f10191e00e70f70e942ae18bc7",
+        "at": "2026-08-29T21:44:53Z",
+        "summary": "control-tower-capsule: summarize c16c4a07cc58",
+        "url": "https://github.com/mourchoua-commits/Gvault-Pages/commit/4e5b7f4c7310f5f10191e00e70f70e942ae18bc7"
+      }
+    },
+    {
+      "id": "public-scout-fact-f7eebfc3b80a-1",
+      "engine": "public-scout",
+      "type": "public_git_commit",
+      "status": "observed",
+      "severity": "ok",
+      "at": "2026-08-29T21:44:41Z",
+      "summary": "Remove Xibalba Quetzal anchor from public root",
+      "sha": "c16c4a07cc588a720b842657156aad313fc9acc6",
+      "proofRefs": [
+        "translation-sha256:f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801"
+      ],
+      "raw": {
+        "kind": "public_git_commit",
+        "index": 1,
+        "id": "c16c4a07cc588a720b842657156aad313fc9acc6",
+        "at": "2026-08-29T21:44:41Z",
+        "summary": "Remove Xibalba Quetzal anchor from public root",
+        "url": "https://github.com/mourchoua-commits/Gvault-Pages/commit/c16c4a07cc588a720b842657156aad313fc9acc6"
+      }
+    },
+    {
+      "id": "public-scout-fact-f7eebfc3b80a-2",
+      "engine": "public-scout",
+      "type": "public_git_commit",
+      "status": "observed",
+      "severity": "ok",
+      "at": "2026-08-29T21:42:13Z",
+      "summary": "control-tower-capsule: summarize 1e62a04ed033",
+      "sha": "b66ddeff760d948137ccbe0b4793cbe9bf5a7cc7",
+      "proofRefs": [
+        "translation-sha256:f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801"
+      ],
+      "raw": {
+        "kind": "public_git_commit",
+        "index": 2,
+        "id": "b66ddeff760d948137ccbe0b4793cbe9bf5a7cc7",
+        "at": "2026-08-29T21:42:13Z",
+        "summary": "control-tower-capsule: summarize 1e62a04ed033",
+        "url": "https://github.com/mourchoua-commits/Gvault-Pages/commit/b66ddeff760d948137ccbe0b4793cbe9bf5a7cc7"
+      }
+    },
+    {
+      "id": "public-scout-fact-f7eebfc3b80a-3",
+      "engine": "public-scout",
+      "type": "public_git_commit",
+      "status": "observed",
+      "severity": "ok",
+      "at": "2026-08-29T21:42:02Z",
+      "summary": "Add XIBALBA QUETZAL resilient GVault anchor",
+      "sha": "1e62a04ed033d72d81886d32d7e7d9747feeca43",
+      "proofRefs": [
+        "translation-sha256:f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801"
+      ],
+      "raw": {
+        "kind": "public_git_commit",
+        "index": 3,
+        "id": "1e62a04ed033d72d81886d32d7e7d9747feeca43",
+        "at": "2026-08-29T21:42:02Z",
+        "summary": "Add XIBALBA QUETZAL resilient GVault anchor",
+        "url": "https://github.com/mourchoua-commits/Gvault-Pages/commit/1e62a04ed033d72d81886d32d7e7d9747feeca43"
+      }
+    },
+    {
+      "id": "public-scout-fact-f7eebfc3b80a-4",
+      "engine": "public-scout",
+      "type": "public_git_commit",
+      "status": "observed",
+      "severity": "ok",
+      "at": "2026-08-29T18:56:31Z",
+      "summary": "control-tower-capsule: summarize f03832be824d",
+      "sha": "db1c18303cb1f6458dc393cee656ebb8b347a257",
+      "proofRefs": [
+        "translation-sha256:f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801"
+      ],
+      "raw": {
+        "kind": "public_git_commit",
+        "index": 4,
+        "id": "db1c18303cb1f6458dc393cee656ebb8b347a257",
+        "at": "2026-08-29T18:56:31Z",
+        "summary": "control-tower-capsule: summarize f03832be824d",
+        "url": "https://github.com/mourchoua-commits/Gvault-Pages/commit/db1c18303cb1f6458dc393cee656ebb8b347a257"
+      }
+    },
+    {
+      "id": "public-scout-fact-f7eebfc3b80a-5",
+      "engine": "public-scout",
+      "type": "public_git_commit",
+      "status": "observed",
+      "severity": "ok",
+      "at": "2026-08-29T18:56:16Z",
+      "summary": "chore(backup): export pinned public pages main snapshot for Drive",
+      "sha": "f03832be824db48583e1a7ff383dece3282f9af9",
+      "proofRefs": [
+        "translation-sha256:f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801"
+      ],
+      "raw": {
+        "kind": "public_git_commit",
+        "index": 5,
+        "id": "f03832be824db48583e1a7ff383dece3282f9af9",
+        "at": "2026-08-29T18:56:16Z",
+        "summary": "chore(backup): export pinned public pages main snapshot for Drive",
+        "url": "https://github.com/mourchoua-commits/Gvault-Pages/commit/f03832be824db48583e1a7ff383dece3282f9af9"
+      }
+    },
+    {
+      "id": "public-scout-fact-f7eebfc3b80a-6",
+      "engine": "public-scout",
+      "type": "public_git_commit",
+      "status": "observed",
+      "severity": "ok",
+      "at": "2026-08-29T14:39:10Z",
+      "summary": "control-tower-capsule: summarize f3953074fbb7",
+      "sha": "5559cd0835022e48211e999d9a57be37bff7152d",
+      "proofRefs": [
+        "translation-sha256:f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801"
+      ],
+      "raw": {
+        "kind": "public_git_commit",
+        "index": 6,
+        "id": "5559cd0835022e48211e999d9a57be37bff7152d",
+        "at": "2026-08-29T14:39:10Z",
+        "summary": "control-tower-capsule: summarize f3953074fbb7",
+        "url": "https://github.com/mourchoua-commits/Gvault-Pages/commit/5559cd0835022e48211e999d9a57be37bff7152d"
+      }
+    },
+    {
+      "id": "public-scout-fact-f7eebfc3b80a-7",
+      "engine": "public-scout",
+      "type": "public_git_commit",
+      "status": "observed",
+      "severity": "ok",
+      "at": "2026-08-29T14:38:52Z",
+      "summary": "security: restart public input relay as explicit-only V2",
+      "sha": "f3953074fbb77d03a3e1038ef351a16846c32a10",
+      "proofRefs": [
+        "translation-sha256:f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801"
+      ],
+      "raw": {
+        "kind": "public_git_commit",
+        "index": 7,
+        "id": "f3953074fbb77d03a3e1038ef351a16846c32a10",
+        "at": "2026-08-29T14:38:52Z",
+        "summary": "security: restart public input relay as explicit-only V2",
+        "url": "https://github.com/mourchoua-commits/Gvault-Pages/commit/f3953074fbb77d03a3e1038ef351a16846c32a10"
+      }
+    },
+    {
+      "id": "public-scout-fact-f7eebfc3b80a-8",
+      "engine": "public-scout",
+      "type": "public_git_commit",
+      "status": "observed",
+      "severity": "ok",
+      "at": "2026-08-29T14:19:18Z",
+      "summary": "control-tower-capsule: summarize c08f3c712bff",
+      "sha": "81fb779f7843056656b148dae85c9ea99f26f529",
+      "proofRefs": [
+        "translation-sha256:f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801"
+      ],
+      "raw": {
+        "kind": "public_git_commit",
+        "index": 8,
+        "id": "81fb779f7843056656b148dae85c9ea99f26f529",
+        "at": "2026-08-29T14:19:18Z",
+        "summary": "control-tower-capsule: summarize c08f3c712bff",
+        "url": "https://github.com/mourchoua-commits/Gvault-Pages/commit/81fb779f7843056656b148dae85c9ea99f26f529"
+      }
+    },
+    {
+      "id": "public-scout-fact-f7eebfc3b80a-9",
+      "engine": "public-scout",
+      "type": "public_git_commit",
+      "status": "observed",
+      "severity": "ok",
+      "at": "2026-08-29T14:19:04Z",
+      "summary": "input-relay: inject ciphertext capture through public shell worker",
+      "sha": "c08f3c712bff334c28c7196ca8f3f3d73851911e",
+      "proofRefs": [
+        "translation-sha256:f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801"
+      ],
+      "raw": {
+        "kind": "public_git_commit",
+        "index": 9,
+        "id": "c08f3c712bff334c28c7196ca8f3f3d73851911e",
+        "at": "2026-08-29T14:19:04Z",
+        "summary": "input-relay: inject ciphertext capture through public shell worker",
+        "url": "https://github.com/mourchoua-commits/Gvault-Pages/commit/c08f3c712bff334c28c7196ca8f3f3d73851911e"
+      }
+    }
+  ],
+  "privateAckHint": {
+    "authority": "PUBLIC_HEAD_CONTAINING_TRANSLATION_DIGEST",
+    "translationDigest": "f7eebfc3b80a291a3f6d96ef5c8b4b7dc426de3087eead6e6e24c99d858c4801",
+    "sourceBodySha256": "7e43481935345e7e290ec12a6e8ca02cc4425ba1de2e847b993ffdaa449451c2"
+  },
+  "publicStateSha256": "0f67901b68e0294a94b4e3e7b6bea5d8f735798ff3188045c769f4386c538b7d"
+}
