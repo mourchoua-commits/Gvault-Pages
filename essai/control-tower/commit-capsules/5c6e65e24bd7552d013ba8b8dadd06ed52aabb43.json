@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "5c6e65e24bd7552d013ba8b8dadd06ed52aabb43",
+  "parentSha": "da086d72c1d61661e230d97ce46687e33856715f",
+  "committedAt": "2026-08-31T01:27:11+02:00",
+  "summary": {
+    "subject": "Add public checkpoint handoff API",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 65,
+    "deletions": 0,
+    "paths": [
+      "lib/public-checkpoint-handoff.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 65,
+    "deletions": 0,
+    "magnitude": 65,
+    "committedAt": "2026-08-31T01:27:11+02:00",
+    "parentSha": "da086d72c1d61661e230d97ce46687e33856715f"
+  },
+  "pulseKey": "CTP1:5c6e65e24bd7552d013ba8b8dadd06ed52aabb43:e917e4039a8559bf",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "baa11bb010e7346875bcd5bc8deb4824f28a5fd9b77b18afacd4b4c136b7b39c",
+  "typedKeys": {
+    "commit": "gitc:5c6e65e24bd7552d013ba8b8dadd06ed52aabb43",
+    "parent": "gitc:da086d72c1d61661e230d97ce46687e33856715f",
+    "pulse": "ctp1:5c6e65e24bd7552d013ba8b8dadd06ed52aabb43:e917e4039a8559bf",
+    "translation": "cttrans:baa11bb010e7346875bcd5bc8deb4824f28a5fd9b77b18afacd4b4c136b7b39c",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "5c6e65e24bd7552d013ba8b8dadd06ed52aabb43",
+    "parentSha": "da086d72c1d61661e230d97ce46687e33856715f",
+    "committedAt": "2026-08-31T01:27:11+02:00",
+    "summary": {
+      "subject": "Add public checkpoint handoff API",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 65,
+      "deletions": 0,
+      "paths": [
+        "lib/public-checkpoint-handoff.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 65,
+      "deletions": 0,
+      "magnitude": 65,
+      "committedAt": "2026-08-31T01:27:11+02:00",
+      "parentSha": "da086d72c1d61661e230d97ce46687e33856715f"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/5c6e65e24bd7552d013ba8b8dadd06ed52aabb43.json",
+      "vfsKey": "CTP1:5c6e65e24bd7552d013ba8b8dadd06ed52aabb43:e917e4039a8559bf",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/5c6e65e24bd7552d013ba8b8dadd06ed52aabb43.json"
+}
