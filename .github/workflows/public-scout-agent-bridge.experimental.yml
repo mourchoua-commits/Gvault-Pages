@@ -1,0 +1,51 @@
+name: Public Scout · Agent IA bridge
+
+on:
+  push:
+    branches:
+      - experiment/power-ranger-public-scout-20260830
+    paths:
+      - 'essai/control-tower/public-scout-agent-core-v1.mjs'
+      - 'essai/control-tower/public-scout-agent-bridge-v1.mjs'
+      - 'essai/control-tower/app-public-scout-v1.mjs'
+      - 'scripts/public-scout-agent-bridge.test.mjs'
+      - '.github/workflows/public-scout-agent-bridge.experimental.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Power Ranger Violet · Agent IA RX/TX
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: experiment/power-ranger-public-scout-20260830
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Static boundary checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check essai/control-tower/public-scout-agent-core-v1.mjs
+          node --check essai/control-tower/public-scout-agent-bridge-v1.mjs
+          node --check essai/control-tower/app-public-scout-v1.mjs
+          if grep -Eiq 'GITHUB_TOKEN|secrets\.|Authorization[[:space:]]*:|node:https|node:http' essai/control-tower/public-scout-agent-core-v1.mjs essai/control-tower/public-scout-agent-bridge-v1.mjs; then
+            echo 'AGENT_PUBLIC_BRIDGE_NETWORK_OR_SECRET_REFERENCE_FORBIDDEN' >&2
+            exit 1
+          fi
+      - name: RX/TX regression
+        run: node scripts/public-scout-agent-bridge.test.mjs
+      - name: Summary
+        if: always()
+        run: |
+          echo '## Power Ranger Violet · Agent IA RX/TX' >> "$GITHUB_STEP_SUMMARY"
+          echo '- receive: verified public state only' >> "$GITHUB_STEP_SUMMARY"
+          echo '- produce: PUBLIC_ONLY packet + SHA-256' >> "$GITHUB_STEP_SUMMARY"
+          echo '- secret patterns: rejected before writer' >> "$GITHUB_STEP_SUMMARY"
+          echo '- embedded network writer: NONE' >> "$GITHUB_STEP_SUMMARY"
+          echo '- private raw data allowed: false' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Megazord status: le facteur a désormais un sas et un casque.' >> "$GITHUB_STEP_SUMMARY"
