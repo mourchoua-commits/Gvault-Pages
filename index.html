@@ -9,6 +9,7 @@
 </head>
 <body>
 <div class="boot"><b>GVAULT · ESSAI</b><div class="state" id="state">Chargement du runtime Stable épinglé…</div></div>
+<script src="./scripts/gvault-pre-sas-vfs.js?v=1"></script>
 <script>
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw-gvault-v1.js',{scope:'./',updateViaCache:'none'}).catch(e=>console.warn('GVAULT shell worker non installé',e));
