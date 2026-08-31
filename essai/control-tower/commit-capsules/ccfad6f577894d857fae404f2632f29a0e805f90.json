@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "ccfad6f577894d857fae404f2632f29a0e805f90",
+  "parentSha": "a33efedf73018d39df37e0c3351c4bd65d3db99f",
+  "committedAt": "2026-08-31T13:09:57+02:00",
+  "summary": {
+    "subject": "vfs: add hidden tokenless pre-SAS local writer",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 83,
+    "deletions": 0,
+    "paths": [
+      "scripts/gvault-pre-sas-vfs.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 83,
+    "deletions": 0,
+    "magnitude": 83,
+    "committedAt": "2026-08-31T13:09:57+02:00",
+    "parentSha": "a33efedf73018d39df37e0c3351c4bd65d3db99f"
+  },
+  "pulseKey": "CTP1:ccfad6f577894d857fae404f2632f29a0e805f90:9c033ee9eb5b24e5",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "33dffc3f19dae453e04930d5e7baeba5b4b3e76bddf0948e1693e53902f6c635",
+  "typedKeys": {
+    "commit": "gitc:ccfad6f577894d857fae404f2632f29a0e805f90",
+    "parent": "gitc:a33efedf73018d39df37e0c3351c4bd65d3db99f",
+    "pulse": "ctp1:ccfad6f577894d857fae404f2632f29a0e805f90:9c033ee9eb5b24e5",
+    "translation": "cttrans:33dffc3f19dae453e04930d5e7baeba5b4b3e76bddf0948e1693e53902f6c635",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "ccfad6f577894d857fae404f2632f29a0e805f90",
+    "parentSha": "a33efedf73018d39df37e0c3351c4bd65d3db99f",
+    "committedAt": "2026-08-31T13:09:57+02:00",
+    "summary": {
+      "subject": "vfs: add hidden tokenless pre-SAS local writer",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 83,
+      "deletions": 0,
+      "paths": [
+        "scripts/gvault-pre-sas-vfs.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 83,
+      "deletions": 0,
+      "magnitude": 83,
+      "committedAt": "2026-08-31T13:09:57+02:00",
+      "parentSha": "a33efedf73018d39df37e0c3351c4bd65d3db99f"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/ccfad6f577894d857fae404f2632f29a0e805f90.json",
+      "vfsKey": "CTP1:ccfad6f577894d857fae404f2632f29a0e805f90:9c033ee9eb5b24e5",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/ccfad6f577894d857fae404f2632f29a0e805f90.json"
+}
