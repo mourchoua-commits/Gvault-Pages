@@ -1,0 +1,49 @@
+name: GThink Method Lock
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/gvault-agent-gateway.json'
+      - 'blobs/public/gthink-method-*.json'
+      - '.github/workflows/gthink-method-lock.yml'
+  pull_request:
+    paths:
+      - 'scripts/gvault-agent-gateway.json'
+      - 'blobs/public/gthink-method-*.json'
+      - '.github/workflows/gthink-method-lock.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify locked GThink method
+        shell: python
+        run: |
+          import json, pathlib, sys
+          root = pathlib.Path('.')
+          lock = json.loads((root/'blobs/public/gthink-method-lock-v1.json').read_text())
+          cfg = json.loads((root/'scripts/gvault-agent-gateway.json').read_text())
+          expected_stream = 'gvault://blobs/public/gthink/stream'
+          errors = []
+          if lock.get('status') != 'LOCKED': errors.append('method lock is not LOCKED')
+          if lock.get('canonical',{}).get('transport') != 'blob-stream': errors.append('lock transport drift')
+          if lock.get('canonical',{}).get('streamUrl') != expected_stream: errors.append('lock streamUrl drift')
+          if lock.get('evidence',{}).get('methodChangeApproved') is not False: errors.append('method change unexpectedly approved')
+          if cfg.get('transport') != 'blob-stream': errors.append('gateway transport must remain blob-stream')
+          if cfg.get('streamUrl') != expected_stream: errors.append('gateway streamUrl drift')
+          http = cfg.get('httpAdapter',{})
+          if http.get('enabled') is not False: errors.append('HTTP adapter must stay disabled')
+          if http.get('baseUrl') is not None: errors.append('HTTP baseUrl must stay null')
+          guard = cfg.get('methodGuard',{})
+          if guard.get('methodChangeRequiresExplicitUserRequest') is not True: errors.append('explicit user method-change requirement missing')
+          if guard.get('methodChangeApproved') is not False: errors.append('gateway method change unexpectedly approved')
+          if errors:
+              print('GThink method lock violations:')
+              for e in errors: print(' -', e)
+              sys.exit(1)
+          print('PASS: canonical GThink blob-stream method locked')
