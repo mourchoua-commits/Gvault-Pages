@@ -1,0 +1,75 @@
+name: GThink provider cache bump
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/gthink-provider-cache-bump.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gthink-provider-cache-bump
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Pin latest provider and bust public loader caches
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          r=Path('scripts/gthink-public-responder.js')
+          s=r.read_text(encoding='utf-8')
+          if "gthink-provider-blob.js?v=1" in s:
+              s=s.replace("gthink-provider-blob.js?v=1","gthink-provider-blob.js?v=2",1)
+          elif "gthink-provider-blob.js?v=2" not in s:
+              raise SystemExit('Provider loader anchor not found')
+          if "s.dataset.gthinkProviderBlob='V1'" in s:
+              s=s.replace("s.dataset.gthinkProviderBlob='V1'","s.dataset.gthinkProviderBlob='V2'",1)
+          r.write_text(s,encoding='utf-8')
+
+          p=Path('gthink/index.html')
+          h=p.read_text(encoding='utf-8')
+          if 'gthink-public-responder.js?v=4' in h:
+              h=h.replace('gthink-public-responder.js?v=4','gthink-public-responder.js?v=5',1)
+          elif 'gthink-public-responder.js?v=5' not in h:
+              raise SystemExit('Responder loader anchor not found')
+          if 'data-gthink-public-responder="V3"' in h:
+              h=h.replace('data-gthink-public-responder="V3"','data-gthink-public-responder="V5"',1)
+          elif 'data-gthink-public-responder="V4"' in h:
+              h=h.replace('data-gthink-public-responder="V4"','data-gthink-public-responder="V5"',1)
+          elif 'data-gthink-public-responder="V5"' not in h:
+              raise SystemExit('Responder marker anchor not found')
+          p.write_text(h,encoding='utf-8')
+          PY
+          node --check scripts/gthink-provider-blob.js
+          node --check scripts/gthink-public-responder.js
+          grep -q 'gthink-provider-blob.js?v=2' scripts/gthink-public-responder.js
+          grep -q 'gthink-public-responder.js?v=5' gthink/index.html
+          grep -q 'data-gthink-public-responder="V5"' gthink/index.html
+      - name: Commit cache-safe wiring
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- scripts/gthink-public-responder.js gthink/index.html; then
+            echo 'Provider/responder caches already pinned.'
+            exit 0
+          fi
+          git config user.name 'GThink Blob Wiring'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/gthink-public-responder.js gthink/index.html
+          git commit -m 'fix(gthink): pin provider v2 and responder v5'
+          git push origin HEAD:main
