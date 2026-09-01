@@ -1,6 +1,6 @@
 {
   "schema": "GVAULT_FULL_SAVE_DIRECT_BANANA_STUDY_MANIFEST_V1",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "branch": "study/full-save-direct-banana",
   "target": "Gvault-Pages public banana surface -> existing GVAULT local Agent",
   "methodology": {
@@ -41,10 +41,12 @@
   "tests": {
     "fullSavePipeline": "PASS_27_27",
     "localGThinkBananaAdapter": "PASS_25_25",
+    "browserCompatibilityHarness": "PASS_18_18",
     "bananaMismatchFailurePath": "PASS",
     "remoteProviderRequired": false,
-    "browserScriptSyntax": "PENDING_RECHECK",
-    "realPostSasRuntimeBinding": "PENDING_STUDY_BRANCH_BROWSER_CHECK"
+    "browserScriptSyntax": "PASS",
+    "networkCallsInHarness": 0,
+    "realPostSasRuntimeBinding": "PENDING_TARGET_SITE_OBSERVATION"
   },
   "truthBoundary": {
     "fullSaveMethodologyCanWrapTheLocalAgentTurn": true,
@@ -53,5 +55,5 @@
     "remoteApiOrCloudWorkerNeeded": false,
     "mainBranchChangedByThisLocalStudy": false
   },
-  "promotion": "STUDY_ONLY_UNTIL_BROWSER_BINDING_PASS"
+  "promotion": "READY_FOR_PUBLIC_MAIN_TRIAL_WITH_FAIL_CLOSED_LOCAL_AGENT_UNAVAILABLE"
 }
