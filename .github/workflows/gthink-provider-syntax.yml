@@ -1,0 +1,28 @@
+name: GThink provider blob syntax
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/gthink-provider-blob.js'
+      - 'scripts/gthink-public-responder.js'
+      - '.github/workflows/gthink-provider-syntax.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check GThink blob JavaScript
+        run: |
+          node --check scripts/gthink-provider-blob.js
+          node --check scripts/gthink-public-responder.js
+          echo 'GTHINK_PROVIDER_BLOB_SYNTAX=PASS'
