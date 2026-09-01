@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "5633ad68c19a0a93073ef8b450d4b6d6ae7eaf47",
+  "parentSha": "c6785b76dc3369fcffd637c9417b2adf75519025",
+  "committedAt": "2026-09-02T00:16:39+02:00",
+  "summary": {
+    "subject": "feat(gthink): route responder through provider blob",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 70,
+    "deletions": 18,
+    "paths": [
+      "scripts/gthink-public-responder.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 70,
+    "deletions": 18,
+    "magnitude": 88,
+    "committedAt": "2026-09-02T00:16:39+02:00",
+    "parentSha": "c6785b76dc3369fcffd637c9417b2adf75519025"
+  },
+  "pulseKey": "CTP1:5633ad68c19a0a93073ef8b450d4b6d6ae7eaf47:1d6f5ef82c81f7fc",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "72c41f5cde6a7be0e609f81013bd7eeabc0cf2de585ed9143e6a7371428ee3c5",
+  "typedKeys": {
+    "commit": "gitc:5633ad68c19a0a93073ef8b450d4b6d6ae7eaf47",
+    "parent": "gitc:c6785b76dc3369fcffd637c9417b2adf75519025",
+    "pulse": "ctp1:5633ad68c19a0a93073ef8b450d4b6d6ae7eaf47:1d6f5ef82c81f7fc",
+    "translation": "cttrans:72c41f5cde6a7be0e609f81013bd7eeabc0cf2de585ed9143e6a7371428ee3c5",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "5633ad68c19a0a93073ef8b450d4b6d6ae7eaf47",
+    "parentSha": "c6785b76dc3369fcffd637c9417b2adf75519025",
+    "committedAt": "2026-09-02T00:16:39+02:00",
+    "summary": {
+      "subject": "feat(gthink): route responder through provider blob",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 70,
+      "deletions": 18,
+      "paths": [
+        "scripts/gthink-public-responder.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 70,
+      "deletions": 18,
+      "magnitude": 88,
+      "committedAt": "2026-09-02T00:16:39+02:00",
+      "parentSha": "c6785b76dc3369fcffd637c9417b2adf75519025"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/5633ad68c19a0a93073ef8b450d4b6d6ae7eaf47.json",
+      "vfsKey": "CTP1:5633ad68c19a0a93073ef8b450d4b6d6ae7eaf47:1d6f5ef82c81f7fc",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/5633ad68c19a0a93073ef8b450d4b6d6ae7eaf47.json"
+}
