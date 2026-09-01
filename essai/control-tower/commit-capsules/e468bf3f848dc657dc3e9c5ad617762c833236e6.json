@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "e468bf3f848dc657dc3e9c5ad617762c833236e6",
+  "parentSha": "23f4c1b82e3123375c9ecacc97b3c1384b6d6997",
+  "committedAt": "2026-09-02T00:44:51+02:00",
+  "summary": {
+    "subject": "Make mini swarm and throughput guard parser-blocking before GThink UI",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 4,
+    "deletions": 1,
+    "paths": [
+      "scripts/gthink-prelistener-stream-blob.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 4,
+    "deletions": 1,
+    "magnitude": 5,
+    "committedAt": "2026-09-02T00:44:51+02:00",
+    "parentSha": "23f4c1b82e3123375c9ecacc97b3c1384b6d6997"
+  },
+  "pulseKey": "CTP1:e468bf3f848dc657dc3e9c5ad617762c833236e6:2492f3b9cad4f5d0",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "393bf153393033ae2762fbe3b3ba90a27eca47eae9f595cb23c335150144d35d",
+  "typedKeys": {
+    "commit": "gitc:e468bf3f848dc657dc3e9c5ad617762c833236e6",
+    "parent": "gitc:23f4c1b82e3123375c9ecacc97b3c1384b6d6997",
+    "pulse": "ctp1:e468bf3f848dc657dc3e9c5ad617762c833236e6:2492f3b9cad4f5d0",
+    "translation": "cttrans:393bf153393033ae2762fbe3b3ba90a27eca47eae9f595cb23c335150144d35d",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "e468bf3f848dc657dc3e9c5ad617762c833236e6",
+    "parentSha": "23f4c1b82e3123375c9ecacc97b3c1384b6d6997",
+    "committedAt": "2026-09-02T00:44:51+02:00",
+    "summary": {
+      "subject": "Make mini swarm and throughput guard parser-blocking before GThink UI",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 4,
+      "deletions": 1,
+      "paths": [
+        "scripts/gthink-prelistener-stream-blob.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 4,
+      "deletions": 1,
+      "magnitude": 5,
+      "committedAt": "2026-09-02T00:44:51+02:00",
+      "parentSha": "23f4c1b82e3123375c9ecacc97b3c1384b6d6997"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/e468bf3f848dc657dc3e9c5ad617762c833236e6.json",
+      "vfsKey": "CTP1:e468bf3f848dc657dc3e9c5ad617762c833236e6:2492f3b9cad4f5d0",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/e468bf3f848dc657dc3e9c5ad617762c833236e6.json"
+}
