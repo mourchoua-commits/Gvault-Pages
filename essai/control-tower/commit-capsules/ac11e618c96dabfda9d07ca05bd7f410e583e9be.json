@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "ac11e618c96dabfda9d07ca05bd7f410e583e9be",
+  "parentSha": "e6b4fcc71836b28f42fc3fad9bde913e9cdaa9a0",
+  "committedAt": "2026-09-01T17:03:13+02:00",
+  "summary": {
+    "subject": "Materialize public evidence blob with measured performance and claim guardrails",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 101,
+    "deletions": 0,
+    "paths": [
+      "blobs/public/trajectory-ai-evidence-2026-09-01.blob.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 101,
+    "deletions": 0,
+    "magnitude": 101,
+    "committedAt": "2026-09-01T17:03:13+02:00",
+    "parentSha": "e6b4fcc71836b28f42fc3fad9bde913e9cdaa9a0"
+  },
+  "pulseKey": "CTP1:ac11e618c96dabfda9d07ca05bd7f410e583e9be:892e7ec37fc80743",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "2f57b27e70c3e99406f131d93884f348d4d7a00b7f53ec8698bde85c3cf9d151",
+  "typedKeys": {
+    "commit": "gitc:ac11e618c96dabfda9d07ca05bd7f410e583e9be",
+    "parent": "gitc:e6b4fcc71836b28f42fc3fad9bde913e9cdaa9a0",
+    "pulse": "ctp1:ac11e618c96dabfda9d07ca05bd7f410e583e9be:892e7ec37fc80743",
+    "translation": "cttrans:2f57b27e70c3e99406f131d93884f348d4d7a00b7f53ec8698bde85c3cf9d151",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "ac11e618c96dabfda9d07ca05bd7f410e583e9be",
+    "parentSha": "e6b4fcc71836b28f42fc3fad9bde913e9cdaa9a0",
+    "committedAt": "2026-09-01T17:03:13+02:00",
+    "summary": {
+      "subject": "Materialize public evidence blob with measured performance and claim guardrails",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 101,
+      "deletions": 0,
+      "paths": [
+        "blobs/public/trajectory-ai-evidence-2026-09-01.blob.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 101,
+      "deletions": 0,
+      "magnitude": 101,
+      "committedAt": "2026-09-01T17:03:13+02:00",
+      "parentSha": "e6b4fcc71836b28f42fc3fad9bde913e9cdaa9a0"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/ac11e618c96dabfda9d07ca05bd7f410e583e9be.json",
+      "vfsKey": "CTP1:ac11e618c96dabfda9d07ca05bd7f410e583e9be:892e7ec37fc80743",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/ac11e618c96dabfda9d07ca05bd7f410e583e9be.json"
+}
