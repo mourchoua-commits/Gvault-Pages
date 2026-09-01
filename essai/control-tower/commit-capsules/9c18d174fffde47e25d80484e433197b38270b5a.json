@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "9c18d174fffde47e25d80484e433197b38270b5a",
+  "parentSha": "bfc5f39489e7cb42f3214a64415aef50ca3c4709",
+  "committedAt": "2026-09-01T15:41:46+02:00",
+  "summary": {
+    "subject": "Control Tower: narrow fixed walls and install blob style contract",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 22,
+    "deletions": 4,
+    "paths": [
+      "essai/control-tower/gthink-sas-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 22,
+    "deletions": 4,
+    "magnitude": 26,
+    "committedAt": "2026-09-01T15:41:46+02:00",
+    "parentSha": "bfc5f39489e7cb42f3214a64415aef50ca3c4709"
+  },
+  "pulseKey": "CTP1:9c18d174fffde47e25d80484e433197b38270b5a:6431095008608ff2",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "c2d25afb651293e83249d26c4ef46ce80b5537532bf0bcc9765c8de0e322b118",
+  "typedKeys": {
+    "commit": "gitc:9c18d174fffde47e25d80484e433197b38270b5a",
+    "parent": "gitc:bfc5f39489e7cb42f3214a64415aef50ca3c4709",
+    "pulse": "ctp1:9c18d174fffde47e25d80484e433197b38270b5a:6431095008608ff2",
+    "translation": "cttrans:c2d25afb651293e83249d26c4ef46ce80b5537532bf0bcc9765c8de0e322b118",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "9c18d174fffde47e25d80484e433197b38270b5a",
+    "parentSha": "bfc5f39489e7cb42f3214a64415aef50ca3c4709",
+    "committedAt": "2026-09-01T15:41:46+02:00",
+    "summary": {
+      "subject": "Control Tower: narrow fixed walls and install blob style contract",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 22,
+      "deletions": 4,
+      "paths": [
+        "essai/control-tower/gthink-sas-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 22,
+      "deletions": 4,
+      "magnitude": 26,
+      "committedAt": "2026-09-01T15:41:46+02:00",
+      "parentSha": "bfc5f39489e7cb42f3214a64415aef50ca3c4709"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/9c18d174fffde47e25d80484e433197b38270b5a.json",
+      "vfsKey": "CTP1:9c18d174fffde47e25d80484e433197b38270b5a:6431095008608ff2",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/9c18d174fffde47e25d80484e433197b38270b5a.json"
+}
