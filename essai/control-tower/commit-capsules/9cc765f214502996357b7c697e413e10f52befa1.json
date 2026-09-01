@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "9cc765f214502996357b7c697e413e10f52befa1",
+  "parentSha": "1c4a33623c32ab84232c1c7edf3f2e6a5d7ca8f9",
+  "committedAt": "2026-09-02T01:06:50+02:00",
+  "summary": {
+    "subject": "gthink: announce listener only when private bridge is live",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 6,
+    "deletions": 5,
+    "paths": [
+      "scripts/gthink-public-responder.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 6,
+    "deletions": 5,
+    "magnitude": 11,
+    "committedAt": "2026-09-02T01:06:50+02:00",
+    "parentSha": "1c4a33623c32ab84232c1c7edf3f2e6a5d7ca8f9"
+  },
+  "pulseKey": "CTP1:9cc765f214502996357b7c697e413e10f52befa1:98d08c4bbb421f8b",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "9b89142482f523df808be04266428ab95643eb73ff5fa2894c74e6a67a61edc2",
+  "typedKeys": {
+    "commit": "gitc:9cc765f214502996357b7c697e413e10f52befa1",
+    "parent": "gitc:1c4a33623c32ab84232c1c7edf3f2e6a5d7ca8f9",
+    "pulse": "ctp1:9cc765f214502996357b7c697e413e10f52befa1:98d08c4bbb421f8b",
+    "translation": "cttrans:9b89142482f523df808be04266428ab95643eb73ff5fa2894c74e6a67a61edc2",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "9cc765f214502996357b7c697e413e10f52befa1",
+    "parentSha": "1c4a33623c32ab84232c1c7edf3f2e6a5d7ca8f9",
+    "committedAt": "2026-09-02T01:06:50+02:00",
+    "summary": {
+      "subject": "gthink: announce listener only when private bridge is live",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 6,
+      "deletions": 5,
+      "paths": [
+        "scripts/gthink-public-responder.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 6,
+      "deletions": 5,
+      "magnitude": 11,
+      "committedAt": "2026-09-02T01:06:50+02:00",
+      "parentSha": "1c4a33623c32ab84232c1c7edf3f2e6a5d7ca8f9"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/9cc765f214502996357b7c697e413e10f52befa1.json",
+      "vfsKey": "CTP1:9cc765f214502996357b7c697e413e10f52befa1:98d08c4bbb421f8b",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/9cc765f214502996357b7c697e413e10f52befa1.json"
+}
