@@ -1,0 +1,32 @@
+{
+  "schema": "GVAULT_PERSON_MEMORY_PROTOCOL_V1",
+  "version": 1,
+  "personBlob": {
+    "dynamic": true,
+    "idPattern": "blob:person:<pseudonymous-local-id>",
+    "onePerLocalBrowserProfile": true,
+    "sharedBetweenPeople": false,
+    "public": false
+  },
+  "writingBlob": {
+    "createdFor": "each user utterance",
+    "parent": "personBlob",
+    "fields": ["writingBlobId", "personBlobId", "sourceBlobId", "timestamp", "text"],
+    "storage": "IndexedDB-local",
+    "maxLocalItems": 500
+  },
+  "retrieval": {
+    "ownerOnly": true,
+    "examples": ["mes écrits", "mes messages", "mes échanges", "ce que j'ai écrit", "montre mes écrits"],
+    "crossDevice": false
+  },
+  "adaptiveInterface": {
+    "progressive": true,
+    "signals": ["message length", "line count", "punctuation density", "exchange count"],
+    "changes": ["blob hue", "blob shape", "spacing density", "motion duration"],
+    "sensitiveInference": false,
+    "semanticProfiling": false
+  },
+  "events": ["person.profile", "person.writing.stored", "ui.adapt", "person.memory.cleared"],
+  "streamUrl": "gvault://blobs/public/gthink/stream"
+}
