@@ -23,4 +23,5 @@ async function init(){const personId=getPersonId();profile={schema:'GVAULT_PERSO
 void init().catch(e=>console.warn('GVAULT person blob unavailable',e));
 const selfScript=document.currentScript?.src||'';
 if(/\/gthink\/(?:index\.html)?$/i.test(location.pathname)&&selfScript&&!document.querySelector('[data-gthink-public-responder]')){const s=document.createElement('script');s.src=new URL('gthink-public-responder.js?v=2',selfScript).href;s.dataset.gthinkPublicResponder='V2';document.head.appendChild(s)}
+if(/\/gthink\/(?:index\.html)?$/i.test(location.pathname)&&selfScript&&!document.querySelector('[data-gthink-night-ops-team]')){const s=document.createElement('script');s.src=new URL('gthink-night-ops-team.js?v=1',selfScript).href;s.dataset.gthinkNightOpsTeam='V1';document.head.appendChild(s)}
 })();
