@@ -1,0 +1,67 @@
+{
+  "schema": "GTHINK_INCIDENT_BLOB_TEAM_V1",
+  "teamId": "gthink-night-listener-incidents-2026-09-01",
+  "scope": "gthink-public-listener-and-stream",
+  "createdAt": "2026-09-01",
+  "purpose": "Dedicated blob team for the listener, stream, cache, deployment and UI-state failures observed during the 2026-09-01 GThink public-page incident.",
+  "rules": {
+    "noUiRebuild": true,
+    "gthinkIsResponder": true,
+    "routingBeforeIndex": true,
+    "observeBeforeRepair": true,
+    "preserveMainUntilValidated": true,
+    "emitUniversalDiagnosticBlobs": true
+  },
+  "teams": [
+    {
+      "blobId": "blob:gthink-ops:listener-sentinel",
+      "name": "Listener Sentinel",
+      "mission": "Track gthink.listener.ready, responder TTL, probe/ready timing and missing listener announcements.",
+      "signals": ["gthink.listener.ready", "gateway.probe", "gateway.state"]
+    },
+    {
+      "blobId": "blob:gthink-ops:pending-loopback",
+      "name": "Pending Loopback",
+      "mission": "Detect gateway.request responses that exist locally but fail to resolve the waiting request.",
+      "signals": ["gateway.request", "gateway.response", "error"]
+    },
+    {
+      "blobId": "blob:gthink-ops:channel-bridge",
+      "name": "Channel Bridge",
+      "mission": "Check the v2/v1 BroadcastChannel bridge and detect missing cross-channel propagation.",
+      "signals": ["gvault.public.blobs.v2", "gvault.public.blobs.v1"]
+    },
+    {
+      "blobId": "blob:gthink-ops:cache-scout",
+      "name": "Cache Scout",
+      "mission": "Verify that the expected responder/person/bus script versions are actually loaded by the page.",
+      "signals": ["script-version", "responder-schema"]
+    },
+    {
+      "blobId": "blob:gthink-ops:ui-state-auditor",
+      "name": "UI State Auditor",
+      "mission": "Compare the visible GThink status with runtime responder/transport state and flag contradictions.",
+      "signals": ["gateway.state", "gthink.listener.ready", "document-state"]
+    },
+    {
+      "blobId": "blob:gthink-ops:regression-runner",
+      "name": "Regression Runner",
+      "mission": "Run deterministic listener/transport/status checks without sending destructive traffic.",
+      "signals": ["self-test", "status", "probe"]
+    },
+    {
+      "blobId": "blob:gthink-ops:supervisor",
+      "name": "Night Ops Supervisor",
+      "mission": "Aggregate incidents, deduplicate repeated faults and expose one factual health snapshot.",
+      "signals": ["diagnostic.issue", "diagnostic.pass", "diagnostic.snapshot"]
+    }
+  ],
+  "incidentClasses": [
+    "LISTENER_NOT_READY",
+    "LOCAL_RESPONSE_NOT_RESOLVED",
+    "BROADCAST_CHANNEL_GAP",
+    "STALE_SCRIPT_CACHE",
+    "UI_RUNTIME_STATE_MISMATCH",
+    "DEPLOYMENT_NOT_YET_SERVED"
+  ]
+}
