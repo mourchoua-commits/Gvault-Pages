@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "02a5eefdf2b61f13b2c518cc346320d34190ea27",
+  "parentSha": "6775f56933e502949fe58bfcdf256e75770e7767",
+  "committedAt": "2026-09-01T18:59:06+02:00",
+  "summary": {
+    "subject": "Fix pre-SAS input relay injection boundary",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 4,
+    "deletions": 3,
+    "paths": [
+      "sw-gvault-v1.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 4,
+    "deletions": 3,
+    "magnitude": 7,
+    "committedAt": "2026-09-01T18:59:06+02:00",
+    "parentSha": "6775f56933e502949fe58bfcdf256e75770e7767"
+  },
+  "pulseKey": "CTP1:02a5eefdf2b61f13b2c518cc346320d34190ea27:0ac47023a74533a1",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "08d1704ee97739cb7bce1a21a565eb9efdfc47b0719f881979577dbc43937b26",
+  "typedKeys": {
+    "commit": "gitc:02a5eefdf2b61f13b2c518cc346320d34190ea27",
+    "parent": "gitc:6775f56933e502949fe58bfcdf256e75770e7767",
+    "pulse": "ctp1:02a5eefdf2b61f13b2c518cc346320d34190ea27:0ac47023a74533a1",
+    "translation": "cttrans:08d1704ee97739cb7bce1a21a565eb9efdfc47b0719f881979577dbc43937b26",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "02a5eefdf2b61f13b2c518cc346320d34190ea27",
+    "parentSha": "6775f56933e502949fe58bfcdf256e75770e7767",
+    "committedAt": "2026-09-01T18:59:06+02:00",
+    "summary": {
+      "subject": "Fix pre-SAS input relay injection boundary",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 4,
+      "deletions": 3,
+      "paths": [
+        "sw-gvault-v1.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 4,
+      "deletions": 3,
+      "magnitude": 7,
+      "committedAt": "2026-09-01T18:59:06+02:00",
+      "parentSha": "6775f56933e502949fe58bfcdf256e75770e7767"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/02a5eefdf2b61f13b2c518cc346320d34190ea27.json",
+      "vfsKey": "CTP1:02a5eefdf2b61f13b2c518cc346320d34190ea27:0ac47023a74533a1",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/02a5eefdf2b61f13b2c518cc346320d34190ea27.json"
+}
