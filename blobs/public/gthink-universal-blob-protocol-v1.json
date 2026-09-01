@@ -1,0 +1,65 @@
+{
+  "schema": "GVAULT_UNIVERSAL_BLOB_PROTOCOL/1",
+  "blobSchema": "GVAULT_UNIVERSAL_BLOB_V1",
+  "bus": {
+    "domEvent": "gvault:blob",
+    "legacyDomEvent": "gvault:blob:signal",
+    "broadcastChannel": "gvault.public.blobs.v2",
+    "legacyBroadcastChannel": "gvault.public.blobs.v1"
+  },
+  "purpose": "Faire communiquer GThink, le noyau public, le gateway et l'interface avec une enveloppe blob commune, compréhensible et traçable.",
+  "requiredFields": [
+    "schema",
+    "blobId",
+    "conversationId",
+    "kind",
+    "from",
+    "to",
+    "intent",
+    "at",
+    "payload"
+  ],
+  "commonFields": {
+    "parentBlobId": "lien causal vers le blob parent",
+    "role": "user | gthink | system | renderer | gateway | kernel",
+    "language": "langue humaine principale du contenu",
+    "surface": "surface publique d'origine",
+    "chroma": "métadonnées chromatiques du blob",
+    "understoodBy": "liste déclarative des couches capables d'interpréter le blob"
+  },
+  "kinds": {
+    "utterance": "message utilisateur ou réponse GThink",
+    "state": "état du noyau, du gateway, de GThink ou du rendu",
+    "error": "erreur transportée comme blob et reliée à sa cause",
+    "render.delta": "petit fragment de caractères à ajouter directement dans le blob visible",
+    "render.done": "fin du rendu d'une réponse",
+    "kernel.state": "état du noyau public",
+    "gateway.state": "état de la passerelle"
+  },
+  "routing": {
+    "order": [
+      "intention/fonction",
+      "méthode de routage",
+      "emplacement logique existant",
+      "index/cadastre en support"
+    ],
+    "rule": "Chaque couche consomme les blobs qu'elle comprend, conserve parentBlobId et conversationId, puis émet un nouveau blob plutôt que de contourner le bus.",
+    "defaultPath": "user blob -> public kernel blob -> gateway adapter -> GThink reply blob -> render.delta blobs -> public display"
+  },
+  "compatibility": {
+    "acceptAgentResponses": [
+      "GVAULT_AGENT_CHAT_RESPONSE_V1",
+      "GVAULT_AGENT_CHAT_RESPONSE_V2"
+    ],
+    "acceptChromaticReplies": [
+      "GTHINK_CHROMATIC_BLOB_V1",
+      "GTHINK_DUAL_CHROMATIC_PAIR_V1"
+    ],
+    "legacySignalsMirrored": true
+  },
+  "privacy": {
+    "publicOnly": true,
+    "containsSecrets": false,
+    "privateReasoning": false
+  }
+}
