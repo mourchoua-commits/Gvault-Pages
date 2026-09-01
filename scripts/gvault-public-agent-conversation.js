@@ -67,11 +67,19 @@ function installRemoteLayer(){
  };
  try{window.fetch=wrapped;window.__GVAULT_PUBLIC_AGENT_FETCH_STYLE_V1=true;return true}catch{return false}
 }
+function loadDefectBlobs(){
+ if(window.GVAULT_DEFECT_BLOBS||document.querySelector('script[data-gvault-defect-blobs]'))return;
+ const s=document.createElement('script');
+ s.src='./scripts/gvault-defect-selfheal-blobs.js?v=0.1.0-test';
+ s.async=true;s.dataset.gvaultDefectBlobs='bounded-self-heal-v1';
+ s.addEventListener('error',()=>{try{window.dispatchEvent(new CustomEvent('gvault:defect-live',{detail:{schema:'GVAULT_DEFECT_BLOB_EVENT_V1',code:'DEFECT_BLOBS_LOAD_FAILED',status:'REPORT_ONLY',at:new Date().toISOString()}}))}catch{}});
+ document.head.appendChild(s);
+}
 function announce(){
  try{window.dispatchEvent(new CustomEvent('gvault:public-agent-conversation-style-ready',{detail:{schema:STYLE.schema,version:VERSION}}))}catch{}
 }
-installRemoteLayer();
+installRemoteLayer();loadDefectBlobs();
 let tries=0;const timer=setInterval(()=>{tries++;if(installLocalLayer()||tries>=80){clearInterval(timer);announce()}},125);
 if(installLocalLayer()){clearInterval(timer);announce()}
-window.GVAULT_PUBLIC_AGENT_CONVERSATION=Object.freeze({version:VERSION,style:STYLE,systemInstruction:SYSTEM_INSTRUCTION,conversationalize,status:()=>({localLayer:!!window.applyAgentModel?.__gvaultConversationStyleV1,remoteLayer:!!window.__GVAULT_PUBLIC_AGENT_FETCH_STYLE_V1})});
+window.GVAULT_PUBLIC_AGENT_CONVERSATION=Object.freeze({version:VERSION,style:STYLE,systemInstruction:SYSTEM_INSTRUCTION,conversationalize,status:()=>({localLayer:!!window.applyAgentModel?.__gvaultConversationStyleV1,remoteLayer:!!window.__GVAULT_PUBLIC_AGENT_FETCH_STYLE_V1,defectBlobs:!!window.GVAULT_DEFECT_BLOBS})});
 })();
