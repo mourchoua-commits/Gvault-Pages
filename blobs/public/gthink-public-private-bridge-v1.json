@@ -1,0 +1,35 @@
+{
+  "schema": "GTHINK_PUBLIC_PRIVATE_BRIDGE_PUBLIC_CONTRACT_V1",
+  "version": 1,
+  "stream": "gvault://blobs/public/gthink/stream",
+  "client": "scripts/gthink-public-private-bridge.js",
+  "requestSchema": "GTHINK_PUBLIC_PRIVATE_BRIDGE_REQUEST_V1",
+  "responseSchema": "GTHINK_PUBLIC_PRIVATE_BRIDGE_RESPONSE_V1",
+  "publicEvents": [
+    "gthink.private.handoff",
+    "gthink.private.accepted",
+    "gthink.private.release",
+    "gthink.private.error"
+  ],
+  "publicEventRule": "No private payload may be emitted before explicit release authorization.",
+  "release": {
+    "required": true,
+    "policy": "EXPLICIT_DECLASSIFICATION_V1",
+    "integrity": ["utf8ByteLength", "sha256"]
+  },
+  "publicMetadataOnlyBeforeRelease": [
+    "blobId",
+    "parentBlobId",
+    "conversationId",
+    "correlationId",
+    "sha256",
+    "byteLength",
+    "route state"
+  ],
+  "neverPublic": [
+    "server secrets",
+    "provider authorization",
+    "privatePayload",
+    "hidden reasoning"
+  ]
+}
