@@ -1,0 +1,11 @@
+{
+  "schema": "GVAULT_AGENT_GATEWAY_CONFIG_V1",
+  "version": 1,
+  "status": "PENDING_GATEWAY_DEPLOY",
+  "baseUrl": null,
+  "chatPath": "/api/vault/chat",
+  "model": "gpt-5.6-sol",
+  "blob": "BLOB_AGENT_DIRECT_BANANA",
+  "otherSideLiteral": "banane",
+  "containsSecret": false
+}

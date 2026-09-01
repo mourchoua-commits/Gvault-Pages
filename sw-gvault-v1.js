@@ -1,4 +1,4 @@
-const VERSION='gvault-shell-v1-20260901-input-relay-v4';
+const VERSION='gvault-shell-v1-20260901-agent-live-blob-v1';
 const SHELL_CACHE=`${VERSION}-shell`;
 const API_CACHE=`${VERSION}-public-api`;
 const SCOPE=self.registration.scope;
@@ -9,6 +9,9 @@ const SHELL=[
   './index.html',
   './scripts/gvault-input-relay.js',
   './scripts/gvault-input-relay-key.v2.json',
+  './scripts/gvault-public-agent-conversation.js',
+  './scripts/gvault-agent-live-blob.js',
+  './scripts/gvault-agent-gateway.json',
   './essai/private-tool-session-v1.mjs',
   './essai/control-tower/v2.html',
   './essai/control-tower/index.html',
@@ -99,7 +102,7 @@ self.addEventListener('activate',event=>{
     const keys=await caches.keys();
     await Promise.all(keys.filter(k=>k.startsWith('gvault-shell-v1-')&&!k.startsWith(VERSION)).map(k=>caches.delete(k)));
     await self.clients.claim();
-    await announce('READY',{version:VERSION,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE'});
+    await announce('READY',{version:VERSION,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE',agentLiveBlob:'GVAULT_AGENT_LIVE_BLOB_CLIENT_V1'});
   })());
 });
 
@@ -119,6 +122,6 @@ self.addEventListener('fetch',event=>{
 self.addEventListener('message',event=>{
   const d=event.data||{};
   if(d.schema!=='GVAULT_SW_COMMAND_V1')return;
-  if(d.command==='STATUS')event.source?.postMessage({schema:'GVAULT_SW_STATUS_V1',version:VERSION,scope:SCOPE,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE'});
+  if(d.command==='STATUS')event.source?.postMessage({schema:'GVAULT_SW_STATUS_V1',version:VERSION,scope:SCOPE,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE',agentLiveBlob:'GVAULT_AGENT_LIVE_BLOB_CLIENT_V1'});
   if(d.command==='REFRESH_SHELL')event.waitUntil((async()=>{for(const url of [...SHELL,BASELINE]){try{const r=await fetch(url,{cache:'reload'});if(isGood(r))await putSafe(SHELL_CACHE,url,r)}catch{}}await announce('SHELL_REFRESHED',{version:VERSION})})());
 });
