@@ -1,8 +1,13 @@
 (()=>{'use strict';
-const SCHEMA='GTHINK_PUBLIC_RESPONDER_V1';
+const SCHEMA='GTHINK_PUBLIC_RESPONDER_V2';
+const BLOB_SCHEMA='GVAULT_UNIVERSAL_BLOB_V1';
 const NAME='GThink';
+const CHANNELS=['gvault.public.blobs.v2','gvault.public.blobs.v1'];
 const HELP=`Je suis GThink sur le stream public GVAULT.\n\nJe peux recevoir les blobs de conversation, conserver le fil court de la session, répondre localement aux demandes simples, donner l’état du stream et utiliser un moteur de langage natif du navigateur s’il est disponible. La mémoire personnelle locale reste gérée par ton blob utilisateur.`;
-let attached=false;
+let attached=false,heartbeat=null;
+const bridgeChannels=[];
+const handledRequests=new Set();
+function uid(prefix='blob'){return `${prefix}-${crypto.randomUUID?.()||`${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`}`}
 function clean(value){return String(value??'').trim()}
 function lower(value){return clean(value).toLocaleLowerCase('fr-FR')}
 function lastHistory(request){return Array.isArray(request?.payload?.history)?request.payload.history.slice(-12):[]}
@@ -61,17 +66,45 @@ async function responder(request){
   const text=native||await localReply(message,history,api);
   return {schema:SCHEMA,text,engine:native?'browser-language-model':'gthink-local',chroma:null};
 }
+function readyBlob(){
+  const api=window.GVAULT_AGENT_LIVE_BLOB;
+  if(!api?.speak)return;
+  api.speak({schema:BLOB_SCHEMA,blobId:uid('gthink-listener'),parentBlobId:null,conversationId:'gthink-public-listener',kind:'gthink.listener.ready',role:'gthink',from:NAME,to:'public.bus',intent:'announce_responder_ready',language:'fr',at:new Date().toISOString(),surface:'Gvault-Pages',streamUrl:api.streamUrl,text:'GThink listener ready',payload:{state:'listener_ready',name:NAME,mode:'blob-channel-bridge',schema:SCHEMA,streamUrl:api.streamUrl},understoodBy:['GThink','public-kernel','gateway-adapter','public-ui'],silent:true,muted:false});
+}
+function postBridgeResponse(request,result){
+  const text=typeof result==='string'?result:clean(result?.text||result?.display);
+  if(!text)return;
+  const response={schema:BLOB_SCHEMA,blobId:uid('gthink-response'),parentBlobId:request.blobId||null,conversationId:request.conversationId||'gthink-public',kind:'gateway.response',role:'gthink',from:NAME,to:'public-kernel',intent:'reply',language:'fr',at:new Date().toISOString(),surface:'Gvault-Pages',streamUrl:request.streamUrl||window.GVAULT_AGENT_LIVE_BLOB?.streamUrl,text,display:text,chroma:result?.chroma||null,understoodBy:['GThink','public-kernel','gateway-adapter','public-ui'],silent:true,muted:false,payload:{text,requestBlobId:request.blobId,response:result,transport:'blob-channel-bridge'}};
+  for(const ch of bridgeChannels){try{ch.postMessage(response)}catch{}}
+}
+async function handleBridgeRequest(request){
+  if(!request||request.schema!==BLOB_SCHEMA||request.kind!=='gateway.request'||!request.blobId)return;
+  if(handledRequests.has(request.blobId))return;
+  handledRequests.add(request.blobId);
+  if(handledRequests.size>256)handledRequests.delete(handledRequests.values().next().value);
+  try{postBridgeResponse(request,await responder(request))}catch(e){
+    const error={schema:BLOB_SCHEMA,blobId:uid('gthink-error'),parentBlobId:request.blobId,conversationId:request.conversationId||'gthink-public',kind:'error',role:'gthink',from:NAME,to:'public-ui',intent:'report_error',language:'fr',at:new Date().toISOString(),surface:'Gvault-Pages',streamUrl:window.GVAULT_AGENT_LIVE_BLOB?.streamUrl,text:String(e?.message||e),payload:{error:String(e?.message||e),requestBlobId:request.blobId,transport:'blob-channel-bridge'},understoodBy:['GThink','public-kernel','public-ui'],silent:true,muted:false};
+    for(const ch of bridgeChannels){try{ch.postMessage(error)}catch{}}
+  }
+}
+function attachBridge(){
+  if(bridgeChannels.length)return;
+  for(const name of CHANNELS){try{const ch=new BroadcastChannel(name);ch.onmessage=e=>void handleBridgeRequest(e.data);bridgeChannels.push(ch)}catch{}}
+}
 function attach(){
   if(attached)return true;
   const api=window.GVAULT_AGENT_LIVE_BLOB;
   if(!api?.registerResponder)return false;
+  attachBridge();
   api.registerResponder(responder,NAME);
+  readyBlob();
+  heartbeat=setInterval(readyBlob,8000);
   attached=true;
-  window.GTHINK_PUBLIC_RESPONDER=Object.freeze({schema:SCHEMA,name:NAME,engine:'auto',attached:true});
+  window.GTHINK_PUBLIC_RESPONDER=Object.freeze({schema:SCHEMA,name:NAME,engine:'auto',attached:true,transport:'blob-channel-bridge'});
   return true;
 }
 if(!attach()){
   let tries=0;
-  const timer=setInterval(()=>{tries++;if(attach()||tries>100)clearInterval(timer)},50);
+  const timer=setInterval(()=>{tries++;if(attach()||tries>200)clearInterval(timer)},50);
 }
 })();
