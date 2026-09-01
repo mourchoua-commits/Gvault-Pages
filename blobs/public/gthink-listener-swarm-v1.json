@@ -1,0 +1,18 @@
+{
+  "schema": "GVAULT_GTHINK_LISTENER_SWARM_V1",
+  "version": 1,
+  "blobId": "blob:public:gthink-listener-swarm:v1",
+  "streamUrl": "gvault://blobs/public/gthink/stream",
+  "purpose": "Observer le stream public en direct et répondre à chaque événement observé avec un blob enfant causal, sans usurper GThink.",
+  "listeners": [
+    {"blobId":"blob:listener:user:v1","name":"listener.user","watches":["utterance:user"],"replyKind":"listener.reply"},
+    {"blobId":"blob:listener:gateway:v1","name":"listener.gateway","watches":["gateway.request","gateway.probe","gateway.state"],"replyKind":"listener.reply"},
+    {"blobId":"blob:listener:gthink:v1","name":"listener.gthink","watches":["gateway.response","utterance:gthink"],"replyKind":"listener.reply"},
+    {"blobId":"blob:listener:render:v1","name":"listener.render","watches":["render.delta","render.done"],"replyKind":"listener.reply","deltaAggregation":"180ms ou 24 caractères"},
+    {"blobId":"blob:listener:health:v1","name":"listener.health","watches":["state","error","method.violation"],"replyKind":"listener.reply"}
+  ],
+  "causality": "Chaque listener.reply porte parentBlobId=blob observé et payload.seenBlobId/seenKind.",
+  "loopGuard": "Les listeners ignorent listener.* et les blobs émis par blob:listener:*.",
+  "identityRule": "Les listenerBlob observent, routent et signalent. Ils ne produisent jamais une réponse sémantique en se faisant passer pour GThink.",
+  "methodLockCompatible": true
+}
