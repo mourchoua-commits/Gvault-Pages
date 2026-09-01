@@ -1,7 +1,7 @@
 {
   "schema": "GVAULT_AGENT_GATEWAY_CONFIG_V2",
   "version": 2,
-  "status": "BLOB_STREAM_WAITING_GTHINK",
+  "status": "PRIVATE_BRIDGE_DEPLOY_PENDING",
   "transport": "blob-stream",
   "streamUrl": "gvault://blobs/public/gthink/stream",
   "blobSchema": "GVAULT_UNIVERSAL_BLOB_V1",
@@ -9,7 +9,12 @@
   "broadcastChannel": "gvault.public.blobs.v2",
   "requestKind": "gateway.request",
   "responseKinds": ["gateway.response", "utterance", "error"],
-  "route": "public.user -> public-kernel -> blob-stream -> GThink -> blob-stream -> public-ui",
+  "route": "public.user -> public-kernel -> public-private-bridge -> private GThink -> explicit declassification -> public-ui",
+  "baseUrl": null,
+  "chatPath": "/api/vault/chat",
+  "privateBridgePath": "/v1/gthink-private-bridge",
+  "privateBridgeSchema": "GTHINK_PUBLIC_PRIVATE_BRIDGE_RESPONSE_V1",
+  "privateBridgePolicy": "EXPLICIT_DECLASSIFICATION_V1",
   "methodGuard": {
     "lockBlob": "../blobs/public/gthink-method-lock-v1.json",
     "detectorBlob": "../blobs/public/gthink-method-deviation-detector-v1.json",
@@ -17,39 +22,36 @@
     "canonicalTransport": "blob-stream",
     "canonicalStreamUrl": "gvault://blobs/public/gthink/stream",
     "methodChangeRequiresExplicitUserRequest": true,
-    "methodChangeApproved": false
+    "methodChangeApproved": true,
+    "approvedChange": "PUBLIC_PRIVATE_BLOB_SPLIT"
   },
   "readiness": {
     "transportReady": true,
     "responderReady": false,
+    "privateBridgeConfigured": false,
     "requiredListenerKind": "gthink.listener.ready",
-    "reason": "Le stream existe mais aucun moteur GThink public n'est actuellement attaché pour consommer gateway.request."
-  },
-  "httpAdapter": {
-    "enabled": false,
-    "baseUrl": null,
-    "chatPath": "/api/vault/chat"
+    "reason": "Public/private blob code is installed, but the private ingress deployment has not published a live baseUrl yet."
   },
   "model": "gpt-5.6-sol",
   "gatewayBlob": {
     "schema": "GVAULT_UNIVERSAL_BLOB_V1",
-    "blobId": "blob:public:gthink-gateway:v2",
+    "blobId": "blob:public:gthink-gateway:v3-public-private",
     "conversationId": "public-shared",
     "kind": "gateway.state",
     "role": "gateway",
     "from": "gateway-config",
     "to": "public.bus",
-    "intent": "route_all_gthink_traffic_through_blob_stream",
+    "intent": "route_gthink_through_private_blob_boundary",
     "language": "fr",
     "surface": "Gvault-Pages",
-    "understoodBy": ["GThink", "public-kernel", "gateway-adapter", "public-ui", "method-guard"],
+    "understoodBy": ["GThink", "GThinkMini", "public-kernel", "private-bridge", "public-ui", "method-guard"],
     "payload": {
       "transport": "blob-stream",
       "streamUrl": "gvault://blobs/public/gthink/stream",
       "transportReady": true,
       "responderReady": false,
-      "configured": false,
-      "methodLockBlobId": "blob:public:gthink-method-lock:v1"
+      "privateBridgeConfigured": false,
+      "releasePolicy": "EXPLICIT_DECLASSIFICATION_V1"
     }
   },
   "containsSecret": false
