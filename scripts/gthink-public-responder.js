@@ -3,8 +3,10 @@ const SCHEMA='GTHINK_PUBLIC_RESPONDER_V3';
 const BLOB_SCHEMA='GVAULT_UNIVERSAL_BLOB_V1';
 const NAME='GThink';
 const CHANNELS=['gvault.public.blobs.v2','gvault.public.blobs.v1'];
+const SCRIPT_BASE=new URL('.',document.currentScript?.src||location.href);
+const PROVIDER_URL=new URL('gthink-provider-blob.js?v=1',SCRIPT_BASE).href;
 const HELP=`Je suis GThink sur le stream public GVAULT.\n\nJe reçois les blobs de conversation, garde le fil court de la session et tente d'abord le blob provider distant sécurisé. Si ce provider n'est pas disponible, je peux utiliser un moteur de langage natif du navigateur ou mes réponses locales de secours. La clé du modèle distant n'est jamais placée dans la page publique.`;
-let attached=false,heartbeat=null;
+let attached=false,heartbeat=null,providerLoad=null;
 const bridgeChannels=[];
 const handledRequests=new Set();
 function uid(prefix='blob'){return `${prefix}-${crypto.randomUUID?.()||`${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`}`}
@@ -23,12 +25,14 @@ function simpleMath(text){
  if(!m||!/^[\d\s.+\-*/%]+$/.test(m[1]))return null;
  try{const value=Function(`"use strict";return (${m[1]})`)();return Number.isFinite(value)?`${m[1].replace(/\s+/g,' ')} = ${value}`:null}catch{return null}
 }
+async function ensureProvider(){
+ if(window.GTHINK_PROVIDER_BLOB?.ask)return window.GTHINK_PROVIDER_BLOB;
+ if(!providerLoad){providerLoad=new Promise(resolve=>{const s=document.createElement('script');s.src=PROVIDER_URL;s.async=false;s.dataset.gthinkProviderBlob='V1';s.onload=()=>resolve(window.GTHINK_PROVIDER_BLOB||null);s.onerror=()=>resolve(null);(document.head||document.documentElement).appendChild(s)}).finally(()=>{providerLoad=null})}
+ return providerLoad;
+}
 async function tryProvider(message,history,request){
- const provider=window.GTHINK_PROVIDER_BLOB;if(!provider?.ask)return null;
- try{
-  const out=await provider.ask(message,history,{parentBlobId:request?.blobId||null,conversationId:request?.conversationId||null});
-  return out?.ok&&clean(out.text)?out:null;
- }catch{return null}
+ const provider=await ensureProvider();if(!provider?.ask)return null;
+ try{const out=await provider.ask(message,history,{parentBlobId:request?.blobId||null,conversationId:request?.conversationId||null});return out?.ok&&clean(out.text)?out:null}catch{return null}
 }
 async function tryNativeModel(message,history){
  const prompt=`Tu es GThink, l'entité publique de GVAULT qui interprète les blobs de conversation et répond en français. Réponds directement, clairement et sans prétendre avoir accès à des données privées non fournies.\n\nContexte récent:\n${recentContext(history)||'(aucun)'}\n\nMessage:\n${message}`;
@@ -49,7 +53,7 @@ async function localReply(message,history,api){
  if(isStatus(t)){
   let stream='inconnu',listener='inconnu',provider='inconnu';
   try{const s=await api.status();stream=s.transportReady?'prêt':'indisponible';listener=s.responderReady?'actif':'inactif'}catch{}
-  try{const p=await window.GTHINK_PROVIDER_BLOB?.status?.();provider=p?.configured?'raccordé':'non raccordé'}catch{}
+  try{const p=await (await ensureProvider())?.status?.();provider=p?.configured?'raccordé':'non raccordé'}catch{}
   return `Stream GThink : ${stream}. Listener : ${listener}. Blob provider : ${provider}.`;
  }
  if(/^(répète|repete|redis)( |$)/i.test(l)){const prev=[...history].reverse().find(x=>x?.role==='assistant'&&clean(x?.content));return prev?clean(prev.content):'Je n’ai pas encore de réponse précédente dans cette session.'}
@@ -80,8 +84,8 @@ async function handleBridgeRequest(request){
 function attachBridge(){if(bridgeChannels.length)return;for(const name of CHANNELS){try{const ch=new BroadcastChannel(name);ch.onmessage=e=>void handleBridgeRequest(e.data);bridgeChannels.push(ch)}catch{}}}
 function attach(){
  if(attached)return true;const api=window.GVAULT_AGENT_LIVE_BLOB;if(!api?.registerResponder)return false;
- attachBridge();api.registerResponder(responder,NAME);readyBlob();heartbeat=setInterval(readyBlob,8000);attached=true;
- window.GTHINK_PUBLIC_RESPONDER=Object.freeze({schema:SCHEMA,name:NAME,engine:'provider-native-local',attached:true,transport:'blob-channel-bridge',providerBlob:window.GTHINK_PROVIDER_BLOB?.schema||null});return true;
+ attachBridge();api.registerResponder(responder,NAME);readyBlob();heartbeat=setInterval(readyBlob,8000);attached=true;void ensureProvider();
+ window.GTHINK_PUBLIC_RESPONDER=Object.freeze({schema:SCHEMA,name:NAME,engine:'provider-native-local',attached:true,transport:'blob-channel-bridge',get providerBlob(){return window.GTHINK_PROVIDER_BLOB?.schema||null}});return true;
 }
 if(!attach()){let tries=0;const timer=setInterval(()=>{tries++;if(attach()||tries>200)clearInterval(timer)},50)}
 })();
