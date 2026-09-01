@@ -16,18 +16,21 @@ async function fetchJson(url){const r=await fetch(url,{cache:'no-store',credenti
 const feed=new BlobNode('feed',{kind:'source',read:async()=>{try{return await fetchJson('./data/latest.json')}catch{return fetchJson('./data/manifest.json')}}});
 const vfs=new BlobNode('vfs',{kind:'runtime',deps:['feed'],read:async()=>window.GVAULT_CONTROL_TOWER_VFS_V2?.getState?.()||null});
 const watcher=new BlobNode('watcher',{kind:'runtime',read:async()=>window.GVAULT_CONTROL_TOWER_COMMIT_WATCHER_V1?.getState?.()||null});
-const session=new BlobNode('session',{kind:'security',read:async()=>({sas:document.documentElement.dataset.gvaultSessionOk==='1',visible:document.visibilityState==='visible'})});
-const ui=new BlobNode('ui',{kind:'view',deps:['feed','vfs','watcher','session'],read:async()=>({events:document.querySelectorAll('.event').length,timeline:document.querySelectorAll('.timelineItem').length,kpis:[...document.querySelectorAll('.kpi b')].map(x=>x.textContent)})});
-function ensureBadge(){let n=document.querySelector('#ctBlobMeshState');if(n)return n;const host=document.querySelector('.brand')||document.querySelector('header')||document.body;n=document.createElement('span');n.id='ctBlobMeshState';n.textContent='blob mesh: boot';n.style.cssText='font-size:8px;padding:4px 7px;border:1px solid var(--accent,#c8a95a);border-radius:999px;color:var(--accent,#c8a95a);white-space:nowrap';host.appendChild(n);return n}
-function render(){const n=ensureBadge();const nodes=[...registry.values()];const bad=nodes.filter(x=>x.status==='degraded').length;const live=nodes.filter(x=>x.status==='live').length;n.textContent=`blob mesh: ${bad?'DEGRADED':'LIVE'} · ${live}/${nodes.length} · ${POLL_MS/1000}s`;n.dataset.state=bad?'degraded':'live'}
-async function refreshAll(reason='tick'){for(const node of registry.values())await node.refresh(reason);render();emit('mesh-sync',{reason,state:getState()})}
+const ui=new BlobNode('ui',{kind:'view',deps:['feed','vfs','watcher'],read:async()=>({events:document.querySelectorAll('#eventList .event').length,timeline:document.querySelectorAll('.timelineItem').length,kpis:[...document.querySelectorAll('.kpi b')].map(x=>x.textContent)})});
+function gthinkState(){return window.GVAULT_GTHINK_SAS_V1?.getState?.()||{sasOpen:false,mode:'UNAVAILABLE'}}
+async function propose(blobId,proposal={},executor){
+  const node=registry.get(blobId);if(!node)return {executed:false,error:'unknown-blob'};
+  const arbiter=window.GVAULT_GTHINK_SAS_V1;if(!arbiter)return {executed:false,error:'gthink-unavailable'};
+  return arbiter.request({blobId,...proposal,targetRole:proposal.targetRole||'blob-zone',touchesWall:proposal.touchesWall===true,touchesSas:proposal.touchesSas===true},executor)
+}
+async function refreshAll(reason='tick'){for(const node of registry.values())await node.refresh(reason);emit('mesh-sync',{reason,state:getState()})}
 function schedule(){clearTimeout(timer);if(!stopped)timer=setTimeout(async()=>{await refreshAll('poll');schedule()},POLL_MS)}
 function wake(){if(stopped)return;if(document.visibilityState==='visible')void refreshAll('wake')}
-function getState(){return {schema:'GVAULT_CONTROL_TOWER_BLOB_MESH_V1',pollMs:POLL_MS,stopped,nodes:[...registry.values()].map(x=>({id:x.id,kind:x.kind,status:x.status,updatedAt:x.updatedAt,deps:x.deps}))}}
+function getState(){return {schema:'GVAULT_CONTROL_TOWER_BLOB_MESH_V1',pollMs:POLL_MS,stopped,gthink:gthinkState(),walls:'external-fixed',nodes:[...registry.values()].map(x=>({id:x.id,kind:x.kind,status:x.status,updatedAt:x.updatedAt,deps:x.deps}))}}
 function stop(){stopped=true;clearTimeout(timer);try{bc?.close()}catch{}document.removeEventListener('visibilitychange',wake);window.removeEventListener('focus',wake)}
-try{bc=new BroadcastChannel(CHANNEL);bc.onmessage=ev=>{const d=ev.data||{};if(d.type==='blob-change'||d.type==='mesh-sync')render()}}catch{}
+try{bc=new BroadcastChannel(CHANNEL);bc.onmessage=ev=>{const d=ev.data||{};if(d.type==='blob-change'||d.type==='mesh-sync')emit('peer-signal',{peerType:d.type})}}catch{}
 for(const name of ['gvault:control-tower-new-public-commit','gvault:control-tower-vfs-ingested','gvault:control-tower-public-commit','gvault:control-tower-vfs-ingest-failed'])window.addEventListener(name,()=>void refreshAll(name));
-const mo=new MutationObserver(()=>{ui.refresh('dom').then(render)});mo.observe(document.documentElement,{subtree:true,childList:true,characterData:true});
+const mo=new MutationObserver(()=>{ui.refresh('dom')});mo.observe(document.documentElement,{subtree:true,childList:true,characterData:true});
 document.addEventListener('visibilitychange',wake);window.addEventListener('focus',wake);window.addEventListener('pagehide',()=>{mo.disconnect();stop()},{once:true});
-window.GVAULT_CONTROL_TOWER_BLOB_MESH_V1=Object.freeze({schema:'GVAULT_CONTROL_TOWER_BLOB_MESH_V1',refresh:()=>refreshAll('manual'),getState,blobs:registry,stop});
+window.GVAULT_CONTROL_TOWER_BLOB_MESH_V1=Object.freeze({schema:'GVAULT_CONTROL_TOWER_BLOB_MESH_V1',refresh:()=>refreshAll('manual'),getState,blobs:registry,propose,stop});
 setTimeout(async()=>{await refreshAll('boot');schedule()},900);
