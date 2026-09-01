@@ -12,7 +12,7 @@
 <script src="./scripts/gvault-pre-sas-vfs.js?v=1"></script>
 <script>
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw-gvault-v1.js',{scope:'./',updateViaCache:'none'}).catch(e=>console.warn('GVAULT shell worker non installé',e));
+  navigator.serviceWorker.register('./sw-gvault-v1.js?v=3',{scope:'./',updateViaCache:'none'}).catch(e=>console.warn('GVAULT shell worker non installé',e));
 }
 </script>
 <script>
@@ -78,7 +78,8 @@ if(!h.includes(needle))throw new Error('Point de greffe outils privés introuvab
 h=h.replace(needle,graft);
 if(!h.includes('gvault-public-agent-conversation.js')){
  const agentStyle='<script src="./scripts/gvault-public-agent-conversation.js?v=1"><\/script>\n';
- h=h.replace(/<\/body>\s*<\/html>\s*$/i,agentStyle+'</body>\n</html>');
+ const documentClose='<'+'/body>\n<'+'/html>';
+ h=h.replace(/<\/body>\s*<\/html>\s*$/i,agentStyle+documentClose);
 }
 document.open();document.write(h);document.close();
 })().catch(e=>{const s=document.getElementById('state');if(s){s.classList.add('err');s.textContent='GVAULT INDISPONIBLE · '+String(e&&e.message||e)}console.error(e)});
