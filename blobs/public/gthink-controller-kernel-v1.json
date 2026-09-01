@@ -1,0 +1,91 @@
+{
+  "schema": "GVAULT_PUBLIC_CONTROLLER_KERNEL/1",
+  "blobId": "blob:public:gthink-controller-kernel:v1",
+  "kind": "controller_kernel",
+  "surface": "public_external",
+  "materialized": true,
+  "createdAt": "2026-09-01",
+  "title": "GThink Public Controller Kernel v1",
+  "purpose": "Donner à l'agent public un noyau de routage, contexte et capacités sans exposer le contrôle privé ni les secrets.",
+  "architecture": {
+    "publicKernel": "thin-client blob: collecte, normalise, route et applique les réponses autorisées",
+    "privateController": "autorité de décision: politiques, mémoire privée, orchestration modèle/outils, validation des écritures",
+    "agentSurface": "interface publique consommant uniquement des enveloppes et capacités explicitement autorisées"
+  },
+  "authority": {
+    "publicKernelMay": [
+      "lire les blobs publics",
+      "construire une enveloppe de requête",
+      "conserver un état public non sensible",
+      "appliquer une réponse signée/autorisée",
+      "dégrader vers un mode local limité si le contrôleur privé est indisponible"
+    ],
+    "publicKernelMustNot": [
+      "contenir des secrets ou jetons privés",
+      "lire directement le dépôt privé",
+      "prendre une décision privilégiée",
+      "écrire dans l'état privé sans médiation",
+      "présenter le noyau comme une instance autonome permanente de ChatGPT"
+    ],
+    "privateControllerIsAuthoritative": true
+  },
+  "requestEnvelope": {
+    "required": [
+      "requestId",
+      "timestamp",
+      "intent",
+      "publicContext",
+      "capabilityRequest"
+    ],
+    "optional": [
+      "blobRefs",
+      "sessionHints",
+      "clientStateHash"
+    ],
+    "forbidden": [
+      "privateTokens",
+      "repositorySecrets",
+      "rawPrivateMemory"
+    ]
+  },
+  "responseEnvelope": {
+    "required": [
+      "requestId",
+      "status",
+      "authorizedActions",
+      "agentPayload"
+    ],
+    "optional": [
+      "publicBlobUpdates",
+      "warnings",
+      "controllerProof"
+    ],
+    "rule": "le public n'exécute que les actions explicitement autorisées par le contrôleur"
+  },
+  "routing": {
+    "order": [
+      "intention/fonction",
+      "méthode de routage",
+      "emplacement logique existant",
+      "index/cadastre en support"
+    ],
+    "defaultRoute": "public -> private controller -> authorized response -> public agent",
+    "failClosed": true
+  },
+  "modelControl": {
+    "mode": "private-orchestrated",
+    "description": "Le contrôleur privé peut appeler le modèle/agent lorsqu'une exécution est demandée; le noyau public n'embarque pas une session assistant persistante.",
+    "humanAndPolicyOverride": true
+  },
+  "health": {
+    "heartbeat": true,
+    "lastKnownControllerState": "UNKNOWN",
+    "offlineFallback": "PUBLIC_LOCAL_LIMITED"
+  },
+  "externalBehavior": {
+    "autonomousReadable": true,
+    "canBeMirrored": true,
+    "canBeIndexed": true,
+    "containsSecrets": false
+  }
+}
