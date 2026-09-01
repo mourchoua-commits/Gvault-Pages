@@ -36,7 +36,7 @@ footer{font-size:11px;color:#8e97aa;text-align:center;padding:0 8px;min-height:1
 </head>
 <body>
 <main>
-<header><strong>GThink · GVAULT</strong><span id="status">Initialisation…</span></header>
+<header><strong>GThink · GVAULT</strong><span id="status">Initialisation des blobs…</span></header>
 <section id="stream" aria-live="polite">
 <article class="blob" id="userBlob" data-role="user">
 <div class="label">Blob entrant</div>
@@ -45,56 +45,68 @@ footer{font-size:11px;color:#8e97aa;text-align:center;padding:0 8px;min-height:1
 </article>
 <article class="blob" id="gthinkBlob" data-role="gthink">
 <div class="label">GThink</div>
-<div class="text" id="answer">Deux blobs visibles. La passerelle distante est vérifiée avant chaque envoi.</div>
+<div class="text" id="answer">Tous les échanges de cette surface passent par le bus blob commun.</div>
 </article>
 </section>
-<footer id="foot">Surface publique · aucune donnée privée chargée</footer>
+<footer id="foot">GVAULT_UNIVERSAL_BLOB_V1 · public uniquement</footer>
 </main>
+<script src="../scripts/gvault-agent-live-blob.js?v=4" data-gvault-agent-live-blob="V4"></script>
 <script>
 (()=>{'use strict';
-const CONFIG='../scripts/gvault-agent-gateway.json';
-const CHAT_PATH='/api/vault/chat';
 const stream=document.getElementById('stream'),input=document.getElementById('input'),send=document.getElementById('send'),answer=document.getElementById('answer'),userText=document.getElementById('userText'),userBlob=document.getElementById('userBlob'),gthinkBlob=document.getElementById('gthinkBlob'),status=document.getElementById('status'),foot=document.getElementById('foot');
-let history=[],busy=false,baseUrl=null;
-const sessionId='gthink-pages-'+(crypto.randomUUID?.()||Date.now().toString(36)+Math.random().toString(36).slice(2));
+let busy=false,connected=false,currentReplyBlobId=null,api=null;
 function hash(text,role){let h=2166136261>>>0,s=role+':'+text;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0}return h>>>0}
 function fallback(text,role){const h=hash(text,role),a=h%360,b=(a+52+((h>>>24)%72))%360;return `linear-gradient(145deg,hsl(${a} 72% 48%),hsl(${b} 78% 57%))`}
-function paint(el,meta,text,role){el.style.background=meta?.css||fallback(text,role)}
-function clean(v){return String(v||'').replace(/\/+$/,'')}
+function paint(el,chroma,text,role){el.style.background=chroma?.css||fallback(text,role)}
 function autosize(){input.style.height='auto';input.style.height=Math.min(130,Math.max(48,input.scrollHeight))+'px'}
-function setBusy(v){busy=v;send.disabled=v||!baseUrl;input.disabled=v;status.textContent=v?'GThink interprète…':baseUrl?'2 blobs · GThink connecté':'2 blobs · gateway en attente';gthinkBlob.classList.toggle('thinking',v)}
+function setBusy(v){busy=v;send.disabled=v||!connected;input.disabled=v;gthinkBlob.classList.toggle('thinking',v&&!gthinkBlob.classList.contains('writing'))}
 function roll(fn){stream.classList.add('rolling');setTimeout(()=>{fn();stream.classList.remove('rolling')},180)}
-function writeDirect(text,chroma){
- return new Promise(resolve=>{
-  const chars=Array.from(String(text||''));let i=0;
-  answer.textContent='';paint(gthinkBlob,chroma,text,'gthink');gthinkBlob.classList.remove('thinking');gthinkBlob.classList.add('writing');status.textContent='GThink répond…';
-  const step=()=>{
-   const burst=Math.max(1,Math.min(4,Math.ceil((chars.length-i)/90)));
-   for(let n=0;n<burst&&i<chars.length;n++)answer.append(chars[i++]);
-   answer.scrollTop=answer.scrollHeight;
-   if(i<chars.length)requestAnimationFrame(step);else{gthinkBlob.classList.remove('writing');resolve()}
-  };
-  requestAnimationFrame(step);
- });
-}
-async function loadGateway(){
- try{const r=await fetch(CONFIG+'?ts='+Date.now(),{cache:'no-store',credentials:'omit'});if(!r.ok)throw new Error('HTTP '+r.status);const c=await r.json();baseUrl=c?.baseUrl?clean(c.baseUrl):null;if(baseUrl){status.textContent='2 blobs · GThink connecté';foot.textContent='Gateway '+baseUrl;send.disabled=false}else{status.textContent='2 blobs · gateway en attente';foot.textContent='Surface publiée · passerelle distante non déployée';send.disabled=true}}
- catch(e){baseUrl=null;status.textContent='Configuration indisponible';foot.textContent=String(e?.message||e);send.disabled=true}
+function onBlob(blob){
+ if(!blob||blob.schema!=='GVAULT_UNIVERSAL_BLOB_V1')return;
+ if(blob.kind==='gateway.state'){
+  connected=blob.payload?.configured===true;
+  status.textContent=connected?'2 blobs · tout en blob · GThink connecté':'2 blobs · tout en blob · gateway en attente';
+  foot.textContent=connected?'Bus blob commun · gateway connecté':'Bus blob commun · passerelle distante en attente';
+  send.disabled=busy||!connected;
+  return;
+ }
+ if(blob.kind==='utterance'&&blob.role==='user'){
+  const text=blob.text||blob.payload?.text||'';
+  roll(()=>{userText.textContent=text;userText.hidden=false;paint(userBlob,blob.chroma,text,'user');answer.textContent='';paint(gthinkBlob,null,'GThink:'+text,'gthink')});
+  currentReplyBlobId=null;return;
+ }
+ if(blob.kind==='state'&&blob.role==='gthink'&&blob.payload?.state==='interpreting'){
+  status.textContent='GThink interprète le blob…';gthinkBlob.classList.add('thinking');return;
+ }
+ if(blob.kind==='utterance'&&blob.role==='gthink'){
+  currentReplyBlobId=blob.blobId;answer.textContent='';paint(gthinkBlob,blob.chroma,blob.text||'GThink','gthink');gthinkBlob.classList.remove('thinking');gthinkBlob.classList.add('writing');status.textContent='GThink répond en blobs…';return;
+ }
+ if(blob.kind==='render.delta'&&blob.parentBlobId===currentReplyBlobId){
+  answer.append(blob.payload?.chars||'');answer.scrollTop=answer.scrollHeight;return;
+ }
+ if(blob.kind==='render.done'&&blob.parentBlobId===currentReplyBlobId){
+  gthinkBlob.classList.remove('writing','thinking');status.textContent=connected?'2 blobs · tout en blob · GThink connecté':'2 blobs · tout en blob';setBusy(false);input.focus();return;
+ }
+ if(blob.kind==='error'){
+  gthinkBlob.classList.remove('writing','thinking');const msg=blob.payload?.error||'gthink_unavailable';answer.textContent='GThink indisponible : '+msg;paint(gthinkBlob,null,'error:'+msg,'gthink');status.textContent='Blob erreur reçu';setBusy(false);return;
+ }
 }
 async function submit(){
- const message=input.value.trim();if(!message||busy)return;setBusy(true);
- roll(()=>{userText.textContent=message;userText.hidden=false;paint(userBlob,null,message,'user');answer.textContent='';paint(gthinkBlob,null,'GThink:'+message,'gthink')});
- input.value='';autosize();
- try{
-  const r=await fetch(baseUrl+CHAT_PATH,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({sessionId,message,blob:{schema:'GTHINK_CHROMATIC_BLOB_V1',role:'user',text:message},history}),cache:'no-store',credentials:'omit'});
-  const data=await r.json().catch(()=>({ok:false,error:'invalid_response'}));if(!r.ok||!data?.ok)throw new Error(data?.error||'gthink_unavailable');
-  const text=String(data.text||data.blob?.text||'').trim();if(!text)throw new Error('empty_gthink_response');history.push({role:'user',content:message},{role:'assistant',content:text});if(history.length>12)history=history.slice(-12);
-  const blob=data.blob||data.pair?.responseBlob||null;await writeDirect(text,blob?.chroma);
- }catch(e){gthinkBlob.classList.remove('thinking','writing');answer.textContent='GThink indisponible : '+String(e?.message||e);paint(gthinkBlob,null,'error:'+String(e?.message||e),'gthink')}
- finally{setBusy(false);input.focus()}
+ const message=input.value.trim();if(!message||busy||!api)return;
+ setBusy(true);input.value='';autosize();
+ const out=await api.ask(message);
+ if(!out?.ok&&busy){setBusy(false);input.focus()}
+}
+async function init(){
+ api=window.GVAULT_AGENT_LIVE_BLOB;
+ if(!api){status.textContent='Bus blob indisponible';send.disabled=true;return}
+ api.listen(onBlob);
+ for(const blob of api.hearLast(32))onBlob(blob);
+ const s=await api.status();connected=!!s.configured;send.disabled=!connected;status.textContent=connected?'2 blobs · tout en blob · GThink connecté':'2 blobs · tout en blob · gateway en attente';
+ paint(userBlob,null,'blob entrant','user');paint(gthinkBlob,null,'gthink','gthink');
 }
 input.addEventListener('input',autosize);input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submit()}});send.addEventListener('click',submit);userBlob.addEventListener('click',e=>{if(e.target!==send)input.focus()});
-paint(userBlob,null,'blob entrant','user');paint(gthinkBlob,null,'gthink','gthink');autosize();loadGateway();
+autosize();init();
 })();
 </script>
 </body>
