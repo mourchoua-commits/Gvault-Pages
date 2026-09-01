@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "01ae00a9695220756be4155fe7166fbe1567a7c6",
+  "parentSha": "16033ac9b3185ee6aab85d2bcdcdd23250a394ec",
+  "committedAt": "2026-09-02T01:32:45+02:00",
+  "summary": {
+    "subject": "gthink: route around missing deploy credentials with client-private worker",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 13,
+    "deletions": 24,
+    "paths": [
+      "scripts/gthink-public-private-bridge.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 13,
+    "deletions": 24,
+    "magnitude": 37,
+    "committedAt": "2026-09-02T01:32:45+02:00",
+    "parentSha": "16033ac9b3185ee6aab85d2bcdcdd23250a394ec"
+  },
+  "pulseKey": "CTP1:01ae00a9695220756be4155fe7166fbe1567a7c6:95f6d93717d6d2ee",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "a7d92f363b8132658dfb989bf9f468c9efe5debc376896faf9593b93dcc05b37",
+  "typedKeys": {
+    "commit": "gitc:01ae00a9695220756be4155fe7166fbe1567a7c6",
+    "parent": "gitc:16033ac9b3185ee6aab85d2bcdcdd23250a394ec",
+    "pulse": "ctp1:01ae00a9695220756be4155fe7166fbe1567a7c6:95f6d93717d6d2ee",
+    "translation": "cttrans:a7d92f363b8132658dfb989bf9f468c9efe5debc376896faf9593b93dcc05b37",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "01ae00a9695220756be4155fe7166fbe1567a7c6",
+    "parentSha": "16033ac9b3185ee6aab85d2bcdcdd23250a394ec",
+    "committedAt": "2026-09-02T01:32:45+02:00",
+    "summary": {
+      "subject": "gthink: route around missing deploy credentials with client-private worker",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 13,
+      "deletions": 24,
+      "paths": [
+        "scripts/gthink-public-private-bridge.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 13,
+      "deletions": 24,
+      "magnitude": 37,
+      "committedAt": "2026-09-02T01:32:45+02:00",
+      "parentSha": "16033ac9b3185ee6aab85d2bcdcdd23250a394ec"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/01ae00a9695220756be4155fe7166fbe1567a7c6.json",
+      "vfsKey": "CTP1:01ae00a9695220756be4155fe7166fbe1567a7c6:95f6d93717d6d2ee",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/01ae00a9695220756be4155fe7166fbe1567a7c6.json"
+}
