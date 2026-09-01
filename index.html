@@ -76,6 +76,10 @@ function installPrivateToolEntries(){
 if(document.readyState==='loading')window.addEventListener('DOMContentLoaded',installPrivateToolEntries,{once:true});else installPrivateToolEntries();`;
 if(!h.includes(needle))throw new Error('Point de greffe outils privés introuvable');
 h=h.replace(needle,graft);
+if(!h.includes('gvault-public-agent-conversation.js')){
+ const agentStyle='<script src="./scripts/gvault-public-agent-conversation.js?v=1"><\/script>\n';
+ h=h.replace(/<\/body>\s*<\/html>\s*$/i,agentStyle+'</body>\n</html>');
+}
 document.open();document.write(h);document.close();
 })().catch(e=>{const s=document.getElementById('state');if(s){s.classList.add('err');s.textContent='GVAULT INDISPONIBLE · '+String(e&&e.message||e)}console.error(e)});
 </script>
