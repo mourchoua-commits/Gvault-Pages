@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const VERSION='1.1.0';
+const VERSION='1.1.1';
 const STYLE=Object.freeze({
  schema:'GVAULT_PUBLIC_AGENT_CONVERSATION_STYLE_V1',
  version:VERSION,
@@ -69,7 +69,7 @@ function installRemoteLayer(){
 }
 function loadLiveBlobLayer(){
  if(window.GVAULT_AGENT_LIVE_BLOB||document.querySelector('script[data-gvault-agent-live-blob]'))return;
- const s=document.createElement('script');s.src='./scripts/gvault-agent-live-blob.js?v=1';s.async=false;s.setAttribute('data-gvault-agent-live-blob','V1');s.onerror=()=>console.warn('GVAULT direct agent blob layer unavailable');(document.head||document.documentElement).appendChild(s);
+ const s=document.createElement('script');s.src='./scripts/gvault-agent-live-blob.js?v=2';s.async=false;s.setAttribute('data-gvault-agent-live-blob','V2');s.onerror=()=>console.warn('GVAULT direct agent blob layer unavailable');(document.head||document.documentElement).appendChild(s);
 }
 function announce(){
  try{window.dispatchEvent(new CustomEvent('gvault:public-agent-conversation-style-ready',{detail:{schema:STYLE.schema,version:VERSION}}))}catch{}
