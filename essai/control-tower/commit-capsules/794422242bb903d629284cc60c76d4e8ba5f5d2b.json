@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "794422242bb903d629284cc60c76d4e8ba5f5d2b",
+  "parentSha": "4e06ca9823f6d0ebd4f8c4d6ae3f0d1fd869ef87",
+  "committedAt": "2026-09-02T00:41:57+02:00",
+  "summary": {
+    "subject": "Add GThink throughput guard and runtime benchmark",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 31,
+    "deletions": 0,
+    "paths": [
+      "scripts/gthink-throughput-guard.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 31,
+    "deletions": 0,
+    "magnitude": 31,
+    "committedAt": "2026-09-02T00:41:57+02:00",
+    "parentSha": "4e06ca9823f6d0ebd4f8c4d6ae3f0d1fd869ef87"
+  },
+  "pulseKey": "CTP1:794422242bb903d629284cc60c76d4e8ba5f5d2b:f3dfb18abb820d0d",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "56a25b9e8f3de6c48deb1fbfc705d720ba3f0dd4cad62ddc9fe37f0f1d79d9c0",
+  "typedKeys": {
+    "commit": "gitc:794422242bb903d629284cc60c76d4e8ba5f5d2b",
+    "parent": "gitc:4e06ca9823f6d0ebd4f8c4d6ae3f0d1fd869ef87",
+    "pulse": "ctp1:794422242bb903d629284cc60c76d4e8ba5f5d2b:f3dfb18abb820d0d",
+    "translation": "cttrans:56a25b9e8f3de6c48deb1fbfc705d720ba3f0dd4cad62ddc9fe37f0f1d79d9c0",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "794422242bb903d629284cc60c76d4e8ba5f5d2b",
+    "parentSha": "4e06ca9823f6d0ebd4f8c4d6ae3f0d1fd869ef87",
+    "committedAt": "2026-09-02T00:41:57+02:00",
+    "summary": {
+      "subject": "Add GThink throughput guard and runtime benchmark",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 31,
+      "deletions": 0,
+      "paths": [
+        "scripts/gthink-throughput-guard.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 31,
+      "deletions": 0,
+      "magnitude": 31,
+      "committedAt": "2026-09-02T00:41:57+02:00",
+      "parentSha": "4e06ca9823f6d0ebd4f8c4d6ae3f0d1fd869ef87"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/794422242bb903d629284cc60c76d4e8ba5f5d2b.json",
+      "vfsKey": "CTP1:794422242bb903d629284cc60c76d4e8ba5f5d2b:f3dfb18abb820d0d",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/794422242bb903d629284cc60c76d4e8ba5f5d2b.json"
+}
