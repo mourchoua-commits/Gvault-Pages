@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "6267733b9dc7f90d09c81ecea4142d3d8a3dd7a2",
+  "parentSha": "53927d73ef2a230b17dc6a6e7735309e72358cda",
+  "committedAt": "2026-09-01T23:11:32+02:00",
+  "summary": {
+    "subject": "fix(blobs): add GThink responder handshake and adaptive interface state",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 30,
+    "deletions": 165,
+    "paths": [
+      "scripts/gvault-agent-live-blob.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 30,
+    "deletions": 165,
+    "magnitude": 195,
+    "committedAt": "2026-09-01T23:11:32+02:00",
+    "parentSha": "53927d73ef2a230b17dc6a6e7735309e72358cda"
+  },
+  "pulseKey": "CTP1:6267733b9dc7f90d09c81ecea4142d3d8a3dd7a2:252c88fe27f4f7a2",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "c8ba27002fcb45d62b5bc43d2106bb0e5f756eefb7ceccbda7e10985dee7a44a",
+  "typedKeys": {
+    "commit": "gitc:6267733b9dc7f90d09c81ecea4142d3d8a3dd7a2",
+    "parent": "gitc:53927d73ef2a230b17dc6a6e7735309e72358cda",
+    "pulse": "ctp1:6267733b9dc7f90d09c81ecea4142d3d8a3dd7a2:252c88fe27f4f7a2",
+    "translation": "cttrans:c8ba27002fcb45d62b5bc43d2106bb0e5f756eefb7ceccbda7e10985dee7a44a",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "6267733b9dc7f90d09c81ecea4142d3d8a3dd7a2",
+    "parentSha": "53927d73ef2a230b17dc6a6e7735309e72358cda",
+    "committedAt": "2026-09-01T23:11:32+02:00",
+    "summary": {
+      "subject": "fix(blobs): add GThink responder handshake and adaptive interface state",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 30,
+      "deletions": 165,
+      "paths": [
+        "scripts/gvault-agent-live-blob.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 30,
+      "deletions": 165,
+      "magnitude": 195,
+      "committedAt": "2026-09-01T23:11:32+02:00",
+      "parentSha": "53927d73ef2a230b17dc6a6e7735309e72358cda"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/6267733b9dc7f90d09c81ecea4142d3d8a3dd7a2.json",
+      "vfsKey": "CTP1:6267733b9dc7f90d09c81ecea4142d3d8a3dd7a2:252c88fe27f4f7a2",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/6267733b9dc7f90d09c81ecea4142d3d8a3dd7a2.json"
+}
