@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "b82086ebb4ec436f776a07363e115bcaf5d17244",
+  "parentSha": "e646e12f489db98af8126d8e494c589a1243bf6e",
+  "committedAt": "2026-09-01T23:20:57+02:00",
+  "summary": {
+    "subject": "ci(gthink): enforce canonical blob-stream method",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 49,
+    "deletions": 0,
+    "paths": [
+      ".github/workflows/gthink-method-lock.yml"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 49,
+    "deletions": 0,
+    "magnitude": 49,
+    "committedAt": "2026-09-01T23:20:57+02:00",
+    "parentSha": "e646e12f489db98af8126d8e494c589a1243bf6e"
+  },
+  "pulseKey": "CTP1:b82086ebb4ec436f776a07363e115bcaf5d17244:a5e268e73f59cf3e",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "c788890509896a9f7a7b55887b963afd060f7ec58a07e632e40cdc6e16f6b7b9",
+  "typedKeys": {
+    "commit": "gitc:b82086ebb4ec436f776a07363e115bcaf5d17244",
+    "parent": "gitc:e646e12f489db98af8126d8e494c589a1243bf6e",
+    "pulse": "ctp1:b82086ebb4ec436f776a07363e115bcaf5d17244:a5e268e73f59cf3e",
+    "translation": "cttrans:c788890509896a9f7a7b55887b963afd060f7ec58a07e632e40cdc6e16f6b7b9",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "b82086ebb4ec436f776a07363e115bcaf5d17244",
+    "parentSha": "e646e12f489db98af8126d8e494c589a1243bf6e",
+    "committedAt": "2026-09-01T23:20:57+02:00",
+    "summary": {
+      "subject": "ci(gthink): enforce canonical blob-stream method",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 49,
+      "deletions": 0,
+      "paths": [
+        ".github/workflows/gthink-method-lock.yml"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 49,
+      "deletions": 0,
+      "magnitude": 49,
+      "committedAt": "2026-09-01T23:20:57+02:00",
+      "parentSha": "e646e12f489db98af8126d8e494c589a1243bf6e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/b82086ebb4ec436f776a07363e115bcaf5d17244.json",
+      "vfsKey": "CTP1:b82086ebb4ec436f776a07363e115bcaf5d17244:a5e268e73f59cf3e",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/b82086ebb4ec436f776a07363e115bcaf5d17244.json"
+}
