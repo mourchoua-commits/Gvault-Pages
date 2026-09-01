@@ -1,0 +1,41 @@
+{
+  "schema": "GVAULT_PEER_ASSIST_STUDY_BLOBS/1",
+  "silent": true,
+  "muted": false,
+  "blobs": [
+    {
+      "blobId": "peer-study-001",
+      "parentBlobId": null,
+      "action": "inspect.current.public.kernel",
+      "status": "PASS",
+      "finding": "Le noyau public garde GVAULT_METHOD_ROUTER comme autorité et autorise PUBLIC_LOCAL_LIMITED en fallback."
+    },
+    {
+      "blobId": "peer-study-002",
+      "parentBlobId": "peer-study-001",
+      "action": "define.parallel.assist.role",
+      "status": "PASS",
+      "finding": "Une autre piste peut proposer intention, route, capacité et preuves sans autoriser d'action."
+    },
+    {
+      "blobId": "peer-study-003",
+      "parentBlobId": "peer-study-002",
+      "action": "create.peer.assist.port",
+      "status": "PASS",
+      "artifact": "blobs/public/banana-peer-assist-port-v1.json"
+    },
+    {
+      "blobId": "peer-study-004",
+      "parentBlobId": "peer-study-003",
+      "action": "evaluate.helpfulness.for.local.banana",
+      "status": "USEFUL",
+      "benefits": [
+        "compare parallel route candidates",
+        "feed failure observations into GThink evidence",
+        "preserve canonical authority",
+        "keep every contribution traceable as a blob"
+      ],
+      "constraint": "Aucune suggestion parallèle ne remplace sendAgentMessage -> agentGThinkRouteRequest."
+    }
+  ]
+}
