@@ -1,30 +1,23 @@
 (()=>{'use strict';
-const SCHEMA='GTHINK_PRELISTENER_STREAM_BLOB_V1';
+const SCHEMA='GTHINK_PRELISTENER_STREAM_BLOB_V2';
 const BLOB_SCHEMA='GVAULT_UNIVERSAL_BLOB_V1';
 const NAME='GThinkPrelistener';
-const WAIT_MS=45000;
-let attached=false,downstream=null,downstreamName='GThink';
-const waiters=new Set();
-function uid(prefix='prelistener'){return `${prefix}-${crypto.randomUUID?.()||`${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`}`}
+const CHANNELS=['gvault.public.blobs.v2','gvault.public.blobs.v1'];
+const DOWNSTREAM_TTL=20000;
+const MAX_QUEUE=32;
+let attached=false,downstreamReadyAt=0,heartbeat=null;
+const channels=[],queue=new Map();
+function uid(prefix='gpre'){return `${prefix}-${crypto.randomUUID?.()||`${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`}`}
 function api(){return window.GVAULT_AGENT_LIVE_BLOB}
-function speak(kind,payload={},parentBlobId=null,meta={}){const a=api();if(!a?.speak)return null;return a.speak({schema:BLOB_SCHEMA,blobId:uid('gpre'),parentBlobId,conversationId:meta.conversationId||payload?.conversationId||'gthink-prelistener',kind,role:meta.role||'prelistener',from:meta.from||NAME,to:meta.to||'public.bus',intent:meta.intent||'prelisten_stream',language:'fr',at:new Date().toISOString(),surface:'Gvault-Pages',streamUrl:a.streamUrl,text:meta.text,payload:{...payload,schema:SCHEMA},understoodBy:['GThinkPrelistener','GThink','public-kernel','public-ui'],silent:true,muted:false})}
-function announce(state='prelistener_ready'){speak('gthink.listener.ready',{state,name:NAME,mode:'prelistener-stream',downstreamReady:!!downstream,downstreamName,streamUrl:api()?.streamUrl||null},null,{role:'gthink',from:NAME,to:'public.bus',intent:'announce_prelistener_ready',text:'GThink prelistener stream ready'})}
-function bindDownstream(handler,name='GThink'){
- if(typeof handler!=='function')throw new TypeError('downstream_listener_function_required');
- downstream=handler;downstreamName=name||'GThink';
- for(const w of [...waiters]){clearTimeout(w.timer);waiters.delete(w);w.resolve(downstream)}
- speak('gthink.prelistener.downstream.ready',{name:downstreamName,state:'downstream_ready'},null,{role:'gthink',from:NAME,to:'public.bus',intent:'bind_downstream'});
- announce('listener_ready');
- return ()=>{if(downstream===handler){downstream=null;speak('gthink.prelistener.downstream.waiting',{name:downstreamName,state:'waiting'},null,{role:'prelistener',from:NAME,to:'public.bus',intent:'unbind_downstream'});announce('prelistener_ready')}}
-}
-function waitForDownstream(){if(downstream)return Promise.resolve(downstream);return new Promise((resolve,reject)=>{const w={resolve,reject,timer:null};w.timer=setTimeout(()=>{waiters.delete(w);reject(new Error('gthink_downstream_listener_timeout'))},WAIT_MS);waiters.add(w)})}
-async function preResponder(request){
- speak('gthink.prelistener.ingress',{requestBlobId:request?.blobId||null,message:String(request?.payload?.message||request?.text||'').slice(0,256),conversationId:request?.conversationId||null},request?.blobId||null,{role:'prelistener',from:NAME,to:'GThink',intent:'capture_stream_before_listener',conversationId:request?.conversationId});
- const handler=await waitForDownstream();
- const result=await handler(request);
- speak('gthink.prelistener.egress',{requestBlobId:request?.blobId||null,downstream:downstreamName,conversationId:request?.conversationId||null},request?.blobId||null,{role:'prelistener',from:NAME,to:'public-kernel',intent:'return_downstream_result',conversationId:request?.conversationId});
- return result
-}
-function attach(){if(attached)return true;const a=api();if(!a?.registerResponder)return false;a.registerResponder(preResponder,NAME);attached=true;announce();window.GTHINK_PRELISTENER_STREAM_BLOB=Object.freeze({schema:SCHEMA,name:NAME,mode:'prelistener-stream',bindDownstream,get downstreamReady(){return !!downstream},get downstreamName(){return downstreamName}});return true}
+function downstreamReady(){return Date.now()-downstreamReadyAt<DOWNSTREAM_TTL}
+function speak(kind,payload={},parentBlobId=null,meta={}){const a=api();if(!a?.speak)return null;return a.speak({schema:BLOB_SCHEMA,blobId:uid(),parentBlobId,conversationId:meta.conversationId||payload?.conversationId||'gthink-prelistener',kind,role:meta.role||'prelistener',from:meta.from||NAME,to:meta.to||'public.bus',intent:meta.intent||'prelisten_stream',language:'fr',at:new Date().toISOString(),surface:'Gvault-Pages',streamUrl:a.streamUrl,text:meta.text,payload:{...payload,schema:SCHEMA},understoodBy:['GThinkPrelistener','GThink','public-kernel','public-ui'],silent:true,muted:false})}
+function announce(){speak('gthink.listener.ready',{state:'prelistener_ready',name:NAME,mode:'stream-before-listener',downstreamReady:downstreamReady(),queued:queue.size,streamUrl:api()?.streamUrl||null},null,{role:'gthink',from:NAME,to:'public.bus',intent:'announce_prelistener_ready',text:'GThink prelistener stream ready'})}
+function trimQueue(){while(queue.size>MAX_QUEUE)queue.delete(queue.keys().next().value)}
+function queueRequest(blob){if(!blob?.blobId||queue.has(blob.blobId))return;queue.set(blob.blobId,blob);trimQueue();speak('gthink.prelistener.buffered',{gatewayBlobId:blob.blobId,requestBlobId:blob.parentBlobId||blob.payload?.requestBlobId||null,queued:queue.size,conversationId:blob.conversationId||null},blob.blobId,{role:'prelistener',from:NAME,to:'GThink',intent:'buffer_before_listener',conversationId:blob.conversationId})}
+function replayQueued(){if(!downstreamReady()||!queue.size)return;for(const [id,request] of [...queue]){queue.delete(id);speak('gthink.prelistener.forward',{gatewayBlobId:id,requestBlobId:request.parentBlobId||request.payload?.requestBlobId||null,conversationId:request.conversationId||null},id,{role:'prelistener',from:NAME,to:'GThink',intent:'forward_buffered_stream',conversationId:request.conversationId});for(const ch of channels){try{ch.postMessage(request)}catch{}}}}
+function markDownstream(blob){if(blob?.kind!=='gthink.listener.ready')return false;const from=String(blob.from||blob.payload?.name||'');if(!from||from===NAME||/prelistener/i.test(from))return false;downstreamReadyAt=Date.now();replayQueued();return true}
+function onBlob(blob){if(!blob||blob.schema!==BLOB_SCHEMA)return;if(markDownstream(blob))return;if(blob.kind==='gateway.request'&&!downstreamReady())queueRequest(blob)}
+function attachChannels(){if(channels.length)return;for(const name of CHANNELS){try{const ch=new BroadcastChannel(name);ch.onmessage=e=>onBlob(e.data);channels.push(ch)}catch{}}}
+function attach(){if(attached)return true;const a=api();if(!a?.speak||!a?.listen)return false;attachChannels();a.listen(onBlob);for(const b of a.hearLast?.(48)||[])onBlob(b);announce();heartbeat=setInterval(announce,7000);attached=true;window.GTHINK_PRELISTENER_STREAM_BLOB=Object.freeze({schema:SCHEMA,name:NAME,mode:'stream-before-listener',get downstreamReady(){return downstreamReady()},get queued(){return queue.size},flush:replayQueued});return true}
 if(!attach()){let tries=0;const timer=setInterval(()=>{tries++;if(attach()||tries>200)clearInterval(timer)},25)}
 })();
