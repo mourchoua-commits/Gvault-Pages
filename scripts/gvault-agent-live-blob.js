@@ -3,6 +3,7 @@ const SCHEMA='GVAULT_AGENT_LIVE_BLOB_CLIENT_V1';
 const CONFIG_URL='./scripts/gvault-agent-gateway.json';
 const CHAT_PATH='/api/vault/chat';
 const HISTORY_MAX=12;
+const rootNativeFetch=window.fetch.bind(window);
 const boundWindows=new WeakSet(),boundFrames=new WeakSet();
 let config=null,configAt=0,history=[],panel=null;
 
@@ -16,7 +17,7 @@ function isChatUrl(input,w=window){try{return new URL(typeof input==='string'?in
 function emit(type,detail={}){try{window.dispatchEvent(new CustomEvent(type,{detail:{schema:SCHEMA,at:new Date().toISOString(),...detail}}))}catch{}}
 async function loadConfig(force=false){
  if(!force&&config&&Date.now()-configAt<30000)return config;
- try{const r=await fetch(CONFIG_URL+'?ts='+Date.now(),{cache:'no-store',credentials:'omit'});if(!r.ok)throw new Error('CONFIG_HTTP_'+r.status);const c=await r.json();if(c?.schema!=='GVAULT_AGENT_GATEWAY_CONFIG_V1')throw new Error('CONFIG_SCHEMA');config=c;configAt=Date.now();if(c.baseUrl)window.GVAULT_INGRESS_BASE_URL=clean(c.baseUrl);return c}catch(e){config={schema:'GVAULT_AGENT_GATEWAY_CONFIG_V1',status:'UNAVAILABLE',baseUrl:null,error:String(e?.message||e)};configAt=Date.now();return config}
+ try{const r=await rootNativeFetch(CONFIG_URL+'?ts='+Date.now(),{cache:'no-store',credentials:'omit'});if(!r.ok)throw new Error('CONFIG_HTTP_'+r.status);const c=await r.json();if(c?.schema!=='GVAULT_AGENT_GATEWAY_CONFIG_V1')throw new Error('CONFIG_SCHEMA');config=c;configAt=Date.now();if(c.baseUrl)window.GVAULT_INGRESS_BASE_URL=clean(c.baseUrl);return c}catch(e){config={schema:'GVAULT_AGENT_GATEWAY_CONFIG_V1',status:'UNAVAILABLE',baseUrl:null,error:String(e?.message||e)};configAt=Date.now();return config}
 }
 async function endpoint(){const direct=clean(window.GVAULT_AGENT_CHAT_ENDPOINT||'');if(direct)return direct;const base=clean(window.GVAULT_INGRESS_BASE_URL||'');if(base)return base+CHAT_PATH;const c=await loadConfig();return c?.baseUrl?clean(c.baseUrl)+CHAT_PATH:null}
 function remember(role,content){if(!content)return;history.push({role,content:String(content)});if(history.length>HISTORY_MAX)history=history.slice(-HISTORY_MAX)}
@@ -32,7 +33,7 @@ async function ask(message,{historyOverride=null}={}){
  message=String(message??'').trim();if(!message)return {ok:false,error:'empty_message'};
  const ep=await endpoint();if(!ep)return {ok:false,error:'gateway_pending'};
  const prior=Array.isArray(historyOverride)?historyOverride:history.slice(-HISTORY_MAX);
- let r;try{r=await fetch(ep,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({message,sessionId:sessionId(),history:prior}),cache:'no-store',credentials:'omit'})}catch(e){return {ok:false,error:'network_error',detail:String(e?.message||e)}}
+ let r;try{r=await rootNativeFetch(ep,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({message,sessionId:sessionId(),history:prior}),cache:'no-store',credentials:'omit'})}catch(e){return {ok:false,error:'network_error',detail:String(e?.message||e)}}
  let data=null;try{data=await r.json()}catch{}
  if(!r.ok||data?.schema!=='GVAULT_AGENT_CHAT_RESPONSE_V1')return {ok:false,error:data?.error||`HTTP_${r.status}`,detail:data?.detail||null};
  remember('user',message);remember('assistant',data.text);renderBlob(data.blob);return data;
