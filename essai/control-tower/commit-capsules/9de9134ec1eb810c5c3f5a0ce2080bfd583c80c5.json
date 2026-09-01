@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "9de9134ec1eb810c5c3f5a0ce2080bfd583c80c5",
+  "parentSha": "69a9a0c98cef2966192f619176b6201cf519bcd4",
+  "committedAt": "2026-09-01T15:38:03+02:00",
+  "summary": {
+    "subject": "Control Tower: keep walls and GThink outside blob mesh",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 12,
+    "deletions": 9,
+    "paths": [
+      "essai/control-tower/blob-mesh-live-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 12,
+    "deletions": 9,
+    "magnitude": 21,
+    "committedAt": "2026-09-01T15:38:03+02:00",
+    "parentSha": "69a9a0c98cef2966192f619176b6201cf519bcd4"
+  },
+  "pulseKey": "CTP1:9de9134ec1eb810c5c3f5a0ce2080bfd583c80c5:9db03c89133b24c7",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "587c7d950adf7d78746b2a42f6dfd2fc889ebcda385125121df716faa868a178",
+  "typedKeys": {
+    "commit": "gitc:9de9134ec1eb810c5c3f5a0ce2080bfd583c80c5",
+    "parent": "gitc:69a9a0c98cef2966192f619176b6201cf519bcd4",
+    "pulse": "ctp1:9de9134ec1eb810c5c3f5a0ce2080bfd583c80c5:9db03c89133b24c7",
+    "translation": "cttrans:587c7d950adf7d78746b2a42f6dfd2fc889ebcda385125121df716faa868a178",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "9de9134ec1eb810c5c3f5a0ce2080bfd583c80c5",
+    "parentSha": "69a9a0c98cef2966192f619176b6201cf519bcd4",
+    "committedAt": "2026-09-01T15:38:03+02:00",
+    "summary": {
+      "subject": "Control Tower: keep walls and GThink outside blob mesh",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 12,
+      "deletions": 9,
+      "paths": [
+        "essai/control-tower/blob-mesh-live-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 12,
+      "deletions": 9,
+      "magnitude": 21,
+      "committedAt": "2026-09-01T15:38:03+02:00",
+      "parentSha": "69a9a0c98cef2966192f619176b6201cf519bcd4"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/9de9134ec1eb810c5c3f5a0ce2080bfd583c80c5.json",
+      "vfsKey": "CTP1:9de9134ec1eb810c5c3f5a0ce2080bfd583c80c5:9db03c89133b24c7",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/9de9134ec1eb810c5c3f5a0ce2080bfd583c80c5.json"
+}
