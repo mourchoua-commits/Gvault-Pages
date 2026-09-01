@@ -1,0 +1,63 @@
+{
+  "schema": "GTHINK_NIGHT_INCIDENT_LEDGER_V1",
+  "branch": "gthink/night-listener-incidents-2026-09-01",
+  "date": "2026-09-01",
+  "scope": "Problems observed while making the public GThink page functional.",
+  "incidents": [
+    {
+      "id": "INC-LISTENER-001",
+      "class": "LISTENER_NOT_READY",
+      "symptom": "The UI reported that the blob stream was ready while GThink was still awaited as listener.",
+      "cause": "The public page had a transport but no reliably attached GThink responder at startup.",
+      "guard": ["direct responder V2 load", "listener ready heartbeat", "listener sentinel"]
+    },
+    {
+      "id": "INC-PENDING-002",
+      "class": "LOCAL_RESPONSE_NOT_RESOLVED",
+      "symptom": "GThink could produce a local gateway.response while api.ask() remained waiting.",
+      "cause": "Local emitBlob() dispatched the response but pending requests were only resolved on inbound channel traffic.",
+      "guard": ["emitBlob -> resolvePending", "pending armed before invokeResponder", "pending loopback sentinel"]
+    },
+    {
+      "id": "INC-CHANNEL-003",
+      "class": "BROADCAST_CHANNEL_GAP",
+      "symptom": "A working responder could still appear disconnected when the response depended on a channel round trip.",
+      "cause": "The local flow unnecessarily depended on cross-channel propagation for completion.",
+      "guard": ["local pending resolution", "v2/v1 bridge", "channel loopback self-test"]
+    },
+    {
+      "id": "INC-CACHE-004",
+      "class": "STALE_SCRIPT_CACHE",
+      "symptom": "An older responder/person script could remain loaded even after a code correction.",
+      "cause": "Static GitHub Pages assets can be cached while the page URL remains unchanged.",
+      "guard": ["versioned responder script", "versioned person script", "cache scout"]
+    },
+    {
+      "id": "INC-UI-005",
+      "class": "UI_RUNTIME_STATE_MISMATCH",
+      "symptom": "The visible status could say GThink was awaited while runtime state had changed, or vice versa.",
+      "cause": "UI state and bus state are asynchronous and previously lacked an independent auditor.",
+      "guard": ["UI state auditor", "gateway.state observation", "listener heartbeat observation"]
+    },
+    {
+      "id": "INC-DEPLOY-006",
+      "class": "DEPLOYMENT_NOT_YET_SERVED",
+      "symptom": "A committed fix was not necessarily the version already served by GitHub Pages.",
+      "cause": "Pages deployment and Control Tower follow-up commits can lag or supersede an earlier run.",
+      "guard": ["separate code-ready from live-served state", "never claim live PASS from commit alone"]
+    }
+  ],
+  "mergeGate": {
+    "required": [
+      "listener active",
+      "api.ask returns without listener timeout",
+      "local response resolves pending without channel dependency",
+      "BroadcastChannel v2 loopback PASS",
+      "BroadcastChannel v1 loopback PASS or explicit legacy waiver",
+      "loaded script versions match expected versions",
+      "UI state matches runtime state",
+      "no regression of person local memory"
+    ],
+    "policy": "Do not merge incident-branch changes into main until the checks above have factual evidence."
+  }
+}
