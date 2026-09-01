@@ -28,9 +28,10 @@ button{width:48px;height:48px;border:0;border-radius:50%;background:rgba(255,255
 button:disabled{opacity:.5;cursor:default}
 #stream.rolling .blob{transform:translateY(-18px) scale(.985);opacity:.22;filter:blur(4px)}
 .thinking .text::after{content:"  ···";animation:pulse 1s infinite}
+.writing .text::after{content:"▌";margin-left:2px;animation:pulse .55s infinite}
 footer{font-size:11px;color:#8e97aa;text-align:center;padding:0 8px;min-height:14px}
 @keyframes pulse{0%,100%{opacity:.25}50%{opacity:1}}
-@media (prefers-reduced-motion:reduce){.blob{transition:none}.thinking .text::after{animation:none}}
+@media (prefers-reduced-motion:reduce){.blob{transition:none}.thinking .text::after,.writing .text::after{animation:none}}
 </style>
 </head>
 <body>
@@ -63,20 +64,33 @@ function clean(v){return String(v||'').replace(/\/+$/,'')}
 function autosize(){input.style.height='auto';input.style.height=Math.min(130,Math.max(48,input.scrollHeight))+'px'}
 function setBusy(v){busy=v;send.disabled=v||!baseUrl;input.disabled=v;status.textContent=v?'GThink interprète…':baseUrl?'2 blobs · GThink connecté':'2 blobs · gateway en attente';gthinkBlob.classList.toggle('thinking',v)}
 function roll(fn){stream.classList.add('rolling');setTimeout(()=>{fn();stream.classList.remove('rolling')},180)}
+function writeDirect(text,chroma){
+ return new Promise(resolve=>{
+  const chars=Array.from(String(text||''));let i=0;
+  answer.textContent='';paint(gthinkBlob,chroma,text,'gthink');gthinkBlob.classList.remove('thinking');gthinkBlob.classList.add('writing');status.textContent='GThink répond…';
+  const step=()=>{
+   const burst=Math.max(1,Math.min(4,Math.ceil((chars.length-i)/90)));
+   for(let n=0;n<burst&&i<chars.length;n++)answer.append(chars[i++]);
+   answer.scrollTop=answer.scrollHeight;
+   if(i<chars.length)requestAnimationFrame(step);else{gthinkBlob.classList.remove('writing');resolve()}
+  };
+  requestAnimationFrame(step);
+ });
+}
 async function loadGateway(){
  try{const r=await fetch(CONFIG+'?ts='+Date.now(),{cache:'no-store',credentials:'omit'});if(!r.ok)throw new Error('HTTP '+r.status);const c=await r.json();baseUrl=c?.baseUrl?clean(c.baseUrl):null;if(baseUrl){status.textContent='2 blobs · GThink connecté';foot.textContent='Gateway '+baseUrl;send.disabled=false}else{status.textContent='2 blobs · gateway en attente';foot.textContent='Surface publiée · passerelle distante non déployée';send.disabled=true}}
  catch(e){baseUrl=null;status.textContent='Configuration indisponible';foot.textContent=String(e?.message||e);send.disabled=true}
 }
 async function submit(){
  const message=input.value.trim();if(!message||busy)return;setBusy(true);
- roll(()=>{userText.textContent=message;userText.hidden=false;paint(userBlob,null,message,'user');answer.textContent='Interprétation du blob en cours';paint(gthinkBlob,null,'GThink:'+message,'gthink')});
+ roll(()=>{userText.textContent=message;userText.hidden=false;paint(userBlob,null,message,'user');answer.textContent='';paint(gthinkBlob,null,'GThink:'+message,'gthink')});
  input.value='';autosize();
  try{
   const r=await fetch(baseUrl+CHAT_PATH,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({sessionId,message,blob:{schema:'GTHINK_CHROMATIC_BLOB_V1',role:'user',text:message},history}),cache:'no-store',credentials:'omit'});
   const data=await r.json().catch(()=>({ok:false,error:'invalid_response'}));if(!r.ok||!data?.ok)throw new Error(data?.error||'gthink_unavailable');
   const text=String(data.text||data.blob?.text||'').trim();if(!text)throw new Error('empty_gthink_response');history.push({role:'user',content:message},{role:'assistant',content:text});if(history.length>12)history=history.slice(-12);
-  roll(()=>{answer.textContent=text;const blob=data.blob||data.pair?.responseBlob||null;paint(gthinkBlob,blob?.chroma,text,'gthink')});
- }catch(e){answer.textContent='GThink indisponible : '+String(e?.message||e);paint(gthinkBlob,null,'error:'+String(e?.message||e),'gthink')}
+  const blob=data.blob||data.pair?.responseBlob||null;await writeDirect(text,blob?.chroma);
+ }catch(e){gthinkBlob.classList.remove('thinking','writing');answer.textContent='GThink indisponible : '+String(e?.message||e);paint(gthinkBlob,null,'error:'+String(e?.message||e),'gthink')}
  finally{setBusy(false);input.focus()}
 }
 input.addEventListener('input',autosize);input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submit()}});send.addEventListener('click',submit);userBlob.addEventListener('click',e=>{if(e.target!==send)input.focus()});
