@@ -1,0 +1,51 @@
+{
+  "schema": "GVAULT_BANANA_PEER_ASSIST_PORT/1",
+  "blobId": "blob:public:banana-peer-assist-port:v1",
+  "kind": "routing_assist_port",
+  "surface": "public_external",
+  "silent": true,
+  "muted": false,
+  "purpose": "Permettre à une branche, un essai ou un autre agent d'aider le routage banana sans recevoir l'autorité GThink.",
+  "authority": {
+    "role": "ADVISORY_ONLY",
+    "canonicalDecisionAuthority": "GVAULT_METHOD_ROUTER",
+    "maySuggest": [
+      "intent",
+      "routeCandidate",
+      "capabilityCandidate",
+      "evidenceRefs",
+      "failureObservation",
+      "fallbackCandidate"
+    ],
+    "mustNot": [
+      "authorizeAction",
+      "bypassGThink",
+      "readPrivateSecrets",
+      "writePrivateState",
+      "replaceSendAgentMessage"
+    ]
+  },
+  "inputBlob": {
+    "schema": "GVAULT_BANANA_PEER_HINT/1",
+    "required": ["blobId", "intent", "routeCandidate"],
+    "optional": ["capabilityCandidate", "evidenceRefs", "failureObservation", "confidence"],
+    "forbidden": ["secret", "token", "rawPrivateMemory", "actionAuthority"]
+  },
+  "routing": {
+    "order": [
+      "user intention/function",
+      "canonical GThink routing",
+      "peer hint as advisory evidence",
+      "existing logical placement",
+      "index/cadastre as support"
+    ],
+    "integrationPoint": "banana input blob -> peer hint blob -> sendAgentMessage -> agentGThinkRouteRequest -> agentAnswer -> banana response blob",
+    "failClosedForActions": true
+  },
+  "benefitToCurrentWork": {
+    "parallelExperimentsCanContribute": true,
+    "mainRouterRemainsStable": true,
+    "conflictingHintsCanBeCompared": true,
+    "everyContributionRemainsTraceableAsBlob": true
+  }
+}
