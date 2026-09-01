@@ -25,6 +25,17 @@ export function createFullSaveActionPipeline({ask,snapshot=async()=>({}),emit=()
     const value=Object.freeze({schema:ACTION_BLOB_SCHEMA,blobId:id('fsb'),parentBlobId,type,at:now(),surface:'Gvault-Pages',silent:true,muted:false,payload});
     history.push(value);emit(value);return value;
   }
+  function subtree(rootBlobId){
+    const ids=new Set([rootBlobId]);
+    let grew=true;
+    while(grew){
+      grew=false;
+      for(const item of history){
+        if(item.parentBlobId&&ids.has(item.parentBlobId)&&!ids.has(item.blobId)){ids.add(item.blobId);grew=true}
+      }
+    }
+    return history.filter(item=>ids.has(item.blobId));
+  }
   async function action(name,parentBlobId,fn,input=null){
     const started=blob('action.start',{action:name,input:summarize(input)},parentBlobId);
     try{
@@ -54,10 +65,10 @@ export function createFullSaveActionPipeline({ask,snapshot=async()=>({}),emit=()
       },result?.blob);
       const after=await action('snapshot.after',root.blobId,()=>snapshot());
       const done=blob('fullsave.turn.pass',{response:summarize(result),before:summarize(before),after:summarize(after)},root.blobId);
-      return {ok:true,result,rootBlobId:root.blobId,completionBlobId:done.blobId,blobs:history.filter(x=>x.blobId===root.blobId||x.parentBlobId===root.blobId||history.some(y=>y.parentBlobId===x.blobId&&y.blobId===x.blobId))};
+      return {ok:true,result,rootBlobId:root.blobId,completionBlobId:done.blobId,blobs:subtree(root.blobId)};
     }catch(error){
       blob('fullsave.turn.error',{error:compact(error?.message||error,240)},root.blobId);
-      return {ok:false,error:compact(error?.message||error,240),rootBlobId:root.blobId};
+      return {ok:false,error:compact(error?.message||error,240),rootBlobId:root.blobId,blobs:subtree(root.blobId)};
     }
   }
   return Object.freeze({turn,hear:()=>history.slice(),last:n=>history.slice(-Math.max(1,Number(n)||12)),schema:ACTION_BLOB_SCHEMA,silent:true,muted:false});
