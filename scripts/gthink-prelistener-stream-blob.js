@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const SCHEMA='GTHINK_PRELISTENER_STREAM_BLOB_V4';
+const SCHEMA='GTHINK_PRELISTENER_STREAM_BLOB_V5';
 const BLOB_SCHEMA='GVAULT_UNIVERSAL_BLOB_V1';
 const NAME='GThinkPrelistener';
 const CHANNELS=['gvault.public.blobs.v2','gvault.public.blobs.v1'];
@@ -8,6 +8,9 @@ const MAX_QUEUE=32;
 const SCRIPT_BASE=new URL('.',document.currentScript?.src||location.href);
 const MINI_URL=new URL('gthink-mini-listener-swarm.js?v=2',SCRIPT_BASE).href;
 const GUARD_URL=new URL('gthink-throughput-guard.js?v=2',SCRIPT_BASE).href;
+function parserLoad(url,attr,value){if(document.readyState!=='loading'||document.querySelector(`[${attr}]`))return false;document.write(`<script src="${url}" ${attr}="${value}"><\/script>`);return true}
+parserLoad(MINI_URL,'data-gthink-mini-listener-swarm','V2');
+parserLoad(GUARD_URL,'data-gthink-throughput-guard','V2');
 let attached=false,downstreamReadyAt=0,heartbeat=null,miniLoad=null,guardLoad=null;
 const channels=[],queue=new Map();
 function uid(prefix='gpre'){return `${prefix}-${crypto.randomUUID?.()||`${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`}`}
