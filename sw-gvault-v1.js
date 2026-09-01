@@ -1,4 +1,4 @@
-const VERSION='gvault-shell-v1-20260901-input-relay-v3';
+const VERSION='gvault-shell-v1-20260901-input-relay-v4';
 const SHELL_CACHE=`${VERSION}-shell`;
 const API_CACHE=`${VERSION}-public-api`;
 const SCOPE=self.registration.scope;
@@ -72,8 +72,8 @@ async function injectInputRelay(response){
   const type=String(response.headers.get('content-type')||'');
   if(!/text\/html/i.test(type))return response;
   let html;try{html=await response.clone().text()}catch{return response}
-  if(html.includes('data-gvault-public-input-relay="V2"'))return response;
-  const tag='<script data-gvault-public-input-relay="V2" src="./scripts/gvault-input-relay.js"></script>';
+  if(html.includes('data-gvault-public-input-relay="V3"'))return response;
+  const tag='<script data-gvault-public-input-relay="V3" src="./scripts/gvault-input-relay.js?v=4"></script>';
   const documentEnd=/<\/body>\s*<\/html>\s*$/i;
   if(!documentEnd.test(html))return response;
   html=html.replace(documentEnd,tag+'</body>\n</html>');
@@ -99,7 +99,7 @@ self.addEventListener('activate',event=>{
     const keys=await caches.keys();
     await Promise.all(keys.filter(k=>k.startsWith('gvault-shell-v1-')&&!k.startsWith(VERSION)).map(k=>caches.delete(k)));
     await self.clients.claim();
-    await announce('READY',{version:VERSION,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V2',inputRelayMode:'EXPLICIT_ONLY'});
+    await announce('READY',{version:VERSION,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE'});
   })());
 });
 
@@ -119,6 +119,6 @@ self.addEventListener('fetch',event=>{
 self.addEventListener('message',event=>{
   const d=event.data||{};
   if(d.schema!=='GVAULT_SW_COMMAND_V1')return;
-  if(d.command==='STATUS')event.source?.postMessage({schema:'GVAULT_SW_STATUS_V1',version:VERSION,scope:SCOPE,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V2',inputRelayMode:'EXPLICIT_ONLY'});
+  if(d.command==='STATUS')event.source?.postMessage({schema:'GVAULT_SW_STATUS_V1',version:VERSION,scope:SCOPE,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE'});
   if(d.command==='REFRESH_SHELL')event.waitUntil((async()=>{for(const url of [...SHELL,BASELINE]){try{const r=await fetch(url,{cache:'reload'});if(isGood(r))await putSafe(SHELL_CACHE,url,r)}catch{}}await announce('SHELL_REFRESHED',{version:VERSION})})());
 });
