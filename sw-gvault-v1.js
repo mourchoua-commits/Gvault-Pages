@@ -1,4 +1,4 @@
-const VERSION='gvault-shell-v1-20260902-gthink-mini-swarm-v1';
+const VERSION='gvault-shell-v1-20260902-gthink-throughput-v2';
 const SHELL_CACHE=`${VERSION}-shell`;
 const API_CACHE=`${VERSION}-public-api`;
 const SCOPE=self.registration.scope;
@@ -14,6 +14,7 @@ const SHELL=[
   './scripts/gvault-agent-gateway.json',
   './scripts/gthink-mini-listener-swarm.js',
   './scripts/gthink-prelistener-stream-blob.js',
+  './scripts/gthink-throughput-guard.js',
   './scripts/gthink-public-responder.js',
   './scripts/gthink-provider-blob.js',
   './scripts/gthink-turn-relay.js',
@@ -30,7 +31,7 @@ const scopeOrigin=new URL(SCOPE).origin;
 const isPrivateData=url=>url.origin===scopeOrigin&&url.pathname.includes('/essai/control-tower/data/');
 const isGitHubPublicApi=url=>url.origin==='https://api.github.com'&&/^\/repos\/mourchoua-commits\/(?:Gvault-Pages|GvaultStable)(?:\/|$)/.test(url.pathname);
 const isBaseline=url=>url.href.split('?')[0]===BASELINE;
-const isGThinkCritical=url=>url.origin===scopeOrigin&&/(?:^|\/)(?:gvault-agent-live-blob|gthink-mini-listener-swarm|gthink-prelistener-stream-blob|gthink-public-responder|gthink-provider-blob|gthink-turn-relay)\.js$/i.test(url.pathname);
+const isGThinkCritical=url=>url.origin===scopeOrigin&&/(?:^|\/)(?:gvault-agent-live-blob|gthink-mini-listener-swarm|gthink-prelistener-stream-blob|gthink-throughput-guard|gthink-public-responder|gthink-provider-blob|gthink-turn-relay)\.js$/i.test(url.pathname);
 const isAuthCritical=url=>{
   if(url.origin!==scopeOrigin)return false;
   const p=url.pathname;
@@ -109,7 +110,7 @@ self.addEventListener('activate',event=>{
     const keys=await caches.keys();
     await Promise.all(keys.filter(k=>k.startsWith('gvault-shell-v1-')&&!k.startsWith(VERSION)).map(k=>caches.delete(k)));
     await self.clients.claim();
-    await announce('READY',{version:VERSION,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE',agentLiveBlob:'GVAULT_AGENT_LIVE_BLOB_CLIENT_V6',gthinkMiniSwarm:'GTHINK_MINI_LISTENER_SWARM_V1'})
+    await announce('READY',{version:VERSION,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE',agentLiveBlob:'GVAULT_AGENT_LIVE_BLOB_CLIENT_V6',gthinkMiniSwarm:'GTHINK_MINI_LISTENER_SWARM_V2',gthinkThroughputGuard:'GTHINK_THROUGHPUT_GUARD_V2'})
   })())
 });
 
@@ -130,6 +131,6 @@ self.addEventListener('fetch',event=>{
 self.addEventListener('message',event=>{
   const d=event.data||{};
   if(d.schema!=='GVAULT_SW_COMMAND_V1')return;
-  if(d.command==='STATUS')event.source?.postMessage({schema:'GVAULT_SW_STATUS_V1',version:VERSION,scope:SCOPE,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE',agentLiveBlob:'GVAULT_AGENT_LIVE_BLOB_CLIENT_V6',gthinkMiniSwarm:'GTHINK_MINI_LISTENER_SWARM_V1'});
+  if(d.command==='STATUS')event.source?.postMessage({schema:'GVAULT_SW_STATUS_V1',version:VERSION,scope:SCOPE,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE',agentLiveBlob:'GVAULT_AGENT_LIVE_BLOB_CLIENT_V6',gthinkMiniSwarm:'GTHINK_MINI_LISTENER_SWARM_V2',gthinkThroughputGuard:'GTHINK_THROUGHPUT_GUARD_V2'});
   if(d.command==='REFRESH_SHELL')event.waitUntil((async()=>{for(const url of [...SHELL,BASELINE]){try{const r=await fetch(url,{cache:'reload'});if(isGood(r))await putSafe(SHELL_CACHE,url,r)}catch{}}await announce('SHELL_REFRESHED',{version:VERSION})})())
 });
