@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const VERSION='1.3.0';
+const VERSION='1.3.1';
 const STYLE=Object.freeze({
  schema:'GVAULT_PUBLIC_AGENT_CONVERSATION_STYLE_V1',
  version:VERSION,
@@ -113,7 +113,7 @@ function installRemoteLayer(){
   if(!isChat)return response;
   try{
    const data=await response.clone().json();
-   if(data&&typeof data==='object'&&(data.schema==='GVAULT_AGENT_CHAT_RESPONSE_V1'||data.schema==='GVAULT_AGENT_CHAT_RESPONSE_V2')&&typeof data.text==='string'){
+   if(data&&typeof data==='object'&&(data.schema==='GVAULT_AGENT_CHAT_RESPONSE_V1'||data.schema==='GVAULT_AGENT_CHAT_RESPONSE_V2'||data.schema==='GVAULT_BLOB_STREAM_RESPONSE_V1')&&typeof data.text==='string'){
     const text=conversationalize(data.text,query);
     let blob=data.blob,pair=data.pair;
     if(blob&&typeof blob==='object'){
@@ -131,7 +131,7 @@ function installRemoteLayer(){
 }
 function loadLiveBlobLayer(){
  if(window.GVAULT_AGENT_LIVE_BLOB||document.querySelector('script[data-gvault-agent-live-blob]'))return;
- const s=document.createElement('script');s.src='./scripts/gvault-agent-live-blob.js?v=4';s.async=false;s.setAttribute('data-gvault-agent-live-blob','V4');s.onerror=()=>console.warn('GVAULT direct agent blob layer unavailable');(document.head||document.documentElement).appendChild(s);
+ const s=document.createElement('script');s.src='./scripts/gvault-agent-live-blob.js?v=5';s.async=false;s.setAttribute('data-gvault-agent-live-blob','V5');s.onerror=()=>console.warn('GVAULT blob stream layer unavailable');(document.head||document.documentElement).appendChild(s);
 }
 function announce(){
  try{window.dispatchEvent(new CustomEvent('gvault:public-agent-conversation-style-ready',{detail:{schema:STYLE.schema,version:VERSION}}))}catch{}
