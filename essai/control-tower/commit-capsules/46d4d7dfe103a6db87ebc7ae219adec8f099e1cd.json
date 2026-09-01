@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "46d4d7dfe103a6db87ebc7ae219adec8f099e1cd",
+  "parentSha": "2f952b6e852c1f55d80e709f2263278b1af21d83",
+  "committedAt": "2026-09-01T23:39:35+02:00",
+  "summary": {
+    "subject": "Load GThink responder on public GThink page",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 2,
+    "deletions": 0,
+    "paths": [
+      "scripts/gvault-person-blob.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 2,
+    "deletions": 0,
+    "magnitude": 2,
+    "committedAt": "2026-09-01T23:39:35+02:00",
+    "parentSha": "2f952b6e852c1f55d80e709f2263278b1af21d83"
+  },
+  "pulseKey": "CTP1:46d4d7dfe103a6db87ebc7ae219adec8f099e1cd:4904908ec641e265",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "e7b2ce07702263d2acc6ca386b13ca04719e154088a27bbfc9e6030c9a589931",
+  "typedKeys": {
+    "commit": "gitc:46d4d7dfe103a6db87ebc7ae219adec8f099e1cd",
+    "parent": "gitc:2f952b6e852c1f55d80e709f2263278b1af21d83",
+    "pulse": "ctp1:46d4d7dfe103a6db87ebc7ae219adec8f099e1cd:4904908ec641e265",
+    "translation": "cttrans:e7b2ce07702263d2acc6ca386b13ca04719e154088a27bbfc9e6030c9a589931",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "46d4d7dfe103a6db87ebc7ae219adec8f099e1cd",
+    "parentSha": "2f952b6e852c1f55d80e709f2263278b1af21d83",
+    "committedAt": "2026-09-01T23:39:35+02:00",
+    "summary": {
+      "subject": "Load GThink responder on public GThink page",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 0,
+      "paths": [
+        "scripts/gvault-person-blob.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 0,
+      "magnitude": 2,
+      "committedAt": "2026-09-01T23:39:35+02:00",
+      "parentSha": "2f952b6e852c1f55d80e709f2263278b1af21d83"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/46d4d7dfe103a6db87ebc7ae219adec8f099e1cd.json",
+      "vfsKey": "CTP1:46d4d7dfe103a6db87ebc7ae219adec8f099e1cd:4904908ec641e265",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/46d4d7dfe103a6db87ebc7ae219adec8f099e1cd.json"
+}
