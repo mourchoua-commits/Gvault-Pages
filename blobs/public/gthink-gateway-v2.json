@@ -1,0 +1,39 @@
+{
+  "schema": "GVAULT_UNIVERSAL_BLOB_V1",
+  "blobId": "blob:public:gthink-gateway:v2",
+  "parentBlobId": "blob:public:gthink-controller-kernel:v1",
+  "conversationId": "public-shared",
+  "kind": "gateway.state",
+  "role": "gateway",
+  "from": "public-kernel",
+  "to": "GThink",
+  "intent": "route_all_gthink_traffic_through_blob_stream",
+  "language": "fr",
+  "at": "2026-09-01T00:00:00+02:00",
+  "surface": "Gvault-Pages",
+  "streamUrl": "gvault://blobs/public/gthink/stream",
+  "understoodBy": [
+    "GThink",
+    "public-kernel",
+    "gateway-adapter",
+    "public-ui",
+    "renderer"
+  ],
+  "payload": {
+    "transport": "blob-stream",
+    "streamUrl": "gvault://blobs/public/gthink/stream",
+    "domEvent": "gvault:blob",
+    "broadcastChannel": "gvault.public.blobs.v2",
+    "requestKind": "gateway.request",
+    "responseKinds": [
+      "gateway.response",
+      "utterance",
+      "error"
+    ],
+    "causalRule": "Une réponse doit référencer le gateway.request ou son utterance parent par parentBlobId/requestBlobId.",
+    "httpAdapterEnabled": false,
+    "configured": true
+  },
+  "silent": true,
+  "muted": false
+}
