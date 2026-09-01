@@ -1,4 +1,4 @@
-const VERSION='gvault-shell-v1-20260829-input-relay-v2';
+const VERSION='gvault-shell-v1-20260901-input-relay-v3';
 const SHELL_CACHE=`${VERSION}-shell`;
 const API_CACHE=`${VERSION}-public-api`;
 const SCOPE=self.registration.scope;
@@ -74,8 +74,9 @@ async function injectInputRelay(response){
   let html;try{html=await response.clone().text()}catch{return response}
   if(html.includes('data-gvault-public-input-relay="V2"'))return response;
   const tag='<script data-gvault-public-input-relay="V2" src="./scripts/gvault-input-relay.js"></script>';
-  if(!/<\/body>/i.test(html))return response;
-  html=html.replace(/<\/body>/i,tag+'</body>');
+  const documentEnd=/<\/body>\s*<\/html>\s*$/i;
+  if(!documentEnd.test(html))return response;
+  html=html.replace(documentEnd,tag+'</body>\n</html>');
   const headers=new Headers(response.headers);headers.delete('content-length');headers.set('cache-control','no-store');
   return new Response(html,{status:response.status,statusText:response.statusText,headers});
 }
