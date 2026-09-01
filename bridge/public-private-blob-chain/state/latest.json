@@ -1,0 +1,10 @@
+{
+  "schema": "GVAULT_PUBLIC_PRIVATE_BLOB_CHAIN_LATEST_V1",
+  "status": "EMPTY",
+  "releaseId": null,
+  "path": null,
+  "contentSha256": null,
+  "publishedAt": null,
+  "sourcePrivate": true,
+  "publicSafe": true
+}
