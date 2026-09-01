@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const SCHEMA='GTHINK_TURN_RELAY_V1';
+const SCHEMA='GTHINK_TURN_RELAY_V2';
 const BLOB_SCHEMA='GVAULT_UNIVERSAL_BLOB_V1';
 const RELAYS=['A','B'];
 const requestSlots=new Map();
@@ -7,6 +7,32 @@ const gatewaySlots=new Map();
 const watchdogs=new Map();
 const doneParents=new Set();
 let turn=0;
+function isolateEntry(){
+  try{
+    let meta=document.querySelector('meta[name="referrer"]');
+    if(!meta){meta=document.createElement('meta');meta.name='referrer';document.head.prepend(meta)}
+    meta.content='no-referrer';
+  }catch{}
+  try{
+    let canonical=document.querySelector('link[rel="canonical"]');
+    if(!canonical){canonical=document.createElement('link');canonical.rel='canonical';document.head.appendChild(canonical)}
+    canonical.href=location.origin+location.pathname;
+  }catch{}
+  const u=new URL(location.href),cleanParams=new URLSearchParams();
+  if(u.searchParams.has('v'))cleanParams.set('v',u.searchParams.get('v'));
+  const clean=u.pathname+(cleanParams.toString()?`?${cleanParams}`:'')+u.hash;
+  const current=u.pathname+u.search+u.hash;
+  let external=false;
+  try{external=!!document.referrer&&new URL(document.referrer).origin!==location.origin}catch{}
+  const marker='gthink.origin.isolation.v2';
+  if(current!==clean){try{sessionStorage.setItem(marker,'1')}catch{}location.replace(clean);return false}
+  if(external){let isolated=false;try{isolated=sessionStorage.getItem(marker)==='1'}catch{}if(!isolated){try{sessionStorage.setItem(marker,'1')}catch{}location.replace(clean);return false}}
+  try{sessionStorage.removeItem(marker)}catch{}
+  try{window.name=''}catch{}
+  try{document.documentElement.dataset.gthinkOrigin='standalone'}catch{}
+  return true;
+}
+if(!isolateEntry())return;
 function uid(prefix='relay'){return `${prefix}-${crypto.randomUUID?.()||`${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`}`}
 function api(){return window.GVAULT_AGENT_LIVE_BLOB}
 function speak(kind,payload,parentBlobId=null,slot=null){const a=api();if(!a?.speak)return null;return a.speak({schema:BLOB_SCHEMA,blobId:uid('grelay'),parentBlobId,conversationId:payload?.conversationId||'gthink-relay',kind,role:'relay',from:slot?`GThinkRelay-${slot}`:'GThinkRelay',to:'public.bus',intent:'relay_turn',language:'fr',at:new Date().toISOString(),surface:'Gvault-Pages',streamUrl:a.streamUrl,text:undefined,payload:{...payload,slot,schema:SCHEMA},understoodBy:['GThink','public-kernel','public-ui','relay-team'],silent:true,muted:false})}
@@ -15,6 +41,6 @@ function forward(gatewayBlob){const slot=requestSlots.get(gatewayBlob.parentBlob
 function complete(blob){const id=blob?.payload?.requestBlobId||blob?.parentBlobId;if(!id)return;const slot=gatewaySlots.get(id);if(!slot)return;gatewaySlots.delete(id);const timer=watchdogs.get(id);if(timer)clearTimeout(timer);watchdogs.delete(id);speak('gthink.relay.return',{gatewayBlobId:id,responseBlobId:blob.blobId,conversationId:blob.conversationId},blob.blobId,slot)}
 function ensureRenderDone(blob){const parent=blob.parentBlobId;if(!parent)return;const index=Number(blob.payload?.index),length=Number(blob.payload?.length);if(!Number.isFinite(index)||!Number.isFinite(length)||index<length)return;setTimeout(()=>{if(doneParents.has(parent))return;doneParents.add(parent);const a=api();if(!a?.speak)return;a.speak({schema:BLOB_SCHEMA,blobId:uid('render-done-relay'),parentBlobId:parent,conversationId:blob.conversationId||'gthink-relay',kind:'render.done',role:'renderer',from:'GThinkRelay-Recovery',to:'public-ui',intent:'finish_render_relay_recovery',language:'fr',at:new Date().toISOString(),surface:'Gvault-Pages',streamUrl:a.streamUrl,payload:{length,relayRecovery:true,schema:SCHEMA},understoodBy:['public-ui','GThink','relay-team'],silent:true,muted:false})},240)}
 function onBlob(blob){if(!blob||blob.schema!==BLOB_SCHEMA)return;if(blob.kind==='utterance'&&blob.role==='user'&&blob.intent==='interpret_and_reply'){arm(blob);return}if(blob.kind==='gateway.request'){forward(blob);return}if(blob.kind==='gateway.response'||(blob.kind==='utterance'&&blob.role==='gthink')){complete(blob);return}if(blob.kind==='render.done'){if(blob.parentBlobId)doneParents.add(blob.parentBlobId);return}if(blob.kind==='render.delta'){ensureRenderDone(blob);return}}
-function attach(){const a=api();if(!a?.listen)return false;a.listen(onBlob);for(const b of a.hearLast?.(32)||[])onBlob(b);window.GTHINK_TURN_RELAY=Object.freeze({schema:SCHEMA,mode:'alternating',relays:[...RELAYS],get turn(){return turn}});speak('gthink.relay.ready',{mode:'alternating-A-B',conversationId:'gthink-relay'},null,'A');return true}
+function attach(){const a=api();if(!a?.listen)return false;a.listen(onBlob);for(const b of a.hearLast?.(32)||[])onBlob(b);window.GTHINK_TURN_RELAY=Object.freeze({schema:SCHEMA,mode:'alternating',origin:'standalone',relays:[...RELAYS],get turn(){return turn}});speak('gthink.relay.ready',{mode:'alternating-A-B',origin:'standalone',conversationId:'gthink-relay'},null,'A');return true}
 if(!attach()){let tries=0;const timer=setInterval(()=>{tries++;if(attach()||tries>200)clearInterval(timer)},50)}
 })();
