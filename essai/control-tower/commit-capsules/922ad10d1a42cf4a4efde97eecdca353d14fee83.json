@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "922ad10d1a42cf4a4efde97eecdca353d14fee83",
+  "parentSha": "bc84ff6f3eba633ea414d0ed9a40cb3364a17978",
+  "committedAt": "2026-09-02T01:56:20+02:00",
+  "summary": {
+    "subject": "feat(gthink): make pellicule bridge primary chat responder",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 24,
+    "deletions": 10,
+    "paths": [
+      "scripts/gthink-public-responder.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 24,
+    "deletions": 10,
+    "magnitude": 34,
+    "committedAt": "2026-09-02T01:56:20+02:00",
+    "parentSha": "bc84ff6f3eba633ea414d0ed9a40cb3364a17978"
+  },
+  "pulseKey": "CTP1:922ad10d1a42cf4a4efde97eecdca353d14fee83:e5eeb62d166f5219",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "e5f53d13498df456df454f865d26096e68fbe8727a3bccb538f577ac1358b1f8",
+  "typedKeys": {
+    "commit": "gitc:922ad10d1a42cf4a4efde97eecdca353d14fee83",
+    "parent": "gitc:bc84ff6f3eba633ea414d0ed9a40cb3364a17978",
+    "pulse": "ctp1:922ad10d1a42cf4a4efde97eecdca353d14fee83:e5eeb62d166f5219",
+    "translation": "cttrans:e5f53d13498df456df454f865d26096e68fbe8727a3bccb538f577ac1358b1f8",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "922ad10d1a42cf4a4efde97eecdca353d14fee83",
+    "parentSha": "bc84ff6f3eba633ea414d0ed9a40cb3364a17978",
+    "committedAt": "2026-09-02T01:56:20+02:00",
+    "summary": {
+      "subject": "feat(gthink): make pellicule bridge primary chat responder",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 24,
+      "deletions": 10,
+      "paths": [
+        "scripts/gthink-public-responder.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 24,
+      "deletions": 10,
+      "magnitude": 34,
+      "committedAt": "2026-09-02T01:56:20+02:00",
+      "parentSha": "bc84ff6f3eba633ea414d0ed9a40cb3364a17978"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/922ad10d1a42cf4a4efde97eecdca353d14fee83.json",
+      "vfsKey": "CTP1:922ad10d1a42cf4a4efde97eecdca353d14fee83:e5eeb62d166f5219",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/922ad10d1a42cf4a4efde97eecdca353d14fee83.json"
+}
