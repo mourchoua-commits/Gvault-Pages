@@ -1,0 +1,22 @@
+{
+  "schema": "GVAULT_LOCAL_GTHINK_BANANA_BROWSER_HARNESS_V1",
+  "status": "PASS_18_18",
+  "branch": "study/full-save-direct-banana",
+  "remoteProvider": false,
+  "networkCalls": 0,
+  "agentCalls": 1,
+  "runtime": "#gvaultRuntime.contentWindow.sendAgentMessage",
+  "routing": "sendAgentMessage -> agentGThinkRouteRequest -> agentAnswer -> recordAgentTrace",
+  "methodAuthority": "GVAULT_METHOD_ROUTER",
+  "compatibilitySurface": "/api/vault/chat",
+  "checks": {
+    "syntheticChatResponse200": "PASS",
+    "localAgentAnswer": "PASS",
+    "bananaMirror": "PASS",
+    "routeTraceGThink": "PASS",
+    "noNetwork": "PASS",
+    "statusLocalOnly": "PASS",
+    "actionBlobsSilent": "PASS",
+    "actionBlobsMutedFalse": "PASS"
+  }
+}
