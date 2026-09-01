@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "804730a1a4baefc81f3d69cf46c05f0e3c8acac7",
+  "parentSha": "69056ce9fa9d93907842bb34db41f007dcdf062d",
+  "committedAt": "2026-09-01T15:16:26+02:00",
+  "summary": {
+    "subject": "Control Tower: add live blob mesh runtime",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 33,
+    "deletions": 0,
+    "paths": [
+      "essai/control-tower/blob-mesh-live-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 33,
+    "deletions": 0,
+    "magnitude": 33,
+    "committedAt": "2026-09-01T15:16:26+02:00",
+    "parentSha": "69056ce9fa9d93907842bb34db41f007dcdf062d"
+  },
+  "pulseKey": "CTP1:804730a1a4baefc81f3d69cf46c05f0e3c8acac7:d799ef529120f3fc",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "9022ead9cd93911afc42a6422c395337df3beecd0f86f7cba6b3f79e83562f11",
+  "typedKeys": {
+    "commit": "gitc:804730a1a4baefc81f3d69cf46c05f0e3c8acac7",
+    "parent": "gitc:69056ce9fa9d93907842bb34db41f007dcdf062d",
+    "pulse": "ctp1:804730a1a4baefc81f3d69cf46c05f0e3c8acac7:d799ef529120f3fc",
+    "translation": "cttrans:9022ead9cd93911afc42a6422c395337df3beecd0f86f7cba6b3f79e83562f11",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "804730a1a4baefc81f3d69cf46c05f0e3c8acac7",
+    "parentSha": "69056ce9fa9d93907842bb34db41f007dcdf062d",
+    "committedAt": "2026-09-01T15:16:26+02:00",
+    "summary": {
+      "subject": "Control Tower: add live blob mesh runtime",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 33,
+      "deletions": 0,
+      "paths": [
+        "essai/control-tower/blob-mesh-live-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 33,
+      "deletions": 0,
+      "magnitude": 33,
+      "committedAt": "2026-09-01T15:16:26+02:00",
+      "parentSha": "69056ce9fa9d93907842bb34db41f007dcdf062d"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/804730a1a4baefc81f3d69cf46c05f0e3c8acac7.json",
+      "vfsKey": "CTP1:804730a1a4baefc81f3d69cf46c05f0e3c8acac7:d799ef529120f3fc",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/804730a1a4baefc81f3d69cf46c05f0e3c8acac7.json"
+}
