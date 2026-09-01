@@ -4,7 +4,7 @@ const BLOB_SCHEMA='GVAULT_UNIVERSAL_BLOB_V1';
 const NAME='GThink';
 const CHANNELS=['gvault.public.blobs.v2','gvault.public.blobs.v1'];
 const SCRIPT_BASE=new URL('.',document.currentScript?.src||location.href);
-const PROVIDER_URL=new URL('gthink-provider-blob.js?v=1',SCRIPT_BASE).href;
+const PROVIDER_URL=new URL('gthink-provider-blob.js?v=2',SCRIPT_BASE).href;
 const HELP=`Je suis GThink sur le stream public GVAULT.\n\nJe reçois les blobs de conversation, garde le fil court de la session et tente d'abord le blob provider distant sécurisé. Si ce provider n'est pas disponible, je peux utiliser un moteur de langage natif du navigateur ou mes réponses locales de secours. La clé du modèle distant n'est jamais placée dans la page publique.`;
 let attached=false,heartbeat=null,providerLoad=null;
 const bridgeChannels=[];
@@ -27,7 +27,7 @@ function simpleMath(text){
 }
 async function ensureProvider(){
  if(window.GTHINK_PROVIDER_BLOB?.ask)return window.GTHINK_PROVIDER_BLOB;
- if(!providerLoad){providerLoad=new Promise(resolve=>{const s=document.createElement('script');s.src=PROVIDER_URL;s.async=false;s.dataset.gthinkProviderBlob='V1';s.onload=()=>resolve(window.GTHINK_PROVIDER_BLOB||null);s.onerror=()=>resolve(null);(document.head||document.documentElement).appendChild(s)}).finally(()=>{providerLoad=null})}
+ if(!providerLoad){providerLoad=new Promise(resolve=>{const s=document.createElement('script');s.src=PROVIDER_URL;s.async=false;s.dataset.gthinkProviderBlob='V2';s.onload=()=>resolve(window.GTHINK_PROVIDER_BLOB||null);s.onerror=()=>resolve(null);(document.head||document.documentElement).appendChild(s)}).finally(()=>{providerLoad=null})}
  return providerLoad;
 }
 async function tryProvider(message,history,request){
