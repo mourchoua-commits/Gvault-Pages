@@ -1,0 +1,35 @@
+{
+  "schema": "GVAULT_GTHINK_METHOD_RECOVERY_V1",
+  "version": 1,
+  "blobId": "blob:public:gthink-method-recovery:v1",
+  "kind": "method.recovery",
+  "role": "method-guard",
+  "parentBlobId": "blob:public:gthink-method-lock:v1",
+  "triggerKinds": ["method.violation", "gateway.state", "error"],
+  "recoveryOrder": [
+    "classify: transport / responder / render / person-memory",
+    "restore canonical transport=blob-stream",
+    "restore streamUrl=gvault://blobs/public/gthink/stream",
+    "keep httpAdapter.enabled=false and baseUrl=null",
+    "keep personBlob and writingBlob memory untouched",
+    "probe for gthink.listener.ready on the same stream",
+    "if listener absent, stay WAITING_GTHINK_LISTENER",
+    "do not create a Worker, HTTP route, second gateway or replacement responder",
+    "resume from last conforming state"
+  ],
+  "preserve": [
+    "public two-blob interface",
+    "adaptive personBlob graphics",
+    "local writingBlob memory",
+    "parentBlobId/requestBlobId causality",
+    "render.delta progressive display",
+    "legacy bus compatibility"
+  ],
+  "neverDoAutomatically": [
+    "change the agreed method",
+    "deploy external infrastructure",
+    "invent a public endpoint",
+    "promote a fallback into the canonical route",
+    "erase working components while repairing another layer"
+  ]
+}
