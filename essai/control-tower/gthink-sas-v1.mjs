@@ -5,7 +5,7 @@ let sasOpen=false;
 let sasInitialized=false;
 let observer=null;
 const now=()=>new Date().toISOString();
-const WALL_SELECTORS=['.top','.kpis','.toolbar','.layout','.tracksWrap','.terminal'];
+const WALL_SELECTORS=['html','body','.top','.layout','.pane','.tracksWrap','.terminal','dialog'];
 
 function emit(type,detail={}){
   const payload={schema:'GVAULT_GTHINK_EVENT_V1',type,at:now(),...detail};
@@ -15,7 +15,24 @@ function emit(type,detail={}){
 }
 
 function markFixedStructure(){
-  for(const selector of WALL_SELECTORS){const el=document.querySelector(selector);if(el)el.dataset.gvaultWall='fixed'}
+  for(const selector of WALL_SELECTORS){for(const el of document.querySelectorAll(selector))el.dataset.gvaultWall='fixed'}
+}
+
+function installBlobStyleContract(){
+  if(document.querySelector('#gvaultGthinkBlobContractV1'))return;
+  const style=document.createElement('style');
+  style.id='gvaultGthinkBlobContractV1';
+  style.textContent=`
+[data-gvault-blob-zone="1"]{transition:opacity .16s ease,filter .16s ease,outline-color .16s ease}
+[data-gvault-blob-zone="1"][data-blob-focus="1"]{outline:1px solid color-mix(in srgb,var(--accent,#c8a95a) 55%,transparent);outline-offset:-1px}
+[data-gvault-blob-zone="1"][data-blob-density="compact"] .event{margin-bottom:3px}
+[data-gvault-blob-zone="1"][data-blob-density="compact"] .eventMain{padding:6px}
+[data-gvault-blob-zone="1"][data-blob-density="compact"] .summary{font-size:9px;line-height:1.2}
+[data-gvault-blob-zone="1"][data-blob-density="compact"] .track{padding:7px}
+[data-gvault-blob-zone="1"][data-blob-density="compact"] button{padding-top:5px;padding-bottom:5px}
+[data-gvault-blob-zone="1"][data-blob-activity="high"]{filter:saturate(1.08)}
+`;
+  document.head.appendChild(style);
 }
 
 function syncSasState(reason='status'){
@@ -63,12 +80,12 @@ function decorateSas(){
 }
 
 function arm(){
-  markFixedStructure();
+  markFixedStructure();installBlobStyleContract();
   const status=document.querySelector('#connectionState');
   if(status){observer?.disconnect();observer=new MutationObserver(()=>syncSasState('status-mutation'));observer.observe(status,{childList:true,subtree:true,characterData:true,attributes:true});}
   decorateSas();
   syncSasState('boot');
-  setTimeout(()=>{markFixedStructure();decorateSas();syncSasState('post-boot')},0);
+  setTimeout(()=>{markFixedStructure();installBlobStyleContract();decorateSas();syncSasState('post-boot')},0);
 }
 
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',arm,{once:true});else arm();
@@ -81,5 +98,6 @@ window.GVAULT_GTHINK_SAS_V1=Object.freeze({
   refreshSasState:()=>syncSasState('manual'),
   decorateSas,
   markFixedStructure,
+  installBlobStyleContract,
   getState:()=>({sasOpen,mode:sasOpen?'ARBITER_ACTIVE':'LOCKED',fixedWalls:WALL_SELECTORS.slice(),history:history.slice(-50)})
 });
