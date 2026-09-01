@@ -1,0 +1,51 @@
+name: Public pre-SAS accessibility matrix
+
+on:
+  push:
+    branches:
+      - test/pre-sas-accessibility-20260901
+    paths:
+      - tests/public-pre-sas-accessibility-cdp.py
+      - .github/workflows/pre-sas-accessibility-matrix.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-pre-sas-accessibility-matrix
+  cancel-in-progress: true
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install tiny CDP dependency
+        run: python -m pip install --disable-pip-version-check websocket-client==1.8.0
+
+      - name: Verify Chrome exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser
+
+      - name: Run public pre-SAS device + accessibility campaign
+        env:
+          GVAULT_PUBLIC_URL: https://mourchoua-commits.github.io/Gvault-Pages/
+        run: python tests/public-pre-sas-accessibility-cdp.py
+
+      - name: Upload diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gvault-public-pre-sas-accessibility
+          path: artifacts/pre-sas-a11y
+          if-no-files-found: warn
+          retention-days: 14
