@@ -1,4 +1,4 @@
-const VERSION='gvault-shell-v1-20260901-conversation-plane-v2';
+const VERSION='gvault-shell-v1-20260902-gthink-mini-swarm-v1';
 const SHELL_CACHE=`${VERSION}-shell`;
 const API_CACHE=`${VERSION}-public-api`;
 const SCOPE=self.registration.scope;
@@ -12,6 +12,12 @@ const SHELL=[
   './scripts/gvault-public-agent-conversation.js',
   './scripts/gvault-agent-live-blob.js',
   './scripts/gvault-agent-gateway.json',
+  './scripts/gthink-mini-listener-swarm.js',
+  './scripts/gthink-prelistener-stream-blob.js',
+  './scripts/gthink-public-responder.js',
+  './scripts/gthink-provider-blob.js',
+  './scripts/gthink-turn-relay.js',
+  './scripts/gvault-person-blob.js',
   './essai/private-tool-session-v1.mjs',
   './essai/control-tower/v2.html',
   './essai/control-tower/index.html',
@@ -24,6 +30,7 @@ const scopeOrigin=new URL(SCOPE).origin;
 const isPrivateData=url=>url.origin===scopeOrigin&&url.pathname.includes('/essai/control-tower/data/');
 const isGitHubPublicApi=url=>url.origin==='https://api.github.com'&&/^\/repos\/mourchoua-commits\/(?:Gvault-Pages|GvaultStable)(?:\/|$)/.test(url.pathname);
 const isBaseline=url=>url.href.split('?')[0]===BASELINE;
+const isGThinkCritical=url=>url.origin===scopeOrigin&&/(?:^|\/)(?:gvault-agent-live-blob|gthink-mini-listener-swarm|gthink-prelistener-stream-blob|gthink-public-responder|gthink-provider-blob|gthink-turn-relay)\.js$/i.test(url.pathname);
 const isAuthCritical=url=>{
   if(url.origin!==scopeOrigin)return false;
   const p=url.pathname;
@@ -46,7 +53,7 @@ async function cached(cacheName,request){
 async function networkWithTimeout(request,ms=4500){
   const ctrl=new AbortController();
   const timer=setTimeout(()=>ctrl.abort(),ms);
-  try{return await fetch(request,{signal:ctrl.signal})}finally{clearTimeout(timer)}
+  try{return await fetch(request,{signal:ctrl.signal,cache:'no-store'})}finally{clearTimeout(timer)}
 }
 async function networkFirst(request,cacheName=SHELL_CACHE,ms=4500){
   try{
@@ -102,7 +109,7 @@ self.addEventListener('activate',event=>{
     const keys=await caches.keys();
     await Promise.all(keys.filter(k=>k.startsWith('gvault-shell-v1-')&&!k.startsWith(VERSION)).map(k=>caches.delete(k)));
     await self.clients.claim();
-    await announce('READY',{version:VERSION,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE',agentLiveBlob:'GVAULT_AGENT_LIVE_BLOB_CLIENT_V1'})
+    await announce('READY',{version:VERSION,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE',agentLiveBlob:'GVAULT_AGENT_LIVE_BLOB_CLIENT_V6',gthinkMiniSwarm:'GTHINK_MINI_LISTENER_SWARM_V1'})
   })())
 });
 
@@ -115,6 +122,7 @@ self.addEventListener('fetch',event=>{
   if(isBaseline(url)){event.respondWith(networkFirst(req,SHELL_CACHE,5000));return}
   if(url.origin!==scopeOrigin)return;
   if(req.mode==='navigate'){event.respondWith(networkFirst(req,SHELL_CACHE,3500).then(injectInputRelay));return}
+  if(isGThinkCritical(url)){event.respondWith(networkFirst(req,SHELL_CACHE,5000));return}
   if(['script','style','worker','font'].includes(req.destination)){event.respondWith(staleWhileRevalidate(req));return}
   event.respondWith(networkFirst(req,SHELL_CACHE,4500))
 });
@@ -122,6 +130,6 @@ self.addEventListener('fetch',event=>{
 self.addEventListener('message',event=>{
   const d=event.data||{};
   if(d.schema!=='GVAULT_SW_COMMAND_V1')return;
-  if(d.command==='STATUS')event.source?.postMessage({schema:'GVAULT_SW_STATUS_V1',version:VERSION,scope:SCOPE,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE',agentLiveBlob:'GVAULT_AGENT_LIVE_BLOB_CLIENT_V1'});
+  if(d.command==='STATUS')event.source?.postMessage({schema:'GVAULT_SW_STATUS_V1',version:VERSION,scope:SCOPE,inputRelay:'GVAULT_PUBLIC_INPUT_RELAY_V3',inputRelayMode:'EXPLICIT_ONLY',blobFallback:'DURABLE_LOCAL_QUEUE',agentLiveBlob:'GVAULT_AGENT_LIVE_BLOB_CLIENT_V6',gthinkMiniSwarm:'GTHINK_MINI_LISTENER_SWARM_V1'});
   if(d.command==='REFRESH_SHELL')event.waitUntil((async()=>{for(const url of [...SHELL,BASELINE]){try{const r=await fetch(url,{cache:'reload'});if(isGood(r))await putSafe(SHELL_CACHE,url,r)}catch{}}await announce('SHELL_REFRESHED',{version:VERSION})})())
 });
