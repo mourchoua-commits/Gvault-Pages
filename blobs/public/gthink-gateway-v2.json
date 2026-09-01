@@ -30,9 +30,12 @@
       "utterance",
       "error"
     ],
+    "requiredListenerKind": "gthink.listener.ready",
+    "transportReady": true,
+    "responderReady": false,
     "causalRule": "Une réponse doit référencer le gateway.request ou son utterance parent par parentBlobId/requestBlobId.",
     "httpAdapterEnabled": false,
-    "configured": true
+    "configured": false
   },
   "silent": true,
   "muted": false
