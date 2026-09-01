@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "089a5829caa9803ecc4eab71ab95867f53be22e2",
+  "parentSha": "5cf18e173960694287e88174d151146a11672d6f",
+  "committedAt": "2026-09-01T23:26:02+02:00",
+  "summary": {
+    "subject": "feat(blobs): describe live listener blob swarm",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 18,
+    "deletions": 0,
+    "paths": [
+      "blobs/public/gthink-listener-swarm-v1.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 18,
+    "deletions": 0,
+    "magnitude": 18,
+    "committedAt": "2026-09-01T23:26:02+02:00",
+    "parentSha": "5cf18e173960694287e88174d151146a11672d6f"
+  },
+  "pulseKey": "CTP1:089a5829caa9803ecc4eab71ab95867f53be22e2:f05e88ba3302b9e4",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "53658335958b4c1641ed04b31d1fad03f4ca148644f5b3aed05f5f71c781da09",
+  "typedKeys": {
+    "commit": "gitc:089a5829caa9803ecc4eab71ab95867f53be22e2",
+    "parent": "gitc:5cf18e173960694287e88174d151146a11672d6f",
+    "pulse": "ctp1:089a5829caa9803ecc4eab71ab95867f53be22e2:f05e88ba3302b9e4",
+    "translation": "cttrans:53658335958b4c1641ed04b31d1fad03f4ca148644f5b3aed05f5f71c781da09",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "089a5829caa9803ecc4eab71ab95867f53be22e2",
+    "parentSha": "5cf18e173960694287e88174d151146a11672d6f",
+    "committedAt": "2026-09-01T23:26:02+02:00",
+    "summary": {
+      "subject": "feat(blobs): describe live listener blob swarm",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 18,
+      "deletions": 0,
+      "paths": [
+        "blobs/public/gthink-listener-swarm-v1.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 18,
+      "deletions": 0,
+      "magnitude": 18,
+      "committedAt": "2026-09-01T23:26:02+02:00",
+      "parentSha": "5cf18e173960694287e88174d151146a11672d6f"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/089a5829caa9803ecc4eab71ab95867f53be22e2.json",
+      "vfsKey": "CTP1:089a5829caa9803ecc4eab71ab95867f53be22e2:f05e88ba3302b9e4",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/089a5829caa9803ecc4eab71ab95867f53be22e2.json"
+}
