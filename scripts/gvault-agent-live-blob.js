@@ -1,14 +1,15 @@
 (()=>{'use strict';
-const SCHEMA='GVAULT_AGENT_LIVE_BLOB_CLIENT_V2';
+const SCHEMA='GVAULT_AGENT_LIVE_BLOB_CLIENT_V3';
 const BUS_SCHEMA='GVAULT_PUBLIC_BLOB_SIGNAL_V1';
 const CONFIG_URL='./scripts/gvault-agent-gateway.json';
+const KERNEL_URL='./blobs/public/gthink-controller-kernel-v1.json';
 const CHAT_PATH='/api/vault/chat';
 const HISTORY_MAX=12;
 const SIGNAL_HISTORY_MAX=64;
 const rootNativeFetch=window.fetch.bind(window);
 const boundWindows=new WeakSet(),boundFrames=new WeakSet();
 const signalHistory=[];
-let config=null,configAt=0,history=[];
+let config=null,configAt=0,kernel=null,kernelAt=0,history=[];
 let channel=null;
 try{channel=new BroadcastChannel('gvault.public.blobs.v1')}catch{}
 
@@ -45,6 +46,25 @@ async function loadConfig(force=false){
   return config;
  }
 }
+async function loadKernel(force=false){
+ if(!force&&kernel&&Date.now()-kernelAt<30000)return kernel;
+ try{
+  const r=await rootNativeFetch(KERNEL_URL+'?ts='+Date.now(),{cache:'no-store',credentials:'omit'});
+  if(!r.ok)throw new Error('KERNEL_HTTP_'+r.status);
+  const k=await r.json();if(k?.schema!=='GVAULT_PUBLIC_CONTROLLER_KERNEL/1')throw new Error('KERNEL_SCHEMA');
+  kernel=k;kernelAt=Date.now();
+  signal('kernel.state',{status:'READY',blobId:k.blobId||null,route:k.routing?.defaultRoute||null,privateControllerIsAuthoritative:k.authority?.privateControllerIsAuthoritative===true});
+  return k;
+ }catch(e){
+  kernel={schema:'GVAULT_PUBLIC_CONTROLLER_KERNEL/1',status:'UNAVAILABLE',error:String(e?.message||e)};kernelAt=Date.now();
+  signal('kernel.state',{status:'UNAVAILABLE',error:kernel.error});
+  return kernel;
+ }
+}
+function kernelEnvelope(k){
+ if(!k||k.status==='UNAVAILABLE')return null;
+ return {schema:k.schema,blobId:k.blobId||null,route:k.routing?.defaultRoute||null,privateControllerIsAuthoritative:k.authority?.privateControllerIsAuthoritative===true};
+}
 async function endpoint(){
  const direct=clean(window.GVAULT_AGENT_CHAT_ENDPOINT||'');if(direct)return direct;
  const base=clean(window.GVAULT_INGRESS_BASE_URL||'');if(base)return base+CHAT_PATH;
@@ -65,10 +85,10 @@ async function ask(message,{historyOverride=null}={}){
  message=String(message??'').trim();
  const requestBlob=signal('agent.request',{messageBytes:new TextEncoder().encode(message).byteLength,sessionId:sessionId()});
  if(!message){const out={ok:false,error:'empty_message'};signal('agent.error',out,requestBlob.blobId);return out}
- const ep=await endpoint();if(!ep){const out={ok:false,error:'gateway_pending'};signal('agent.error',out,requestBlob.blobId);return out}
+ const [ep,k]=await Promise.all([endpoint(),loadKernel()]);if(!ep){const out={ok:false,error:'gateway_pending'};signal('agent.error',out,requestBlob.blobId);return out}
  const prior=Array.isArray(historyOverride)?historyOverride:history.slice(-HISTORY_MAX);
  let r;
- try{r=await rootNativeFetch(ep,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({message,sessionId:sessionId(),history:prior}),cache:'no-store',credentials:'omit'})}
+ try{r=await rootNativeFetch(ep,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({message,sessionId:sessionId(),history:prior,controllerKernel:kernelEnvelope(k)}),cache:'no-store',credentials:'omit'})}
  catch(e){const out={ok:false,error:'network_error',detail:String(e?.message||e)};signal('agent.error',out,requestBlob.blobId);return out}
  let data=null;try{data=await r.json()}catch{}
  if(!r.ok||data?.schema!=='GVAULT_AGENT_CHAT_RESPONSE_V1'){
@@ -84,11 +104,11 @@ function bindWindow(w){
  w.fetch=async function(input,init){
   const method=String(init?.method||input?.method||'GET').toUpperCase();
   if(method!=='POST'||!isChatUrl(input,w))return native(input,init);
-  const ep=await endpoint();if(!ep)return native(input,init);
+  const [ep,k]=await Promise.all([endpoint(),loadKernel()]);if(!ep)return native(input,init);
   let body={};try{body=typeof init?.body==='string'?JSON.parse(init.body):{}}catch{}
   const message=typeof body?.message==='string'?body.message:'';if(!message.trim())return native(input,init);
-  const requestBlob=signal('agent.request.intercepted',{messageBytes:new TextEncoder().encode(message).byteLength,sessionId:body.sessionId||sessionId()});
-  const nextBody={...body,message,sessionId:body.sessionId||sessionId(),history:Array.isArray(body.history)?body.history:history.slice(-HISTORY_MAX)};
+  const requestBlob=signal('agent.request.intercepted',{messageBytes:new TextEncoder().encode(message).byteLength,sessionId:body.sessionId||sessionId(),kernelBlobId:k?.blobId||null});
+  const nextBody={...body,message,sessionId:body.sessionId||sessionId(),history:Array.isArray(body.history)?body.history:history.slice(-HISTORY_MAX),controllerKernel:kernelEnvelope(k)};
   const response=await native(ep,{...init,method:'POST',headers:{...(init?.headers||{}),'content-type':'application/json'},body:JSON.stringify(nextBody),cache:'no-store',credentials:'omit'});
   try{
    const data=await response.clone().json();
@@ -112,7 +132,8 @@ function hearLast(n=12){return signalHistory.slice(-Math.max(1,Math.min(SIGNAL_H
 
 bindWindow(window);scanFrames();
 new MutationObserver(scanFrames).observe(document.documentElement,{childList:true,subtree:true});
-window.addEventListener('online',()=>void loadConfig(true));
-window.GVAULT_AGENT_LIVE_BLOB=Object.freeze({schema:SCHEMA,ask,listen,hearLast,reloadConfig:()=>loadConfig(true),status:async()=>{const c=await loadConfig();return {configured:!!(await endpoint()),config:c,historyItems:history.length,signalItems:signalHistory.length,sessionId:sessionId(),silent:true,muted:false,bus:'gvault:blob:signal',broadcastChannel:'gvault.public.blobs.v1'}}});
-signal('listener.ready',{silent:true,muted:false,bus:'gvault:blob:signal',broadcastChannel:'gvault.public.blobs.v1'});
+window.addEventListener('online',()=>{void loadConfig(true);void loadKernel(true)});
+void loadKernel();
+window.GVAULT_AGENT_LIVE_BLOB=Object.freeze({schema:SCHEMA,ask,listen,hearLast,reloadConfig:()=>loadConfig(true),reloadKernel:()=>loadKernel(true),status:async()=>{const [c,k]=await Promise.all([loadConfig(),loadKernel()]);return {configured:!!(await endpoint()),config:c,kernel:kernelEnvelope(k),historyItems:history.length,signalItems:signalHistory.length,sessionId:sessionId(),silent:true,muted:false,bus:'gvault:blob:signal',broadcastChannel:'gvault.public.blobs.v1'}}});
+signal('listener.ready',{silent:true,muted:false,bus:'gvault:blob:signal',broadcastChannel:'gvault.public.blobs.v1',kernelUrl:KERNEL_URL});
 })();
