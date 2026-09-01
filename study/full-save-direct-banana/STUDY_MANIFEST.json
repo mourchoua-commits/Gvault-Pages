@@ -1,50 +1,57 @@
 {
   "schema": "GVAULT_FULL_SAVE_DIRECT_BANANA_STUDY_MANIFEST_V1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "branch": "study/full-save-direct-banana",
-  "target": "Gvault-Pages public agent / BLOB_AGENT_DIRECT_BANANA",
+  "target": "Gvault-Pages public banana surface -> existing GVAULT local Agent",
   "methodology": {
     "name": "FULL_SAVE_ASSEMBLE_THEN_TEST",
-    "description": "Capture the relevant public state first, execute the complete turn as one parent blob, materialize every action as a child blob, verify the banana mirror, then capture the final state.",
+    "description": "Capture the relevant public state first, execute the complete local-routed turn as one parent blob, materialize every action as a child blob, verify the banana mirror, then capture the final state.",
     "everyActionIsBlob": true,
     "silent": true,
     "muted": false
   },
-  "baseline": {
-    "agentLiveBlobSha": "2187a561f48e2e08439da8360fe2817f986cec90",
-    "gatewayConfigSha": "11d475b9876eb2dd50c53c7d5eb7f9c023c37b6f",
-    "conversationLayerSha": "ee1dd9115cbce9d1fc7255a2a028d563adcbe192",
-    "serviceWorkerSha": "af7426ea19e048f932cd7664addb1518b427b4c2",
-    "gatewayStatus": "PENDING_GATEWAY_DEPLOY",
-    "gatewayBaseUrl": null
+  "agent": {
+    "lineage": "GU1.3.2 GTHINK ROUTED AGENT",
+    "provider": "GVAULT_AGENT_LOCAL_GTHINK",
+    "remoteProvider": false,
+    "openAI": false,
+    "methodAuthority": "GVAULT_METHOD_ROUTER",
+    "integrationPoint": "sendAgentMessage -> agentGThinkRouteRequest -> agentAnswer -> recordAgentTrace",
+    "invocationScope": "EVERY_NEW_USER_MESSAGE"
   },
-  "provider": {
-    "target": "OpenAI Responses API",
-    "model": "gpt-5.6-sol",
-    "exactCurrentChatGPTSessionEmbedded": false,
-    "apiModelDirectConversationPossible": true
+  "browserBridge": {
+    "script": "scripts/gvault-agent-live-blob.js",
+    "schema": "GVAULT_AGENT_LIVE_BLOB_CLIENT_V3_LOCAL_GTHINK",
+    "compatibilitySurface": "/api/vault/chat",
+    "networkRequired": false,
+    "behavior": "POST /api/vault/chat is intercepted locally and translated into runtime.sendAgentMessage(message).",
+    "runtimeResolver": "#gvaultRuntime.contentWindow",
+    "serviceWorkerVersion": "gvault-shell-v1-20260901-agent-local-gthink-v3"
   },
   "turnActions": [
-    "snapshot.before",
+    "banana.turn.begin",
     "input.capture",
-    "agent.direct.ask",
-    "agent.response.require_ok",
+    "runtime.resolve",
+    "gthink.route.entry",
+    "sendAgentMessage",
+    "gthink.route.exit",
     "banana.verify",
-    "snapshot.after"
+    "banana.turn.pass"
   ],
   "tests": {
-    "coreSyntax": "PASS",
-    "browserAdapterSyntax": "PASS",
-    "deterministicFullSavePipeline": "PASS_27_27",
+    "fullSavePipeline": "PASS_27_27",
+    "localGThinkBananaAdapter": "PASS_25_25",
     "bananaMismatchFailurePath": "PASS",
-    "realPublicPagesProviderRoundTrip": "PENDING_GATEWAY_BASEURL_AND_PROVIDER_SECRET"
+    "remoteProviderRequired": false,
+    "browserScriptSyntax": "PENDING_RECHECK",
+    "realPostSasRuntimeBinding": "PENDING_STUDY_BRANCH_BROWSER_CHECK"
   },
   "truthBoundary": {
-    "fullSaveMethodologyCanWrapTheDirectAgentTurn": true,
+    "fullSaveMethodologyCanWrapTheLocalAgentTurn": true,
     "allStudyActionsCanBeRepresentedAsBlobs": true,
     "bananaCanBeVerifiedBeforeTurnPass": true,
-    "publicPagesCanCurrentlyReachRemoteAgent": false,
-    "reason": "scripts/gvault-agent-gateway.json still has baseUrl=null. Static GitHub Pages cannot itself hold the server-side OpenAI credential required by the Responses API bridge."
+    "remoteApiOrCloudWorkerNeeded": false,
+    "mainBranchChangedByThisLocalStudy": false
   },
-  "promotion": "STUDY_ONLY_DO_NOT_MERGE_UNTIL_REAL_PROVIDER_ROUNDTRIP_PASS"
+  "promotion": "STUDY_ONLY_UNTIL_BROWSER_BINDING_PASS"
 }
