@@ -45,12 +45,12 @@ footer{font-size:11px;color:#8e97aa;text-align:center;padding:0 8px;min-height:1
 </article>
 <article class="blob" id="gthinkBlob" data-role="gthink">
 <div class="label">GThink</div>
-<div class="text" id="answer">Tous les échanges de cette surface passent par le bus blob commun.</div>
+<div class="text" id="answer">Tous les échanges de cette surface passent par le stream blob commun.</div>
 </article>
 </section>
-<footer id="foot">GVAULT_UNIVERSAL_BLOB_V1 · public uniquement</footer>
+<footer id="foot">gvault://blobs/public/gthink/stream</footer>
 </main>
-<script src="../scripts/gvault-agent-live-blob.js?v=4" data-gvault-agent-live-blob="V4"></script>
+<script src="../scripts/gvault-agent-live-blob.js?v=5" data-gvault-agent-live-blob="V5"></script>
 <script>
 (()=>{'use strict';
 const stream=document.getElementById('stream'),input=document.getElementById('input'),send=document.getElementById('send'),answer=document.getElementById('answer'),userText=document.getElementById('userText'),userBlob=document.getElementById('userBlob'),gthinkBlob=document.getElementById('gthinkBlob'),status=document.getElementById('status'),foot=document.getElementById('foot');
@@ -65,8 +65,8 @@ function onBlob(blob){
  if(!blob||blob.schema!=='GVAULT_UNIVERSAL_BLOB_V1')return;
  if(blob.kind==='gateway.state'){
   connected=blob.payload?.configured===true;
-  status.textContent=connected?'2 blobs · tout en blob · GThink connecté':'2 blobs · tout en blob · gateway en attente';
-  foot.textContent=connected?'Bus blob commun · gateway connecté':'Bus blob commun · passerelle distante en attente';
+  status.textContent=connected?'2 blobs · stream raccordé':'2 blobs · stream indisponible';
+  foot.textContent=blob.payload?.streamUrl||api?.streamUrl||'gvault://blobs/public/gthink/stream';
   send.disabled=busy||!connected;
   return;
  }
@@ -76,7 +76,7 @@ function onBlob(blob){
   currentReplyBlobId=null;return;
  }
  if(blob.kind==='state'&&blob.role==='gthink'&&blob.payload?.state==='interpreting'){
-  status.textContent='GThink interprète le blob…';gthinkBlob.classList.add('thinking');return;
+  status.textContent='GThink écoute le stream…';gthinkBlob.classList.add('thinking');return;
  }
  if(blob.kind==='utterance'&&blob.role==='gthink'){
   currentReplyBlobId=blob.blobId;answer.textContent='';paint(gthinkBlob,blob.chroma,blob.text||'GThink','gthink');gthinkBlob.classList.remove('thinking');gthinkBlob.classList.add('writing');status.textContent='GThink répond en blobs…';return;
@@ -85,7 +85,7 @@ function onBlob(blob){
   answer.append(blob.payload?.chars||'');answer.scrollTop=answer.scrollHeight;return;
  }
  if(blob.kind==='render.done'&&blob.parentBlobId===currentReplyBlobId){
-  gthinkBlob.classList.remove('writing','thinking');status.textContent=connected?'2 blobs · tout en blob · GThink connecté':'2 blobs · tout en blob';setBusy(false);input.focus();return;
+  gthinkBlob.classList.remove('writing','thinking');status.textContent=connected?'2 blobs · stream raccordé':'2 blobs · stream';setBusy(false);input.focus();return;
  }
  if(blob.kind==='error'){
   gthinkBlob.classList.remove('writing','thinking');const msg=blob.payload?.error||'gthink_unavailable';answer.textContent='GThink indisponible : '+msg;paint(gthinkBlob,null,'error:'+msg,'gthink');status.textContent='Blob erreur reçu';setBusy(false);return;
@@ -102,7 +102,7 @@ async function init(){
  if(!api){status.textContent='Bus blob indisponible';send.disabled=true;return}
  api.listen(onBlob);
  for(const blob of api.hearLast(32))onBlob(blob);
- const s=await api.status();connected=!!s.configured;send.disabled=!connected;status.textContent=connected?'2 blobs · tout en blob · GThink connecté':'2 blobs · tout en blob · gateway en attente';
+ const s=await api.status();connected=!!s.configured;send.disabled=!connected;status.textContent=connected?'2 blobs · stream raccordé':'2 blobs · stream indisponible';foot.textContent=s.streamUrl||api.streamUrl||foot.textContent;
  paint(userBlob,null,'blob entrant','user');paint(gthinkBlob,null,'gthink','gthink');
 }
 input.addEventListener('input',autosize);input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submit()}});send.addEventListener('click',submit);userBlob.addEventListener('click',e=>{if(e.target!==send)input.focus()});
