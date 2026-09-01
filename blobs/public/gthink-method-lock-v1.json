@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_GTHINK_METHOD_LOCK_V1",
+  "version": 1,
+  "blobId": "blob:public:gthink-method-lock:v1",
+  "kind": "method.lock",
+  "role": "method-guard",
+  "status": "LOCKED",
+  "scope": ["GThink", "Gvault-Pages", "public-kernel", "gateway", "renderer", "person-memory"],
+  "canonical": {
+    "transport": "blob-stream",
+    "streamUrl": "gvault://blobs/public/gthink/stream",
+    "requestKind": "gateway.request",
+    "listenerReadyKind": "gthink.listener.ready",
+    "responseKinds": ["gateway.response", "utterance", "error"],
+    "renderKinds": ["render.delta", "render.done"],
+    "route": "personBlob/userBlob -> public-kernel -> gateway.request -> gvault://blobs/public/gthink/stream -> GThink listener -> response blob -> render.delta -> public-ui",
+    "causality": "Toute réponse GThink doit référencer gateway.request ou son utterance parent par parentBlobId ou payload.requestBlobId."
+  },
+  "semanticRules": [
+    "L'URL GThink désigne l'adresse logique du stream de blobs, pas une URL HTTP ni l'adresse d'un Worker.",
+    "GThink est le répondant applicatif : les blobs transportent, décrivent et affichent ; ils ne remplacent pas GThink comme interprète/répondant.",
+    "La disponibilité du transport et la disponibilité du répondant sont deux états distincts : transportReady peut être vrai pendant que responderReady est faux.",
+    "Un personBlob et sa mémoire sont des sidecars utilisateur ; ils ne deviennent jamais le moteur GThink.",
+    "L'adaptation graphique ne peut pas modifier le transport, l'adresse du stream, le répondant ou les règles de causalité.",
+    "Une absence de listener doit produire WAITING_GTHINK_LISTENER, jamais déclencher automatiquement la création d'un autre transport.",
+    "Une interface cassée ou un listener absent se répare dans l'architecture existante avant d'inventer une infrastructure parallèle."
+  ],
+  "routingPriority": [
+    "intention/fonction",
+    "méthode de routage déjà convenue",
+    "emplacement logique existant",
+    "index/cadastre uniquement comme support"
+  ],
+  "forbiddenWithoutExplicitMethodChange": [
+    "remplacer le stream par baseUrl + /api/vault/chat",
+    "considérer une URL workers.dev comme URL canonique de GThink",
+    "activer httpAdapter comme transport principal",
+    "ajouter ou déclencher un déploiement Worker pour résoudre l'absence de listener",
+    "créer un second gateway ou un second répondant en parallèle",
+    "faire passer person-memory pour GThink",
+    "modifier la méthode à partir d'une simple inférence, d'une erreur UI ou d'un timeout"
+  ],
+  "preflightBeforeInfrastructureChange": [
+    "Lire ce blob de méthode.",
+    "Lire la config gateway et le client live actuels.",
+    "Identifier si le problème est transportReady, responderReady, rendu ou mémoire utilisateur.",
+    "Conserver le chemin canonique si l'utilisateur n'a pas explicitement demandé de changer de méthode.",
+    "Vérifier qu'aucune action proposée n'introduit HTTP/Worker comme remplacement du stream.",
+    "En cas d'ambiguïté, ne pas changer l'architecture : diagnostiquer dans le stream existant."
+  ],
+  "methodChangePolicy": {
+    "requiresExplicitUserRequest": true,
+    "implicitInferenceAllowed": false,
+    "errorRecoveryMayChangeMethod": false,
+    "uiAdaptationMayChangeMethod": false,
+    "listenerFailureMayChangeMethod": false
+  },
+  "recovery": {
+    "onViolation": [
+      "émettre method.violation",
+      "annuler/retirer le composant divergent si possible",
+      "restaurer transport=blob-stream et streamUrl canonique",
+      "préserver personBlob, writingBlob et interface adaptative",
+      "reprendre au dernier point conforme sans reconstruire l'architecture"
+    ]
+  },
+  "evidence": {
+    "origin": "Méthode explicitement fixée dans la conversation GThink/GVAULT le 1 septembre 2026.",
+    "lastCorrection": "Un workflow Cloudflare ajouté par erreur a été supprimé et la méthode blob-stream a été réaffirmée.",
+    "methodChangeApproved": false
+  }
+}
