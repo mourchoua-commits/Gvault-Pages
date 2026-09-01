@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "c012ef2d69a6cb5b3a4220481a83aeafabd5e4e9",
+  "parentSha": "28eeedcbd315279c69312d0487101a69704e01aa",
+  "committedAt": "2026-09-01T22:53:37+02:00",
+  "summary": {
+    "subject": "feat(blobs): define universal GThink public blob protocol",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 65,
+    "deletions": 0,
+    "paths": [
+      "blobs/public/gthink-universal-blob-protocol-v1.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 65,
+    "deletions": 0,
+    "magnitude": 65,
+    "committedAt": "2026-09-01T22:53:37+02:00",
+    "parentSha": "28eeedcbd315279c69312d0487101a69704e01aa"
+  },
+  "pulseKey": "CTP1:c012ef2d69a6cb5b3a4220481a83aeafabd5e4e9:baed4cd46d05be89",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "6449d278e1d0720ca2e1a484bd2514a2adcd248041abbb0c51e414fafdd4f386",
+  "typedKeys": {
+    "commit": "gitc:c012ef2d69a6cb5b3a4220481a83aeafabd5e4e9",
+    "parent": "gitc:28eeedcbd315279c69312d0487101a69704e01aa",
+    "pulse": "ctp1:c012ef2d69a6cb5b3a4220481a83aeafabd5e4e9:baed4cd46d05be89",
+    "translation": "cttrans:6449d278e1d0720ca2e1a484bd2514a2adcd248041abbb0c51e414fafdd4f386",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "c012ef2d69a6cb5b3a4220481a83aeafabd5e4e9",
+    "parentSha": "28eeedcbd315279c69312d0487101a69704e01aa",
+    "committedAt": "2026-09-01T22:53:37+02:00",
+    "summary": {
+      "subject": "feat(blobs): define universal GThink public blob protocol",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 65,
+      "deletions": 0,
+      "paths": [
+        "blobs/public/gthink-universal-blob-protocol-v1.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 65,
+      "deletions": 0,
+      "magnitude": 65,
+      "committedAt": "2026-09-01T22:53:37+02:00",
+      "parentSha": "28eeedcbd315279c69312d0487101a69704e01aa"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/c012ef2d69a6cb5b3a4220481a83aeafabd5e4e9.json",
+      "vfsKey": "CTP1:c012ef2d69a6cb5b3a4220481a83aeafabd5e4e9:baed4cd46d05be89",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/c012ef2d69a6cb5b3a4220481a83aeafabd5e4e9.json"
+}
