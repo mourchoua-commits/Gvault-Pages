@@ -6,6 +6,8 @@ on:
       - test/pre-sas-accessibility-20260901
     paths:
       - tests/public-pre-sas-accessibility-cdp.py
+      - tests/public-pre-sas-selfheal-cdp.py
+      - scripts/gvault-defect-selfheal-blobs.js
       - .github/workflows/pre-sas-accessibility-matrix.yml
   workflow_dispatch:
 
@@ -40,6 +42,11 @@ jobs:
         env:
           GVAULT_PUBLIC_URL: https://mourchoua-commits.github.io/Gvault-Pages/
         run: python tests/public-pre-sas-accessibility-cdp.py
+
+      - name: Prove bounded self-healing defect blobs
+        env:
+          GVAULT_PUBLIC_URL: https://mourchoua-commits.github.io/Gvault-Pages/
+        run: python tests/public-pre-sas-selfheal-cdp.py
 
       - name: Upload diagnostic evidence
         if: always()
