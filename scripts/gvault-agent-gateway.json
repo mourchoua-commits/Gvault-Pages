@@ -1,8 +1,8 @@
 {
   "schema": "GVAULT_AGENT_GATEWAY_CONFIG_V2",
   "version": 2,
-  "status": "BLOB_STREAM_READY",
-  "transport": "blob-stream",
+  "status": "BLOB_STREAM_WAITING_GTHINK",
+  "transport": "blob-stream-waiting-listener",
   "streamUrl": "gvault://blobs/public/gthink/stream",
   "blobSchema": "GVAULT_UNIVERSAL_BLOB_V1",
   "domEvent": "gvault:blob",
@@ -10,6 +10,12 @@
   "requestKind": "gateway.request",
   "responseKinds": ["gateway.response", "utterance", "error"],
   "route": "public.user -> public-kernel -> blob-stream -> GThink -> blob-stream -> public-ui",
+  "readiness": {
+    "transportReady": true,
+    "responderReady": false,
+    "requiredListenerKind": "gthink.listener.ready",
+    "reason": "Le stream existe mais aucun moteur GThink public n'est actuellement attaché pour consommer gateway.request."
+  },
   "httpAdapter": {
     "enabled": false,
     "baseUrl": null,
@@ -31,7 +37,9 @@
     "payload": {
       "transport": "blob-stream",
       "streamUrl": "gvault://blobs/public/gthink/stream",
-      "configured": true
+      "transportReady": true,
+      "responderReady": false,
+      "configured": false
     }
   },
   "containsSecret": false
