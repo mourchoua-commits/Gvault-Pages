@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const VERSION='1.0.0';
+const VERSION='1.1.0';
 const STYLE=Object.freeze({
  schema:'GVAULT_PUBLIC_AGENT_CONVERSATION_STYLE_V1',
  version:VERSION,
@@ -67,11 +67,15 @@ function installRemoteLayer(){
  };
  try{window.fetch=wrapped;window.__GVAULT_PUBLIC_AGENT_FETCH_STYLE_V1=true;return true}catch{return false}
 }
+function loadLiveBlobLayer(){
+ if(window.GVAULT_AGENT_LIVE_BLOB||document.querySelector('script[data-gvault-agent-live-blob]'))return;
+ const s=document.createElement('script');s.src='./scripts/gvault-agent-live-blob.js?v=1';s.async=false;s.setAttribute('data-gvault-agent-live-blob','V1');s.onerror=()=>console.warn('GVAULT direct agent blob layer unavailable');(document.head||document.documentElement).appendChild(s);
+}
 function announce(){
  try{window.dispatchEvent(new CustomEvent('gvault:public-agent-conversation-style-ready',{detail:{schema:STYLE.schema,version:VERSION}}))}catch{}
 }
-installRemoteLayer();
+installRemoteLayer();loadLiveBlobLayer();
 let tries=0;const timer=setInterval(()=>{tries++;if(installLocalLayer()||tries>=80){clearInterval(timer);announce()}},125);
 if(installLocalLayer()){clearInterval(timer);announce()}
-window.GVAULT_PUBLIC_AGENT_CONVERSATION=Object.freeze({version:VERSION,style:STYLE,systemInstruction:SYSTEM_INSTRUCTION,conversationalize,status:()=>({localLayer:!!window.applyAgentModel?.__gvaultConversationStyleV1,remoteLayer:!!window.__GVAULT_PUBLIC_AGENT_FETCH_STYLE_V1})});
+window.GVAULT_PUBLIC_AGENT_CONVERSATION=Object.freeze({version:VERSION,style:STYLE,systemInstruction:SYSTEM_INSTRUCTION,conversationalize,status:()=>({localLayer:!!window.applyAgentModel?.__gvaultConversationStyleV1,remoteLayer:!!window.__GVAULT_PUBLIC_AGENT_FETCH_STYLE_V1,liveBlobLayer:!!window.GVAULT_AGENT_LIVE_BLOB})});
 })();
