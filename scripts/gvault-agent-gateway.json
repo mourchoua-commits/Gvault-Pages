@@ -2,7 +2,7 @@
   "schema": "GVAULT_AGENT_GATEWAY_CONFIG_V2",
   "version": 2,
   "status": "BLOB_STREAM_WAITING_GTHINK",
-  "transport": "blob-stream-waiting-listener",
+  "transport": "blob-stream",
   "streamUrl": "gvault://blobs/public/gthink/stream",
   "blobSchema": "GVAULT_UNIVERSAL_BLOB_V1",
   "domEvent": "gvault:blob",
@@ -10,6 +10,15 @@
   "requestKind": "gateway.request",
   "responseKinds": ["gateway.response", "utterance", "error"],
   "route": "public.user -> public-kernel -> blob-stream -> GThink -> blob-stream -> public-ui",
+  "methodGuard": {
+    "lockBlob": "../blobs/public/gthink-method-lock-v1.json",
+    "detectorBlob": "../blobs/public/gthink-method-deviation-detector-v1.json",
+    "recoveryBlob": "../blobs/public/gthink-method-recovery-v1.json",
+    "canonicalTransport": "blob-stream",
+    "canonicalStreamUrl": "gvault://blobs/public/gthink/stream",
+    "methodChangeRequiresExplicitUserRequest": true,
+    "methodChangeApproved": false
+  },
   "readiness": {
     "transportReady": true,
     "responderReady": false,
@@ -33,13 +42,14 @@
     "intent": "route_all_gthink_traffic_through_blob_stream",
     "language": "fr",
     "surface": "Gvault-Pages",
-    "understoodBy": ["GThink", "public-kernel", "gateway-adapter", "public-ui"],
+    "understoodBy": ["GThink", "public-kernel", "gateway-adapter", "public-ui", "method-guard"],
     "payload": {
       "transport": "blob-stream",
       "streamUrl": "gvault://blobs/public/gthink/stream",
       "transportReady": true,
       "responderReady": false,
-      "configured": false
+      "configured": false,
+      "methodLockBlobId": "blob:public:gthink-method-lock:v1"
     }
   },
   "containsSecret": false
