@@ -7,106 +7,51 @@
 <meta name="robots" content="noindex,nofollow">
 <title>GThink · GVAULT</title>
 <style>
-:root{font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#05070b;color:#f7f8fb}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#202735 0,#080b11 42%,#030407 100%);overflow:hidden}
+:root{font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#05070b;color:#f7f8fb;--person-hue:220;--person-hue2:272;--person-round:48%;--person-text-scale:1;--person-motion:.31s}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,hsl(var(--person-hue) 22% 20%) 0,#080b11 42%,#030407 100%);overflow:hidden;transition:background var(--person-motion) ease}
 body{min-height:100dvh;display:grid;place-items:center;padding:max(14px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom))}
 main{width:min(100%,720px);height:min(94dvh,880px);display:grid;grid-template-rows:auto 1fr auto;gap:10px}
-header{display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#b9c1d2}
-#status{letter-spacing:.03em;text-transform:none;opacity:.76;text-align:right}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#b9c1d2}#status{letter-spacing:.03em;text-transform:none;opacity:.8;text-align:right}
 #stream{position:relative;display:grid;grid-template-rows:1fr 1fr;gap:12px;min-height:0}
-.blob{position:relative;isolation:isolate;overflow:hidden;border:1px solid rgba(255,255,255,.16);box-shadow:0 18px 60px rgba(0,0,0,.32),inset 0 1px rgba(255,255,255,.16);padding:clamp(18px,5vw,38px);display:flex;flex-direction:column;justify-content:center;transition:transform .36s cubic-bezier(.2,.8,.2,1),opacity .28s ease,filter .36s ease,background .3s ease;border-radius:42% 58% 53% 47% / 48% 43% 57% 52%;min-height:0;background:linear-gradient(145deg,hsl(220 18% 16%),hsl(238 22% 23%))}
+.blob{position:relative;isolation:isolate;overflow:hidden;border:1px solid rgba(255,255,255,.16);box-shadow:0 18px 60px rgba(0,0,0,.32),inset 0 1px rgba(255,255,255,.16);padding:clamp(18px,5vw,38px);display:flex;flex-direction:column;justify-content:center;transition:transform var(--person-motion) ease,opacity var(--person-motion) ease,filter var(--person-motion) ease,background var(--person-motion) ease,border-color var(--person-motion) ease;min-height:0;background:linear-gradient(145deg,hsl(var(--person-hue) 58% 42%),hsl(var(--person-hue2) 62% 50%))}
+#userBlob{border-radius:var(--person-round) calc(100% - var(--person-round)) 53% 47% / 48% 43% 57% 52%}
+#gthinkBlob{border-radius:calc(100% - var(--person-round)) var(--person-round) 46% 54% / 45% 56% 44% 55%;cursor:pointer}
 .blob::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 24% 18%,rgba(255,255,255,.24),transparent 28%),radial-gradient(circle at 78% 82%,rgba(255,255,255,.12),transparent 35%);mix-blend-mode:screen;pointer-events:none}
-.blob[data-role="gthink"]{border-radius:58% 42% 46% 54% / 45% 56% 44% 55%}
-.label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:750;opacity:.72;margin-bottom:10px}
-.text{font-size:clamp(16px,3.8vw,21px);line-height:1.43;white-space:pre-wrap;overflow:auto;scrollbar-width:none;text-shadow:0 1px 4px rgba(0,0,0,.28)}
-.text[hidden]{display:none}.text::-webkit-scrollbar{display:none}
-.composer{display:grid;grid-template-columns:1fr auto;gap:9px;align-items:end;width:100%;margin-top:10px}
-textarea{resize:none;max-height:130px;min-height:48px;width:100%;border:0;outline:0;border-radius:20px;background:rgba(0,0,0,.22);color:inherit;padding:13px 15px;font:inherit;line-height:1.35;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
-textarea::placeholder{color:rgba(255,255,255,.62)}
-button{width:48px;height:48px;border:0;border-radius:50%;background:rgba(255,255,255,.9);color:#0a0d12;font-size:20px;font-weight:800;cursor:pointer;box-shadow:0 7px 24px rgba(0,0,0,.25)}
-button:disabled{opacity:.5;cursor:default}
-#stream.rolling .blob{transform:translateY(-18px) scale(.985);opacity:.22;filter:blur(4px)}
-.thinking .text::after{content:"  ···";animation:pulse 1s infinite}
-.writing .text::after{content:"▌";margin-left:2px;animation:pulse .55s infinite}
-footer{font-size:11px;color:#8e97aa;text-align:center;padding:0 8px;min-height:14px}
-@keyframes pulse{0%,100%{opacity:.25}50%{opacity:1}}
-@media (prefers-reduced-motion:reduce){.blob{transition:none}.thinking .text::after,.writing .text::after{animation:none}}
+.label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:750;opacity:.72;margin-bottom:10px}.text{font-size:calc(clamp(16px,3.8vw,21px)*var(--person-text-scale));line-height:1.43;white-space:pre-wrap;overflow:auto;scrollbar-width:none;text-shadow:0 1px 4px rgba(0,0,0,.28)}.text[hidden]{display:none}.text::-webkit-scrollbar{display:none}
+.composer{display:grid;grid-template-columns:1fr auto;gap:9px;align-items:end;width:100%;margin-top:10px}textarea{resize:none;max-height:130px;min-height:48px;width:100%;border:0;outline:0;border-radius:20px;background:rgba(0,0,0,.22);color:inherit;padding:13px 15px;font:inherit;line-height:1.35;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}textarea::placeholder{color:rgba(255,255,255,.62)}button{width:48px;height:48px;border:0;border-radius:50%;background:rgba(255,255,255,.9);color:#0a0d12;font-size:20px;font-weight:800;cursor:pointer;box-shadow:0 7px 24px rgba(0,0,0,.25)}button:disabled{opacity:.5;cursor:default}
+#stream.rolling .blob{transform:translateY(-18px) scale(.985);opacity:.22;filter:blur(4px)}.thinking .text::after{content:"  ···";animation:pulse 1s infinite}.writing .text::after{content:"▌";margin-left:2px;animation:pulse .55s infinite}footer{font-size:11px;color:#8e97aa;text-align:center;padding:0 8px;min-height:14px}
+body[data-person-density="airy"] .blob{padding:clamp(24px,7vw,48px)}body[data-person-density="compact"] .blob{padding:clamp(14px,4vw,28px)}
+@keyframes pulse{0%,100%{opacity:.25}50%{opacity:1}}@media(prefers-reduced-motion:reduce){.blob,html,body{transition:none}.thinking .text::after,.writing .text::after{animation:none}}
 </style>
 </head>
-<body>
+<body data-state="boot">
 <main>
 <header><strong>GThink · GVAULT</strong><span id="status">Initialisation des blobs…</span></header>
 <section id="stream" aria-live="polite">
-<article class="blob" id="userBlob" data-role="user">
-<div class="label">Blob entrant</div>
-<div class="text" id="userText" hidden></div>
-<div class="composer"><textarea id="input" rows="1" maxlength="24576" placeholder="Parler à GThink…" aria-label="Message pour GThink"></textarea><button id="send" type="button" aria-label="Envoyer">↑</button></div>
-</article>
-<article class="blob" id="gthinkBlob" data-role="gthink">
-<div class="label">GThink</div>
-<div class="text" id="answer">Tous les échanges de cette surface passent par le stream blob commun.</div>
-</article>
+<article class="blob" id="userBlob" data-role="user"><div class="label">Ton blob</div><div class="text" id="userText" hidden></div><div class="composer"><textarea id="input" rows="1" maxlength="24576" placeholder="Parler à GThink…" aria-label="Message pour GThink"></textarea><button id="send" type="button" aria-label="Envoyer">↑</button></div></article>
+<article class="blob" id="gthinkBlob" data-role="gthink"><div class="label" id="answerLabel">GThink</div><div class="text" id="answer">L’interface s’adapte à ton blob utilisateur au fil des échanges.</div></article>
 </section>
 <footer id="foot">gvault://blobs/public/gthink/stream</footer>
 </main>
-<script src="../scripts/gvault-agent-live-blob.js?v=5" data-gvault-agent-live-blob="V5"></script>
+<script src="../scripts/gvault-agent-live-blob.js?v=6" data-gvault-agent-live-blob="V6"></script>
+<script src="../scripts/gvault-person-blob.js?v=1" data-gvault-person-blob="V1"></script>
 <script>
 (()=>{'use strict';
-const stream=document.getElementById('stream'),input=document.getElementById('input'),send=document.getElementById('send'),answer=document.getElementById('answer'),userText=document.getElementById('userText'),userBlob=document.getElementById('userBlob'),gthinkBlob=document.getElementById('gthinkBlob'),status=document.getElementById('status'),foot=document.getElementById('foot');
-let busy=false,connected=false,currentReplyBlobId=null,api=null;
+const stream=document.getElementById('stream'),input=document.getElementById('input'),send=document.getElementById('send'),answer=document.getElementById('answer'),answerLabel=document.getElementById('answerLabel'),userText=document.getElementById('userText'),userBlob=document.getElementById('userBlob'),gthinkBlob=document.getElementById('gthinkBlob'),status=document.getElementById('status'),foot=document.getElementById('foot');
+let busy=false,responderReady=false,transportReady=false,currentReplyBlobId=null,api=null;
 function hash(text,role){let h=2166136261>>>0,s=role+':'+text;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0}return h>>>0}
 function fallback(text,role){const h=hash(text,role),a=h%360,b=(a+52+((h>>>24)%72))%360;return `linear-gradient(145deg,hsl(${a} 72% 48%),hsl(${b} 78% 57%))`}
-function paint(el,chroma,text,role){el.style.background=chroma?.css||fallback(text,role)}
+function paint(el,chroma,text,role){if(chroma?.css)el.style.background=chroma.css;else if(!window.GVAULT_PERSON_BLOB)el.style.background=fallback(text,role)}
 function autosize(){input.style.height='auto';input.style.height=Math.min(130,Math.max(48,input.scrollHeight))+'px'}
-function setBusy(v){busy=v;send.disabled=v||!connected;input.disabled=v;gthinkBlob.classList.toggle('thinking',v&&!gthinkBlob.classList.contains('writing'))}
+function setBusy(v){busy=v;send.disabled=v;input.disabled=v;gthinkBlob.classList.toggle('thinking',v&&!gthinkBlob.classList.contains('writing'))}
+function adaptState(){if(responderReady){document.body.dataset.state='ready';status.textContent='2 blobs · GThink écoute';answerLabel.textContent='GThink';input.placeholder='Parler à GThink…'}else if(transportReady){document.body.dataset.state='waiting';status.textContent='2 blobs · stream prêt · GThink attendu';answerLabel.textContent='GThink / mémoire blob';input.placeholder='Écris ici · tes écrits restent dans ton blob local'}else{document.body.dataset.state='offline';status.textContent='2 blobs · stream indisponible';answerLabel.textContent='Mémoire blob';input.placeholder='Écris ici · mémoire locale disponible'}send.disabled=busy}
 function roll(fn){stream.classList.add('rolling');setTimeout(()=>{fn();stream.classList.remove('rolling')},180)}
-function onBlob(blob){
- if(!blob||blob.schema!=='GVAULT_UNIVERSAL_BLOB_V1')return;
- if(blob.kind==='gateway.state'){
-  connected=blob.payload?.configured===true;
-  status.textContent=connected?'2 blobs · stream raccordé':'2 blobs · stream indisponible';
-  foot.textContent=blob.payload?.streamUrl||api?.streamUrl||'gvault://blobs/public/gthink/stream';
-  send.disabled=busy||!connected;
-  return;
- }
- if(blob.kind==='utterance'&&blob.role==='user'){
-  const text=blob.text||blob.payload?.text||'';
-  roll(()=>{userText.textContent=text;userText.hidden=false;paint(userBlob,blob.chroma,text,'user');answer.textContent='';paint(gthinkBlob,null,'GThink:'+text,'gthink')});
-  currentReplyBlobId=null;return;
- }
- if(blob.kind==='state'&&blob.role==='gthink'&&blob.payload?.state==='interpreting'){
-  status.textContent='GThink écoute le stream…';gthinkBlob.classList.add('thinking');return;
- }
- if(blob.kind==='utterance'&&blob.role==='gthink'){
-  currentReplyBlobId=blob.blobId;answer.textContent='';paint(gthinkBlob,blob.chroma,blob.text||'GThink','gthink');gthinkBlob.classList.remove('thinking');gthinkBlob.classList.add('writing');status.textContent='GThink répond en blobs…';return;
- }
- if(blob.kind==='render.delta'&&blob.parentBlobId===currentReplyBlobId){
-  answer.append(blob.payload?.chars||'');answer.scrollTop=answer.scrollHeight;return;
- }
- if(blob.kind==='render.done'&&blob.parentBlobId===currentReplyBlobId){
-  gthinkBlob.classList.remove('writing','thinking');status.textContent=connected?'2 blobs · stream raccordé':'2 blobs · stream';setBusy(false);input.focus();return;
- }
- if(blob.kind==='error'){
-  gthinkBlob.classList.remove('writing','thinking');const msg=blob.payload?.error||'gthink_unavailable';answer.textContent='GThink indisponible : '+msg;paint(gthinkBlob,null,'error:'+msg,'gthink');status.textContent='Blob erreur reçu';setBusy(false);return;
- }
-}
-async function submit(){
- const message=input.value.trim();if(!message||busy||!api)return;
- setBusy(true);input.value='';autosize();
- const out=await api.ask(message);
- if(!out?.ok&&busy){setBusy(false);input.focus()}
-}
-async function init(){
- api=window.GVAULT_AGENT_LIVE_BLOB;
- if(!api){status.textContent='Bus blob indisponible';send.disabled=true;return}
- api.listen(onBlob);
- for(const blob of api.hearLast(32))onBlob(blob);
- const s=await api.status();connected=!!s.configured;send.disabled=!connected;status.textContent=connected?'2 blobs · stream raccordé':'2 blobs · stream indisponible';foot.textContent=s.streamUrl||api.streamUrl||foot.textContent;
- paint(userBlob,null,'blob entrant','user');paint(gthinkBlob,null,'gthink','gthink');
-}
-input.addEventListener('input',autosize);input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submit()}});send.addEventListener('click',submit);userBlob.addEventListener('click',e=>{if(e.target!==send)input.focus()});
-autosize();init();
+function typeLocal(text,label='Mémoire blob'){answerLabel.textContent=label;answer.textContent='';gthinkBlob.classList.remove('thinking');gthinkBlob.classList.add('writing');let i=0,chars=Array.from(text);const step=()=>{if(i>=chars.length){gthinkBlob.classList.remove('writing');setBusy(false);return}let piece='';for(let n=0;n<3&&i<chars.length;n++)piece+=chars[i++];answer.append(piece);answer.scrollTop=answer.scrollHeight;requestAnimationFrame(step)};requestAnimationFrame(step)}
+function onBlob(blob){if(!blob||blob.schema!=='GVAULT_UNIVERSAL_BLOB_V1')return;if(blob.kind==='gateway.state'){transportReady=blob.payload?.transportReady!==false;responderReady=blob.payload?.responderReady===true;foot.textContent=blob.payload?.streamUrl||api?.streamUrl||foot.textContent;adaptState();return}if(blob.kind==='gthink.listener.ready'){responderReady=true;transportReady=true;adaptState();return}if(blob.kind==='person.profile'){status.textContent=(responderReady?'GThink écoute':'blob utilisateur prêt')+' · mémoire locale';return}if(blob.kind==='ui.adapt'){return}if(blob.kind==='utterance'&&blob.role==='user'){const text=blob.text||blob.payload?.text||'';roll(()=>{userText.textContent=text;userText.hidden=false;paint(userBlob,blob.chroma,text,'user')});currentReplyBlobId=null;return}if(blob.kind==='state'&&blob.role==='gthink'&&blob.payload?.state==='interpreting'){status.textContent='GThink interprète ton blob…';gthinkBlob.classList.add('thinking');return}if(blob.kind==='utterance'&&blob.role==='gthink'){currentReplyBlobId=blob.blobId;answerLabel.textContent='GThink';answer.textContent='';paint(gthinkBlob,blob.chroma,blob.text||'GThink','gthink');gthinkBlob.classList.remove('thinking');gthinkBlob.classList.add('writing');status.textContent='GThink répond en blobs…';return}if(blob.kind==='render.delta'&&blob.parentBlobId===currentReplyBlobId){answer.append(blob.payload?.chars||'');answer.scrollTop=answer.scrollHeight;return}if(blob.kind==='render.done'&&blob.parentBlobId===currentReplyBlobId){gthinkBlob.classList.remove('writing','thinking');setBusy(false);adaptState();input.focus();return}}
+function emitLocalUser(message){return api.speak({schema:'GVAULT_UNIVERSAL_BLOB_V1',kind:'utterance',role:'user',from:'public.user',to:'person-memory',intent:'store_and_understand',text:message,payload:{text:message,localMemory:true}})}
+async function submit(){const message=input.value.trim();if(!message||busy||!api)return;setBusy(true);input.value='';autosize();const memory=window.GVAULT_PERSON_BLOB;if(memory?.isOwnMemoryQuery(message)){emitLocalUser(message);const local=await memory.answerOwnMemoryQuery(message);typeLocal(local?.text||'Aucun écrit local trouvé.');return}const out=await api.ask(message);if(!out?.ok){if(out?.error==='gthink_listener_not_ready'){api.probeResponder();typeLocal('Ton message a été reçu et conservé dans ton blob local. Le stream est prêt, mais GThink ne s’est pas encore annoncé comme listener.','Blob passerelle');return}typeLocal('Le blob a reçu ton message, mais le répondant GThink n’est pas disponible pour le moment.','Blob passerelle')}}
+async function init(){api=window.GVAULT_AGENT_LIVE_BLOB;if(!api){status.textContent='Bus blob indisponible';return}api.listen(onBlob);for(const blob of api.hearLast(40))onBlob(blob);const s=await api.status();transportReady=!!s.transportReady;responderReady=!!s.responderReady;foot.textContent=s.streamUrl||api.streamUrl||foot.textContent;adaptState();api.probeResponder();paint(userBlob,null,'person','user');paint(gthinkBlob,null,'gthink','gthink')}
+input.addEventListener('input',autosize);input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submit()}});send.addEventListener('click',submit);userBlob.addEventListener('click',e=>{if(e.target!==send)input.focus()});gthinkBlob.addEventListener('click',()=>{if(!responderReady&&api){api.probeResponder();status.textContent='Recherche du listener GThink sur le stream…'}});autosize();init();
 })();
 </script>
 </body>
