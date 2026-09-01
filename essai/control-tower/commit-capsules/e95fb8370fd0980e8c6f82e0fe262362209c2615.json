@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "e95fb8370fd0980e8c6f82e0fe262362209c2615",
+  "parentSha": "5df8a429bf0d3d2d8abf76c56c83f96e506bbe15",
+  "committedAt": "2026-09-01T15:37:38+02:00",
+  "summary": {
+    "subject": "Control Tower: add autonomous interactive blob zones",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 79,
+    "deletions": 0,
+    "paths": [
+      "essai/control-tower/blob-autonomy-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 79,
+    "deletions": 0,
+    "magnitude": 79,
+    "committedAt": "2026-09-01T15:37:38+02:00",
+    "parentSha": "5df8a429bf0d3d2d8abf76c56c83f96e506bbe15"
+  },
+  "pulseKey": "CTP1:e95fb8370fd0980e8c6f82e0fe262362209c2615:0c4df7ffe757c5bc",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "b1199a5ef2db9ba43d8dcf1a50228e4f9f96a61dde778fe536addeabbdedbfdc",
+  "typedKeys": {
+    "commit": "gitc:e95fb8370fd0980e8c6f82e0fe262362209c2615",
+    "parent": "gitc:5df8a429bf0d3d2d8abf76c56c83f96e506bbe15",
+    "pulse": "ctp1:e95fb8370fd0980e8c6f82e0fe262362209c2615:0c4df7ffe757c5bc",
+    "translation": "cttrans:b1199a5ef2db9ba43d8dcf1a50228e4f9f96a61dde778fe536addeabbdedbfdc",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "e95fb8370fd0980e8c6f82e0fe262362209c2615",
+    "parentSha": "5df8a429bf0d3d2d8abf76c56c83f96e506bbe15",
+    "committedAt": "2026-09-01T15:37:38+02:00",
+    "summary": {
+      "subject": "Control Tower: add autonomous interactive blob zones",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 79,
+      "deletions": 0,
+      "paths": [
+        "essai/control-tower/blob-autonomy-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 79,
+      "deletions": 0,
+      "magnitude": 79,
+      "committedAt": "2026-09-01T15:37:38+02:00",
+      "parentSha": "5df8a429bf0d3d2d8abf76c56c83f96e506bbe15"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/e95fb8370fd0980e8c6f82e0fe262362209c2615.json",
+      "vfsKey": "CTP1:e95fb8370fd0980e8c6f82e0fe262362209c2615:0c4df7ffe757c5bc",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/e95fb8370fd0980e8c6f82e0fe262362209c2615.json"
+}
