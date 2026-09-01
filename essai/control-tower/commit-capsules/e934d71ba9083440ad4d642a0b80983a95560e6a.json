@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "e934d71ba9083440ad4d642a0b80983a95560e6a",
+  "parentSha": "5db5db43c59e5c7d5a5d55be426a6ae949ba1f65",
+  "committedAt": "2026-09-02T00:51:51+02:00",
+  "summary": {
+    "subject": "fix(gthink): force public responder into offline-only mode",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 12,
+    "deletions": 73,
+    "paths": [
+      "scripts/gthink-public-responder.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 12,
+    "deletions": 73,
+    "magnitude": 85,
+    "committedAt": "2026-09-02T00:51:51+02:00",
+    "parentSha": "5db5db43c59e5c7d5a5d55be426a6ae949ba1f65"
+  },
+  "pulseKey": "CTP1:e934d71ba9083440ad4d642a0b80983a95560e6a:b91615ede2bed587",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "e0f8a9a58008adf7775501d7c4d21aa217af6812e8b12789acd335b985a91417",
+  "typedKeys": {
+    "commit": "gitc:e934d71ba9083440ad4d642a0b80983a95560e6a",
+    "parent": "gitc:5db5db43c59e5c7d5a5d55be426a6ae949ba1f65",
+    "pulse": "ctp1:e934d71ba9083440ad4d642a0b80983a95560e6a:b91615ede2bed587",
+    "translation": "cttrans:e0f8a9a58008adf7775501d7c4d21aa217af6812e8b12789acd335b985a91417",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "e934d71ba9083440ad4d642a0b80983a95560e6a",
+    "parentSha": "5db5db43c59e5c7d5a5d55be426a6ae949ba1f65",
+    "committedAt": "2026-09-02T00:51:51+02:00",
+    "summary": {
+      "subject": "fix(gthink): force public responder into offline-only mode",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 12,
+      "deletions": 73,
+      "paths": [
+        "scripts/gthink-public-responder.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 12,
+      "deletions": 73,
+      "magnitude": 85,
+      "committedAt": "2026-09-02T00:51:51+02:00",
+      "parentSha": "5db5db43c59e5c7d5a5d55be426a6ae949ba1f65"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/e934d71ba9083440ad4d642a0b80983a95560e6a.json",
+      "vfsKey": "CTP1:e934d71ba9083440ad4d642a0b80983a95560e6a:b91615ede2bed587",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/e934d71ba9083440ad4d642a0b80983a95560e6a.json"
+}
