@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "1a3a2a2fee7cf607e9759c1fa95ea55db91f464f",
+  "parentSha": "72af07e9bc95ea18d9735dd0ef3508601500b29e",
+  "committedAt": "2026-09-01T15:37:16+02:00",
+  "summary": {
+    "subject": "Control Tower: make SAS the GThink destiny gate",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 77,
+    "deletions": 0,
+    "paths": [
+      "essai/control-tower/gthink-sas-v1.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 77,
+    "deletions": 0,
+    "magnitude": 77,
+    "committedAt": "2026-09-01T15:37:16+02:00",
+    "parentSha": "72af07e9bc95ea18d9735dd0ef3508601500b29e"
+  },
+  "pulseKey": "CTP1:1a3a2a2fee7cf607e9759c1fa95ea55db91f464f:759d4c63dbab72e4",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "5238f2e61cddb196a674aaebf3e57a514ea794012783155cac828c1546574adb",
+  "typedKeys": {
+    "commit": "gitc:1a3a2a2fee7cf607e9759c1fa95ea55db91f464f",
+    "parent": "gitc:72af07e9bc95ea18d9735dd0ef3508601500b29e",
+    "pulse": "ctp1:1a3a2a2fee7cf607e9759c1fa95ea55db91f464f:759d4c63dbab72e4",
+    "translation": "cttrans:5238f2e61cddb196a674aaebf3e57a514ea794012783155cac828c1546574adb",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "1a3a2a2fee7cf607e9759c1fa95ea55db91f464f",
+    "parentSha": "72af07e9bc95ea18d9735dd0ef3508601500b29e",
+    "committedAt": "2026-09-01T15:37:16+02:00",
+    "summary": {
+      "subject": "Control Tower: make SAS the GThink destiny gate",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 77,
+      "deletions": 0,
+      "paths": [
+        "essai/control-tower/gthink-sas-v1.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 77,
+      "deletions": 0,
+      "magnitude": 77,
+      "committedAt": "2026-09-01T15:37:16+02:00",
+      "parentSha": "72af07e9bc95ea18d9735dd0ef3508601500b29e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/1a3a2a2fee7cf607e9759c1fa95ea55db91f464f.json",
+      "vfsKey": "CTP1:1a3a2a2fee7cf607e9759c1fa95ea55db91f464f:759d4c63dbab72e4",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/1a3a2a2fee7cf607e9759c1fa95ea55db91f464f.json"
+}
