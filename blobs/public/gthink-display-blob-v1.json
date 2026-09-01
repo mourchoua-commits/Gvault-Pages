@@ -1,0 +1,26 @@
+{
+  "schema": "GTHINK_DISPLAY_BLOB_V1",
+  "blobId": "blob:gthink:display:public:v1",
+  "role": "presentation",
+  "owner": "GThink",
+  "language": "fr",
+  "editable": true,
+  "texts": {
+    "greeting": "Oui. Je t’écoute.",
+    "identity": "Je suis GThink. Je reçois ton blob, j’interprète ta demande et je réponds sur le stream GVAULT.",
+    "help": "Je suis GThink. Envoie-moi ton blob : je l’interprète et je te réponds ici.",
+    "thanks": "Avec plaisir.",
+    "empty": "Je n’ai reçu aucun texte à interpréter.",
+    "listenerReady": "Le listener GThink est actif sur cette page.",
+    "previousNone": "Je n’ai pas encore de réponse précédente dans cette session.",
+    "summaryNone": "Il n’y a pas encore assez d’échanges dans cette session pour faire un résumé.",
+    "fallback": "J’ai bien reçu et interprété ton blob : « {message} ».",
+    "statusReady": "Stream GThink : {stream}. Listener : {listener}. Session : {session}."
+  },
+  "displayPolicy": {
+    "nameResponder": "GThink",
+    "avoidTechnicalBackendNarration": true,
+    "avoidModelBranding": true,
+    "fallbackUsesOnlyBlobText": true
+  }
+}
