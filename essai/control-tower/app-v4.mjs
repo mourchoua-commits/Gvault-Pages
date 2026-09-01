@@ -1,4 +1,5 @@
 import './content-addressed-feed-v2.mjs';
+import './blob-mesh-live-v1.mjs';
 
 const nativeFetch=window.fetch.bind(window);
 let lastHead=null;
