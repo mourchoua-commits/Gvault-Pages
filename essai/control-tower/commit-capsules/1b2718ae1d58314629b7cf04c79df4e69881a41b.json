@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "1b2718ae1d58314629b7cf04c79df4e69881a41b",
+  "parentSha": "b2afa4fa668c7e7b152e6ca0c052ff68963604d4",
+  "committedAt": "2026-09-01T15:39:32+02:00",
+  "summary": {
+    "subject": "Control Tower: activate GThink-governed blob architecture",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 161,
+    "paths": [
+      "essai/control-tower/app.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 161,
+    "magnitude": 162,
+    "committedAt": "2026-09-01T15:39:32+02:00",
+    "parentSha": "b2afa4fa668c7e7b152e6ca0c052ff68963604d4"
+  },
+  "pulseKey": "CTP1:1b2718ae1d58314629b7cf04c79df4e69881a41b:7732b8225d6b1b42",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "b88c6b5fcc9444145bbd8c732bd919c5653b5562dc61d86e52902e352a0fd5f5",
+  "typedKeys": {
+    "commit": "gitc:1b2718ae1d58314629b7cf04c79df4e69881a41b",
+    "parent": "gitc:b2afa4fa668c7e7b152e6ca0c052ff68963604d4",
+    "pulse": "ctp1:1b2718ae1d58314629b7cf04c79df4e69881a41b:7732b8225d6b1b42",
+    "translation": "cttrans:b88c6b5fcc9444145bbd8c732bd919c5653b5562dc61d86e52902e352a0fd5f5",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "1b2718ae1d58314629b7cf04c79df4e69881a41b",
+    "parentSha": "b2afa4fa668c7e7b152e6ca0c052ff68963604d4",
+    "committedAt": "2026-09-01T15:39:32+02:00",
+    "summary": {
+      "subject": "Control Tower: activate GThink-governed blob architecture",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 161,
+      "paths": [
+        "essai/control-tower/app.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 161,
+      "magnitude": 162,
+      "committedAt": "2026-09-01T15:39:32+02:00",
+      "parentSha": "b2afa4fa668c7e7b152e6ca0c052ff68963604d4"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/1b2718ae1d58314629b7cf04c79df4e69881a41b.json",
+      "vfsKey": "CTP1:1b2718ae1d58314629b7cf04c79df4e69881a41b:7732b8225d6b1b42",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/1b2718ae1d58314629b7cf04c79df4e69881a41b.json"
+}
