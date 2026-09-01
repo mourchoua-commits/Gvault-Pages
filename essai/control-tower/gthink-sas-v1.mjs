@@ -2,8 +2,10 @@ import {decideDestination} from './gthink-policy-v1.mjs';
 
 const history=[];
 let sasOpen=false;
+let sasInitialized=false;
 let observer=null;
 const now=()=>new Date().toISOString();
+const WALL_SELECTORS=['.top','.kpis','.toolbar','.layout','.tracksWrap','.terminal'];
 
 function emit(type,detail={}){
   const payload={schema:'GVAULT_GTHINK_EVENT_V1',type,at:now(),...detail};
@@ -12,14 +14,18 @@ function emit(type,detail={}){
   return payload;
 }
 
+function markFixedStructure(){
+  for(const selector of WALL_SELECTORS){const el=document.querySelector(selector);if(el)el.dataset.gvaultWall='fixed'}
+}
+
 function syncSasState(reason='status'){
   const status=document.querySelector('#connectionState');
   const next=!!status&&/^LIVE\b/.test(String(status.textContent||'').trim());
-  if(next===sasOpen)return;
-  sasOpen=next;
+  const changed=!sasInitialized||next!==sasOpen;
+  sasInitialized=true;sasOpen=next;
   document.documentElement.dataset.gvaultGthink=sasOpen?'active':'locked';
   document.documentElement.dataset.gvaultSessionOk=sasOpen?'1':'0';
-  emit('sas-state',{open:sasOpen,reason});
+  if(changed)emit('sas-state',{open:sasOpen,reason});
 }
 
 function decide(proposal={}){
@@ -57,11 +63,12 @@ function decorateSas(){
 }
 
 function arm(){
+  markFixedStructure();
   const status=document.querySelector('#connectionState');
   if(status){observer?.disconnect();observer=new MutationObserver(()=>syncSasState('status-mutation'));observer.observe(status,{childList:true,subtree:true,characterData:true,attributes:true});}
   decorateSas();
   syncSasState('boot');
-  setTimeout(decorateSas,0);
+  setTimeout(()=>{markFixedStructure();decorateSas();syncSasState('post-boot')},0);
 }
 
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',arm,{once:true});else arm();
@@ -73,5 +80,6 @@ window.GVAULT_GTHINK_SAS_V1=Object.freeze({
   request,
   refreshSasState:()=>syncSasState('manual'),
   decorateSas,
-  getState:()=>({sasOpen,mode:sasOpen?'ARBITER_ACTIVE':'LOCKED',history:history.slice(-50)})
+  markFixedStructure,
+  getState:()=>({sasOpen,mode:sasOpen?'ARBITER_ACTIVE':'LOCKED',fixedWalls:WALL_SELECTORS.slice(),history:history.slice(-50)})
 });
