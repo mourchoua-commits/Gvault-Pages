@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "fb1b2aa0a3fa0e41bd8585f8ab2d5b9b19f1b51f",
+  "parentSha": "383ed25bf78b0538d0b501444ac8895ea493a7c7",
+  "committedAt": "2026-09-01T22:57:18+02:00",
+  "summary": {
+    "subject": "fix(blobs): make conversation layer understand GThink V2 and load blob bus V4",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 9,
+    "deletions": 7,
+    "paths": [
+      "scripts/gvault-public-agent-conversation.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 9,
+    "deletions": 7,
+    "magnitude": 16,
+    "committedAt": "2026-09-01T22:57:18+02:00",
+    "parentSha": "383ed25bf78b0538d0b501444ac8895ea493a7c7"
+  },
+  "pulseKey": "CTP1:fb1b2aa0a3fa0e41bd8585f8ab2d5b9b19f1b51f:b7b13fb422e10db4",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "57241ac5aa01aab8c2c5e5c17b685bce3e72b9c377c2afb5094a8940a8eceac0",
+  "typedKeys": {
+    "commit": "gitc:fb1b2aa0a3fa0e41bd8585f8ab2d5b9b19f1b51f",
+    "parent": "gitc:383ed25bf78b0538d0b501444ac8895ea493a7c7",
+    "pulse": "ctp1:fb1b2aa0a3fa0e41bd8585f8ab2d5b9b19f1b51f:b7b13fb422e10db4",
+    "translation": "cttrans:57241ac5aa01aab8c2c5e5c17b685bce3e72b9c377c2afb5094a8940a8eceac0",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "fb1b2aa0a3fa0e41bd8585f8ab2d5b9b19f1b51f",
+    "parentSha": "383ed25bf78b0538d0b501444ac8895ea493a7c7",
+    "committedAt": "2026-09-01T22:57:18+02:00",
+    "summary": {
+      "subject": "fix(blobs): make conversation layer understand GThink V2 and load blob bus V4",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 9,
+      "deletions": 7,
+      "paths": [
+        "scripts/gvault-public-agent-conversation.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 9,
+      "deletions": 7,
+      "magnitude": 16,
+      "committedAt": "2026-09-01T22:57:18+02:00",
+      "parentSha": "383ed25bf78b0538d0b501444ac8895ea493a7c7"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/fb1b2aa0a3fa0e41bd8585f8ab2d5b9b19f1b51f.json",
+      "vfsKey": "CTP1:fb1b2aa0a3fa0e41bd8585f8ab2d5b9b19f1b51f:b7b13fb422e10db4",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/fb1b2aa0a3fa0e41bd8585f8ab2d5b9b19f1b51f.json"
+}
