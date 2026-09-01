@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "6f8b304166f62a13e18968cb5cc2b5bc20718ccd",
+  "parentSha": "b94fd6cde627f70c016b94dfd8c00228530d3471",
+  "committedAt": "2026-09-01T17:28:44+02:00",
+  "summary": {
+    "subject": "feat(public-agent): add conversational style bridge",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 77,
+    "deletions": 0,
+    "paths": [
+      "scripts/gvault-public-agent-conversation.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 77,
+    "deletions": 0,
+    "magnitude": 77,
+    "committedAt": "2026-09-01T17:28:44+02:00",
+    "parentSha": "b94fd6cde627f70c016b94dfd8c00228530d3471"
+  },
+  "pulseKey": "CTP1:6f8b304166f62a13e18968cb5cc2b5bc20718ccd:6ca756715ce15b68",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "5301691dad04bf6fe8a2fd72302fca8d4b730da88dd1d8a4d2587a7fe3e7c03e",
+  "typedKeys": {
+    "commit": "gitc:6f8b304166f62a13e18968cb5cc2b5bc20718ccd",
+    "parent": "gitc:b94fd6cde627f70c016b94dfd8c00228530d3471",
+    "pulse": "ctp1:6f8b304166f62a13e18968cb5cc2b5bc20718ccd:6ca756715ce15b68",
+    "translation": "cttrans:5301691dad04bf6fe8a2fd72302fca8d4b730da88dd1d8a4d2587a7fe3e7c03e",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "6f8b304166f62a13e18968cb5cc2b5bc20718ccd",
+    "parentSha": "b94fd6cde627f70c016b94dfd8c00228530d3471",
+    "committedAt": "2026-09-01T17:28:44+02:00",
+    "summary": {
+      "subject": "feat(public-agent): add conversational style bridge",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 77,
+      "deletions": 0,
+      "paths": [
+        "scripts/gvault-public-agent-conversation.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 77,
+      "deletions": 0,
+      "magnitude": 77,
+      "committedAt": "2026-09-01T17:28:44+02:00",
+      "parentSha": "b94fd6cde627f70c016b94dfd8c00228530d3471"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/6f8b304166f62a13e18968cb5cc2b5bc20718ccd.json",
+      "vfsKey": "CTP1:6f8b304166f62a13e18968cb5cc2b5bc20718ccd:6ca756715ce15b68",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/6f8b304166f62a13e18968cb5cc2b5bc20718ccd.json"
+}
