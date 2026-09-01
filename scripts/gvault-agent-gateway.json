@@ -1,11 +1,38 @@
 {
-  "schema": "GVAULT_AGENT_GATEWAY_CONFIG_V1",
-  "version": 1,
-  "status": "PENDING_GATEWAY_DEPLOY",
-  "baseUrl": null,
-  "chatPath": "/api/vault/chat",
+  "schema": "GVAULT_AGENT_GATEWAY_CONFIG_V2",
+  "version": 2,
+  "status": "BLOB_STREAM_READY",
+  "transport": "blob-stream",
+  "streamUrl": "gvault://blobs/public/gthink/stream",
+  "blobSchema": "GVAULT_UNIVERSAL_BLOB_V1",
+  "domEvent": "gvault:blob",
+  "broadcastChannel": "gvault.public.blobs.v2",
+  "requestKind": "gateway.request",
+  "responseKinds": ["gateway.response", "utterance", "error"],
+  "route": "public.user -> public-kernel -> blob-stream -> GThink -> blob-stream -> public-ui",
+  "httpAdapter": {
+    "enabled": false,
+    "baseUrl": null,
+    "chatPath": "/api/vault/chat"
+  },
   "model": "gpt-5.6-sol",
-  "blob": "BLOB_AGENT_DIRECT_BANANA",
-  "otherSideLiteral": "banane",
+  "gatewayBlob": {
+    "schema": "GVAULT_UNIVERSAL_BLOB_V1",
+    "blobId": "blob:public:gthink-gateway:v2",
+    "conversationId": "public-shared",
+    "kind": "gateway.state",
+    "role": "gateway",
+    "from": "gateway-config",
+    "to": "public.bus",
+    "intent": "route_all_gthink_traffic_through_blob_stream",
+    "language": "fr",
+    "surface": "Gvault-Pages",
+    "understoodBy": ["GThink", "public-kernel", "gateway-adapter", "public-ui"],
+    "payload": {
+      "transport": "blob-stream",
+      "streamUrl": "gvault://blobs/public/gthink/stream",
+      "configured": true
+    }
+  },
   "containsSecret": false
 }
