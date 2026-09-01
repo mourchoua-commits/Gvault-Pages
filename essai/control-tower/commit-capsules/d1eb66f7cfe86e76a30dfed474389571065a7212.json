@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "d1eb66f7cfe86e76a30dfed474389571065a7212",
+  "parentSha": "9e98ee4aff0be120c6fbc7f09abec18e057c7d79",
+  "committedAt": "2026-09-01T15:42:17+02:00",
+  "summary": {
+    "subject": "Control Tower: describe fixed shell versus autonomous zones",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 2,
+    "deletions": 1,
+    "paths": [
+      "essai/control-tower/app-v5.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 2,
+    "deletions": 1,
+    "magnitude": 3,
+    "committedAt": "2026-09-01T15:42:17+02:00",
+    "parentSha": "9e98ee4aff0be120c6fbc7f09abec18e057c7d79"
+  },
+  "pulseKey": "CTP1:d1eb66f7cfe86e76a30dfed474389571065a7212:5cca90d1a65ee9c2",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "30d511135ba81689dc2732d5f3ba3759e87b45c598359a18db377b2ee2ff3554",
+  "typedKeys": {
+    "commit": "gitc:d1eb66f7cfe86e76a30dfed474389571065a7212",
+    "parent": "gitc:9e98ee4aff0be120c6fbc7f09abec18e057c7d79",
+    "pulse": "ctp1:d1eb66f7cfe86e76a30dfed474389571065a7212:5cca90d1a65ee9c2",
+    "translation": "cttrans:30d511135ba81689dc2732d5f3ba3759e87b45c598359a18db377b2ee2ff3554",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "d1eb66f7cfe86e76a30dfed474389571065a7212",
+    "parentSha": "9e98ee4aff0be120c6fbc7f09abec18e057c7d79",
+    "committedAt": "2026-09-01T15:42:17+02:00",
+    "summary": {
+      "subject": "Control Tower: describe fixed shell versus autonomous zones",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 1,
+      "paths": [
+        "essai/control-tower/app-v5.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 1,
+      "magnitude": 3,
+      "committedAt": "2026-09-01T15:42:17+02:00",
+      "parentSha": "9e98ee4aff0be120c6fbc7f09abec18e057c7d79"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/d1eb66f7cfe86e76a30dfed474389571065a7212.json",
+      "vfsKey": "CTP1:d1eb66f7cfe86e76a30dfed474389571065a7212:5cca90d1a65ee9c2",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/d1eb66f7cfe86e76a30dfed474389571065a7212.json"
+}
