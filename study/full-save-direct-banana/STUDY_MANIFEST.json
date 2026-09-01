@@ -1,0 +1,50 @@
+{
+  "schema": "GVAULT_FULL_SAVE_DIRECT_BANANA_STUDY_MANIFEST_V1",
+  "version": "1.0.0",
+  "branch": "study/full-save-direct-banana",
+  "target": "Gvault-Pages public agent / BLOB_AGENT_DIRECT_BANANA",
+  "methodology": {
+    "name": "FULL_SAVE_ASSEMBLE_THEN_TEST",
+    "description": "Capture the relevant public state first, execute the complete turn as one parent blob, materialize every action as a child blob, verify the banana mirror, then capture the final state.",
+    "everyActionIsBlob": true,
+    "silent": true,
+    "muted": false
+  },
+  "baseline": {
+    "agentLiveBlobSha": "2187a561f48e2e08439da8360fe2817f986cec90",
+    "gatewayConfigSha": "11d475b9876eb2dd50c53c7d5eb7f9c023c37b6f",
+    "conversationLayerSha": "ee1dd9115cbce9d1fc7255a2a028d563adcbe192",
+    "serviceWorkerSha": "af7426ea19e048f932cd7664addb1518b427b4c2",
+    "gatewayStatus": "PENDING_GATEWAY_DEPLOY",
+    "gatewayBaseUrl": null
+  },
+  "provider": {
+    "target": "OpenAI Responses API",
+    "model": "gpt-5.6-sol",
+    "exactCurrentChatGPTSessionEmbedded": false,
+    "apiModelDirectConversationPossible": true
+  },
+  "turnActions": [
+    "snapshot.before",
+    "input.capture",
+    "agent.direct.ask",
+    "agent.response.require_ok",
+    "banana.verify",
+    "snapshot.after"
+  ],
+  "tests": {
+    "coreSyntax": "PASS",
+    "browserAdapterSyntax": "PASS",
+    "deterministicFullSavePipeline": "PASS_27_27",
+    "bananaMismatchFailurePath": "PASS",
+    "realPublicPagesProviderRoundTrip": "PENDING_GATEWAY_BASEURL_AND_PROVIDER_SECRET"
+  },
+  "truthBoundary": {
+    "fullSaveMethodologyCanWrapTheDirectAgentTurn": true,
+    "allStudyActionsCanBeRepresentedAsBlobs": true,
+    "bananaCanBeVerifiedBeforeTurnPass": true,
+    "publicPagesCanCurrentlyReachRemoteAgent": false,
+    "reason": "scripts/gvault-agent-gateway.json still has baseUrl=null. Static GitHub Pages cannot itself hold the server-side OpenAI credential required by the Responses API bridge."
+  },
+  "promotion": "STUDY_ONLY_DO_NOT_MERGE_UNTIL_REAL_PROVIDER_ROUNDTRIP_PASS"
+}
