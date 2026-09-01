@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "b63417e8ed7f8b06e36afcffcf3c725f436db71d",
+  "parentSha": "0146685e95a3526cb2d3740dac894d66eee9cb7a",
+  "committedAt": "2026-09-02T00:51:10+02:00",
+  "summary": {
+    "subject": "fix(gthink): make prelistener offline-only and remove dynamic loader races",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 6,
+    "deletions": 16,
+    "paths": [
+      "scripts/gthink-prelistener-stream-blob.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 6,
+    "deletions": 16,
+    "magnitude": 22,
+    "committedAt": "2026-09-02T00:51:10+02:00",
+    "parentSha": "0146685e95a3526cb2d3740dac894d66eee9cb7a"
+  },
+  "pulseKey": "CTP1:b63417e8ed7f8b06e36afcffcf3c725f436db71d:b604e77bca32ddc8",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "801de98076c4a996bfbce1137bb70f3e08dfa2ab1877e4aa202b1a41304ff9ee",
+  "typedKeys": {
+    "commit": "gitc:b63417e8ed7f8b06e36afcffcf3c725f436db71d",
+    "parent": "gitc:0146685e95a3526cb2d3740dac894d66eee9cb7a",
+    "pulse": "ctp1:b63417e8ed7f8b06e36afcffcf3c725f436db71d:b604e77bca32ddc8",
+    "translation": "cttrans:801de98076c4a996bfbce1137bb70f3e08dfa2ab1877e4aa202b1a41304ff9ee",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "b63417e8ed7f8b06e36afcffcf3c725f436db71d",
+    "parentSha": "0146685e95a3526cb2d3740dac894d66eee9cb7a",
+    "committedAt": "2026-09-02T00:51:10+02:00",
+    "summary": {
+      "subject": "fix(gthink): make prelistener offline-only and remove dynamic loader races",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 6,
+      "deletions": 16,
+      "paths": [
+        "scripts/gthink-prelistener-stream-blob.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 6,
+      "deletions": 16,
+      "magnitude": 22,
+      "committedAt": "2026-09-02T00:51:10+02:00",
+      "parentSha": "0146685e95a3526cb2d3740dac894d66eee9cb7a"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/b63417e8ed7f8b06e36afcffcf3c725f436db71d.json",
+      "vfsKey": "CTP1:b63417e8ed7f8b06e36afcffcf3c725f436db71d:b604e77bca32ddc8",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/b63417e8ed7f8b06e36afcffcf3c725f436db71d.json"
+}
