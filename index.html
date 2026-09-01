@@ -77,7 +77,7 @@ if(document.readyState==='loading')window.addEventListener('DOMContentLoaded',in
 if(!h.includes(needle))throw new Error('Point de greffe outils privés introuvable');
 h=h.replace(needle,graft);
 if(!h.includes('gvault-public-agent-conversation.js')){
- const agentStyle='<script src="./scripts/gvault-public-agent-conversation.js?v=1"><\/script>\n';
+ const agentStyle='<script src="./scripts/gvault-public-agent-conversation.js?v=2"><\/script>\n';
  const documentClose='<'+'/body>\n<'+'/html>';
  h=h.replace(/<\/body>\s*<\/html>\s*$/i,agentStyle+documentClose);
 }
