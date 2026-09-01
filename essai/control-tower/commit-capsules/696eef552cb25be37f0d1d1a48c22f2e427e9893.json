@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "696eef552cb25be37f0d1d1a48c22f2e427e9893",
+  "parentSha": "664ac1945233d04ec3f85cd8e8765f06180322b8",
+  "committedAt": "2026-09-02T00:43:30+02:00",
+  "summary": {
+    "subject": "Refine GThink benchmark to avoid provider flood and test full transport",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 19,
+    "deletions": 15,
+    "paths": [
+      "scripts/gthink-throughput-guard.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 19,
+    "deletions": 15,
+    "magnitude": 34,
+    "committedAt": "2026-09-02T00:43:30+02:00",
+    "parentSha": "664ac1945233d04ec3f85cd8e8765f06180322b8"
+  },
+  "pulseKey": "CTP1:696eef552cb25be37f0d1d1a48c22f2e427e9893:4c2498d78c737fd9",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "3b7c1fb5b0f78be191bb0c16a5908e89a19bb16e18ef3a4d65ce94428c5b7b4f",
+  "typedKeys": {
+    "commit": "gitc:696eef552cb25be37f0d1d1a48c22f2e427e9893",
+    "parent": "gitc:664ac1945233d04ec3f85cd8e8765f06180322b8",
+    "pulse": "ctp1:696eef552cb25be37f0d1d1a48c22f2e427e9893:4c2498d78c737fd9",
+    "translation": "cttrans:3b7c1fb5b0f78be191bb0c16a5908e89a19bb16e18ef3a4d65ce94428c5b7b4f",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "696eef552cb25be37f0d1d1a48c22f2e427e9893",
+    "parentSha": "664ac1945233d04ec3f85cd8e8765f06180322b8",
+    "committedAt": "2026-09-02T00:43:30+02:00",
+    "summary": {
+      "subject": "Refine GThink benchmark to avoid provider flood and test full transport",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 19,
+      "deletions": 15,
+      "paths": [
+        "scripts/gthink-throughput-guard.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 19,
+      "deletions": 15,
+      "magnitude": 34,
+      "committedAt": "2026-09-02T00:43:30+02:00",
+      "parentSha": "664ac1945233d04ec3f85cd8e8765f06180322b8"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/696eef552cb25be37f0d1d1a48c22f2e427e9893.json",
+      "vfsKey": "CTP1:696eef552cb25be37f0d1d1a48c22f2e427e9893:4c2498d78c737fd9",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/696eef552cb25be37f0d1d1a48c22f2e427e9893.json"
+}
