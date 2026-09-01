@@ -1,0 +1,68 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "d158e0e5a750cdade2fd5d901b6a29e701671033",
+  "parentSha": "1aae0dae3c721d1b9e0cc665adc220bbb6a037cd",
+  "committedAt": "2026-09-01T16:54:23+02:00",
+  "summary": {
+    "subject": "Control Tower: connect all advanced blob capabilities",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 0,
+    "additions": 0,
+    "deletions": 0,
+    "paths": []
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 0,
+    "additions": 0,
+    "deletions": 0,
+    "magnitude": 0,
+    "committedAt": "2026-09-01T16:54:23+02:00",
+    "parentSha": "1aae0dae3c721d1b9e0cc665adc220bbb6a037cd"
+  },
+  "pulseKey": "CTP1:d158e0e5a750cdade2fd5d901b6a29e701671033:2d3138e814a394a3",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "055694d522fc585c8c6dc30deef6ecba924d507deb2af9090a3cb243a8810952",
+  "typedKeys": {
+    "commit": "gitc:d158e0e5a750cdade2fd5d901b6a29e701671033",
+    "parent": "gitc:1aae0dae3c721d1b9e0cc665adc220bbb6a037cd",
+    "pulse": "ctp1:d158e0e5a750cdade2fd5d901b6a29e701671033:2d3138e814a394a3",
+    "translation": "cttrans:055694d522fc585c8c6dc30deef6ecba924d507deb2af9090a3cb243a8810952",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "d158e0e5a750cdade2fd5d901b6a29e701671033",
+    "parentSha": "1aae0dae3c721d1b9e0cc665adc220bbb6a037cd",
+    "committedAt": "2026-09-01T16:54:23+02:00",
+    "summary": {
+      "subject": "Control Tower: connect all advanced blob capabilities",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 0,
+      "additions": 0,
+      "deletions": 0,
+      "paths": []
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 0,
+      "additions": 0,
+      "deletions": 0,
+      "magnitude": 0,
+      "committedAt": "2026-09-01T16:54:23+02:00",
+      "parentSha": "1aae0dae3c721d1b9e0cc665adc220bbb6a037cd"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/d158e0e5a750cdade2fd5d901b6a29e701671033.json",
+      "vfsKey": "CTP1:d158e0e5a750cdade2fd5d901b6a29e701671033:2d3138e814a394a3",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/d158e0e5a750cdade2fd5d901b6a29e701671033.json"
+}
