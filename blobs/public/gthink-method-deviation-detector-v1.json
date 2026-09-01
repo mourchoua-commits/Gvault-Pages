@@ -1,0 +1,30 @@
+{
+  "schema": "GVAULT_GTHINK_METHOD_DEVIATION_DETECTOR_V1",
+  "version": 1,
+  "blobId": "blob:public:gthink-method-deviation-detector:v1",
+  "kind": "method.detector",
+  "role": "method-guard",
+  "parentBlobId": "blob:public:gthink-method-lock:v1",
+  "watches": [
+    {"field":"transport","expected":"blob-stream","violation":"TRANSPORT_DRIFT"},
+    {"field":"streamUrl","expected":"gvault://blobs/public/gthink/stream","violation":"STREAM_URL_DRIFT"},
+    {"field":"httpAdapter.enabled","expected":false,"violation":"HTTP_PRIMARY_DRIFT"},
+    {"field":"httpAdapter.baseUrl","expected":null,"violation":"HTTP_BASEURL_DRIFT"},
+    {"field":"readiness.requiredListenerKind","expected":"gthink.listener.ready","violation":"LISTENER_PROTOCOL_DRIFT"}
+  ],
+  "behavior": {
+    "onMissingListener": "emit gateway.state WAITING_GTHINK_LISTENER; keep transport unchanged",
+    "onConfigDrift": "emit method.violation and reject drift as canonical state",
+    "onUiFailure": "classify UI separately; never change transport automatically",
+    "onMemoryFailure": "classify person-memory separately; never change responder automatically",
+    "onTimeout": "report listener/response timeout; never invent fallback transport"
+  },
+  "violationBlob": {
+    "schema": "GVAULT_UNIVERSAL_BLOB_V1",
+    "kind": "method.violation",
+    "role": "method-guard",
+    "from": "method-deviation-detector",
+    "to": "public-kernel",
+    "intent": "block_architecture_drift"
+  }
+}
