@@ -1,22 +1,36 @@
 (()=>{'use strict';
-const SCHEMA='GTHINK_PUBLIC_RESPONDER_V9_PUBLIC_NATIVE_PRIMARY';
+const SCHEMA='GTHINK_PUBLIC_RESPONDER_V10_PELLICULE_PRIMARY';
 const BLOB_SCHEMA='GVAULT_UNIVERSAL_BLOB_V1';
 const NAME='GThink';
 const SCRIPT_BASE=new URL('.',document.currentScript?.src||location.href);
 const NATIVE_URL=new URL('gthink-public-native-engine.js?v=1',SCRIPT_BASE).href;
-const BRIDGE_URL=new URL('gthink-public-private-bridge.js?v=2',SCRIPT_BASE).href;
+const BRIDGE_URL=new URL('gthink-public-private-bridge.js?v=3',SCRIPT_BASE).href;
 let attached=false,connected=false,heartbeat=null,nativeLoad=null,bridgeLoad=null,unregister=null;
 function uid(prefix='blob'){return `${prefix}-${crypto.randomUUID?.()||`${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`}`}
 function clean(v){return String(v??'').trim()}
 function api(){return window.GVAULT_AGENT_LIVE_BLOB}
 function loadScript(src,attr,value,ready,slot){if(ready())return Promise.resolve(ready());if(slot.current)return slot.current;slot.current=new Promise(resolve=>{const existing=document.querySelector(`script[${attr}]`);if(existing){const start=Date.now(),tick=()=>ready()?resolve(ready()):Date.now()-start>3000?resolve(null):setTimeout(tick,25);tick();return}const s=document.createElement('script');s.src=src;s.async=false;s.setAttribute(attr,value);s.onload=()=>resolve(ready()||null);s.onerror=()=>resolve(null);(document.head||document.documentElement).appendChild(s)}).finally(()=>{slot.current=null});return slot.current}
 async function ensureNative(){const slot={get current(){return nativeLoad},set current(v){nativeLoad=v}};return loadScript(NATIVE_URL,'data-gthink-public-native-engine','V1',()=>window.GTHINK_PUBLIC_NATIVE_ENGINE?.answer?window.GTHINK_PUBLIC_NATIVE_ENGINE:null,slot)}
-async function ensureBridge(){const slot={get current(){return bridgeLoad},set current(v){bridgeLoad=v}};return loadScript(BRIDGE_URL,'data-gthink-public-private-bridge','V2',()=>window.GTHINK_PUBLIC_PRIVATE_BRIDGE?.askRequest?window.GTHINK_PUBLIC_PRIVATE_BRIDGE:null,slot)}
-async function responder(request){const message=clean(request?.payload?.message||request?.text);if(!message)throw new Error('gthink_empty_message');const native=await ensureNative();if(native?.answer){try{const out=await native.answer(request);if(out?.handled!==false&&clean(out?.text||out?.display))return out}catch{}}
- const bridge=await ensureBridge();if(!bridge?.askRequest)throw new Error('gthink_no_responder_available');const s=await bridge.status();if(s?.configured!==true)throw new Error(s?.error||'gthink_private_bridge_not_configured');return bridge.askRequest(request)}
-function emit(kind,payload={},text){const a=api();if(!a?.speak)return;a.speak({schema:BLOB_SCHEMA,blobId:uid('gthink-state'),parentBlobId:null,conversationId:'gthink-public-listener',kind,role:'gthink',from:NAME,to:'public.bus',intent:kind==='gthink.listener.ready'?'announce_responder_ready':'announce_responder_waiting',language:'fr',at:new Date().toISOString(),surface:'Gvault-Pages',streamUrl:a.streamUrl,text,payload:{...payload,schema:SCHEMA,streamUrl:a.streamUrl},understoodBy:['GThink','GThinkPublicNative','GThinkMini','public-kernel','gateway-adapter','public-ui','private-bridge'],silent:true,muted:false})}
-async function syncConnection(){const a=api(),native=await ensureNative();let nativeStatus={configured:false};try{if(native?.status)nativeStatus=await native.status()}catch(e){nativeStatus={configured:false,error:clean(e?.message||e)}}const nativeReady=!!native&&nativeStatus?.configured===true;let bridgeStatus=null;if(!nativeReady){try{const bridge=await ensureBridge();if(bridge?.status)bridgeStatus=await bridge.status()}catch(e){bridgeStatus={configured:false,error:clean(e?.message||e)}}}else{void ensureBridge()}
- const bridgeReady=bridgeStatus?.configured===true;const ready=nativeReady||bridgeReady;if(ready&&!connected&&a?.registerResponder){unregister=a.registerResponder(responder,NAME);connected=true}if(!ready&&connected){try{unregister?.()}catch{}unregister=null;connected=false}window.GTHINK_OFFLINE_ONLY=nativeReady;if(ready)emit('gthink.listener.ready',{state:'listener_ready',name:NAME,mode:nativeReady?'public-native':'public-private-blob-bridge',publicNativeConfigured:nativeReady,publicNativeEngine:nativeStatus?.engine||null,publicNativeModel:nativeStatus?.model||null,privateBridgeConfigured:bridgeReady,offlineCapable:nativeReady},nativeReady?'GThink public native ready':'GThink private bridge ready');else emit('gthink.listener.waiting',{state:'listener_waiting',name:NAME,mode:'public-native',publicNativeConfigured:false,privateBridgeConfigured:false,error:nativeStatus?.error||bridgeStatus?.error||null},'GThink public native waiting');return ready}
-function attach(){if(attached)return true;const a=api();if(!a?.speak)return false;attached=true;void syncConnection();heartbeat=setInterval(()=>void syncConnection(),4000);window.GTHINK_PUBLIC_RESPONDER=Object.freeze({schema:SCHEMA,name:NAME,engine:'public-native-primary',attached:true,transport:'blob-stream',respond:responder,syncConnection,get connected(){return connected},get native(){return window.GTHINK_PUBLIC_NATIVE_ENGINE||null},get bridge(){return window.GTHINK_PUBLIC_PRIVATE_BRIDGE||null}});return true}
+async function ensureBridge(){const slot={get current(){return bridgeLoad},set current(v){bridgeLoad=v}};return loadScript(BRIDGE_URL,'data-gthink-public-private-bridge','V3',()=>window.GTHINK_PUBLIC_PRIVATE_BRIDGE?.askRequest?window.GTHINK_PUBLIC_PRIVATE_BRIDGE:null,slot)}
+async function responder(request){
+ const message=clean(request?.payload?.message||request?.text);if(!message)throw new Error('gthink_empty_message');
+ const bridge=await ensureBridge();if(bridge?.askRequest){try{const s=await bridge.status();if(s?.configured===true){const out=await bridge.askRequest(request);if(clean(out?.text||out?.display))return out}}catch{}}
+ const native=await ensureNative();if(native?.answer){const out=await native.answer(request);if(out?.handled!==false&&clean(out?.text||out?.display))return out}
+ throw new Error('gthink_no_responder_available');
+}
+function emit(kind,payload={},text){const a=api();if(!a?.speak)return;a.speak({schema:BLOB_SCHEMA,blobId:uid('gthink-state'),parentBlobId:null,conversationId:'gthink-public-listener',kind,role:'gthink',from:NAME,to:'public.bus',intent:kind==='gthink.listener.ready'?'announce_responder_ready':'announce_responder_waiting',language:'fr',at:new Date().toISOString(),surface:'Gvault-Pages',streamUrl:a.streamUrl,text,payload:{...payload,schema:SCHEMA,streamUrl:a.streamUrl},understoodBy:['GThink','GThinkPelliculeBridge','GThinkPublicNative','GThinkMini','public-kernel','gateway-adapter','public-ui','private-bridge'],silent:true,muted:false})}
+async function syncConnection(){
+ const a=api();let bridgeStatus={configured:false},nativeStatus={configured:false};
+ try{const bridge=await ensureBridge();if(bridge?.status)bridgeStatus=await bridge.status()}catch(e){bridgeStatus={configured:false,error:clean(e?.message||e)}}
+ if(!bridgeStatus?.configured){try{const native=await ensureNative();if(native?.status)nativeStatus=await native.status()}catch(e){nativeStatus={configured:false,error:clean(e?.message||e)}}}else{void ensureNative()}
+ const bridgeReady=bridgeStatus?.configured===true,nativeReady=nativeStatus?.configured===true,ready=bridgeReady||nativeReady;
+ if(ready&&!connected&&a?.registerResponder){unregister=a.registerResponder(responder,NAME);connected=true}
+ if(!ready&&connected){try{unregister?.()}catch{}unregister=null;connected=false}
+ window.GTHINK_OFFLINE_ONLY=!bridgeReady&&nativeReady;
+ if(ready)emit('gthink.listener.ready',{state:'listener_ready',name:NAME,mode:bridgeReady?'public-private-pellicule':'public-native',transport:bridgeReady?'pellicule':'blob-stream',pelliculeConfigured:bridgeReady,pelliculeFrameBytes:bridgeStatus?.frameBytes||null,privateBridgeConfigured:bridgeReady,publicNativeConfigured:nativeReady,publicNativeEngine:nativeStatus?.engine||null,offlineCapable:nativeReady},bridgeReady?'GThink pont-pellicule ready':'GThink public native ready');
+ else emit('gthink.listener.waiting',{state:'listener_waiting',name:NAME,mode:'pellicule-primary',pelliculeConfigured:false,publicNativeConfigured:false,error:bridgeStatus?.error||nativeStatus?.error||null},'GThink waiting');
+ return ready;
+}
+function attach(){if(attached)return true;const a=api();if(!a?.speak)return false;attached=true;void syncConnection();heartbeat=setInterval(()=>void syncConnection(),4000);window.GTHINK_PUBLIC_RESPONDER=Object.freeze({schema:SCHEMA,name:NAME,engine:'pellicule-private-primary',attached:true,transport:'pellicule',respond:responder,syncConnection,get connected(){return connected},get native(){return window.GTHINK_PUBLIC_NATIVE_ENGINE||null},get bridge(){return window.GTHINK_PUBLIC_PRIVATE_BRIDGE||null}});return true}
 if(!attach()){let tries=0;const timer=setInterval(()=>{tries++;if(attach()||tries>240)clearInterval(timer)},25)}
 })();
