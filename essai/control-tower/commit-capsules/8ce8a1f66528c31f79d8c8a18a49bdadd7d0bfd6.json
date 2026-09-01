@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "8ce8a1f66528c31f79d8c8a18a49bdadd7d0bfd6",
+  "parentSha": "acb94cb6a39b60b7caf2a7a160e2d30d16932cba",
+  "committedAt": "2026-09-01T17:01:20+02:00",
+  "summary": {
+    "subject": "Publish documented AI trajectory result",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 29,
+    "deletions": 0,
+    "paths": [
+      "publications/2026-09-01-trajectoire-ia.md"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 29,
+    "deletions": 0,
+    "magnitude": 29,
+    "committedAt": "2026-09-01T17:01:20+02:00",
+    "parentSha": "acb94cb6a39b60b7caf2a7a160e2d30d16932cba"
+  },
+  "pulseKey": "CTP1:8ce8a1f66528c31f79d8c8a18a49bdadd7d0bfd6:f16ea5801409f4ea",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "f203abba916d07f0d1f957cb555e3a569f158225e9c83614ba1f74b278de909f",
+  "typedKeys": {
+    "commit": "gitc:8ce8a1f66528c31f79d8c8a18a49bdadd7d0bfd6",
+    "parent": "gitc:acb94cb6a39b60b7caf2a7a160e2d30d16932cba",
+    "pulse": "ctp1:8ce8a1f66528c31f79d8c8a18a49bdadd7d0bfd6:f16ea5801409f4ea",
+    "translation": "cttrans:f203abba916d07f0d1f957cb555e3a569f158225e9c83614ba1f74b278de909f",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "8ce8a1f66528c31f79d8c8a18a49bdadd7d0bfd6",
+    "parentSha": "acb94cb6a39b60b7caf2a7a160e2d30d16932cba",
+    "committedAt": "2026-09-01T17:01:20+02:00",
+    "summary": {
+      "subject": "Publish documented AI trajectory result",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 29,
+      "deletions": 0,
+      "paths": [
+        "publications/2026-09-01-trajectoire-ia.md"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 29,
+      "deletions": 0,
+      "magnitude": 29,
+      "committedAt": "2026-09-01T17:01:20+02:00",
+      "parentSha": "acb94cb6a39b60b7caf2a7a160e2d30d16932cba"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/8ce8a1f66528c31f79d8c8a18a49bdadd7d0bfd6.json",
+      "vfsKey": "CTP1:8ce8a1f66528c31f79d8c8a18a49bdadd7d0bfd6:f16ea5801409f4ea",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/8ce8a1f66528c31f79d8c8a18a49bdadd7d0bfd6.json"
+}
