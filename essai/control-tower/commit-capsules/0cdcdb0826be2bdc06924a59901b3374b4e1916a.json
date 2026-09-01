@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "0cdcdb0826be2bdc06924a59901b3374b4e1916a",
+  "parentSha": "85c124dd709f387a7fbbc5fb27cf6a7e1c44069e",
+  "committedAt": "2026-09-01T23:12:45+02:00",
+  "summary": {
+    "subject": "feat(blobs): add per-person local memory and adaptive UI blob",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 24,
+    "deletions": 0,
+    "paths": [
+      "scripts/gvault-person-blob.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 24,
+    "deletions": 0,
+    "magnitude": 24,
+    "committedAt": "2026-09-01T23:12:45+02:00",
+    "parentSha": "85c124dd709f387a7fbbc5fb27cf6a7e1c44069e"
+  },
+  "pulseKey": "CTP1:0cdcdb0826be2bdc06924a59901b3374b4e1916a:d3bc223ed1441e62",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "9965f6db0a4cf679c18e8210f2e96a1f10be42ba9d70ff549fc57a08510768e3",
+  "typedKeys": {
+    "commit": "gitc:0cdcdb0826be2bdc06924a59901b3374b4e1916a",
+    "parent": "gitc:85c124dd709f387a7fbbc5fb27cf6a7e1c44069e",
+    "pulse": "ctp1:0cdcdb0826be2bdc06924a59901b3374b4e1916a:d3bc223ed1441e62",
+    "translation": "cttrans:9965f6db0a4cf679c18e8210f2e96a1f10be42ba9d70ff549fc57a08510768e3",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "0cdcdb0826be2bdc06924a59901b3374b4e1916a",
+    "parentSha": "85c124dd709f387a7fbbc5fb27cf6a7e1c44069e",
+    "committedAt": "2026-09-01T23:12:45+02:00",
+    "summary": {
+      "subject": "feat(blobs): add per-person local memory and adaptive UI blob",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 24,
+      "deletions": 0,
+      "paths": [
+        "scripts/gvault-person-blob.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 24,
+      "deletions": 0,
+      "magnitude": 24,
+      "committedAt": "2026-09-01T23:12:45+02:00",
+      "parentSha": "85c124dd709f387a7fbbc5fb27cf6a7e1c44069e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/0cdcdb0826be2bdc06924a59901b3374b4e1916a.json",
+      "vfsKey": "CTP1:0cdcdb0826be2bdc06924a59901b3374b4e1916a:d3bc223ed1441e62",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/0cdcdb0826be2bdc06924a59901b3374b4e1916a.json"
+}
