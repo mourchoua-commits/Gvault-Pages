@@ -1,0 +1,45 @@
+{
+  "schema": "GVAULT_DEFECT_BLOB_SELFHEAL_PROOF_V1",
+  "runId": 33537414374,
+  "branch": "test/pre-sas-accessibility-20260901",
+  "status": "PASS",
+  "failures": [],
+  "runtime": {
+    "schema": "GVAULT_DEFECT_BLOBS_STATUS_V1",
+    "version": "0.1.0-test",
+    "active": true,
+    "mode": "BOUNDED_SELF_HEAL_PLUS_REPORT_ONLY",
+    "liveEventName": "gvault:defect-live"
+  },
+  "verifiedFixes": {
+    "passwordAccessibleName": "Mot de passe GVAULT",
+    "themeAccessibleName": "Thème GVAULT",
+    "touchTargets": {
+      "safeCollapse": "44x44",
+      "themeCycle": "44x44",
+      "togglePass": "44x44",
+      "unlockBtn": "306x44"
+    },
+    "prefersReducedMotion": true,
+    "reducedMotionStyleInstalled": true,
+    "targetedRunningAnimations": []
+  },
+  "autoFixedEventsObserved": [
+    "PASSWORD_ACCESSIBLE_NAME",
+    "THEME_ACCESSIBLE_NAME",
+    "TOUCH_TARGET_SAFECOLLAPSE",
+    "TOUCH_TARGET_THEMECYCLE",
+    "TOUCH_TARGET_TOGGLEPASS",
+    "TOUCH_TARGET_UNLOCKBTN",
+    "REDUCED_MOTION"
+  ],
+  "safetyPolicy": {
+    "knownBoundedDefects": "AUTO_FIXED",
+    "unknownOrStructuralDefects": "REPORT_ONLY",
+    "productionMainModified": false
+  },
+  "workflowArtifact": {
+    "id": 9812217496,
+    "sha256": "be3388c460be050c12dbeb34548f1dafd0e72ab30f8dd5a3b171392a4903b13e"
+  }
+}
