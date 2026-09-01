@@ -1,0 +1,78 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "9572175fcde66c4730a0ce32763234e190522bdd",
+  "parentSha": "8a3eb4b33e2e67b98dbd70a3a76f10ee0d7143d8",
+  "committedAt": "2026-09-01T21:56:24+02:00",
+  "summary": {
+    "subject": "Agent: live direct blob client with banana mirror",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 4,
+    "additions": 100,
+    "deletions": 6,
+    "paths": [
+      "scripts/gvault-agent-gateway.json",
+      "scripts/gvault-agent-live-blob.js",
+      "scripts/gvault-public-agent-conversation.js",
+      "sw-gvault-v1.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 4,
+    "additions": 100,
+    "deletions": 6,
+    "magnitude": 106,
+    "committedAt": "2026-09-01T21:56:24+02:00",
+    "parentSha": "8a3eb4b33e2e67b98dbd70a3a76f10ee0d7143d8"
+  },
+  "pulseKey": "CTP1:9572175fcde66c4730a0ce32763234e190522bdd:4a09f26e33005af5",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "05560b9fa51606385be274b30419226ea81db840ba910d73b6b78e26213ea9a4",
+  "typedKeys": {
+    "commit": "gitc:9572175fcde66c4730a0ce32763234e190522bdd",
+    "parent": "gitc:8a3eb4b33e2e67b98dbd70a3a76f10ee0d7143d8",
+    "pulse": "ctp1:9572175fcde66c4730a0ce32763234e190522bdd:4a09f26e33005af5",
+    "translation": "cttrans:05560b9fa51606385be274b30419226ea81db840ba910d73b6b78e26213ea9a4",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "9572175fcde66c4730a0ce32763234e190522bdd",
+    "parentSha": "8a3eb4b33e2e67b98dbd70a3a76f10ee0d7143d8",
+    "committedAt": "2026-09-01T21:56:24+02:00",
+    "summary": {
+      "subject": "Agent: live direct blob client with banana mirror",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 4,
+      "additions": 100,
+      "deletions": 6,
+      "paths": [
+        "scripts/gvault-agent-gateway.json",
+        "scripts/gvault-agent-live-blob.js",
+        "scripts/gvault-public-agent-conversation.js",
+        "sw-gvault-v1.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 4,
+      "additions": 100,
+      "deletions": 6,
+      "magnitude": 106,
+      "committedAt": "2026-09-01T21:56:24+02:00",
+      "parentSha": "8a3eb4b33e2e67b98dbd70a3a76f10ee0d7143d8"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/9572175fcde66c4730a0ce32763234e190522bdd.json",
+      "vfsKey": "CTP1:9572175fcde66c4730a0ce32763234e190522bdd:4a09f26e33005af5",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/9572175fcde66c4730a0ce32763234e190522bdd.json"
+}
