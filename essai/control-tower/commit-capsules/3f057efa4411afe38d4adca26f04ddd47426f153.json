@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "3f057efa4411afe38d4adca26f04ddd47426f153",
+  "parentSha": "2741c7022b203cfc6c96286b3f66acc99d75db0b",
+  "committedAt": "2026-09-02T01:56:02+02:00",
+  "summary": {
+    "subject": "feat(gthink): transport public-private chat through pellicule frames",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 49,
+    "deletions": 12,
+    "paths": [
+      "scripts/gthink-public-private-bridge.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 49,
+    "deletions": 12,
+    "magnitude": 61,
+    "committedAt": "2026-09-02T01:56:02+02:00",
+    "parentSha": "2741c7022b203cfc6c96286b3f66acc99d75db0b"
+  },
+  "pulseKey": "CTP1:3f057efa4411afe38d4adca26f04ddd47426f153:1d4d4891c03b84ef",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "40203482e951fd208f618bca87364dfdb834e013e7e668e310b5915774afd78c",
+  "typedKeys": {
+    "commit": "gitc:3f057efa4411afe38d4adca26f04ddd47426f153",
+    "parent": "gitc:2741c7022b203cfc6c96286b3f66acc99d75db0b",
+    "pulse": "ctp1:3f057efa4411afe38d4adca26f04ddd47426f153:1d4d4891c03b84ef",
+    "translation": "cttrans:40203482e951fd208f618bca87364dfdb834e013e7e668e310b5915774afd78c",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "3f057efa4411afe38d4adca26f04ddd47426f153",
+    "parentSha": "2741c7022b203cfc6c96286b3f66acc99d75db0b",
+    "committedAt": "2026-09-02T01:56:02+02:00",
+    "summary": {
+      "subject": "feat(gthink): transport public-private chat through pellicule frames",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 49,
+      "deletions": 12,
+      "paths": [
+        "scripts/gthink-public-private-bridge.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 49,
+      "deletions": 12,
+      "magnitude": 61,
+      "committedAt": "2026-09-02T01:56:02+02:00",
+      "parentSha": "2741c7022b203cfc6c96286b3f66acc99d75db0b"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/3f057efa4411afe38d4adca26f04ddd47426f153.json",
+      "vfsKey": "CTP1:3f057efa4411afe38d4adca26f04ddd47426f153:1d4d4891c03b84ef",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/3f057efa4411afe38d4adca26f04ddd47426f153.json"
+}
