@@ -1,0 +1,85 @@
+{
+  "schema": "GVAULT_PUBLIC_PRE_SAS_ACCESSIBILITY_EVIDENCE_V1",
+  "runId": 33535646681,
+  "branch": "test/pre-sas-accessibility-20260901",
+  "productionMainModified": false,
+  "targetUrl": "https://mourchoua-commits.github.io/Gvault-Pages/",
+  "scope": "PUBLIC_PRE_SAS_TO_CREDENTIAL_BOUNDARY",
+  "cases": 22,
+  "summary": {
+    "PASS": 0,
+    "WARN": 0,
+    "FAIL": 22
+  },
+  "interpretation": "All 22 cases are marked FAIL because the same hard accessibility findings repeat; this does not mean layout/runtime failed in all cases.",
+  "issueCounts": {
+    "PASSWORD_NO_ACCESSIBLE_NAME": 22,
+    "THEME_NO_ACCESSIBLE_NAME": 22,
+    "REDUCED_MOTION_STILL_ANIMATING": 2,
+    "TOUCH_TARGET_LT_44": 98
+  },
+  "positiveChecks": {
+    "horizontalOverflowBeforePrompt": 0,
+    "horizontalOverflowAfterPrompt": 0,
+    "focusStolenAutomatically": 0,
+    "autoplayMediaCases": 0,
+    "lockKeyboardActivation": "PASS",
+    "lockAccessibleName": "Afficher le déverrouillage"
+  },
+  "representativeAndroid360x663": {
+    "accessibilityTree": {
+      "lock": {"role": "button", "name": "Afficher le déverrouillage"},
+      "password": {"role": "textbox", "name": ""},
+      "theme": {"role": "combobox", "name": ""}
+    },
+    "undersizedControls": [
+      {"id": "safeCollapse", "size": "34x34"},
+      {"id": "themeCycle", "size": "33x42"},
+      {"id": "togglePass", "size": "44x42"},
+      {"id": "unlockBtn", "size": "304x42"}
+    ]
+  },
+  "reducedMotionRepresentative": {
+    "runningAnimations": 10,
+    "continuousExamples": [
+      {"name": "gearTurn", "durationMs": 29000},
+      {"name": "gearTurn", "durationMs": 34000},
+      {"name": "phoneLockFloat", "durationMs": 3200},
+      {"name": "lockSwipeHint", "durationMs": 1800}
+    ]
+  },
+  "deviceClasses": [
+    "320x568 DPR2",
+    "Android 360x607 DPR3",
+    "Android 360x663 DPR3",
+    "iPhone SE 375x667 DPR2 UA emulation",
+    "iPhone 390x844 DPR3 UA emulation",
+    "Android 412x915 DPR2.625",
+    "phone landscape 663x360 DPR3",
+    "tablet 768x1024 DPR2",
+    "desktop 1366x768",
+    "desktop 1920x1080"
+  ],
+  "accessibilityProfiles": [
+    "keyboard-only",
+    "prefers-reduced-motion",
+    "forced-colors + prefers-contrast more",
+    "achromatopsia",
+    "protanopia",
+    "deuteranopia",
+    "tritanopia",
+    "blurred vision",
+    "reduced contrast",
+    "zoom 200%"
+  ],
+  "fieldLimits": [
+    "Chrome engine with device metrics and UA emulation is not physical Safari/iOS.",
+    "This automated run is not a substitute for real VoiceOver, TalkBack, NVDA or JAWS field testing.",
+    "The campaign stops at the password/credential boundary and does not bypass SAS."
+  ],
+  "artifact": {
+    "id": 9811525354,
+    "name": "gvault-public-pre-sas-accessibility",
+    "sha256": "a0ea87e70169f9a11c8ca8e5e963adbe9f9b985bafbdf0df3d1a12b90d85e67f"
+  }
+}
