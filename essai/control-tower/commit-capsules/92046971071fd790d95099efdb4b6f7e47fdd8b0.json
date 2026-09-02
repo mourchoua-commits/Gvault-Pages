@@ -1,0 +1,96 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "92046971071fd790d95099efdb4b6f7e47fdd8b0",
+  "parentSha": "7f426a76d02854f762b0d2db300b60858afd2a80",
+  "committedAt": "2026-09-02T04:45:34+02:00",
+  "summary": {
+    "subject": "feat(public-page-blob): absorb transport into live page blob",
+    "intent": "Treat the complete public GVAULT page as one live parent blob and absorb the former public/private bridge topology as an internal page transport organ.",
+    "workSpecial": "",
+    "changedFiles": 13,
+    "additions": 183,
+    "deletions": 162,
+    "paths": [
+      "blob/bridge-chain.json",
+      "blob/public/page/internal/transport-chain.json",
+      "blob/public/page/internal/transport-state.json",
+      "blob/public/page/manifest.json",
+      "blobs/public/gthink-page-transport-organ-v1.json",
+      "blobs/public/gthink-public-private-bridge-v1.json",
+      "bridge/public-private-blob-chain/state/latest.json",
+      "index.html",
+      "scripts/gthink-page-transport-core.js",
+      "scripts/gthink-page-transport-organ.js",
+      "scripts/gthink-public-private-bridge.js",
+      "scripts/gthink-public-responder.js",
+      "scripts/gvault-public-page-blob.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 13,
+    "additions": 183,
+    "deletions": 162,
+    "magnitude": 345,
+    "committedAt": "2026-09-02T04:45:34+02:00",
+    "parentSha": "7f426a76d02854f762b0d2db300b60858afd2a80"
+  },
+  "pulseKey": "CTP1:92046971071fd790d95099efdb4b6f7e47fdd8b0:8666bc10f9fa2611",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "2cf95ccdcb11aea4d865afa02b16ca34113fe39f60f1e792457181168a9a76c4",
+  "typedKeys": {
+    "commit": "gitc:92046971071fd790d95099efdb4b6f7e47fdd8b0",
+    "parent": "gitc:7f426a76d02854f762b0d2db300b60858afd2a80",
+    "pulse": "ctp1:92046971071fd790d95099efdb4b6f7e47fdd8b0:8666bc10f9fa2611",
+    "translation": "cttrans:2cf95ccdcb11aea4d865afa02b16ca34113fe39f60f1e792457181168a9a76c4",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "92046971071fd790d95099efdb4b6f7e47fdd8b0",
+    "parentSha": "7f426a76d02854f762b0d2db300b60858afd2a80",
+    "committedAt": "2026-09-02T04:45:34+02:00",
+    "summary": {
+      "subject": "feat(public-page-blob): absorb transport into live page blob",
+      "intent": "Treat the complete public GVAULT page as one live parent blob and absorb the former public/private bridge topology as an internal page transport organ.",
+      "workSpecial": "",
+      "changedFiles": 13,
+      "additions": 183,
+      "deletions": 162,
+      "paths": [
+        "blob/bridge-chain.json",
+        "blob/public/page/internal/transport-chain.json",
+        "blob/public/page/internal/transport-state.json",
+        "blob/public/page/manifest.json",
+        "blobs/public/gthink-page-transport-organ-v1.json",
+        "blobs/public/gthink-public-private-bridge-v1.json",
+        "bridge/public-private-blob-chain/state/latest.json",
+        "index.html",
+        "scripts/gthink-page-transport-core.js",
+        "scripts/gthink-page-transport-organ.js",
+        "scripts/gthink-public-private-bridge.js",
+        "scripts/gthink-public-responder.js",
+        "scripts/gvault-public-page-blob.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 13,
+      "additions": 183,
+      "deletions": 162,
+      "magnitude": 345,
+      "committedAt": "2026-09-02T04:45:34+02:00",
+      "parentSha": "7f426a76d02854f762b0d2db300b60858afd2a80"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/92046971071fd790d95099efdb4b6f7e47fdd8b0.json",
+      "vfsKey": "CTP1:92046971071fd790d95099efdb4b6f7e47fdd8b0:8666bc10f9fa2611",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/92046971071fd790d95099efdb4b6f7e47fdd8b0.json"
+}
