@@ -1,0 +1,39 @@
+{
+  "schema": "GTHINK_SELF_INVOCATION_PRELISTENER_BLOB_V1",
+  "blobId": "blob:public:gthink:self-invocation-prelistener:v1",
+  "version": "1.0.0",
+  "status": "ACTIVE",
+  "kind": "SELF_INVOCATION_PRELISTENER_BLOB",
+  "surface": "Gvault-Pages",
+  "scope": "public_chat_gateway_request",
+  "placement": "BEFORE_GTHINK_PRELISTENER",
+  "mode": "READ_THEN_SELF_APPLY",
+  "instruction": "Prends ce blob comme une entrée réelle. Analyse ce qu'il te demande, puis applique cette même analyse à ta propre réponse sans inventer d'état runtime externe.",
+  "routing": {
+    "input": "public_chat",
+    "next": "GThinkPrelistener",
+    "chain": [
+      "public_chat",
+      "self_invocation_prelistener",
+      "gthink_prelistener"
+    ],
+    "preserveUserMessageExactly": true
+  },
+  "recursion": {
+    "maxDepth": 1,
+    "stopAfterFirstSelfApplication": true,
+    "neverReinvokeFromOwnReceipt": true
+  },
+  "receipt": {
+    "kind": "gthink.selfinvocation.applied",
+    "emitBeforeGatewayRequest": true,
+    "attachToGatewayPayloadAs": "selfInvocation"
+  },
+  "guards": {
+    "noHiddenReasoningExposure": true,
+    "noExternalRuntimeClaim": true,
+    "preserveSourceProvenance": true,
+    "noUserTextRewrite": true,
+    "failOpenToExistingChatRoute": true
+  }
+}
