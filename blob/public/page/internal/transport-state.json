@@ -3,7 +3,6 @@
   "blobId": "blob:public:gvault-page:transport:v1",
   "ownerBlobId": "blob:public:gvault-page:v1",
   "internal": true,
-  "externalBridge": false,
   "publicHead": "9b19e38913951e306c3d056d2f393a5d5b6ce897",
   "peerHeadOmittedFromPublicPageBlob": true,
   "updatedAt": "2026-09-02T02:29:14Z"
