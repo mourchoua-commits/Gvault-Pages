@@ -1,6 +1,6 @@
 {
   "schema": "GVAULT_AGENT_GATEWAY_CONFIG_V2",
-  "version": 4,
+  "version": 5,
   "status": "AUTONOMOUS_BLOB_READY",
   "transport": "blob-stream",
   "streamUrl": "gvault://blobs/public/gthink/stream",
@@ -23,6 +23,10 @@
     }
   },
   "route": "public.user -> canonical routing fabric -> explicit private capture + autonomous private GThink blob -> explicit release -> public-ui; admin/diagnostic stay SAS-gated",
+  "httpAdapter": {
+    "enabled": false,
+    "baseUrl": null
+  },
   "baseUrl": null,
   "chatPath": "/api/vault/chat",
   "privateBridgePath": "/v1/gthink-private-bridge",
@@ -37,8 +41,8 @@
     "canonicalTransport": "blob-stream",
     "canonicalStreamUrl": "gvault://blobs/public/gthink/stream",
     "methodChangeRequiresExplicitUserRequest": true,
-    "methodChangeApproved": true,
-    "approvedChange": "AUTONOMOUS_PRIVATE_BLOB_WORKER_WITH_CANONICAL_ROUTING_FABRIC"
+    "methodChangeApproved": false,
+    "lastApprovedChange": "AUTONOMOUS_PRIVATE_BLOB_WORKER_WITH_CANONICAL_ROUTING_FABRIC"
   },
   "readiness": {
     "transportReady": true,
@@ -54,7 +58,7 @@
   "model": "browser-native-or-local-fallback",
   "gatewayBlob": {
     "schema": "GVAULT_UNIVERSAL_BLOB_V1",
-    "blobId": "blob:public:gthink-gateway:v5-routed-autonomous-private-worker",
+    "blobId": "blob:public:gthink-gateway:v6-method-lock-aligned",
     "conversationId": "public-shared",
     "kind": "gateway.state",
     "role": "gateway",
@@ -75,6 +79,7 @@
       "remoteBridgeConfigured": false,
       "localWorkerConfigured": true,
       "serverOptional": true,
+      "httpAdapterEnabled": false,
       "releasePolicy": "LOCAL_WORKER_PUBLIC_OUTPUT_V1",
       "remoteReleasePolicy": "EXPLICIT_DECLASSIFICATION_V1"
     }
