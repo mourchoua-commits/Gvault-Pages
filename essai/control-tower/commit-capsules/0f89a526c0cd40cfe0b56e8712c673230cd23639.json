@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "0f89a526c0cd40cfe0b56e8712c673230cd23639",
+  "parentSha": "bb9fbe515a9e222b85304e3a7ed780af21728629",
+  "committedAt": "2026-09-02T03:34:06+02:00",
+  "summary": {
+    "subject": "gthink: autoload ping pong alter-ego health mesh",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "paths": [
+      "scripts/gthink-response-word-flow.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "magnitude": 1,
+    "committedAt": "2026-09-02T03:34:06+02:00",
+    "parentSha": "bb9fbe515a9e222b85304e3a7ed780af21728629"
+  },
+  "pulseKey": "CTP1:0f89a526c0cd40cfe0b56e8712c673230cd23639:eae234ede5c9cf7a",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "0e7300e210fbac78af9fd343bbf9b7ba408d6c1a2f57d057f173856397199513",
+  "typedKeys": {
+    "commit": "gitc:0f89a526c0cd40cfe0b56e8712c673230cd23639",
+    "parent": "gitc:bb9fbe515a9e222b85304e3a7ed780af21728629",
+    "pulse": "ctp1:0f89a526c0cd40cfe0b56e8712c673230cd23639:eae234ede5c9cf7a",
+    "translation": "cttrans:0e7300e210fbac78af9fd343bbf9b7ba408d6c1a2f57d057f173856397199513",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "0f89a526c0cd40cfe0b56e8712c673230cd23639",
+    "parentSha": "bb9fbe515a9e222b85304e3a7ed780af21728629",
+    "committedAt": "2026-09-02T03:34:06+02:00",
+    "summary": {
+      "subject": "gthink: autoload ping pong alter-ego health mesh",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "paths": [
+        "scripts/gthink-response-word-flow.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "magnitude": 1,
+      "committedAt": "2026-09-02T03:34:06+02:00",
+      "parentSha": "bb9fbe515a9e222b85304e3a7ed780af21728629"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/0f89a526c0cd40cfe0b56e8712c673230cd23639.json",
+      "vfsKey": "CTP1:0f89a526c0cd40cfe0b56e8712c673230cd23639:eae234ede5c9cf7a",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/0f89a526c0cd40cfe0b56e8712c673230cd23639.json"
+}
