@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "493dbfea0dfc00023636968b9ffc1fee09f53cfa",
+  "parentSha": "d7e0fe50341f4c6be58d8d569bf81aff407b4465",
+  "committedAt": "2026-09-02T03:37:27+02:00",
+  "summary": {
+    "subject": "Align GThink gateway with canonical routing fabric",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 23,
+    "deletions": 7,
+    "paths": [
+      "scripts/gvault-agent-gateway.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 23,
+    "deletions": 7,
+    "magnitude": 30,
+    "committedAt": "2026-09-02T03:37:27+02:00",
+    "parentSha": "d7e0fe50341f4c6be58d8d569bf81aff407b4465"
+  },
+  "pulseKey": "CTP1:493dbfea0dfc00023636968b9ffc1fee09f53cfa:0466973a9befb14a",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "8a6f9d0cb85056e8f1c8fd2c0b04caf25b9cec07b627507ad667230d5b5677cd",
+  "typedKeys": {
+    "commit": "gitc:493dbfea0dfc00023636968b9ffc1fee09f53cfa",
+    "parent": "gitc:d7e0fe50341f4c6be58d8d569bf81aff407b4465",
+    "pulse": "ctp1:493dbfea0dfc00023636968b9ffc1fee09f53cfa:0466973a9befb14a",
+    "translation": "cttrans:8a6f9d0cb85056e8f1c8fd2c0b04caf25b9cec07b627507ad667230d5b5677cd",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "493dbfea0dfc00023636968b9ffc1fee09f53cfa",
+    "parentSha": "d7e0fe50341f4c6be58d8d569bf81aff407b4465",
+    "committedAt": "2026-09-02T03:37:27+02:00",
+    "summary": {
+      "subject": "Align GThink gateway with canonical routing fabric",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 23,
+      "deletions": 7,
+      "paths": [
+        "scripts/gvault-agent-gateway.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 23,
+      "deletions": 7,
+      "magnitude": 30,
+      "committedAt": "2026-09-02T03:37:27+02:00",
+      "parentSha": "d7e0fe50341f4c6be58d8d569bf81aff407b4465"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/493dbfea0dfc00023636968b9ffc1fee09f53cfa.json",
+      "vfsKey": "CTP1:493dbfea0dfc00023636968b9ffc1fee09f53cfa:0466973a9befb14a",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/493dbfea0dfc00023636968b9ffc1fee09f53cfa.json"
+}
