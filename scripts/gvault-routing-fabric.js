@@ -1,9 +1,10 @@
 (()=>{'use strict';
 const SCHEMA='GVAULT_ROUTING_FABRIC_V1';
-const VERSION=5;
+const VERSION=6;
 const PRIVATE_POLICY='EXPLICIT_DECLASSIFICATION_V1';
 const PUBLIC_STREAM='gvault://blobs/public/gthink/stream';
 const flowBacklog=[];
+const recentNetwork=new Map();
 function clean(v){return String(v??'').trim()}
 function words(v){return clean(v).toLowerCase()}
 function classify(input={}){
@@ -20,6 +21,7 @@ function classify(input={}){
  return 'public.bus';
 }
 function privateHint(v=''){return /gadmin|control[-_ ]?tower|private-tool|private-catalog|\/private\/|sas/i.test(String(v))}
+function sourceFor(url){return /(^|\.)github\.com$|(^|\.)githubusercontent\.com$|(^|\.)githubapis\.com$|^api\.github\.com$/i.test(url.hostname)?'github-public':url.origin===location.origin?'same-origin-public':'external-public'}
 function deliverFlow(detail){
  try{
   if(window.GVAULT_PUBLIC_TRIPLE_GEYSER?.ingest){window.GVAULT_PUBLIC_TRIPLE_GEYSER.ingest(detail);return true}
@@ -27,6 +29,13 @@ function deliverFlow(detail){
  }catch{return false}
 }
 function flushFlows(){if(!window.GVAULT_PUBLIC_TRIPLE_GEYSER?.ingest)return;for(const x of flowBacklog.splice(0))try{window.GVAULT_PUBLIC_TRIPLE_GEYSER.ingest(x)}catch{}}
+function emitNetworkFlow(urlLike,{method='GET',initiatorType='fetch',source=null}={}){
+ try{
+  const url=new URL(String(urlLike||''),location.href);if(privateHint(url.pathname))return false;
+  const key=`${String(method).toUpperCase()}|${url.origin}|${url.pathname}`;const now=Date.now(),last=recentNetwork.get(key)||0;if(now-last<750)return false;recentNetwork.set(key,now);if(recentNetwork.size>256){for(const [k,t] of recentNetwork)if(now-t>5000)recentNetwork.delete(k)}
+  return deliverFlow({kind:'public.network.ingress',intent:'transform_and_push_outward',surface:'public-network',role:'network',destination:'public.outward',routeHint:source||sourceFor(url),primary:'public.bus',source:source||sourceFor(url),method:String(method).toUpperCase(),origin:url.origin,path:url.pathname,initiatorType:String(initiatorType||'network').slice(0,64),at:new Date().toISOString()});
+ }catch{return false}
+}
 function emitFlowRoute(input,primary){
  try{
   if(!input||typeof input!=='object'||typeof input.blobId==='string'||input.schema==='GVAULT_UNIVERSAL_BLOB_V1')return;
@@ -38,7 +47,22 @@ function emitFlowRoute(input,primary){
 function emitServiceWorkerIngress(d={}){
  if(d.schema!=='GVAULT_SW_EVENT_V1'||d.type!=='PUBLIC_FLOW_INGRESS')return;
  const hint=[d.origin,d.path,d.source,d.destination].join(' ');if(privateHint(hint))return;
- deliverFlow({kind:'public.network.ingress',intent:'transform_and_push_outward',surface:'service-worker',role:'network',destination:'public.outward',routeHint:clean(d.source)||'public-network',primary:'public.bus',source:clean(d.source)||'public-network',method:clean(d.method)||'GET',origin:clean(d.origin)||null,path:clean(d.path)||null,destinationType:clean(d.destination)||null,mode:clean(d.mode)||null,at:d.at||new Date().toISOString()});
+ try{emitNetworkFlow(`${d.origin||location.origin}${d.path||'/'}`,{method:d.method||'GET',initiatorType:d.destination||d.mode||'service-worker',source:d.source||'public-network'})}catch{}
+}
+function installFetchObserver(){
+ try{
+  const current=window.fetch;if(typeof current!=='function'||current.__gvaultRoutingFlowObserver)return;
+  const native=current.bind(window);const wrapped=async function(input,init){try{const raw=typeof input==='string'?input:String(input?.url||''),method=String(init?.method||input?.method||'GET');emitNetworkFlow(raw,{method,initiatorType:'fetch'})}catch{}return native(input,init)};
+  Object.defineProperty(wrapped,'__gvaultRoutingFlowObserver',{value:true});window.fetch=wrapped;
+ }catch{}
+}
+function installResourceObserver(){
+ try{
+  if(!('PerformanceObserver' in window))return;
+  const observer=new PerformanceObserver(list=>{for(const entry of list.getEntries())emitNetworkFlow(entry.name,{method:'GET',initiatorType:entry.initiatorType||entry.entryType||'resource'})});
+  observer.observe({type:'resource',buffered:true});
+  emitNetworkFlow(location.href,{method:'GET',initiatorType:'navigation'});
+ }catch{}
 }
 function plan(input={},opts={}){
  const primary=opts.destination||classify(input),routes=[];
@@ -60,9 +84,9 @@ function plan(input={},opts={}){
  return Object.freeze({schema:SCHEMA,version:VERSION,primary,routes:Object.freeze(routes),privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,privateContentPublished:false,createdAt:new Date().toISOString(),source:{kind:clean(input.kind||input.type)||null,intent:clean(input.intent||input.payload?.intent)||null,surface:clean(input.surface)||null,role:clean(input.role)||null,destination:clean(input.destination||input.to)||null,routeHint:clean(input.routeHint||input.payload?.routeHint)||null}})
 }
 function describe(input,opts){const p=plan(input,opts);return {schema:SCHEMA,version:VERSION,primary:p.primary,routeIds:p.routes.map(x=>x.id),privatePolicy:p.privatePolicy,privateContentPublished:false}}
-window.GVAULT_ROUTING_FABRIC=Object.freeze({schema:SCHEMA,version:VERSION,privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,classify,plan,describe,deliverFlow});
+window.GVAULT_ROUTING_FABRIC=Object.freeze({schema:SCHEMA,version:VERSION,privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,classify,plan,describe,deliverFlow,emitNetworkFlow});
 try{window.dispatchEvent(new CustomEvent('gvault:routing-fabric-ready',{detail:{schema:SCHEMA,version:VERSION,privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,privateContentPublished:false}}))}catch{}
 if(navigator.serviceWorker)navigator.serviceWorker.addEventListener('message',e=>emitServiceWorkerIngress(e.data||{}));
 function loadTripleGeyser(){if(window.GVAULT_PUBLIC_TRIPLE_GEYSER){flushFlows();return}if(document.querySelector('script[data-gvault-triple-geyser]'))return;const s=document.createElement('script');s.src='./scripts/gvault-public-triple-geyser.js?v=2';s.async=false;s.setAttribute('data-gvault-triple-geyser','V2');s.onload=flushFlows;s.onerror=()=>console.warn('GVAULT triple geyser unavailable');(document.head||document.documentElement).appendChild(s)}
-loadTripleGeyser();
+loadTripleGeyser();installFetchObserver();installResourceObserver();
 })();
