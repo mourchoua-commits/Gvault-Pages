@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "36c35e523bab2e812efcc6b811e731e472a6668b",
+  "parentSha": "0a72b84f98e4330ecfbff8a63f91e856fb4e7c91",
+  "committedAt": "2026-09-02T02:29:18+02:00",
+  "summary": {
+    "subject": "Load blob:// virtual URI router in GThink public flow",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 9,
+    "deletions": 0,
+    "paths": [
+      "scripts/gthink-turn-relay.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 9,
+    "deletions": 0,
+    "magnitude": 9,
+    "committedAt": "2026-09-02T02:29:18+02:00",
+    "parentSha": "0a72b84f98e4330ecfbff8a63f91e856fb4e7c91"
+  },
+  "pulseKey": "CTP1:36c35e523bab2e812efcc6b811e731e472a6668b:6cc733abd76a756d",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "cd7af3f6b5cf3f48490472f3ae1f028d8a563954f8c4a1c82644c9bbeca894e9",
+  "typedKeys": {
+    "commit": "gitc:36c35e523bab2e812efcc6b811e731e472a6668b",
+    "parent": "gitc:0a72b84f98e4330ecfbff8a63f91e856fb4e7c91",
+    "pulse": "ctp1:36c35e523bab2e812efcc6b811e731e472a6668b:6cc733abd76a756d",
+    "translation": "cttrans:cd7af3f6b5cf3f48490472f3ae1f028d8a563954f8c4a1c82644c9bbeca894e9",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "36c35e523bab2e812efcc6b811e731e472a6668b",
+    "parentSha": "0a72b84f98e4330ecfbff8a63f91e856fb4e7c91",
+    "committedAt": "2026-09-02T02:29:18+02:00",
+    "summary": {
+      "subject": "Load blob:// virtual URI router in GThink public flow",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 9,
+      "deletions": 0,
+      "paths": [
+        "scripts/gthink-turn-relay.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 9,
+      "deletions": 0,
+      "magnitude": 9,
+      "committedAt": "2026-09-02T02:29:18+02:00",
+      "parentSha": "0a72b84f98e4330ecfbff8a63f91e856fb4e7c91"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/36c35e523bab2e812efcc6b811e731e472a6668b.json",
+      "vfsKey": "CTP1:36c35e523bab2e812efcc6b811e731e472a6668b:6cc733abd76a756d",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/36c35e523bab2e812efcc6b811e731e472a6668b.json"
+}
