@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "7cf0168e02c0fb9ba5d2f70f323d5ee08a3e8340",
+  "parentSha": "ad845a655371d1ff1e154c5a76ae905fa5936506",
+  "committedAt": "2026-09-02T15:42:52+02:00",
+  "summary": {
+    "subject": "blob(gthink): add self-invocation stage before public prelistener",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 39,
+    "deletions": 0,
+    "paths": [
+      "blobs/public/gthink-self-invocation-prelistener-v1.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 39,
+    "deletions": 0,
+    "magnitude": 39,
+    "committedAt": "2026-09-02T15:42:52+02:00",
+    "parentSha": "ad845a655371d1ff1e154c5a76ae905fa5936506"
+  },
+  "pulseKey": "CTP1:7cf0168e02c0fb9ba5d2f70f323d5ee08a3e8340:445ba0f7f68d01f6",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "53d751973716a17a277791bbc1631e259678db86b7a2e1462eb08c9b61a0f8c5",
+  "typedKeys": {
+    "commit": "gitc:7cf0168e02c0fb9ba5d2f70f323d5ee08a3e8340",
+    "parent": "gitc:ad845a655371d1ff1e154c5a76ae905fa5936506",
+    "pulse": "ctp1:7cf0168e02c0fb9ba5d2f70f323d5ee08a3e8340:445ba0f7f68d01f6",
+    "translation": "cttrans:53d751973716a17a277791bbc1631e259678db86b7a2e1462eb08c9b61a0f8c5",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "7cf0168e02c0fb9ba5d2f70f323d5ee08a3e8340",
+    "parentSha": "ad845a655371d1ff1e154c5a76ae905fa5936506",
+    "committedAt": "2026-09-02T15:42:52+02:00",
+    "summary": {
+      "subject": "blob(gthink): add self-invocation stage before public prelistener",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 39,
+      "deletions": 0,
+      "paths": [
+        "blobs/public/gthink-self-invocation-prelistener-v1.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 39,
+      "deletions": 0,
+      "magnitude": 39,
+      "committedAt": "2026-09-02T15:42:52+02:00",
+      "parentSha": "ad845a655371d1ff1e154c5a76ae905fa5936506"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/7cf0168e02c0fb9ba5d2f70f323d5ee08a3e8340.json",
+      "vfsKey": "CTP1:7cf0168e02c0fb9ba5d2f70f323d5ee08a3e8340:445ba0f7f68d01f6",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/7cf0168e02c0fb9ba5d2f70f323d5ee08a3e8340.json"
+}
