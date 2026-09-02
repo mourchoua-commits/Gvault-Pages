@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "118b429b21cbe4fc62c42fbe63f19015493e6da3",
+  "parentSha": "00c7b0bb8f24f0eed0a803c81b2984e3fa0c357f",
+  "committedAt": "2026-09-02T22:16:00+02:00",
+  "summary": {
+    "subject": "gthink public: use co-development memory in conversation bridge",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 21,
+    "deletions": 12,
+    "paths": [
+      "scripts/gthink-secondary-conversation-bridge.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 21,
+    "deletions": 12,
+    "magnitude": 33,
+    "committedAt": "2026-09-02T22:16:00+02:00",
+    "parentSha": "00c7b0bb8f24f0eed0a803c81b2984e3fa0c357f"
+  },
+  "pulseKey": "CTP1:118b429b21cbe4fc62c42fbe63f19015493e6da3:58f1ea55b014261e",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "262b3fc8fd5e33412b1e7fb30e15a3027691198e683c51d7c106236ced5d9b71",
+  "typedKeys": {
+    "commit": "gitc:118b429b21cbe4fc62c42fbe63f19015493e6da3",
+    "parent": "gitc:00c7b0bb8f24f0eed0a803c81b2984e3fa0c357f",
+    "pulse": "ctp1:118b429b21cbe4fc62c42fbe63f19015493e6da3:58f1ea55b014261e",
+    "translation": "cttrans:262b3fc8fd5e33412b1e7fb30e15a3027691198e683c51d7c106236ced5d9b71",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "118b429b21cbe4fc62c42fbe63f19015493e6da3",
+    "parentSha": "00c7b0bb8f24f0eed0a803c81b2984e3fa0c357f",
+    "committedAt": "2026-09-02T22:16:00+02:00",
+    "summary": {
+      "subject": "gthink public: use co-development memory in conversation bridge",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 21,
+      "deletions": 12,
+      "paths": [
+        "scripts/gthink-secondary-conversation-bridge.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 21,
+      "deletions": 12,
+      "magnitude": 33,
+      "committedAt": "2026-09-02T22:16:00+02:00",
+      "parentSha": "00c7b0bb8f24f0eed0a803c81b2984e3fa0c357f"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/118b429b21cbe4fc62c42fbe63f19015493e6da3.json",
+      "vfsKey": "CTP1:118b429b21cbe4fc62c42fbe63f19015493e6da3:58f1ea55b014261e",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/118b429b21cbe4fc62c42fbe63f19015493e6da3.json"
+}
