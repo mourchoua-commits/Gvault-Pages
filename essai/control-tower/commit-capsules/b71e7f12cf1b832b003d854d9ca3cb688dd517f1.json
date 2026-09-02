@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "b71e7f12cf1b832b003d854d9ca3cb688dd517f1",
+  "parentSha": "8116659a72e326c957fe4bb4f9980c4ec70d1899",
+  "committedAt": "2026-09-02T02:45:52+02:00",
+  "summary": {
+    "subject": "Add literal blocker layer to blob bridge chain",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 2,
+    "deletions": 1,
+    "paths": [
+      "blob/bridge-chain.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 2,
+    "deletions": 1,
+    "magnitude": 3,
+    "committedAt": "2026-09-02T02:45:52+02:00",
+    "parentSha": "8116659a72e326c957fe4bb4f9980c4ec70d1899"
+  },
+  "pulseKey": "CTP1:b71e7f12cf1b832b003d854d9ca3cb688dd517f1:a56851d242b8aa1c",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "a7f5311f4a6f89506387555d98e96e9e5713645775d81221cb737797ae97531b",
+  "typedKeys": {
+    "commit": "gitc:b71e7f12cf1b832b003d854d9ca3cb688dd517f1",
+    "parent": "gitc:8116659a72e326c957fe4bb4f9980c4ec70d1899",
+    "pulse": "ctp1:b71e7f12cf1b832b003d854d9ca3cb688dd517f1:a56851d242b8aa1c",
+    "translation": "cttrans:a7f5311f4a6f89506387555d98e96e9e5713645775d81221cb737797ae97531b",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "b71e7f12cf1b832b003d854d9ca3cb688dd517f1",
+    "parentSha": "8116659a72e326c957fe4bb4f9980c4ec70d1899",
+    "committedAt": "2026-09-02T02:45:52+02:00",
+    "summary": {
+      "subject": "Add literal blocker layer to blob bridge chain",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 1,
+      "paths": [
+        "blob/bridge-chain.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 1,
+      "magnitude": 3,
+      "committedAt": "2026-09-02T02:45:52+02:00",
+      "parentSha": "8116659a72e326c957fe4bb4f9980c4ec70d1899"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/b71e7f12cf1b832b003d854d9ca3cb688dd517f1.json",
+      "vfsKey": "CTP1:b71e7f12cf1b832b003d854d9ca3cb688dd517f1:a56851d242b8aa1c",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/b71e7f12cf1b832b003d854d9ca3cb688dd517f1.json"
+}
