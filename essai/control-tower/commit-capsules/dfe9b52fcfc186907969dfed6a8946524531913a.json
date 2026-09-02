@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "dfe9b52fcfc186907969dfed6a8946524531913a",
+  "parentSha": "05b59fd4be90d26e0876c830fe0f6c751f04da45",
+  "committedAt": "2026-09-02T23:53:29+02:00",
+  "summary": {
+    "subject": "gthink qa: add simultaneous dual-heart probe",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 44,
+    "deletions": 0,
+    "paths": [
+      "scripts/gthink-dual-heart-probe.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 44,
+    "deletions": 0,
+    "magnitude": 44,
+    "committedAt": "2026-09-02T23:53:29+02:00",
+    "parentSha": "05b59fd4be90d26e0876c830fe0f6c751f04da45"
+  },
+  "pulseKey": "CTP1:dfe9b52fcfc186907969dfed6a8946524531913a:7b77e4cdc816a90e",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "123b12466911aa1f0f2c492e64702885a23c025bbc439ba4440dd4ddfd5542c9",
+  "typedKeys": {
+    "commit": "gitc:dfe9b52fcfc186907969dfed6a8946524531913a",
+    "parent": "gitc:05b59fd4be90d26e0876c830fe0f6c751f04da45",
+    "pulse": "ctp1:dfe9b52fcfc186907969dfed6a8946524531913a:7b77e4cdc816a90e",
+    "translation": "cttrans:123b12466911aa1f0f2c492e64702885a23c025bbc439ba4440dd4ddfd5542c9",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "dfe9b52fcfc186907969dfed6a8946524531913a",
+    "parentSha": "05b59fd4be90d26e0876c830fe0f6c751f04da45",
+    "committedAt": "2026-09-02T23:53:29+02:00",
+    "summary": {
+      "subject": "gthink qa: add simultaneous dual-heart probe",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 44,
+      "deletions": 0,
+      "paths": [
+        "scripts/gthink-dual-heart-probe.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 44,
+      "deletions": 0,
+      "magnitude": 44,
+      "committedAt": "2026-09-02T23:53:29+02:00",
+      "parentSha": "05b59fd4be90d26e0876c830fe0f6c751f04da45"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/dfe9b52fcfc186907969dfed6a8946524531913a.json",
+      "vfsKey": "CTP1:dfe9b52fcfc186907969dfed6a8946524531913a:7b77e4cdc816a90e",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/dfe9b52fcfc186907969dfed6a8946524531913a.json"
+}
