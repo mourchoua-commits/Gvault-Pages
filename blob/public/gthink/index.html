@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark light">
 <title>blob://public/gthink · GVAULT</title>
 <style>
-html,body{margin:0;min-height:100%;background:#05070b;color:#f7f8fb;font-family:system-ui,sans-serif}body{min-height:100dvh;display:grid;place-items:center;padding:20px}.blob{width:min(88vw,430px);min-height:240px;border-radius:42% 58% 51% 49%/45% 43% 57% 55%;display:grid;place-items:center;text-align:center;padding:28px;background:radial-gradient(circle at 30% 20%,#5367ff,#1d2844 48%,#080b11 78%);box-shadow:0 24px 70px #0009,inset 0 1px #ffffff38}.route{font:600 13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;opacity:.9;white-space:pre-line}.small{margin-top:14px;font-size:12px;opacity:.72}a{color:inherit}
+html,body{margin:0;min-height:100%;background:#05070b;color:#f7f8fb;font-family:system-ui,sans-serif}body{min-height:100dvh;display:grid;place-items:center;padding:20px}.blob{width:min(88vw,430px);min-height:290px;border-radius:42% 58% 51% 49%/45% 43% 57% 55%;display:grid;place-items:center;text-align:center;padding:28px;background:radial-gradient(circle at 30% 20%,#5367ff,#1d2844 48%,#080b11 78%);box-shadow:0 24px 70px #0009,inset 0 1px #ffffff38}.route{font:600 13px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;opacity:.9;white-space:pre-line}.small{margin-top:14px;font-size:12px;opacity:.72}a{color:inherit}
 </style>
 </head>
 <body>
@@ -16,17 +16,22 @@ blob URI
 ↓
 blob routeur
 ↓
-GThink
+document GThink
 ↓
-stream</div><div class="small" id="state">Initialisation de la route propre…</div></div></section>
+fetch amont
+↓
+statut HTTP
+↓
+stream
+↳ 404 = blob terminal</div><div class="small" id="state">Initialisation de la route jusqu’au 404…</div></div></section>
 <script>
 (()=>{'use strict';
-const ROUTE_ID='blob-public-gthink-v3';
+const ROUTE_ID='blob-public-gthink-v4';
 const state=document.getElementById('state');
 const direct=new URL('../../../gthink/?via=blob-route-fallback',location.href).href;
-const swUrl=new URL('../../blob-sw.js?v=3',location.href).href;
+const swUrl=new URL('../../blob-sw.js?v=4',location.href).href;
 const swScope=new URL('../../',location.href).href;
-const bootKey='gvault.blob.public.gthink.boot.v3';
+const bootKey='gvault.blob.public.gthink.boot.v4';
 let changing=false;
 function fallback(msg){state.innerHTML=`${msg} · <a href="${direct}">ouvrir GThink directement</a>`}
 function reloadThroughBlob(){
@@ -38,21 +43,21 @@ function reloadThroughBlob(){
   location.replace(u.href);
 }
 if(!('serviceWorker' in navigator)){fallback('Service Worker indisponible');return}
-navigator.serviceWorker.addEventListener('controllerchange',()=>{state.textContent='Route contrôlée · ouverture de GThink…';reloadThroughBlob()});
+navigator.serviceWorker.addEventListener('controllerchange',()=>{state.textContent='Blob 3/7 · route contrôlée · ouverture…';reloadThroughBlob()});
 (async()=>{try{
-  state.textContent='Blob 1/5 · entrée HTTPS';
+  state.textContent='Blob 1/7 · entrée HTTPS';
   const reg=await navigator.serviceWorker.register(swUrl,{scope:swScope,updateViaCache:'none'});
-  state.textContent='Blob 2/5 · routeur enregistré';
+  state.textContent='Blob 2/7 · routeur enregistré';
   await reg.update().catch(()=>{});
   await navigator.serviceWorker.ready;
-  state.textContent='Blob 3/5 · routeur prêt';
+  state.textContent='Blob 3/7 · routeur prêt';
   if(navigator.serviceWorker.controller){
     const count=Number(sessionStorage.getItem(bootKey)||'0');
     if(count<2){sessionStorage.setItem(bootKey,String(count+1));reloadThroughBlob();return}
-    fallback('Le routeur contrôle la page mais GThink n’a pas été servi');
+    fallback('Le routeur contrôle la page mais la chaîne n’a pas atteint GThink/404');
     return;
   }
-  state.textContent='Blob 4/5 · prise de contrôle…';
+  state.textContent='Blob 3/7 · prise de contrôle…';
   setTimeout(()=>{if(!changing)fallback('La prise de contrôle tarde')},5000);
 }catch(e){fallback('Route blob indisponible')}})();
 })();
