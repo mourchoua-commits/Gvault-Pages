@@ -1,0 +1,10 @@
+(()=>{'use strict';
+const SCHEMA='GTHINK_NATIVE_OFFLINE_LINK_V1';
+const NAME='GThinkNativeOfflineLink';
+let bound=false,baseNative=null;
+function bridge(){return window.GTHINK_OFFLINE_CONTROL_PLANE_BRIDGE||null}
+function native(){return window.GTHINK_PUBLIC_NATIVE_ENGINE||null}
+function offlineState(){const b=bridge();if(!b)return {connected:false,networkRequired:false};return {connected:b.status?.().configured===true,bridgeSchema:b.schema,source:b.source,principle:b.snapshot?.principle||'',sourceOrder:[...(b.snapshot?.sourceOrder||[])],method:[...(b.snapshot?.method||[])],forbiddenRuntimeDependencies:[...(b.snapshot?.forbiddenRuntimeDependencies||[])],relayRule:{...(b.snapshot?.relayRule||{})},networkRule:b.snapshot?.networkRule||'',networkRequired:false,sourceMutation:false,mergeRequired:false}}
+function bind(){if(bound)return true;const b=bridge(),n=native();if(!b||!n?.answer||!n?.status)return false;baseNative=n;const linked={schema:n.schema,name:n.name,async answer(request){const off=offlineState();const out=await baseNative.answer({...request,payload:{...(request?.payload||{}),offlineControlPlane:off}});return !out||out.handled===false?out:{...out,offlineControlPlane:off,resolutionMethod:off.method,networkRequired:false}},status(){const off=offlineState();return {...(baseNative.status?.()||{}),offlineControlPlane:off,offlineBridgeConnected:off.connected,networkRequired:false}},streamState:typeof n.streamState==='function'?n.streamState.bind(n):()=>({}),knowledge:n.knowledge,offlineContext:offlineState,get base(){return baseNative}};window.GTHINK_PUBLIC_NATIVE_ENGINE=Object.freeze(linked);window.GTHINK_NATIVE_OFFLINE_LINK=Object.freeze({schema:SCHEMA,name:NAME,status:()=>({schema:SCHEMA,bound:true,offline:offlineState(),nativeEngine:baseNative.status?.().engine||null}),offlineContext:offlineState,base:baseNative});bound=true;b.announce?.();return true}
+if(!bind()){let tries=0;const timer=setInterval(()=>{tries++;if(bind()||tries>240)clearInterval(timer)},25)}
+})();
