@@ -6,36 +6,55 @@
 <meta name="color-scheme" content="dark light">
 <title>blob://public/gthink · GVAULT</title>
 <style>
-html,body{margin:0;min-height:100%;background:#05070b;color:#f7f8fb;font-family:system-ui,sans-serif}body{min-height:100dvh;display:grid;place-items:center;padding:20px}.blob{width:min(88vw,430px);min-height:240px;border-radius:42% 58% 51% 49%/45% 43% 57% 55%;display:grid;place-items:center;text-align:center;padding:28px;background:radial-gradient(circle at 30% 20%,#5367ff,#1d2844 48%,#080b11 78%);box-shadow:0 24px 70px #0009,inset 0 1px #ffffff38}.route{font:600 13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;opacity:.9;white-space:pre-line}.small{margin-top:14px;font-size:12px;opacity:.65}a{color:inherit}
+html,body{margin:0;min-height:100%;background:#05070b;color:#f7f8fb;font-family:system-ui,sans-serif}body{min-height:100dvh;display:grid;place-items:center;padding:20px}.blob{width:min(88vw,430px);min-height:240px;border-radius:42% 58% 51% 49%/45% 43% 57% 55%;display:grid;place-items:center;text-align:center;padding:28px;background:radial-gradient(circle at 30% 20%,#5367ff,#1d2844 48%,#080b11 78%);box-shadow:0 24px 70px #0009,inset 0 1px #ffffff38}.route{font:600 13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;opacity:.9;white-space:pre-line}.small{margin-top:14px;font-size:12px;opacity:.72}a{color:inherit}
 </style>
 </head>
 <body>
-<section class="blob" aria-live="polite"><div><strong>blob://public/gthink</strong><div class="route" id="route">blob adresse
+<section class="blob" aria-live="polite"><div><strong>blob://public/gthink</strong><div class="route">HTTPS public
 ↓
-blob service worker
+blob URI
 ↓
-blob document
+blob routeur
 ↓
-GThink</div><div class="small" id="state">Connexion des blobs…</div></div></section>
+GThink
+↓
+stream</div><div class="small" id="state">Initialisation de la route propre…</div></div></section>
 <script>
 (()=>{'use strict';
+const ROUTE_ID='blob-public-gthink-v3';
 const state=document.getElementById('state');
-const target=new URL('../../../gthink/?via=blob-bootstrap-fallback&v=451',location.href).href;
-const sw=new URL('../../blob-sw.js?v=1',location.href).href;
-let reloading=false;
-function fallback(msg){state.innerHTML=`${msg} · <a href="${target}">ouvrir GThink</a>`}
+const direct=new URL('../../../gthink/?via=blob-route-fallback',location.href).href;
+const swUrl=new URL('../../blob-sw.js?v=3',location.href).href;
+const swScope=new URL('../../',location.href).href;
+const bootKey='gvault.blob.public.gthink.boot.v3';
+let changing=false;
+function fallback(msg){state.innerHTML=`${msg} · <a href="${direct}">ouvrir GThink directement</a>`}
+function reloadThroughBlob(){
+  if(changing)return;
+  changing=true;
+  const u=new URL(location.href);
+  u.searchParams.set('route',ROUTE_ID);
+  u.searchParams.set('boot','1');
+  location.replace(u.href);
+}
 if(!('serviceWorker' in navigator)){fallback('Service Worker indisponible');return}
-navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloading)return;reloading=true;state.textContent='Dernier blob atteint · rechargement…';location.reload()});
+navigator.serviceWorker.addEventListener('controllerchange',()=>{state.textContent='Route contrôlée · ouverture de GThink…';reloadThroughBlob()});
 (async()=>{try{
-state.textContent='Blob 1/4 · adresse reconnue';
-const reg=await navigator.serviceWorker.register(sw,{scope:'../../',updateViaCache:'none'});
-await reg.update().catch(()=>{});
-state.textContent='Blob 2/4 · routeur installé';
-await navigator.serviceWorker.ready;
-state.textContent='Blob 3/4 · document prêt';
-if(navigator.serviceWorker.controller){reloading=true;location.reload();return}
-setTimeout(()=>{if(!reloading)fallback('Le blob routeur tarde à prendre le contrôle')},5000);
-}catch(e){fallback('Pont blob indisponible')}})();
+  state.textContent='Blob 1/5 · entrée HTTPS';
+  const reg=await navigator.serviceWorker.register(swUrl,{scope:swScope,updateViaCache:'none'});
+  state.textContent='Blob 2/5 · routeur enregistré';
+  await reg.update().catch(()=>{});
+  await navigator.serviceWorker.ready;
+  state.textContent='Blob 3/5 · routeur prêt';
+  if(navigator.serviceWorker.controller){
+    const count=Number(sessionStorage.getItem(bootKey)||'0');
+    if(count<2){sessionStorage.setItem(bootKey,String(count+1));reloadThroughBlob();return}
+    fallback('Le routeur contrôle la page mais GThink n’a pas été servi');
+    return;
+  }
+  state.textContent='Blob 4/5 · prise de contrôle…';
+  setTimeout(()=>{if(!changing)fallback('La prise de contrôle tarde')},5000);
+}catch(e){fallback('Route blob indisponible')}})();
 })();
 </script>
 </body>
