@@ -1,12 +1,24 @@
 import { test, expect } from '@playwright/test';
 
-const TARGET = process.env.GTHINK_URL || 'http://127.0.0.1:4173/gthink/index.html?dual-heart-playwright=1';
-const CASES = ['Test', 'Tu va bien ?', 'Explique la méthode de routage GThink'];
+const TARGET = process.env.GTHINK_URL || 'http://127.0.0.1:4173/gthink/index.html?dual-heart-playwright=2';
+const CASES = [
+  'Test',
+  'Tu va bien ?',
+  'On continue ici',
+  'Nan pas ça',
+  'Du coup ?',
+  'Explique la méthode de routage GThink',
+  'C est quoi FIRST_CAPTURE dans GVault ?',
+  'Teste le bridge',
+  'Comment ça va marcher le serveur ?'
+];
 
-test.describe('GThink dual-heart simultaneous probe', () => {
-  test.setTimeout(90_000);
+test.describe('GThink dual-heart simultaneous coexistence probe', () => {
+  test.setTimeout(120_000);
 
   test.beforeEach(async ({ page }) => {
+    const pageErrors = [];
+    page.on('pageerror', err => pageErrors.push(String(err?.message || err)));
     await page.goto(TARGET, { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => !!window.GVAULT_AGENT_LIVE_BLOB?.speak, null, { timeout: 15_000 });
     await page.waitForFunction(() => !!window.GTHINK_PUBLIC_RESPONDER?.respond, null, { timeout: 15_000 });
@@ -30,6 +42,7 @@ test.describe('GThink dual-heart simultaneous probe', () => {
         if (String(b?.kind || '').startsWith('gthink.dual-heart.')) window.__GTHINK_DUAL_HEART_BLOBS.push(b);
       });
     });
+    page.__dualHeartPageErrors = pageErrors;
   });
 
   test('both hearts are available on the same GThink page', async ({ page }) => {
@@ -41,9 +54,15 @@ test.describe('GThink dual-heart simultaneous probe', () => {
   });
 
   for (const message of CASES) {
-    test(`same input in parallel: ${message}`, async ({ page }) => {
-      const beforeAnswer = await page.locator('#answer').textContent();
-      const result = await page.evaluate(msg => window.GTHINK_DUAL_HEART_PROBE.run(msg, { timeoutMs: 20_000, restoreUI: true }), message);
+    test(`same input in parallel without collision: ${message}`, async ({ page }) => {
+      const before = await page.evaluate(() => ({
+        answer: document.querySelector('#answer')?.textContent || '',
+        mode: window.GTHINK_DUAL_KERNEL_ROUTER?.mode || null,
+        responderSchema: window.GTHINK_PUBLIC_RESPONDER?.schema || null,
+        secondarySchema: window.GTHINK_PUBLIC_NATIVE_ENGINE?.schema || null
+      }));
+
+      const result = await page.evaluate(msg => window.GTHINK_DUAL_HEART_PROBE.run(msg, { timeoutMs: 25_000, restoreUI: true }), message);
 
       expect(result.message).toBe(message);
       expect(result.messageSha256).toMatch(/^[a-f0-9]{64}$/);
@@ -58,19 +77,64 @@ test.describe('GThink dual-heart simultaneous probe', () => {
       expect(result.comparison.noVote).toBe(true);
       expect(result.comparison.independentSeals).toBe(true);
 
-      const kinds = await page.evaluate(() => window.__GTHINK_DUAL_HEART_BLOBS.map(b => b.kind));
-      expect(kinds).toContain('gthink.dual-heart.start');
-      expect(kinds).toContain('gthink.dual-heart.primary.sealed');
-      expect(kinds).toContain('gthink.dual-heart.secondary.sealed');
-      expect(kinds).toContain('gthink.dual-heart.compare');
+      const state = await page.evaluate(() => ({
+        kinds: window.__GTHINK_DUAL_HEART_BLOBS.map(b => b.kind),
+        starts: window.__GTHINK_DUAL_HEART_BLOBS.filter(b => b.kind === 'gthink.dual-heart.start').map(b => b.payload),
+        primaries: window.__GTHINK_DUAL_HEART_BLOBS.filter(b => b.kind === 'gthink.dual-heart.primary.sealed').map(b => b.payload),
+        secondaries: window.__GTHINK_DUAL_HEART_BLOBS.filter(b => b.kind === 'gthink.dual-heart.secondary.sealed').map(b => b.payload),
+        compares: window.__GTHINK_DUAL_HEART_BLOBS.filter(b => b.kind === 'gthink.dual-heart.compare').map(b => b.payload),
+        answer: document.querySelector('#answer')?.textContent || '',
+        mode: window.GTHINK_DUAL_KERNEL_ROUTER?.mode || null,
+        responderSchema: window.GTHINK_PUBLIC_RESPONDER?.schema || null,
+        secondarySchema: window.GTHINK_PUBLIC_NATIVE_ENGINE?.schema || null
+      }));
 
-      const start = await page.evaluate(() => window.__GTHINK_DUAL_HEART_BLOBS.find(b => b.kind === 'gthink.dual-heart.start')?.payload);
-      const primary = await page.evaluate(() => window.__GTHINK_DUAL_HEART_BLOBS.find(b => b.kind === 'gthink.dual-heart.primary.sealed')?.payload);
-      const secondary = await page.evaluate(() => window.__GTHINK_DUAL_HEART_BLOBS.find(b => b.kind === 'gthink.dual-heart.secondary.sealed')?.payload);
+      expect(state.kinds).toContain('gthink.dual-heart.start');
+      expect(state.kinds).toContain('gthink.dual-heart.primary.sealed');
+      expect(state.kinds).toContain('gthink.dual-heart.secondary.sealed');
+      expect(state.kinds).toContain('gthink.dual-heart.compare');
+      const start = state.starts.at(-1);
+      const primary = state.primaries.at(-1);
+      const secondary = state.secondaries.at(-1);
+      const compare = state.compares.at(-1);
       expect(primary.messageSha256).toBe(start.messageSha256);
       expect(secondary.messageSha256).toBe(start.messageSha256);
+      expect(compare.primaryOk).toBe(true);
+      expect(compare.secondaryOk).toBe(true);
 
-      await expect(page.locator('#answer')).toHaveText(beforeAnswer || '');
+      expect(state.answer).toBe(before.answer);
+      expect(state.mode).toBe(before.mode);
+      expect(state.responderSchema).toBe(before.responderSchema);
+      expect(state.secondarySchema).toBe(before.secondarySchema);
+      expect(page.__dualHeartPageErrors).toEqual([]);
     });
   }
+
+  test('repeated parallel probes do not steal router ownership or mutate visible state', async ({ page }) => {
+    const before = await page.evaluate(() => ({
+      answer: document.querySelector('#answer')?.textContent || '',
+      mode: window.GTHINK_DUAL_KERNEL_ROUTER?.mode || null
+    }));
+    const suite = await page.evaluate(() => window.GTHINK_DUAL_HEART_PROBE.runSuite([
+      'Salut',
+      'Test',
+      'Tu va bien ?',
+      'On continue ici',
+      'Teste le bridge'
+    ], { timeoutMs: 25_000, restoreUI: true }));
+    expect(suite.count).toBe(5);
+    expect(suite.passed).toBe(5);
+    for (const run of suite.runs) {
+      expect(run.primary.ok).toBe(true);
+      expect(run.secondary.ok).toBe(true);
+      expect(run.parallel.sameTick).toBe(true);
+      expect(run.comparison.noFusion).toBe(true);
+    }
+    const after = await page.evaluate(() => ({
+      answer: document.querySelector('#answer')?.textContent || '',
+      mode: window.GTHINK_DUAL_KERNEL_ROUTER?.mode || null
+    }));
+    expect(after).toEqual(before);
+    expect(page.__dualHeartPageErrors).toEqual([]);
+  });
 });
