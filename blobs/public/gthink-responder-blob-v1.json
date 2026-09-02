@@ -1,0 +1,33 @@
+{
+  "schema": "GVAULT_UNIVERSAL_BLOB_V1",
+  "blobId": "blob:public:gthink-responder:v1",
+  "parentBlobId": "blob:public:gthink-private-route:v1",
+  "conversationId": "public-shared",
+  "kind": "gthink.responder.contract",
+  "role": "gthink",
+  "from": "GThink",
+  "to": "public-ui",
+  "intent": "interpret_and_reply_through_private_gthink_blob_route",
+  "language": "fr",
+  "surface": "Gvault-Pages",
+  "streamUrl": "gvault://blobs/public/gthink/stream",
+  "understoodBy": ["GThink", "public-kernel", "private-ingress", "public-ui", "renderer"],
+  "payload": {
+    "watches": ["gateway.request"],
+    "routeBlobId": "blob:public:gthink-private-route:v1",
+    "privateIngressBlobId": "blob:private:gthink-ingress:v1",
+    "readyEvent": "gthink.listener.ready",
+    "waitingEvent": "gthink.listener.waiting",
+    "responseKinds": ["gateway.response", "utterance"],
+    "errorKind": "error",
+    "readyRule": "emit gthink.listener.ready only after a causal private ingress ready proof is observed",
+    "replyRule": "every semantic answer must be produced by GThink and causally reference the incoming gateway.request",
+    "noSemanticFallback": true,
+    "http": false,
+    "script": null,
+    "worker": null,
+    "blobOnly": true
+  },
+  "silent": true,
+  "muted": false
+}
