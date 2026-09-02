@@ -1,0 +1,33 @@
+{
+  "schema": "GVAULT_PUBLIC_PAGE_BLOB_MANIFEST_V1",
+  "blobId": "blob:public:gvault-page:v1",
+  "surface": "Gvault-Pages",
+  "mode": "live-parent-blob",
+  "description": "La page publique GVAULT entière est l'unité blob parente. Les fonctions de transport et de routage sont des organes internes, pas des ponts externes.",
+  "runtime": "../../../scripts/gvault-public-page-blob.js",
+  "update": {
+    "dom": "MutationObserver",
+    "navigation": ["pageshow", "popstate", "hashchange"],
+    "deploymentCheckMs": 30000,
+    "serviceWorkerUpdate": true
+  },
+  "organs": {
+    "transport": {
+      "blobId": "blob:public:gvault-page:transport:v1",
+      "internal": true,
+      "externalBridge": false,
+      "facade": "../../../scripts/gthink-page-transport-organ.js",
+      "core": "../../../scripts/gthink-page-transport-core.js",
+      "chain": "./internal/transport-chain.json",
+      "state": "./internal/transport-state.json"
+    },
+    "routing": {"runtime": "../../../scripts/gvault-routing-fabric.js"},
+    "liveBlobBus": {"runtime": "../../../scripts/gvault-agent-live-blob.js"}
+  },
+  "privacy": {
+    "inputValuesCaptured": false,
+    "sasCaptured": false,
+    "privatePlaintextCaptured": false,
+    "rawConversationTextExported": false
+  }
+}

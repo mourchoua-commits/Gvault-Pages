@@ -33,27 +33,7 @@ const projectMarker='const changelogBlueprints={';
 if(reconstructedCatalog.length&&h.includes(projectMarker)){
  const accents=['#c8a95a','#67e8f9','#a98bff','#82c89a','#fb7185','#f59e0b'];
  const publicLaunchable=x=>!!x.publicPath&&!/^(control-tower|gadmin)$/.test(x.id);
- const recovered=reconstructedCatalog.map((x,i)=>({
-   id:x.id,
-   name:x.name,
-   subtitle:`RECONSTRUCTION · ${x.kind||'trace'} · ${(x.proof||[]).join(' + ')||'preuve indexée'}`,
-   version:x.version||'TRACE RECONSTRUITE',
-   date:'29 août 2026',
-   lastModified:'2026-08-29T00:52:00+02:00',
-   modifiedSource:'reconstruction probante · archives + changelogs + ONOU + artefacts + Git',
-   status:publicLaunchable(x)?'active':'candidate',
-   confidence:(x.confidence||0)>=.98?'confirmed':'reconstructed',
-   canonicalUser:true,
-   playable:publicLaunchable(x),
-   conversationProject:true,
-   category:x.category||String(x.kind||'TRACE').toUpperCase(),
-   accent:accents[i%accents.length],
-   file:publicLaunchable(x)?x.publicPath:'',
-   summary:x.summary||'Trace de projet reconstruite.',
-   focus:'Conserver la filiation et approfondir les preuves dans le catalogue reconstruit ; aucune absence de build ne doit effacer la trace.',
-   branches:['PROJECT CATALOG V2',...(x.proof||[]).slice(0,4)],
-   report:`Projection publique sanitisée · état source ${x.status||'reconstructed'} · confiance ${Math.round((x.confidence||0)*100)}% · aucun verbatim privé publié.`
- }));
+ const recovered=reconstructedCatalog.map((x,i)=>({id:x.id,name:x.name,subtitle:`RECONSTRUCTION · ${x.kind||'trace'} · ${(x.proof||[]).join(' + ')||'preuve indexée'}`,version:x.version||'TRACE RECONSTRUITE',date:'29 août 2026',lastModified:'2026-08-29T00:52:00+02:00',modifiedSource:'reconstruction probante · archives + changelogs + ONOU + artefacts + Git',status:publicLaunchable(x)?'active':'candidate',confidence:(x.confidence||0)>=.98?'confirmed':'reconstructed',canonicalUser:true,playable:publicLaunchable(x),conversationProject:true,category:x.category||String(x.kind||'TRACE').toUpperCase(),accent:accents[i%accents.length],file:publicLaunchable(x)?x.publicPath:'',summary:x.summary||'Trace de projet reconstruite.',focus:'Conserver la filiation et approfondir les preuves dans le catalogue reconstruit ; aucune absence de build ne doit effacer la trace.',branches:['PROJECT CATALOG V2',...(x.proof||[]).slice(0,4)],report:`Projection publique sanitisée · état source ${x.status||'reconstructed'} · confiance ${Math.round((x.confidence||0)*100)}% · aucun verbatim privé publié.`}));
  const injection=`try{const __gvaultRecoveredProjects=${JSON.stringify(recovered)};for(const rp of __gvaultRecoveredProjects){if(!projects.some(p=>p.id===rp.id))projects.push(rp)}}catch(e){console.warn('project reconstruction graft skipped',e)}\n${projectMarker}`;
  h=h.replace(projectMarker,injection);
 }
@@ -69,18 +49,14 @@ function installPrivateToolEntries(){
  const sync=()=>{const ready=liveSas();for(const b of [admin,tower]){b.disabled=!ready;b.classList.toggle('ready',ready)}};
  const nonce=()=>Array.from(crypto.getRandomValues(new Uint8Array(16)),x=>x.toString(16).padStart(2,'0')).join('');
  function openTool(button,{tool,url}){sync();if(button.disabled||!liveSas())return;const n=nonce(),target=new URL(url,location.href);target.searchParams.set('sas_nonce',n);const child=window.open(target.href,'_blank');if(!child){button.title='Ouverture bloquée par le navigateur';return}let accepted=false;const onMessage=ev=>{if(ev.origin!==location.origin||ev.source!==child)return;const d=ev.data||{};if(d.tool!==tool||d.nonce!==n)return;if(d.schema==='GVAULT_PRIVATE_TOOL_SAS_REQUEST_V1'){if(!liveSas())return;const pw=window.__GVAULT_PROJECT_STORE_PASSWORD__;child.postMessage({schema:'GVAULT_PRIVATE_TOOL_SAS_SESSION_V1',tool,nonce:n,password:pw},location.origin)}else if(d.schema==='GVAULT_PRIVATE_TOOL_SAS_ACCEPTED_V1'){accepted=true}};window.addEventListener('message',onMessage);const timer=setInterval(()=>{if(child.closed||!liveSas()){clearInterval(timer);window.removeEventListener('message',onMessage);if(!child.closed&&!accepted)try{child.close()}catch{}}},750);setTimeout(()=>{if(!accepted){clearInterval(timer);window.removeEventListener('message',onMessage);try{if(!child.closed)child.close()}catch{}}},25000)}
- admin.addEventListener('click',()=>openTool(admin,{tool:'gadmin',url:'./essai/gadmin/'}));
- tower.addEventListener('click',()=>openTool(tower,{tool:'control-tower',url:'./essai/control-tower/v2.html'}));
- sync();const timer=setInterval(sync,350);window.addEventListener('pageshow',sync);window.addEventListener('pagehide',()=>clearInterval(timer),{once:true});
+ admin.addEventListener('click',()=>openTool(admin,{tool:'gadmin',url:'./essai/gadmin/'}));tower.addEventListener('click',()=>openTool(tower,{tool:'control-tower',url:'./essai/control-tower/v2.html'}));sync();const timer=setInterval(sync,350);window.addEventListener('pageshow',sync);window.addEventListener('pagehide',()=>clearInterval(timer),{once:true});
 }
 if(document.readyState==='loading')window.addEventListener('DOMContentLoaded',installPrivateToolEntries,{once:true});else installPrivateToolEntries();`;
 if(!h.includes(needle))throw new Error('Point de greffe outils privés introuvable');
 h=h.replace(needle,graft);
-if(!h.includes('gvault-public-agent-conversation.js')){
- const agentStyle='<script src="./scripts/gvault-public-agent-conversation.js?v=2"><\/script>\n';
- const documentClose='<'+'/body>\n<'+'/html>';
- h=h.replace(/<\/body>\s*<\/html>\s*$/i,agentStyle+documentClose);
-}
+const documentClose='<'+'/body>\n<'+'/html>';
+if(!h.includes('gvault-public-agent-conversation.js'))h=h.replace(/<\/body>\s*<\/html>\s*$/i,'<script src="./scripts/gvault-public-agent-conversation.js?v=2"><\/script>\n'+documentClose);
+if(!h.includes('gvault-public-page-blob.js'))h=h.replace(/<\/body>\s*<\/html>\s*$/i,'<script src="./scripts/gvault-public-page-blob.js?v=1"><\/script>\n'+documentClose);
 document.open();document.write(h);document.close();
 })().catch(e=>{const s=document.getElementById('state');if(s){s.classList.add('err');s.textContent='GVAULT INDISPONIBLE · '+String(e&&e.message||e)}console.error(e)});
 </script>

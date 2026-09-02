@@ -1,5 +1,9 @@
 {
-  "schema": "GVAULT_BLOB_BRIDGE_CHAIN_V2",
+  "schema": "GVAULT_PUBLIC_PAGE_TRANSPORT_CHAIN_V1",
+  "blobId": "blob:public:gvault-page:transport:v1",
+  "ownerBlobId": "blob:public:gvault-page:v1",
+  "internal": true,
+  "externalBridge": false,
   "virtualUri": "blob://public/gthink",
   "browserEntry": "/Gvault-Pages/blob/public/gthink/",
   "target": "/Gvault-Pages/gthink/",
