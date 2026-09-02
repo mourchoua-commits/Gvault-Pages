@@ -26,6 +26,11 @@ stream
 ↳ 404 = blob terminal</div><div class="small" id="state">Initialisation de la route jusqu’au 404…</div></div></section>
 <script>
 (()=>{'use strict';
+const params=new URLSearchParams(location.search);
+if(params.get('show404')==='1'){
+  location.replace('/Gvault-Pages/blob/http-404-blob/terminal-404');
+  return;
+}
 const ROUTE_ID='blob-public-gthink-v4';
 const state=document.getElementById('state');
 const direct=new URL('../../../gthink/?via=blob-route-fallback',location.href).href;
