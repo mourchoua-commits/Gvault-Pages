@@ -20,6 +20,7 @@ function injectRoute(html,requestUrl){
   const route=JSON.stringify({schema:SCHEMA,routeId:ROUTE_ID,virtualUri:VIRTUAL_URI,browserHref:requestUrl,targetHref:gthinkBase.href,hops});
   const bridge=`<script>window.GVAULT_BLOB_ROUTE=Object.freeze(${route});window.dispatchEvent(new CustomEvent('gvault:blob-route-ready',{detail:window.GVAULT_BLOB_ROUTE}));<\/script>`;
   let out=String(html||'');
+  out=out.replace(/gthink-turn-relay\.js\?v=\d+/g,'gthink-turn-relay.js?v=3');
   if(!/<base\b/i.test(out))out=out.replace(/<head([^>]*)>/i,`<head$1>${base}`);
   if(/<\/head>/i.test(out))out=out.replace(/<\/head>/i,`${bridge}</head>`);
   else out=bridge+out;
