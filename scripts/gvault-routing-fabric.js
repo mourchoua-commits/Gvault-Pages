@@ -1,8 +1,9 @@
 (()=>{'use strict';
 const SCHEMA='GVAULT_ROUTING_FABRIC_V1';
-const VERSION=7;
+const VERSION=8;
 const PRIVATE_POLICY='EXPLICIT_DECLASSIFICATION_V1';
 const PUBLIC_STREAM='gvault://blobs/public/gthink/stream';
+const FLOW_POLICY=Object.freeze({startupQueue:'DRAIN_ON_GEYSER_READY',startupHardCap:null,applicationRateLimit:null,overflowStrategy:'BLOB_FRAGMENTATION',legacyCapsBlobified:true});
 const flowBacklog=[];
 function clean(v){return String(v??'').trim()}
 function words(v){return clean(v).toLowerCase()}
@@ -25,14 +26,14 @@ function deliverFlow(detail){
  try{
   if(window.GVAULT_PUBLIC_TRIPLE_GEYSER?.publish){window.GVAULT_PUBLIC_TRIPLE_GEYSER.publish(detail);return true}
   if(window.GVAULT_PUBLIC_TRIPLE_GEYSER?.ingest){window.GVAULT_PUBLIC_TRIPLE_GEYSER.ingest(detail);return true}
-  flowBacklog.push(detail);if(flowBacklog.length>256)flowBacklog.splice(0,flowBacklog.length-256);return false;
+  flowBacklog.push(detail);return false;
  }catch{return false}
 }
 function flushFlows(){const g=window.GVAULT_PUBLIC_TRIPLE_GEYSER;if(!g)return;for(const x of flowBacklog.splice(0))try{g.publish?g.publish(x):g.ingest?.(x)}catch{}}
 function emitNetworkFlow(urlLike,{method='GET',initiatorType='fetch',source=null}={}){
  try{
   const url=new URL(String(urlLike||''),location.href);if(privateHint(url.pathname))return false;
-  return deliverFlow({kind:'public.network.ingress',intent:'transform_and_push_outward',surface:'public-network',role:'network',destination:'public.outward',routeHint:source||sourceFor(url),primary:'public.bus',source:source||sourceFor(url),method:String(method).toUpperCase(),origin:url.origin,path:url.pathname,initiatorType:String(initiatorType||'network').slice(0,64),valve:'FULL_OPEN',applicationRateLimit:null,at:new Date().toISOString()});
+  return deliverFlow({kind:'public.network.ingress',intent:'transform_and_push_outward',surface:'public-network',role:'network',destination:'public.outward',routeHint:source||sourceFor(url),primary:'public.bus',source:source||sourceFor(url),method:String(method).toUpperCase(),origin:url.origin,path:url.pathname,initiatorType:String(initiatorType||'network'),valve:'FULL_OPEN',applicationRateLimit:null,flowPolicy:FLOW_POLICY,at:new Date().toISOString()});
  }catch{return false}
 }
 function emitFlowRoute(input,primary){
@@ -40,7 +41,7 @@ function emitFlowRoute(input,primary){
   if(!input||typeof input!=='object'||typeof input.blobId==='string'||input.schema==='GVAULT_UNIVERSAL_BLOB_V1')return;
   const surface=clean(input.surface),destination=clean(input.destination||input.to),routeHint=clean(input.routeHint||input.payload?.routeHint),hint=[surface,destination,routeHint].join(' ');
   if(privateHint(hint))return;
-  deliverFlow({kind:clean(input.kind||input.type)||'public.ingress',intent:clean(input.intent||input.payload?.intent)||null,surface:surface||'public',role:clean(input.role)||null,destination:destination||primary,routeHint:routeHint||null,primary,source:'routing-fabric',valve:'FULL_OPEN',applicationRateLimit:null,at:new Date().toISOString()});
+  deliverFlow({kind:clean(input.kind||input.type)||'public.ingress',intent:clean(input.intent||input.payload?.intent)||null,surface:surface||'public',role:clean(input.role)||null,destination:destination||primary,routeHint:routeHint||null,primary,source:'routing-fabric',valve:'FULL_OPEN',applicationRateLimit:null,flowPolicy:FLOW_POLICY,at:new Date().toISOString()});
  }catch{}
 }
 function emitServiceWorkerIngress(d={}){
@@ -80,12 +81,12 @@ function plan(input={},opts={}){
  else if(primary==='public.local')add('public.local','primary','same-origin public project/module route','PUBLIC_ONLY');
  else add('public.bus','primary','unclassified public event','NO_PRIVILEGE_ESCALATION');
  emitFlowRoute(input,primary);
- return Object.freeze({schema:SCHEMA,version:VERSION,primary,routes:Object.freeze(routes),privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,privateContentPublished:false,createdAt:new Date().toISOString(),source:{kind:clean(input.kind||input.type)||null,intent:clean(input.intent||input.payload?.intent)||null,surface:clean(input.surface)||null,role:clean(input.role)||null,destination:clean(input.destination||input.to)||null,routeHint:clean(input.routeHint||input.payload?.routeHint)||null}})
+ return Object.freeze({schema:SCHEMA,version:VERSION,primary,routes:Object.freeze(routes),privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,flowPolicy:FLOW_POLICY,privateContentPublished:false,createdAt:new Date().toISOString(),source:{kind:clean(input.kind||input.type)||null,intent:clean(input.intent||input.payload?.intent)||null,surface:clean(input.surface)||null,role:clean(input.role)||null,destination:clean(input.destination||input.to)||null,routeHint:clean(input.routeHint||input.payload?.routeHint)||null}})
 }
-function describe(input,opts){const p=plan(input,opts);return {schema:SCHEMA,version:VERSION,primary:p.primary,routeIds:p.routes.map(x=>x.id),privatePolicy:p.privatePolicy,privateContentPublished:false}}
-window.GVAULT_ROUTING_FABRIC=Object.freeze({schema:SCHEMA,version:VERSION,privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,valve:'FULL_OPEN',applicationRateLimit:null,classify,plan,describe,deliverFlow,emitNetworkFlow});
-try{window.dispatchEvent(new CustomEvent('gvault:routing-fabric-ready',{detail:{schema:SCHEMA,version:VERSION,privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,valve:'FULL_OPEN',applicationRateLimit:null,privateContentPublished:false}}))}catch{}
+function describe(input,opts){const p=plan(input,opts);return {schema:SCHEMA,version:VERSION,primary:p.primary,routeIds:p.routes.map(x=>x.id),privatePolicy:p.privatePolicy,flowPolicy:FLOW_POLICY,privateContentPublished:false}}
+window.GVAULT_ROUTING_FABRIC=Object.freeze({schema:SCHEMA,version:VERSION,privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,valve:'FULL_OPEN',applicationRateLimit:null,flowPolicy:FLOW_POLICY,classify,plan,describe,deliverFlow,emitNetworkFlow,status:()=>({version:VERSION,valve:'FULL_OPEN',applicationRateLimit:null,flowPolicy:FLOW_POLICY,startupQueued:flowBacklog.length})});
+try{window.dispatchEvent(new CustomEvent('gvault:routing-fabric-ready',{detail:{schema:SCHEMA,version:VERSION,privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,valve:'FULL_OPEN',applicationRateLimit:null,flowPolicy:FLOW_POLICY,privateContentPublished:false}}))}catch{}
 if(navigator.serviceWorker)navigator.serviceWorker.addEventListener('message',e=>emitServiceWorkerIngress(e.data||{}));
-function loadTripleGeyser(){if(window.GVAULT_PUBLIC_TRIPLE_GEYSER){flushFlows();return}if(document.querySelector('script[data-gvault-triple-geyser]'))return;const s=document.createElement('script');s.src='./scripts/gvault-public-triple-geyser.js?v=3';s.async=false;s.setAttribute('data-gvault-triple-geyser','V3');s.onload=flushFlows;s.onerror=()=>console.warn('GVAULT triple geyser unavailable');(document.head||document.documentElement).appendChild(s)}
+function loadTripleGeyser(){if(window.GVAULT_PUBLIC_TRIPLE_GEYSER){flushFlows();return}if(document.querySelector('script[data-gvault-triple-geyser]'))return;const s=document.createElement('script');s.src='./scripts/gvault-public-triple-geyser.js?v=4';s.async=false;s.setAttribute('data-gvault-triple-geyser','V4');s.onload=flushFlows;s.onerror=()=>console.warn('GVAULT triple geyser unavailable');(document.head||document.documentElement).appendChild(s)}
 loadTripleGeyser();installFetchObserver();installResourceObserver();
 })();
