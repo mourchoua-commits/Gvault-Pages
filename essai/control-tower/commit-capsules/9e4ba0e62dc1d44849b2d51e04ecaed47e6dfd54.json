@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "9e4ba0e62dc1d44849b2d51e04ecaed47e6dfd54",
+  "parentSha": "9c2ca20772b7ac5c9607fb109b4d3986cf1da3ad",
+  "committedAt": "2026-09-02T03:35:48+02:00",
+  "summary": {
+    "subject": "Add canonical public-private routing fabric",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 45,
+    "deletions": 0,
+    "paths": [
+      "scripts/gvault-routing-fabric.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 45,
+    "deletions": 0,
+    "magnitude": 45,
+    "committedAt": "2026-09-02T03:35:48+02:00",
+    "parentSha": "9c2ca20772b7ac5c9607fb109b4d3986cf1da3ad"
+  },
+  "pulseKey": "CTP1:9e4ba0e62dc1d44849b2d51e04ecaed47e6dfd54:7f6d213a7cc01c7f",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "4003102ef700cb84b921fa6cb1f99c172a9fcceeca17334e844befa71f97a453",
+  "typedKeys": {
+    "commit": "gitc:9e4ba0e62dc1d44849b2d51e04ecaed47e6dfd54",
+    "parent": "gitc:9c2ca20772b7ac5c9607fb109b4d3986cf1da3ad",
+    "pulse": "ctp1:9e4ba0e62dc1d44849b2d51e04ecaed47e6dfd54:7f6d213a7cc01c7f",
+    "translation": "cttrans:4003102ef700cb84b921fa6cb1f99c172a9fcceeca17334e844befa71f97a453",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "9e4ba0e62dc1d44849b2d51e04ecaed47e6dfd54",
+    "parentSha": "9c2ca20772b7ac5c9607fb109b4d3986cf1da3ad",
+    "committedAt": "2026-09-02T03:35:48+02:00",
+    "summary": {
+      "subject": "Add canonical public-private routing fabric",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 45,
+      "deletions": 0,
+      "paths": [
+        "scripts/gvault-routing-fabric.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 45,
+      "deletions": 0,
+      "magnitude": 45,
+      "committedAt": "2026-09-02T03:35:48+02:00",
+      "parentSha": "9c2ca20772b7ac5c9607fb109b4d3986cf1da3ad"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/9e4ba0e62dc1d44849b2d51e04ecaed47e6dfd54.json",
+      "vfsKey": "CTP1:9e4ba0e62dc1d44849b2d51e04ecaed47e6dfd54:7f6d213a7cc01c7f",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/9e4ba0e62dc1d44849b2d51e04ecaed47e6dfd54.json"
+}
