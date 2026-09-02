@@ -1,0 +1,37 @@
+{
+  "schema": "GVAULT_BLOB_ROUTE_V4",
+  "routeId": "blob-public-gthink-v4",
+  "virtualUri": "blob://public/gthink",
+  "browserEntry": "/Gvault-Pages/blob/public/gthink/",
+  "serviceWorker": "/Gvault-Pages/blob/blob-sw.js?v=4",
+  "serviceWorkerScope": "/Gvault-Pages/blob/",
+  "targetDocument": "/Gvault-Pages/gthink/index.html",
+  "targetBase": "/Gvault-Pages/gthink/",
+  "stream": "gvault://blobs/public/gthink/stream",
+  "stopCondition": "HTTP_404",
+  "terminal404": "http-404-blob",
+  "hops": [
+    "https-entry-blob",
+    "virtual-uri-blob",
+    "service-worker-router-blob",
+    "gthink-document-blob",
+    "upstream-fetch-blob",
+    "http-status-blob",
+    "gthink-stream-blob"
+  ],
+  "on404": [
+    "upstream-fetch-blob",
+    "http-status-blob",
+    "http-404-blob"
+  ],
+  "invariants": {
+    "sameOrigin": true,
+    "iframe": false,
+    "privateRouteExposed": false,
+    "browserBlobSchemeRegistration": false,
+    "canonicalBrowserEntryOnly": true,
+    "rawTargetOnProxyFailure": false,
+    "preserveFirst404": true,
+    "rewrite404As502": false
+  }
+}
