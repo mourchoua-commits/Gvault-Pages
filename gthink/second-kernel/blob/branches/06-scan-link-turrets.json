@@ -1,0 +1,54 @@
+{
+  "schema": "gthink.second-kernel.branch.scan-link-turrets.v1",
+  "id": "scan-link-turrets",
+  "blobId": "GT-SCAN-LINK-TURRETS",
+  "parentBlobId": "GT-SECOND-KERNEL-KNOWLEDGE",
+  "purpose": "Relier les éléments déjà scannés au graphe public par des fils de blobs sortants, sans modifier ni aspirer les cibles.",
+  "model": {
+    "turret": "nœud émetteur de liens",
+    "thread": "arête blob traçable entre une observation/scanner et une cible",
+    "direction": "outbound",
+    "mutation": "link-only",
+    "targetFetch": false,
+    "destructiveAction": false
+  },
+  "turrets": [
+    {"id":"T-REF","accepts":["url","gvault","path","ref"]},
+    {"id":"T-HASH","accepts":["sha256","sha","digest"]},
+    {"id":"T-SOURCE","accepts":["source","origin","repository","resource"]},
+    {"id":"T-SCAN","accepts":["scan","discovery","observation","evidence","capture","manifest","snapshot"]}
+  ],
+  "threadBlob": {
+    "kind": "turret.thread",
+    "role": "kernel",
+    "from": "scan-link-turret",
+    "to": "external.graph",
+    "intent": "link_scanned_target",
+    "requiredPayload": ["turretId","sourceBlobId","target","targetType","relation"]
+  },
+  "dedupe": "sourceBlobId + target",
+  "limits": {
+    "maxTargetsPerSource": 24,
+    "persistentEdges": 512,
+    "maxTraversalDepth": 5
+  },
+  "persistence": {
+    "surface": "localStorage",
+    "key": "gvault.blob.turret.graph.v1",
+    "containsRawPrivateData": false
+  },
+  "bootScan": [
+    "current public page",
+    "loaded script src",
+    "loaded link href",
+    "recent universal blobs",
+    "second-kernel manifest"
+  ],
+  "safety": {
+    "publicOnly": true,
+    "noCredentialCollection": true,
+    "noCrossOriginFetch": true,
+    "noPrivateRepositoryRead": true,
+    "noTargetMutation": true
+  }
+}
