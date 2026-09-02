@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>blob://public/gthink · GVAULT</title>
+<style>
+html,body{margin:0;width:100%;height:100%;min-height:100dvh;background:#05070b;overflow:hidden}
+iframe{display:block;width:100%;height:100dvh;border:0;background:#05070b}
+#fallback{position:fixed;inset:auto 12px 12px 12px;padding:10px 12px;border-radius:12px;background:#111722;color:#fff;font:13px system-ui,sans-serif;text-align:center;z-index:2}
+#fallback[hidden]{display:none}
+a{color:inherit}
+</style>
+</head>
+<body>
+<iframe id="blobFrame" title="blob://public/gthink" src="../../../gthink/?via=blob-address-bridge&v=450" allow="clipboard-read; clipboard-write" referrerpolicy="same-origin"></iframe>
+<div id="fallback" hidden>Le pont blob n’a pas chargé. <a href="../../../gthink/?via=blob-address-bridge&v=450">Ouvrir GThink directement</a>.</div>
+<script>
+(()=>{'use strict';
+const URI='blob://public/gthink';
+const frame=document.getElementById('blobFrame');
+const fallback=document.getElementById('fallback');
+let loaded=false;
+frame.addEventListener('load',()=>{loaded=true;fallback.hidden=true;try{frame.contentWindow.postMessage({schema:'GVAULT_BLOB_ADDRESS_BRIDGE_V1',kind:'blob.address.bridge',uri:URI,href:location.href},location.origin)}catch{}});
+setTimeout(()=>{if(!loaded)fallback.hidden=false},6000);
+window.GVAULT_BLOB_ADDRESS_BRIDGE=Object.freeze({schema:'GVAULT_BLOB_ADDRESS_BRIDGE_V1',uri:URI,href:location.href,target:new URL('../../../gthink/',location.href).href});
+})();
+</script>
+</body>
+</html>
