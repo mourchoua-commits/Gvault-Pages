@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "4f63fbb55269b42bfdaa45892bc3dcbe2bf886d8",
+  "parentSha": "8f50e2e5362e96925cca53002cfdde0e1aa3507f",
+  "committedAt": "2026-09-02T06:51:07+02:00",
+  "summary": {
+    "subject": "Add one-shot five blob burst on GThink",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 11,
+    "deletions": 0,
+    "paths": [
+      "scripts/gthink-five-blob-burst.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 11,
+    "deletions": 0,
+    "magnitude": 11,
+    "committedAt": "2026-09-02T06:51:07+02:00",
+    "parentSha": "8f50e2e5362e96925cca53002cfdde0e1aa3507f"
+  },
+  "pulseKey": "CTP1:4f63fbb55269b42bfdaa45892bc3dcbe2bf886d8:e4aaa81c45a02c72",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "bc85514e2fe1bf68d05494f5e998a07267ab699547f97422a355c751337c179a",
+  "typedKeys": {
+    "commit": "gitc:4f63fbb55269b42bfdaa45892bc3dcbe2bf886d8",
+    "parent": "gitc:8f50e2e5362e96925cca53002cfdde0e1aa3507f",
+    "pulse": "ctp1:4f63fbb55269b42bfdaa45892bc3dcbe2bf886d8:e4aaa81c45a02c72",
+    "translation": "cttrans:bc85514e2fe1bf68d05494f5e998a07267ab699547f97422a355c751337c179a",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "4f63fbb55269b42bfdaa45892bc3dcbe2bf886d8",
+    "parentSha": "8f50e2e5362e96925cca53002cfdde0e1aa3507f",
+    "committedAt": "2026-09-02T06:51:07+02:00",
+    "summary": {
+      "subject": "Add one-shot five blob burst on GThink",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 11,
+      "deletions": 0,
+      "paths": [
+        "scripts/gthink-five-blob-burst.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 11,
+      "deletions": 0,
+      "magnitude": 11,
+      "committedAt": "2026-09-02T06:51:07+02:00",
+      "parentSha": "8f50e2e5362e96925cca53002cfdde0e1aa3507f"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/4f63fbb55269b42bfdaa45892bc3dcbe2bf886d8.json",
+      "vfsKey": "CTP1:4f63fbb55269b42bfdaa45892bc3dcbe2bf886d8:e4aaa81c45a02c72",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/4f63fbb55269b42bfdaa45892bc3dcbe2bf886d8.json"
+}
