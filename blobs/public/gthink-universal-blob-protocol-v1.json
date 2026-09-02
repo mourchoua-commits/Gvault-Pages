@@ -34,7 +34,10 @@
     "render.delta": "petit fragment de caractères à ajouter directement dans le blob visible",
     "render.done": "fin du rendu d'une réponse",
     "kernel.state": "état du noyau public",
-    "gateway.state": "état de la passerelle"
+    "gateway.state": "état de la passerelle",
+    "turret.thread": "fil blob sortant reliant un blob observé à une cible déjà référencée/scannée",
+    "turret.snapshot": "état compact du graphe de fils de tourelles",
+    "gthink.turret.ready": "annonce que les tourelles de liaison sont armées"
   },
   "routing": {
     "order": [
