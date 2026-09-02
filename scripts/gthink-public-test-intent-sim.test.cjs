@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict');
+function clean(v){return String(v??'').trim()}
+function norm(v){return clean(v).toLocaleLowerCase('fr-FR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[’']/g,'').replace(/[^a-z0-9]+/g,' ').trim()}
+function bareTestIntent(message){const n=norm(message);return /^(test|teste|tester|un test|le test|fais un test|fait un test|on test|on teste|on testera|testons|essai|un essai|essaie|essaye|on essaie|on essaye)$/.test(n)}
+function testIntentState(message){const n=norm(message);const bare=bareTestIntent(message);const explicit=bare||/^(test|teste|tester|verifie|verifier|verification|valide|valider|validation|preuve)\b/.test(n)||/\b(test|teste|tester|verifie|verifier|validation|preuve)\b/.test(n);return {explicit,bare,targetState:bare?'MISSING':explicit?'EXPLICIT_OR_CONTEXTUAL':'NONE',requiresCadrage:bare,nextProtocol:explicit?'T_EPREUVE':null}}
+function route(message){const t=testIntentState(message),p=[];if(t.requiresCadrage)p.push('T_CADRAGE');if(t.explicit&&!t.bare)p.push('T_EPREUVE');return p}
+const intentCases=[['Test',true],['test',true],['Teste',true],['Tester',true],['Un test',true],['Fais un test',true],['On test',true],['On teste',true],['Testons',true],['Essai',true],['Un essai',true],['Essaie',true],['On essaie',true],['Teste le bridge',false],['Test le bridge',false],['Teste GThink',false],['Vérifie le blob',false],['Test du worker',false],['On teste la mémoire',false],['Je veux un test du routeur',false],['Comment tester le serveur ?',false],['C’est un test du système',false],['test 123',false],['ping',false]];
+for(const [input,expected] of intentCases)assert.equal(bareTestIntent(input),expected,input);
+const routeCases=[['Test',['T_CADRAGE']],['Un test',['T_CADRAGE']],['Teste le bridge',['T_EPREUVE']],['Vérifie le blob',['T_EPREUVE']],['Salut',[]]];
+for(const [input,expected] of routeCases)assert.deepEqual(route(input),expected,input);
+console.log(`PASS intent=${intentCases.length}/${intentCases.length} routing=${routeCases.length}/${routeCases.length}`);
