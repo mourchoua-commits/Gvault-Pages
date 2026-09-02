@@ -1,0 +1,19 @@
+{
+  "branchId": "task-methods",
+  "kind": "execution-methods",
+  "methods": {
+    "quality": ["re-read", "test", "report", "correct", "validate"],
+    "FiCsa": ["inverse-path-first", "normal-path-second"],
+    "ProdOui": "transform important functions into real testable implementations rather than mockups",
+    "SACREBLEU": "reconstruct from multiple sources and double-validate when reconstruction is required",
+    "snapshot": "for a task, preserve an instant-T evidence snapshot when the host workflow provides a protected storage destination",
+    "triangulation": "use the exact request instant as primary anchor; compare other snapshots only as separately timestamped secondary points"
+  },
+  "operatingRules": [
+    "Prefer a working minimal graft over a parallel replacement architecture.",
+    "Keep public and private data boundaries explicit.",
+    "Simulate or inspect before destructive changes.",
+    "When a function can operate offline, do not make internet connectivity a hard dependency.",
+    "Do not claim a capability is operational until its actual path has been tested or directly verified."
+  ]
+}
