@@ -7,7 +7,7 @@
     "broadcastChannel": "gvault.public.blobs.v2",
     "legacyBroadcastChannel": "gvault.public.blobs.v1"
   },
-  "purpose": "Faire communiquer GThink, le noyau public, le gateway et l'interface avec une enveloppe blob commune, compréhensible et traçable.",
+  "purpose": "Faire communiquer GThink, le noyau public, le passage privé et l'interface avec des enveloppes blob communes, compréhensibles et traçables.",
   "requiredFields": [
     "schema",
     "blobId",
@@ -21,20 +21,27 @@
   ],
   "commonFields": {
     "parentBlobId": "lien causal vers le blob parent",
-    "role": "user | gthink | system | renderer | gateway | kernel",
+    "role": "user | gthink | renderer | gateway | kernel | router | gate | private-ingress",
     "language": "langue humaine principale du contenu",
-    "surface": "surface publique d'origine",
+    "surface": "surface d'origine",
     "chroma": "métadonnées chromatiques du blob",
-    "understoodBy": "liste déclarative des couches capables d'interpréter le blob"
+    "understoodBy": "liste déclarative des blobs/couches capables d'interpréter le blob"
   },
   "kinds": {
     "utterance": "message utilisateur ou réponse GThink",
-    "state": "état du noyau, du gateway, de GThink ou du rendu",
+    "state": "état transporté comme blob",
     "error": "erreur transportée comme blob et reliée à sa cause",
     "render.delta": "petit fragment de caractères à ajouter directement dans le blob visible",
     "render.done": "fin du rendu d'une réponse",
-    "kernel.state": "état du noyau public",
-    "gateway.state": "état de la passerelle",
+    "kernel.state": "état du noyau public blob",
+    "gateway.state": "état de la passerelle blob",
+    "route.contract": "route blob public vers ingress blob privé",
+    "gthink.responder.contract": "contrat du blob répondeur GThink",
+    "readiness.gate": "porte blob fail-closed pour la saisie publique",
+    "private.ingress.contract": "contrat d'entrée blob côté privé",
+    "private.ingress.ready": "preuve blob que l'entrée privée est disponible",
+    "gthink.listener.ready": "preuve blob que le répondeur GThink est prêt",
+    "gthink.listener.waiting": "preuve blob que le répondeur GThink attend encore",
     "turret.thread": "fil blob sortant reliant un blob observé à une cible déjà référencée/scannée",
     "turret.snapshot": "état compact du graphe de fils de tourelles",
     "gthink.turret.ready": "annonce que les tourelles de liaison sont armées"
@@ -46,8 +53,10 @@
       "emplacement logique existant",
       "index/cadastre en support"
     ],
-    "rule": "Chaque couche consomme les blobs qu'elle comprend, conserve parentBlobId et conversationId, puis émet un nouveau blob plutôt que de contourner le bus.",
-    "defaultPath": "user blob -> public kernel blob -> gateway adapter -> GThink reply blob -> render.delta blobs -> public display"
+    "rule": "Chaque blob consomme uniquement les blobs qu'il comprend, conserve parentBlobId et conversationId, puis émet un nouveau blob plutôt que de contourner le bus.",
+    "defaultPath": "user blob -> public kernel blob -> route blob -> private ingress blob -> GThink reply blob -> readiness/render blobs -> public display",
+    "nonBlobDependencies": [],
+    "blobOnly": true
   },
   "compatibility": {
     "acceptAgentResponses": [
