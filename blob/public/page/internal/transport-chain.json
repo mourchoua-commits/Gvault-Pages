@@ -3,7 +3,6 @@
   "blobId": "blob:public:gvault-page:transport:v1",
   "ownerBlobId": "blob:public:gvault-page:v1",
   "internal": true,
-  "externalBridge": false,
   "virtualUri": "blob://public/gthink",
   "browserEntry": "/Gvault-Pages/blob/public/gthink/",
   "target": "/Gvault-Pages/gthink/",
