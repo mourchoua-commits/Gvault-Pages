@@ -1,6 +1,6 @@
 (()=>{'use strict';
 const SCHEMA='GVAULT_ROUTING_FABRIC_V1';
-const VERSION=3;
+const VERSION=4;
 const PRIVATE_POLICY='EXPLICIT_DECLASSIFICATION_V1';
 const PUBLIC_STREAM='gvault://blobs/public/gthink/stream';
 function clean(v){return String(v??'').trim()}
@@ -17,6 +17,14 @@ function classify(input={}){
  if(/\b(blob|stream|bus|relay|signal)\b/.test(meta))return 'public.blob-stream';
  if(/\b(project|projet|navigation|page|module|app)\b/.test(meta))return 'public.local';
  return 'public.bus';
+}
+function emitFlowRoute(input,primary){
+ try{
+  if(!input||typeof input!=='object'||typeof input.blobId==='string'||input.schema==='GVAULT_UNIVERSAL_BLOB_V1')return;
+  const surface=clean(input.surface),destination=clean(input.destination||input.to),hint=[surface,destination,clean(input.routeHint)].join(' ').toLowerCase();
+  if(/gadmin|control[-_ ]?tower|private-tool|sas/.test(hint))return;
+  window.dispatchEvent(new CustomEvent('gvault:public-flow',{detail:{kind:clean(input.kind||input.type)||'public.ingress',intent:clean(input.intent||input.payload?.intent)||null,surface:surface||'public',role:clean(input.role)||null,destination:destination||primary,routeHint:clean(input.routeHint||input.payload?.routeHint)||null,primary,at:new Date().toISOString()}}));
+ }catch{}
 }
 function plan(input={},opts={}){
  const primary=opts.destination||classify(input),routes=[];
@@ -39,6 +47,7 @@ function plan(input={},opts={}){
  }else if(primary==='public.local'){
   add('public.local','primary','same-origin public project/module route','PUBLIC_ONLY');
  }else add('public.bus','primary','unclassified public event','NO_PRIVILEGE_ESCALATION');
+ emitFlowRoute(input,primary);
  return Object.freeze({schema:SCHEMA,version:VERSION,primary,routes:Object.freeze(routes),privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,privateContentPublished:false,createdAt:new Date().toISOString(),source:{kind:clean(input.kind||input.type)||null,intent:clean(input.intent||input.payload?.intent)||null,surface:clean(input.surface)||null,role:clean(input.role)||null,destination:clean(input.destination||input.to)||null,routeHint:clean(input.routeHint||input.payload?.routeHint)||null}})
 }
 function describe(input,opts){const p=plan(input,opts);return {schema:SCHEMA,version:VERSION,primary:p.primary,routeIds:p.routes.map(x=>x.id),privatePolicy:p.privatePolicy,privateContentPublished:false}}
