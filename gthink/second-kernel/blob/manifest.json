@@ -13,7 +13,8 @@
     {"id":"task-methods","path":"branches/02-task-methods.json","load":"always"},
     {"id":"capabilities","path":"branches/03-capabilities.json","load":"on-demand"},
     {"id":"handoff","path":"branches/04-handoff.json","load":"always"},
-    {"id":"offline-control-plane","path":"branches/05-offline-control-plane.json","load":"always"}
+    {"id":"offline-control-plane","path":"branches/05-offline-control-plane.json","load":"always"},
+    {"id":"scan-link-turrets","path":"branches/06-scan-link-turrets.json","load":"always"}
   ],
   "privacy": {
     "publicOnly": true,
