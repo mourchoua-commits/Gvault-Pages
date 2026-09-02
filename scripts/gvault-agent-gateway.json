@@ -1,6 +1,6 @@
 {
   "schema": "GVAULT_AGENT_GATEWAY_CONFIG_V2",
-  "version": 3,
+  "version": 4,
   "status": "AUTONOMOUS_BLOB_READY",
   "transport": "blob-stream",
   "streamUrl": "gvault://blobs/public/gthink/stream",
@@ -9,7 +9,20 @@
   "broadcastChannel": "gvault.public.blobs.v2",
   "requestKind": "gateway.request",
   "responseKinds": ["gateway.response", "utterance", "error"],
-  "route": "public.user -> public-kernel -> autonomous private blob worker -> explicit local release -> public-ui; optional remote private bridge when configured",
+  "routingFabric": {
+    "schema": "GVAULT_ROUTING_FABRIC_V1",
+    "script": "./gvault-routing-fabric.js",
+    "scope": "ALL_PUBLIC_HTML",
+    "routes": {
+      "conversation": ["private.capture", "private.gthink", "public.ui"],
+      "capture": ["private.capture", "public.bus"],
+      "admin": ["private.gadmin"],
+      "diagnostic": ["private.control-tower"],
+      "blob": ["public.blob-stream"],
+      "project": ["public.local"]
+    }
+  },
+  "route": "public.user -> canonical routing fabric -> explicit private capture + autonomous private GThink blob -> explicit release -> public-ui; admin/diagnostic stay SAS-gated",
   "baseUrl": null,
   "chatPath": "/api/vault/chat",
   "privateBridgePath": "/v1/gthink-private-bridge",
@@ -25,34 +38,37 @@
     "canonicalStreamUrl": "gvault://blobs/public/gthink/stream",
     "methodChangeRequiresExplicitUserRequest": true,
     "methodChangeApproved": true,
-    "approvedChange": "AUTONOMOUS_PRIVATE_BLOB_WORKER_WITH_OPTIONAL_REMOTE"
+    "approvedChange": "AUTONOMOUS_PRIVATE_BLOB_WORKER_WITH_CANONICAL_ROUTING_FABRIC"
   },
   "readiness": {
     "transportReady": true,
+    "routingReady": true,
     "responderReady": true,
     "privateBridgeConfigured": true,
     "remoteBridgeConfigured": false,
     "localWorkerConfigured": true,
     "serverOptional": true,
     "requiredListenerKind": "gthink.listener.ready",
-    "reason": "The gateway can answer through its autonomous client-private worker without a baseUrl. A remote private ingress remains optional and is preferred when configured."
+    "reason": "All public HTML receives the canonical routing fabric. GThink can answer through its autonomous client-private worker without a baseUrl; a remote private ingress remains optional."
   },
   "model": "browser-native-or-local-fallback",
   "gatewayBlob": {
     "schema": "GVAULT_UNIVERSAL_BLOB_V1",
-    "blobId": "blob:public:gthink-gateway:v4-autonomous-private-worker",
+    "blobId": "blob:public:gthink-gateway:v5-routed-autonomous-private-worker",
     "conversationId": "public-shared",
     "kind": "gateway.state",
     "role": "gateway",
     "from": "gateway-config",
     "to": "public.bus",
-    "intent": "route_gthink_through_autonomous_private_blob_boundary",
+    "intent": "route_gthink_through_canonical_private_blob_boundary",
     "language": "fr",
     "surface": "Gvault-Pages",
-    "understoodBy": ["GThink", "GThinkMini", "public-kernel", "client-private-worker", "private-bridge", "public-ui", "method-guard"],
+    "understoodBy": ["GThink", "GThinkMini", "public-kernel", "routing-fabric", "client-private-worker", "private-bridge", "public-ui", "method-guard"],
     "payload": {
       "transport": "blob-stream",
       "streamUrl": "gvault://blobs/public/gthink/stream",
+      "routingFabric": "GVAULT_ROUTING_FABRIC_V1",
+      "routingReady": true,
       "transportReady": true,
       "responderReady": true,
       "privateBridgeConfigured": true,
