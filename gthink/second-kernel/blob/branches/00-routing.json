@@ -1,0 +1,18 @@
+{
+  "branchId": "routing",
+  "kind": "decision-routing",
+  "rules": [
+    "Interpret the requested intention and function before consulting registries or indexes.",
+    "Route additions into the existing logical location instead of rebuilding the host architecture.",
+    "Classify additions as autonomous app, integrated module, utility service, or admin access before placement.",
+    "Indexes, cadastres and registries are evidence/catalogue layers; they do not drive interpretation.",
+    "GThink is the component that interprets blob signals and produces the response; blobs carry structure, state and data.",
+    "When information is missing, request or load only the branch needed for the active task rather than loading the full blob."
+  ],
+  "routingOrder": ["intention", "function", "method", "existing-place", "evidence-index"],
+  "taskContract": {
+    "preserveExisting": true,
+    "preferGreft": true,
+    "avoidUnrequestedRebuild": true
+  }
+}
