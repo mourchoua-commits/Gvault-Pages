@@ -1,8 +1,9 @@
 (()=>{'use strict';
 const SCHEMA='GVAULT_ROUTING_FABRIC_V1';
-const VERSION=4;
+const VERSION=5;
 const PRIVATE_POLICY='EXPLICIT_DECLASSIFICATION_V1';
 const PUBLIC_STREAM='gvault://blobs/public/gthink/stream';
+const flowBacklog=[];
 function clean(v){return String(v??'').trim()}
 function words(v){return clean(v).toLowerCase()}
 function classify(input={}){
@@ -18,13 +19,26 @@ function classify(input={}){
  if(/\b(project|projet|navigation|page|module|app)\b/.test(meta))return 'public.local';
  return 'public.bus';
 }
+function privateHint(v=''){return /gadmin|control[-_ ]?tower|private-tool|private-catalog|\/private\/|sas/i.test(String(v))}
+function deliverFlow(detail){
+ try{
+  if(window.GVAULT_PUBLIC_TRIPLE_GEYSER?.ingest){window.GVAULT_PUBLIC_TRIPLE_GEYSER.ingest(detail);return true}
+  flowBacklog.push(detail);if(flowBacklog.length>256)flowBacklog.splice(0,flowBacklog.length-256);return false;
+ }catch{return false}
+}
+function flushFlows(){if(!window.GVAULT_PUBLIC_TRIPLE_GEYSER?.ingest)return;for(const x of flowBacklog.splice(0))try{window.GVAULT_PUBLIC_TRIPLE_GEYSER.ingest(x)}catch{}}
 function emitFlowRoute(input,primary){
  try{
   if(!input||typeof input!=='object'||typeof input.blobId==='string'||input.schema==='GVAULT_UNIVERSAL_BLOB_V1')return;
-  const surface=clean(input.surface),destination=clean(input.destination||input.to),hint=[surface,destination,clean(input.routeHint)].join(' ').toLowerCase();
-  if(/gadmin|control[-_ ]?tower|private-tool|sas/.test(hint))return;
-  window.dispatchEvent(new CustomEvent('gvault:public-flow',{detail:{kind:clean(input.kind||input.type)||'public.ingress',intent:clean(input.intent||input.payload?.intent)||null,surface:surface||'public',role:clean(input.role)||null,destination:destination||primary,routeHint:clean(input.routeHint||input.payload?.routeHint)||null,primary,at:new Date().toISOString()}}));
+  const surface=clean(input.surface),destination=clean(input.destination||input.to),routeHint=clean(input.routeHint||input.payload?.routeHint),hint=[surface,destination,routeHint].join(' ');
+  if(privateHint(hint))return;
+  deliverFlow({kind:clean(input.kind||input.type)||'public.ingress',intent:clean(input.intent||input.payload?.intent)||null,surface:surface||'public',role:clean(input.role)||null,destination:destination||primary,routeHint:routeHint||null,primary,source:'routing-fabric',at:new Date().toISOString()});
  }catch{}
+}
+function emitServiceWorkerIngress(d={}){
+ if(d.schema!=='GVAULT_SW_EVENT_V1'||d.type!=='PUBLIC_FLOW_INGRESS')return;
+ const hint=[d.origin,d.path,d.source,d.destination].join(' ');if(privateHint(hint))return;
+ deliverFlow({kind:'public.network.ingress',intent:'transform_and_push_outward',surface:'service-worker',role:'network',destination:'public.outward',routeHint:clean(d.source)||'public-network',primary:'public.bus',source:clean(d.source)||'public-network',method:clean(d.method)||'GET',origin:clean(d.origin)||null,path:clean(d.path)||null,destinationType:clean(d.destination)||null,mode:clean(d.mode)||null,at:d.at||new Date().toISOString()});
 }
 function plan(input={},opts={}){
  const primary=opts.destination||classify(input),routes=[];
@@ -36,23 +50,19 @@ function plan(input={},opts={}){
  }else if(primary==='private.capture'){
   add('private.capture','primary','store explicit public input privately','EXPLICIT_INPUT_ONLY');
   add('public.bus','ack','publish state/receipt only','NO_PRIVATE_CONTENT');
- }else if(primary==='private.gadmin'){
-  add('private.gadmin','primary','administration surface','LIVE_SAS_REQUIRED');
- }else if(primary==='private.control-tower'){
-  add('private.control-tower','primary','diagnostic and maintenance surface','LIVE_SAS_REQUIRED');
- }else if(primary==='public.ui'){
-  add('public.ui','primary','visible response surface',PRIVATE_POLICY);
- }else if(primary==='public.blob-stream'){
-  add('public.blob-stream','primary','shared public coordination bus','NO_SECRET_PAYLOAD');
- }else if(primary==='public.local'){
-  add('public.local','primary','same-origin public project/module route','PUBLIC_ONLY');
- }else add('public.bus','primary','unclassified public event','NO_PRIVILEGE_ESCALATION');
+ }else if(primary==='private.gadmin')add('private.gadmin','primary','administration surface','LIVE_SAS_REQUIRED');
+ else if(primary==='private.control-tower')add('private.control-tower','primary','diagnostic and maintenance surface','LIVE_SAS_REQUIRED');
+ else if(primary==='public.ui')add('public.ui','primary','visible response surface',PRIVATE_POLICY);
+ else if(primary==='public.blob-stream')add('public.blob-stream','primary','shared public coordination bus','NO_SECRET_PAYLOAD');
+ else if(primary==='public.local')add('public.local','primary','same-origin public project/module route','PUBLIC_ONLY');
+ else add('public.bus','primary','unclassified public event','NO_PRIVILEGE_ESCALATION');
  emitFlowRoute(input,primary);
  return Object.freeze({schema:SCHEMA,version:VERSION,primary,routes:Object.freeze(routes),privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,privateContentPublished:false,createdAt:new Date().toISOString(),source:{kind:clean(input.kind||input.type)||null,intent:clean(input.intent||input.payload?.intent)||null,surface:clean(input.surface)||null,role:clean(input.role)||null,destination:clean(input.destination||input.to)||null,routeHint:clean(input.routeHint||input.payload?.routeHint)||null}})
 }
 function describe(input,opts){const p=plan(input,opts);return {schema:SCHEMA,version:VERSION,primary:p.primary,routeIds:p.routes.map(x=>x.id),privatePolicy:p.privatePolicy,privateContentPublished:false}}
-window.GVAULT_ROUTING_FABRIC=Object.freeze({schema:SCHEMA,version:VERSION,privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,classify,plan,describe});
+window.GVAULT_ROUTING_FABRIC=Object.freeze({schema:SCHEMA,version:VERSION,privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,classify,plan,describe,deliverFlow});
 try{window.dispatchEvent(new CustomEvent('gvault:routing-fabric-ready',{detail:{schema:SCHEMA,version:VERSION,privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,privateContentPublished:false}}))}catch{}
-function loadTripleGeyser(){if(window.GVAULT_PUBLIC_TRIPLE_GEYSER||document.querySelector('script[data-gvault-triple-geyser]'))return;const s=document.createElement('script');s.src='./scripts/gvault-public-triple-geyser.js?v=1';s.async=false;s.setAttribute('data-gvault-triple-geyser','V1');s.onerror=()=>console.warn('GVAULT triple geyser unavailable');(document.head||document.documentElement).appendChild(s)}
+if(navigator.serviceWorker)navigator.serviceWorker.addEventListener('message',e=>emitServiceWorkerIngress(e.data||{}));
+function loadTripleGeyser(){if(window.GVAULT_PUBLIC_TRIPLE_GEYSER){flushFlows();return}if(document.querySelector('script[data-gvault-triple-geyser]'))return;const s=document.createElement('script');s.src='./scripts/gvault-public-triple-geyser.js?v=2';s.async=false;s.setAttribute('data-gvault-triple-geyser','V2');s.onload=flushFlows;s.onerror=()=>console.warn('GVAULT triple geyser unavailable');(document.head||document.documentElement).appendChild(s)}
 loadTripleGeyser();
 })();
