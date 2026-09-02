@@ -6,25 +6,36 @@
 <meta name="color-scheme" content="dark light">
 <title>blob://public/gthink · GVAULT</title>
 <style>
-html,body{margin:0;width:100%;height:100%;min-height:100dvh;background:#05070b;overflow:hidden}
-iframe{display:block;width:100%;height:100dvh;border:0;background:#05070b}
-#fallback{position:fixed;inset:auto 12px 12px 12px;padding:10px 12px;border-radius:12px;background:#111722;color:#fff;font:13px system-ui,sans-serif;text-align:center;z-index:2}
-#fallback[hidden]{display:none}
-a{color:inherit}
+html,body{margin:0;min-height:100%;background:#05070b;color:#f7f8fb;font-family:system-ui,sans-serif}body{min-height:100dvh;display:grid;place-items:center;padding:20px}.blob{width:min(88vw,430px);min-height:240px;border-radius:42% 58% 51% 49%/45% 43% 57% 55%;display:grid;place-items:center;text-align:center;padding:28px;background:radial-gradient(circle at 30% 20%,#5367ff,#1d2844 48%,#080b11 78%);box-shadow:0 24px 70px #0009,inset 0 1px #ffffff38}.route{font:600 13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;opacity:.9;white-space:pre-line}.small{margin-top:14px;font-size:12px;opacity:.65}a{color:inherit}
 </style>
 </head>
 <body>
-<iframe id="blobFrame" title="blob://public/gthink" src="../../../gthink/?via=blob-address-bridge&v=450" allow="clipboard-read; clipboard-write" referrerpolicy="same-origin"></iframe>
-<div id="fallback" hidden>Le pont blob n’a pas chargé. <a href="../../../gthink/?via=blob-address-bridge&v=450">Ouvrir GThink directement</a>.</div>
+<section class="blob" aria-live="polite"><div><strong>blob://public/gthink</strong><div class="route" id="route">blob adresse
+↓
+blob service worker
+↓
+blob document
+↓
+GThink</div><div class="small" id="state">Connexion des blobs…</div></div></section>
 <script>
 (()=>{'use strict';
-const URI='blob://public/gthink';
-const frame=document.getElementById('blobFrame');
-const fallback=document.getElementById('fallback');
-let loaded=false;
-frame.addEventListener('load',()=>{loaded=true;fallback.hidden=true;try{frame.contentWindow.postMessage({schema:'GVAULT_BLOB_ADDRESS_BRIDGE_V1',kind:'blob.address.bridge',uri:URI,href:location.href},location.origin)}catch{}});
-setTimeout(()=>{if(!loaded)fallback.hidden=false},6000);
-window.GVAULT_BLOB_ADDRESS_BRIDGE=Object.freeze({schema:'GVAULT_BLOB_ADDRESS_BRIDGE_V1',uri:URI,href:location.href,target:new URL('../../../gthink/',location.href).href});
+const state=document.getElementById('state');
+const target=new URL('../../../gthink/?via=blob-bootstrap-fallback&v=451',location.href).href;
+const sw=new URL('../../blob-sw.js?v=1',location.href).href;
+let reloading=false;
+function fallback(msg){state.innerHTML=`${msg} · <a href="${target}">ouvrir GThink</a>`}
+if(!('serviceWorker' in navigator)){fallback('Service Worker indisponible');return}
+navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloading)return;reloading=true;state.textContent='Dernier blob atteint · rechargement…';location.reload()});
+(async()=>{try{
+state.textContent='Blob 1/4 · adresse reconnue';
+const reg=await navigator.serviceWorker.register(sw,{scope:'../../',updateViaCache:'none'});
+await reg.update().catch(()=>{});
+state.textContent='Blob 2/4 · routeur installé';
+await navigator.serviceWorker.ready;
+state.textContent='Blob 3/4 · document prêt';
+if(navigator.serviceWorker.controller){reloading=true;location.reload();return}
+setTimeout(()=>{if(!reloading)fallback('Le blob routeur tarde à prendre le contrôle')},5000);
+}catch(e){fallback('Pont blob indisponible')}})();
 })();
 </script>
 </body>
