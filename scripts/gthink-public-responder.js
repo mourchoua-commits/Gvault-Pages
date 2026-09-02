@@ -21,8 +21,8 @@ if(!attach()){let tries=0;const timer=setInterval(()=>{tries++;if(attach()||trie
 if(window.GTHINK_RESPONSE_WORD_FLOW||document.querySelector('script[data-gthink-response-word-flow]'))return;
 const current=document.currentScript?.src||location.href;
 const script=document.createElement('script');
-script.src=new URL('gthink-response-word-flow.js?v=1',current).href;
-script.dataset.gthinkResponseWordFlow='V1';
+script.src=new URL('gthink-response-word-flow.js?v=2',current).href;
+script.dataset.gthinkResponseWordFlow='V2';
 script.async=false;
 (document.head||document.documentElement).appendChild(script);
 })();
