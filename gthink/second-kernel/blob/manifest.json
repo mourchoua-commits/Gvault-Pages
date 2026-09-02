@@ -1,0 +1,28 @@
+{
+  "schema": "gthink.second-kernel.knowledge-blob.v1",
+  "blobId": "GT-SECOND-KERNEL-KNOWLEDGE",
+  "role": "public_knowledge_parent",
+  "purpose": "Provide the second native kernel with task-relevant operational knowledge while keeping private vault data outside the public surface.",
+  "entrypoint": "manifest.json",
+  "loadPolicy": "lazy-by-branch",
+  "routingPriority": ["intent", "function", "routing_method", "existing_logical_location", "indexes"],
+  "interpreter": "GThink",
+  "branches": [
+    {"id":"routing","path":"branches/00-routing.json","load":"always"},
+    {"id":"architecture","path":"branches/01-architecture.json","load":"on-demand"},
+    {"id":"task-methods","path":"branches/02-task-methods.json","load":"always"},
+    {"id":"capabilities","path":"branches/03-capabilities.json","load":"on-demand"},
+    {"id":"handoff","path":"branches/04-handoff.json","load":"always"}
+  ],
+  "privacy": {
+    "publicOnly": true,
+    "forbidden": ["private verbatim", "credentials", "tokens", "private captures", "personal secrets"],
+    "privateDataAccess": "explicit authenticated bridge only"
+  },
+  "runtime": {
+    "loader": "loader.js",
+    "mergeMode": "namespaced",
+    "cache": "memory",
+    "fallback": "continue with already loaded branches"
+  }
+}
