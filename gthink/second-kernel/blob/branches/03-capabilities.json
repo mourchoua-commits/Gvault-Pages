@@ -1,0 +1,19 @@
+{
+  "branchId": "capabilities",
+  "kind": "capability-map",
+  "capabilities": {
+    "publicKnowledge": "read versioned public JSON branches through the parent manifest",
+    "taskContext": "receive a scoped task packet from the primary core",
+    "branchLoading": "load branches lazily according to the active task",
+    "handoff": "return structured findings, evidence references, proposed actions and uncertainty",
+    "offline": "retain already loaded public branches for local use when supported by the host runtime",
+    "connected": "use connected services only when the active task needs them and the host grants access"
+  },
+  "boundaries": [
+    "No credentials or private vault material in this public blob.",
+    "No automatic authority over protected resources.",
+    "No fabricated tool result: unavailable evidence must be marked unavailable.",
+    "Public knowledge can guide work but protected state remains behind the authenticated bridge."
+  ],
+  "preferredResponseShape": ["understanding", "loadedBranches", "result", "evidence", "nextAction", "uncertainty"]
+}
