@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "43f10c7a9a29eff5a4fc8d75a56fbe7e9a44c9a5",
+  "parentSha": "85a960d28b883195470fa524b9a24c4c9c1b63cb",
+  "committedAt": "2026-09-02T04:12:15+02:00",
+  "summary": {
+    "subject": "Blob-wrap public flows before triple geyser propulsion",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 20,
+    "deletions": 12,
+    "paths": [
+      "scripts/gvault-public-triple-geyser.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 20,
+    "deletions": 12,
+    "magnitude": 32,
+    "committedAt": "2026-09-02T04:12:15+02:00",
+    "parentSha": "85a960d28b883195470fa524b9a24c4c9c1b63cb"
+  },
+  "pulseKey": "CTP1:43f10c7a9a29eff5a4fc8d75a56fbe7e9a44c9a5:ef07ab86c0c3c2cf",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "061c17941a04820d912736e95932fdd372cb54ed186cb547552af564e922273c",
+  "typedKeys": {
+    "commit": "gitc:43f10c7a9a29eff5a4fc8d75a56fbe7e9a44c9a5",
+    "parent": "gitc:85a960d28b883195470fa524b9a24c4c9c1b63cb",
+    "pulse": "ctp1:43f10c7a9a29eff5a4fc8d75a56fbe7e9a44c9a5:ef07ab86c0c3c2cf",
+    "translation": "cttrans:061c17941a04820d912736e95932fdd372cb54ed186cb547552af564e922273c",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "43f10c7a9a29eff5a4fc8d75a56fbe7e9a44c9a5",
+    "parentSha": "85a960d28b883195470fa524b9a24c4c9c1b63cb",
+    "committedAt": "2026-09-02T04:12:15+02:00",
+    "summary": {
+      "subject": "Blob-wrap public flows before triple geyser propulsion",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 20,
+      "deletions": 12,
+      "paths": [
+        "scripts/gvault-public-triple-geyser.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 20,
+      "deletions": 12,
+      "magnitude": 32,
+      "committedAt": "2026-09-02T04:12:15+02:00",
+      "parentSha": "85a960d28b883195470fa524b9a24c4c9c1b63cb"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/43f10c7a9a29eff5a4fc8d75a56fbe7e9a44c9a5.json",
+      "vfsKey": "CTP1:43f10c7a9a29eff5a4fc8d75a56fbe7e9a44c9a5:ef07ab86c0c3c2cf",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/43f10c7a9a29eff5a4fc8d75a56fbe7e9a44c9a5.json"
+}
