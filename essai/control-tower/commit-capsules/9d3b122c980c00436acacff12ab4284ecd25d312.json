@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "9d3b122c980c00436acacff12ab4284ecd25d312",
+  "parentSha": "b20662b57d7f93245ae550a107672ea8788eea2e",
+  "committedAt": "2026-09-02T04:30:03+02:00",
+  "summary": {
+    "subject": "Replace legacy routing cap with blob fragmentation policy",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 10,
+    "deletions": 9,
+    "paths": [
+      "scripts/gvault-routing-fabric.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 10,
+    "deletions": 9,
+    "magnitude": 19,
+    "committedAt": "2026-09-02T04:30:03+02:00",
+    "parentSha": "b20662b57d7f93245ae550a107672ea8788eea2e"
+  },
+  "pulseKey": "CTP1:9d3b122c980c00436acacff12ab4284ecd25d312:212a8a40516ea132",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "9d6ab84827ba3aadde28ed8b759f5d2e958b7d61ec97c02321a1d6e61832d53d",
+  "typedKeys": {
+    "commit": "gitc:9d3b122c980c00436acacff12ab4284ecd25d312",
+    "parent": "gitc:b20662b57d7f93245ae550a107672ea8788eea2e",
+    "pulse": "ctp1:9d3b122c980c00436acacff12ab4284ecd25d312:212a8a40516ea132",
+    "translation": "cttrans:9d6ab84827ba3aadde28ed8b759f5d2e958b7d61ec97c02321a1d6e61832d53d",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "9d3b122c980c00436acacff12ab4284ecd25d312",
+    "parentSha": "b20662b57d7f93245ae550a107672ea8788eea2e",
+    "committedAt": "2026-09-02T04:30:03+02:00",
+    "summary": {
+      "subject": "Replace legacy routing cap with blob fragmentation policy",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 10,
+      "deletions": 9,
+      "paths": [
+        "scripts/gvault-routing-fabric.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 10,
+      "deletions": 9,
+      "magnitude": 19,
+      "committedAt": "2026-09-02T04:30:03+02:00",
+      "parentSha": "b20662b57d7f93245ae550a107672ea8788eea2e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/9d3b122c980c00436acacff12ab4284ecd25d312.json",
+      "vfsKey": "CTP1:9d3b122c980c00436acacff12ab4284ecd25d312:212a8a40516ea132",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/9d3b122c980c00436acacff12ab4284ecd25d312.json"
+}
