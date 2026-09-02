@@ -1,0 +1,27 @@
+{
+  "branchId": "architecture",
+  "kind": "system-map",
+  "system": "GVAULT / Go.S / GThink",
+  "planes": {
+    "public": "Gvault-Pages surface for distributable runtime and public knowledge",
+    "private": "GVault proof, captures, private state and protected data",
+    "offline": "sovereign/local runtime able to keep useful functions when the connected plane is unavailable"
+  },
+  "coreModel": {
+    "primary": "main/local persistent agent plane",
+    "second": "second native kernel used as a cooperating execution/reasoning core",
+    "coordination": "exchange task context through explicit blobs and branch manifests"
+  },
+  "blobModel": {
+    "parent": "composite functional unit",
+    "children": "specialized branches or sub-blobs",
+    "composition": "simple blobs may be assembled, decomposed and recomposed without losing component functions",
+    "images": "when image processing is explicitly requested, image is a parent blob and pixels may be represented as child blobs"
+  },
+  "uiAndRuntime": {
+    "mobileFirst": true,
+    "publicAgent": "GThink",
+    "preserveExistingRoutes": true,
+    "connectedAndOfflinePlanes": true
+  }
+}
