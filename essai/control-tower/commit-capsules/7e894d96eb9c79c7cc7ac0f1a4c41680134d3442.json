@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "7e894d96eb9c79c7cc7ac0f1a4c41680134d3442",
+  "parentSha": "54a61c067b16e1d49acef0a8acec14f24a39c62e",
+  "committedAt": "2026-09-02T02:16:38+02:00",
+  "summary": {
+    "subject": "Add dual-kernel blob stream router",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 31,
+    "deletions": 0,
+    "paths": [
+      "scripts/gthink-dual-kernel-router.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 31,
+    "deletions": 0,
+    "magnitude": 31,
+    "committedAt": "2026-09-02T02:16:38+02:00",
+    "parentSha": "54a61c067b16e1d49acef0a8acec14f24a39c62e"
+  },
+  "pulseKey": "CTP1:7e894d96eb9c79c7cc7ac0f1a4c41680134d3442:4132b37f2d1fea4b",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "f6939a47901da7cd230bc73d341d6b9899b9b3b61a34fc0f2b2c2a1312ef2f4f",
+  "typedKeys": {
+    "commit": "gitc:7e894d96eb9c79c7cc7ac0f1a4c41680134d3442",
+    "parent": "gitc:54a61c067b16e1d49acef0a8acec14f24a39c62e",
+    "pulse": "ctp1:7e894d96eb9c79c7cc7ac0f1a4c41680134d3442:4132b37f2d1fea4b",
+    "translation": "cttrans:f6939a47901da7cd230bc73d341d6b9899b9b3b61a34fc0f2b2c2a1312ef2f4f",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "7e894d96eb9c79c7cc7ac0f1a4c41680134d3442",
+    "parentSha": "54a61c067b16e1d49acef0a8acec14f24a39c62e",
+    "committedAt": "2026-09-02T02:16:38+02:00",
+    "summary": {
+      "subject": "Add dual-kernel blob stream router",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 31,
+      "deletions": 0,
+      "paths": [
+        "scripts/gthink-dual-kernel-router.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 31,
+      "deletions": 0,
+      "magnitude": 31,
+      "committedAt": "2026-09-02T02:16:38+02:00",
+      "parentSha": "54a61c067b16e1d49acef0a8acec14f24a39c62e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/7e894d96eb9c79c7cc7ac0f1a4c41680134d3442.json",
+      "vfsKey": "CTP1:7e894d96eb9c79c7cc7ac0f1a4c41680134d3442:4132b37f2d1fea4b",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/7e894d96eb9c79c7cc7ac0f1a4c41680134d3442.json"
+}
