@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "4ebaa16a6263c421b621d7e9d7e8da22b84b9a3b",
+  "parentSha": "3bb07e9ea88ed4b800f123df5e9ce6946c1e756e",
+  "committedAt": "2026-09-02T04:48:43+02:00",
+  "summary": {
+    "subject": "refactor(public-page-blob): keep transport chain page-internal",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 0,
+    "deletions": 1,
+    "paths": [
+      "blob/public/page/internal/transport-chain.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 0,
+    "deletions": 1,
+    "magnitude": 1,
+    "committedAt": "2026-09-02T04:48:43+02:00",
+    "parentSha": "3bb07e9ea88ed4b800f123df5e9ce6946c1e756e"
+  },
+  "pulseKey": "CTP1:4ebaa16a6263c421b621d7e9d7e8da22b84b9a3b:c67f8ae18bb86824",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "911944e6995e6245dfa9da9de3e39e07f52e1196fbac3ac234858a8e446ca07a",
+  "typedKeys": {
+    "commit": "gitc:4ebaa16a6263c421b621d7e9d7e8da22b84b9a3b",
+    "parent": "gitc:3bb07e9ea88ed4b800f123df5e9ce6946c1e756e",
+    "pulse": "ctp1:4ebaa16a6263c421b621d7e9d7e8da22b84b9a3b:c67f8ae18bb86824",
+    "translation": "cttrans:911944e6995e6245dfa9da9de3e39e07f52e1196fbac3ac234858a8e446ca07a",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "4ebaa16a6263c421b621d7e9d7e8da22b84b9a3b",
+    "parentSha": "3bb07e9ea88ed4b800f123df5e9ce6946c1e756e",
+    "committedAt": "2026-09-02T04:48:43+02:00",
+    "summary": {
+      "subject": "refactor(public-page-blob): keep transport chain page-internal",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 0,
+      "deletions": 1,
+      "paths": [
+        "blob/public/page/internal/transport-chain.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 0,
+      "deletions": 1,
+      "magnitude": 1,
+      "committedAt": "2026-09-02T04:48:43+02:00",
+      "parentSha": "3bb07e9ea88ed4b800f123df5e9ce6946c1e756e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/4ebaa16a6263c421b621d7e9d7e8da22b84b9a3b.json",
+      "vfsKey": "CTP1:4ebaa16a6263c421b621d7e9d7e8da22b84b9a3b:c67f8ae18bb86824",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/4ebaa16a6263c421b621d7e9d7e8da22b84b9a3b.json"
+}
