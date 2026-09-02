@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "bb01da8573a7dd97dc2319f7541e81acb48ee0c4",
+  "parentSha": "4e4ab70f8f1b767b3f6829a4d54477f61e3b7301",
+  "committedAt": "2026-09-02T23:53:50+02:00",
+  "summary": {
+    "subject": "gthink qa: add Playwright simultaneous dual-heart spec",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 76,
+    "deletions": 0,
+    "paths": [
+      "tests/gthink-dual-heart.spec.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 76,
+    "deletions": 0,
+    "magnitude": 76,
+    "committedAt": "2026-09-02T23:53:50+02:00",
+    "parentSha": "4e4ab70f8f1b767b3f6829a4d54477f61e3b7301"
+  },
+  "pulseKey": "CTP1:bb01da8573a7dd97dc2319f7541e81acb48ee0c4:8628887d5785d3b6",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "6cb077ca91141c83c1ab11258825a61e105f750f08097e8cce25e126a18c96de",
+  "typedKeys": {
+    "commit": "gitc:bb01da8573a7dd97dc2319f7541e81acb48ee0c4",
+    "parent": "gitc:4e4ab70f8f1b767b3f6829a4d54477f61e3b7301",
+    "pulse": "ctp1:bb01da8573a7dd97dc2319f7541e81acb48ee0c4:8628887d5785d3b6",
+    "translation": "cttrans:6cb077ca91141c83c1ab11258825a61e105f750f08097e8cce25e126a18c96de",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "bb01da8573a7dd97dc2319f7541e81acb48ee0c4",
+    "parentSha": "4e4ab70f8f1b767b3f6829a4d54477f61e3b7301",
+    "committedAt": "2026-09-02T23:53:50+02:00",
+    "summary": {
+      "subject": "gthink qa: add Playwright simultaneous dual-heart spec",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 76,
+      "deletions": 0,
+      "paths": [
+        "tests/gthink-dual-heart.spec.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 76,
+      "deletions": 0,
+      "magnitude": 76,
+      "committedAt": "2026-09-02T23:53:50+02:00",
+      "parentSha": "4e4ab70f8f1b767b3f6829a4d54477f61e3b7301"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/bb01da8573a7dd97dc2319f7541e81acb48ee0c4.json",
+      "vfsKey": "CTP1:bb01da8573a7dd97dc2319f7541e81acb48ee0c4:8628887d5785d3b6",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/bb01da8573a7dd97dc2319f7541e81acb48ee0c4.json"
+}
