@@ -1,0 +1,51 @@
+name: GThink Dual Heart Playwright
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'gthink/**'
+      - 'scripts/gthink-dual-heart-probe.js'
+      - 'scripts/gthink-dual-kernel-router-v4.js'
+      - 'scripts/gthink-public-responder.js'
+      - 'scripts/gthink-public-native-engine*.js'
+      - 'scripts/gthink-secondary-conversation-bridge.js'
+      - 'tests/gthink-dual-heart.spec.mjs'
+      - 'playwright.config.mjs'
+      - '.github/workflows/gthink-dual-heart-playwright.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  dual-heart:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright test runner
+        run: npm install --no-save @playwright/test@1.55.0
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run simultaneous dual-heart tests
+        run: npx playwright test tests/gthink-dual-heart.spec.mjs --config=playwright.config.mjs
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gthink-dual-heart-playwright-report
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+          retention-days: 14
