@@ -18,3 +18,12 @@ function onBlob(blob){if(!blob||blob.schema!==BLOB_SCHEMA)return;if(blob.kind===
 function attach(){const a=api();if(!a?.listen)return false;a.listen(onBlob);for(const b of a.hearLast?.(32)||[])onBlob(b);window.GTHINK_TURN_RELAY=Object.freeze({schema:SCHEMA,mode:'alternating',relays:[...RELAYS],get turn(){return turn}});speak('gthink.relay.ready',{mode:'alternating-A-B',conversationId:'gthink-relay'},null,'A');return true}
 if(!attach()){let tries=0;const timer=setInterval(()=>{tries++;if(attach()||tries>200)clearInterval(timer)},50)}
 })();
+(()=>{'use strict';
+if(window.GTHINK_BLOB_TURRETS||document.querySelector('script[data-gthink-blob-turrets]'))return;
+const current=document.currentScript?.src||location.href;
+const script=document.createElement('script');
+script.src=new URL('gthink-blob-turrets.js?v=1',current).href;
+script.dataset.gthinkBlobTurrets='V1';
+script.async=false;
+document.head.appendChild(script);
+})();
