@@ -1,7 +1,7 @@
 {
   "schema": "GVAULT_AGENT_GATEWAY_CONFIG_V2",
-  "version": 2,
-  "status": "PRIVATE_BRIDGE_DEPLOY_PENDING",
+  "version": 3,
+  "status": "AUTONOMOUS_BLOB_READY",
   "transport": "blob-stream",
   "streamUrl": "gvault://blobs/public/gthink/stream",
   "blobSchema": "GVAULT_UNIVERSAL_BLOB_V1",
@@ -9,12 +9,14 @@
   "broadcastChannel": "gvault.public.blobs.v2",
   "requestKind": "gateway.request",
   "responseKinds": ["gateway.response", "utterance", "error"],
-  "route": "public.user -> public-kernel -> public-private-bridge -> private GThink -> explicit declassification -> public-ui",
+  "route": "public.user -> public-kernel -> autonomous private blob worker -> explicit local release -> public-ui; optional remote private bridge when configured",
   "baseUrl": null,
   "chatPath": "/api/vault/chat",
   "privateBridgePath": "/v1/gthink-private-bridge",
+  "localWorkerPath": "./gthink-client-private-worker.js",
   "privateBridgeSchema": "GTHINK_PUBLIC_PRIVATE_BRIDGE_RESPONSE_V1",
   "privateBridgePolicy": "EXPLICIT_DECLASSIFICATION_V1",
+  "localReleasePolicy": "LOCAL_WORKER_PUBLIC_OUTPUT_V1",
   "methodGuard": {
     "lockBlob": "../blobs/public/gthink-method-lock-v1.json",
     "detectorBlob": "../blobs/public/gthink-method-deviation-detector-v1.json",
@@ -23,35 +25,42 @@
     "canonicalStreamUrl": "gvault://blobs/public/gthink/stream",
     "methodChangeRequiresExplicitUserRequest": true,
     "methodChangeApproved": true,
-    "approvedChange": "PUBLIC_PRIVATE_BLOB_SPLIT"
+    "approvedChange": "AUTONOMOUS_PRIVATE_BLOB_WORKER_WITH_OPTIONAL_REMOTE"
   },
   "readiness": {
     "transportReady": true,
-    "responderReady": false,
-    "privateBridgeConfigured": false,
+    "responderReady": true,
+    "privateBridgeConfigured": true,
+    "remoteBridgeConfigured": false,
+    "localWorkerConfigured": true,
+    "serverOptional": true,
     "requiredListenerKind": "gthink.listener.ready",
-    "reason": "Public/private blob code is installed, but the private ingress deployment has not published a live baseUrl yet."
+    "reason": "The gateway can answer through its autonomous client-private worker without a baseUrl. A remote private ingress remains optional and is preferred when configured."
   },
-  "model": "gpt-5.6-sol",
+  "model": "browser-native-or-local-fallback",
   "gatewayBlob": {
     "schema": "GVAULT_UNIVERSAL_BLOB_V1",
-    "blobId": "blob:public:gthink-gateway:v3-public-private",
+    "blobId": "blob:public:gthink-gateway:v4-autonomous-private-worker",
     "conversationId": "public-shared",
     "kind": "gateway.state",
     "role": "gateway",
     "from": "gateway-config",
     "to": "public.bus",
-    "intent": "route_gthink_through_private_blob_boundary",
+    "intent": "route_gthink_through_autonomous_private_blob_boundary",
     "language": "fr",
     "surface": "Gvault-Pages",
-    "understoodBy": ["GThink", "GThinkMini", "public-kernel", "private-bridge", "public-ui", "method-guard"],
+    "understoodBy": ["GThink", "GThinkMini", "public-kernel", "client-private-worker", "private-bridge", "public-ui", "method-guard"],
     "payload": {
       "transport": "blob-stream",
       "streamUrl": "gvault://blobs/public/gthink/stream",
       "transportReady": true,
-      "responderReady": false,
-      "privateBridgeConfigured": false,
-      "releasePolicy": "EXPLICIT_DECLASSIFICATION_V1"
+      "responderReady": true,
+      "privateBridgeConfigured": true,
+      "remoteBridgeConfigured": false,
+      "localWorkerConfigured": true,
+      "serverOptional": true,
+      "releasePolicy": "LOCAL_WORKER_PUBLIC_OUTPUT_V1",
+      "remoteReleasePolicy": "EXPLICIT_DECLASSIFICATION_V1"
     }
   },
   "containsSecret": false
