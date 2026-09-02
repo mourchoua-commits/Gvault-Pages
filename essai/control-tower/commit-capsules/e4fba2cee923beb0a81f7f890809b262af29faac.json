@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "e4fba2cee923beb0a81f7f890809b262af29faac",
+  "parentSha": "9cb01c1f8732e2705e22e9c6a50c9ac7c3373a25",
+  "committedAt": "2026-09-02T03:38:44+02:00",
+  "summary": {
+    "subject": "Make routing fabric directional and loop-safe",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 18,
+    "deletions": 16,
+    "paths": [
+      "scripts/gvault-routing-fabric.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 18,
+    "deletions": 16,
+    "magnitude": 34,
+    "committedAt": "2026-09-02T03:38:44+02:00",
+    "parentSha": "9cb01c1f8732e2705e22e9c6a50c9ac7c3373a25"
+  },
+  "pulseKey": "CTP1:e4fba2cee923beb0a81f7f890809b262af29faac:7f8c35ca7ee1107e",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "1787edeb0087eb06b015aac7c06e20e9c5535f87df9f8574f5b42709f4ae5a82",
+  "typedKeys": {
+    "commit": "gitc:e4fba2cee923beb0a81f7f890809b262af29faac",
+    "parent": "gitc:9cb01c1f8732e2705e22e9c6a50c9ac7c3373a25",
+    "pulse": "ctp1:e4fba2cee923beb0a81f7f890809b262af29faac:7f8c35ca7ee1107e",
+    "translation": "cttrans:1787edeb0087eb06b015aac7c06e20e9c5535f87df9f8574f5b42709f4ae5a82",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "e4fba2cee923beb0a81f7f890809b262af29faac",
+    "parentSha": "9cb01c1f8732e2705e22e9c6a50c9ac7c3373a25",
+    "committedAt": "2026-09-02T03:38:44+02:00",
+    "summary": {
+      "subject": "Make routing fabric directional and loop-safe",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 18,
+      "deletions": 16,
+      "paths": [
+        "scripts/gvault-routing-fabric.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 18,
+      "deletions": 16,
+      "magnitude": 34,
+      "committedAt": "2026-09-02T03:38:44+02:00",
+      "parentSha": "9cb01c1f8732e2705e22e9c6a50c9ac7c3373a25"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/e4fba2cee923beb0a81f7f890809b262af29faac.json",
+      "vfsKey": "CTP1:e4fba2cee923beb0a81f7f890809b262af29faac:7f8c35ca7ee1107e",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/e4fba2cee923beb0a81f7f890809b262af29faac.json"
+}
