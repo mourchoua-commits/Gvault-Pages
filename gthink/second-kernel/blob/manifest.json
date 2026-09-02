@@ -9,6 +9,7 @@
   "interpreter": "GThink",
   "branches": [
     {"id":"core-cognition","path":"branches/07-gthink-core-cognition.json","load":"always"},
+    {"id":"co-development-memory","path":"branches/08-gthink-co-development-memory.json","load":"always"},
     {"id":"routing","path":"branches/00-routing.json","load":"always"},
     {"id":"architecture","path":"branches/01-architecture.json","load":"on-demand"},
     {"id":"task-methods","path":"branches/02-task-methods.json","load":"always"},
@@ -19,7 +20,7 @@
   ],
   "privacy": {
     "publicOnly": true,
-    "forbidden": ["private verbatim", "credentials", "tokens", "private captures", "personal secrets", "hidden reasoning"],
+    "forbidden": ["private verbatim", "credentials", "tokens", "private captures", "personal secrets", "hidden reasoning", "sensitive personal data"],
     "privateDataAccess": "disabled on public-only path"
   },
   "runtime": {
@@ -28,6 +29,7 @@
     "cache": "memory",
     "fallback": "continue with already loaded branches",
     "offlineCoreBranch": "offline-control-plane",
-    "alwaysLoadedCognitionBranch": "core-cognition"
+    "alwaysLoadedCognitionBranch": "core-cognition",
+    "alwaysLoadedCoDevelopmentBranch": "co-development-memory"
   }
 }
