@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "cd679b01e25d45d718b95f2e9d0cf7d018f106ab",
+  "parentSha": "efc8acdf5edac03f860b222b6f22a9ca332f4e71",
+  "committedAt": "2026-09-02T02:48:56+02:00",
+  "summary": {
+    "subject": "feat(gthink): load continuous fragment dynamics v2",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 3,
+    "deletions": 3,
+    "paths": [
+      "scripts/gthink-public-responder.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 3,
+    "deletions": 3,
+    "magnitude": 6,
+    "committedAt": "2026-09-02T02:48:56+02:00",
+    "parentSha": "efc8acdf5edac03f860b222b6f22a9ca332f4e71"
+  },
+  "pulseKey": "CTP1:cd679b01e25d45d718b95f2e9d0cf7d018f106ab:254266cc79a50562",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "c5568c84e076eb356ac25722cd92f80085f327333c33332042443bfcd83d6739",
+  "typedKeys": {
+    "commit": "gitc:cd679b01e25d45d718b95f2e9d0cf7d018f106ab",
+    "parent": "gitc:efc8acdf5edac03f860b222b6f22a9ca332f4e71",
+    "pulse": "ctp1:cd679b01e25d45d718b95f2e9d0cf7d018f106ab:254266cc79a50562",
+    "translation": "cttrans:c5568c84e076eb356ac25722cd92f80085f327333c33332042443bfcd83d6739",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "cd679b01e25d45d718b95f2e9d0cf7d018f106ab",
+    "parentSha": "efc8acdf5edac03f860b222b6f22a9ca332f4e71",
+    "committedAt": "2026-09-02T02:48:56+02:00",
+    "summary": {
+      "subject": "feat(gthink): load continuous fragment dynamics v2",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 3,
+      "deletions": 3,
+      "paths": [
+        "scripts/gthink-public-responder.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 3,
+      "deletions": 3,
+      "magnitude": 6,
+      "committedAt": "2026-09-02T02:48:56+02:00",
+      "parentSha": "efc8acdf5edac03f860b222b6f22a9ca332f4e71"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/cd679b01e25d45d718b95f2e9d0cf7d018f106ab.json",
+      "vfsKey": "CTP1:cd679b01e25d45d718b95f2e9d0cf7d018f106ab:254266cc79a50562",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/cd679b01e25d45d718b95f2e9d0cf7d018f106ab.json"
+}
