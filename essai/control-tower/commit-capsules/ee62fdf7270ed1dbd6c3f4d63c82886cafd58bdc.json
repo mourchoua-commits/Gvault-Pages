@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "ee62fdf7270ed1dbd6c3f4d63c82886cafd58bdc",
+  "parentSha": "942905e01943d425b1766fc732c560a815545838",
+  "committedAt": "2026-09-02T03:21:26+02:00",
+  "summary": {
+    "subject": "Add private ubiquity mesh to public runtime",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 23,
+    "deletions": 0,
+    "paths": [
+      "scripts/gvault-private-ubiquity.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 23,
+    "deletions": 0,
+    "magnitude": 23,
+    "committedAt": "2026-09-02T03:21:26+02:00",
+    "parentSha": "942905e01943d425b1766fc732c560a815545838"
+  },
+  "pulseKey": "CTP1:ee62fdf7270ed1dbd6c3f4d63c82886cafd58bdc:626916d05f13809e",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "61fc14f07713c7e102566c1cb484923c9378de1d0539be69ddef7a92c30c1d37",
+  "typedKeys": {
+    "commit": "gitc:ee62fdf7270ed1dbd6c3f4d63c82886cafd58bdc",
+    "parent": "gitc:942905e01943d425b1766fc732c560a815545838",
+    "pulse": "ctp1:ee62fdf7270ed1dbd6c3f4d63c82886cafd58bdc:626916d05f13809e",
+    "translation": "cttrans:61fc14f07713c7e102566c1cb484923c9378de1d0539be69ddef7a92c30c1d37",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "ee62fdf7270ed1dbd6c3f4d63c82886cafd58bdc",
+    "parentSha": "942905e01943d425b1766fc732c560a815545838",
+    "committedAt": "2026-09-02T03:21:26+02:00",
+    "summary": {
+      "subject": "Add private ubiquity mesh to public runtime",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 23,
+      "deletions": 0,
+      "paths": [
+        "scripts/gvault-private-ubiquity.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 23,
+      "deletions": 0,
+      "magnitude": 23,
+      "committedAt": "2026-09-02T03:21:26+02:00",
+      "parentSha": "942905e01943d425b1766fc732c560a815545838"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/ee62fdf7270ed1dbd6c3f4d63c82886cafd58bdc.json",
+      "vfsKey": "CTP1:ee62fdf7270ed1dbd6c3f4d63c82886cafd58bdc:626916d05f13809e",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/ee62fdf7270ed1dbd6c3f4d63c82886cafd58bdc.json"
+}
