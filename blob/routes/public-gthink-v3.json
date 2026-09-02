@@ -1,0 +1,26 @@
+{
+  "schema": "GVAULT_BLOB_ROUTE_V3",
+  "routeId": "blob-public-gthink-v3",
+  "virtualUri": "blob://public/gthink",
+  "browserEntry": "/Gvault-Pages/blob/public/gthink/",
+  "serviceWorker": "/Gvault-Pages/blob/blob-sw.js?v=3",
+  "serviceWorkerScope": "/Gvault-Pages/blob/",
+  "targetDocument": "/Gvault-Pages/gthink/index.html",
+  "targetBase": "/Gvault-Pages/gthink/",
+  "stream": "gvault://blobs/public/gthink/stream",
+  "hops": [
+    "https-entry-blob",
+    "virtual-uri-blob",
+    "service-worker-router-blob",
+    "gthink-document-blob",
+    "gthink-stream-blob"
+  ],
+  "invariants": {
+    "sameOrigin": true,
+    "iframe": false,
+    "privateRouteExposed": false,
+    "browserBlobSchemeRegistration": false,
+    "canonicalBrowserEntryOnly": true,
+    "rawTargetOnProxyFailure": false
+  }
+}
