@@ -2,7 +2,8 @@ import { loadSecondKernelKnowledge, buildSecondKernelTaskPacket } from './loader
 
 const KEYWORDS = {
   architecture: /architecture|structure|module|route|greffe|graft|gva?ult|go\.s/i,
-  capabilities: /capacit|outil|service|connect|github|fichier|worker|agent/i
+  capabilities: /capacit|outil|service|connect|github|fichier|worker|agent/i,
+  'scan-link-turrets': /scan|scanner|tourelle|turret|fil de blob|thread|link|relier|liaison|evidence|capture|manifest|source/i
 };
 
 function inferBranches(task = {}) {
@@ -14,7 +15,7 @@ function inferBranches(task = {}) {
 let readyPromise = null;
 
 export function ready() {
-  if (!readyPromise) readyPromise = loadSecondKernelKnowledge({ branches: ['architecture', 'capabilities'] });
+  if (!readyPromise) readyPromise = loadSecondKernelKnowledge({ branches: ['architecture', 'capabilities', 'scan-link-turrets'] });
   return readyPromise;
 }
 
