@@ -1,0 +1,34 @@
+{
+  "schema": "GVAULT_UNIVERSAL_BLOB_V1",
+  "blobId": "blob:public:gthink-readiness-gate:v1",
+  "parentBlobId": "blob:public:gthink-responder:v1",
+  "conversationId": "public-shared",
+  "kind": "readiness.gate",
+  "role": "gate",
+  "from": "public-kernel",
+  "to": "public-ui",
+  "intent": "open_public_input_only_when_gthink_blob_chain_is_ready",
+  "language": "fr",
+  "surface": "Gvault-Pages",
+  "streamUrl": "gvault://blobs/public/gthink/stream",
+  "understoodBy": ["GThink", "public-kernel", "public-ui"],
+  "payload": {
+    "defaultState": "LOCKED",
+    "openOn": "gthink.listener.ready",
+    "closeOn": ["gthink.listener.waiting", "error", "private.ingress.down"],
+    "requiredProofChain": [
+      "blob:public:gthink-private-route:v1",
+      "blob:private:gthink-ingress:v1",
+      "blob:public:gthink-responder:v1"
+    ],
+    "openState": "READY",
+    "closedState": "WAITING_GTHINK",
+    "failClosed": true,
+    "http": false,
+    "script": null,
+    "worker": null,
+    "blobOnly": true
+  },
+  "silent": true,
+  "muted": false
+}
