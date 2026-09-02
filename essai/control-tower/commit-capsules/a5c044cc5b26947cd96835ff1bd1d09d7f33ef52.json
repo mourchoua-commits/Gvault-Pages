@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "a5c044cc5b26947cd96835ff1bd1d09d7f33ef52",
+  "parentSha": "a220031328cfa7ebe3e8c443eee5b77dbb4467b7",
+  "committedAt": "2026-09-02T22:07:53+02:00",
+  "summary": {
+    "subject": "gthink public: add comprehensive core cognition knowledge blob",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 247,
+    "deletions": 0,
+    "paths": [
+      "gthink/second-kernel/blob/branches/07-gthink-core-cognition.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 247,
+    "deletions": 0,
+    "magnitude": 247,
+    "committedAt": "2026-09-02T22:07:53+02:00",
+    "parentSha": "a220031328cfa7ebe3e8c443eee5b77dbb4467b7"
+  },
+  "pulseKey": "CTP1:a5c044cc5b26947cd96835ff1bd1d09d7f33ef52:37e0f2c3981c463a",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "0ccfe690fd3a52a7a9bcb9b58419a31158841d2fcda1315a487a956cec92eb63",
+  "typedKeys": {
+    "commit": "gitc:a5c044cc5b26947cd96835ff1bd1d09d7f33ef52",
+    "parent": "gitc:a220031328cfa7ebe3e8c443eee5b77dbb4467b7",
+    "pulse": "ctp1:a5c044cc5b26947cd96835ff1bd1d09d7f33ef52:37e0f2c3981c463a",
+    "translation": "cttrans:0ccfe690fd3a52a7a9bcb9b58419a31158841d2fcda1315a487a956cec92eb63",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "a5c044cc5b26947cd96835ff1bd1d09d7f33ef52",
+    "parentSha": "a220031328cfa7ebe3e8c443eee5b77dbb4467b7",
+    "committedAt": "2026-09-02T22:07:53+02:00",
+    "summary": {
+      "subject": "gthink public: add comprehensive core cognition knowledge blob",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 247,
+      "deletions": 0,
+      "paths": [
+        "gthink/second-kernel/blob/branches/07-gthink-core-cognition.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 247,
+      "deletions": 0,
+      "magnitude": 247,
+      "committedAt": "2026-09-02T22:07:53+02:00",
+      "parentSha": "a220031328cfa7ebe3e8c443eee5b77dbb4467b7"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/a5c044cc5b26947cd96835ff1bd1d09d7f33ef52.json",
+      "vfsKey": "CTP1:a5c044cc5b26947cd96835ff1bd1d09d7f33ef52:37e0f2c3981c463a",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/a5c044cc5b26947cd96835ff1bd1d09d7f33ef52.json"
+}
