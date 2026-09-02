@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "d7bbdc5ad9d860cd9105ce986d5e8a51e4f1f51f",
+  "parentSha": "fb8d4d7183624f767cce95578e6b06cd64e451cb",
+  "committedAt": "2026-09-02T03:55:11+02:00",
+  "summary": {
+    "subject": "gthink: load mano a mano ping pong mesh v3",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "paths": [
+      "scripts/gthink-response-word-flow.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "magnitude": 2,
+    "committedAt": "2026-09-02T03:55:11+02:00",
+    "parentSha": "fb8d4d7183624f767cce95578e6b06cd64e451cb"
+  },
+  "pulseKey": "CTP1:d7bbdc5ad9d860cd9105ce986d5e8a51e4f1f51f:97c1ab10fdbbf6a7",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "8790e6bd0951328c77fad43636f7b97e526cd4489e79843cf1f7260e56110d70",
+  "typedKeys": {
+    "commit": "gitc:d7bbdc5ad9d860cd9105ce986d5e8a51e4f1f51f",
+    "parent": "gitc:fb8d4d7183624f767cce95578e6b06cd64e451cb",
+    "pulse": "ctp1:d7bbdc5ad9d860cd9105ce986d5e8a51e4f1f51f:97c1ab10fdbbf6a7",
+    "translation": "cttrans:8790e6bd0951328c77fad43636f7b97e526cd4489e79843cf1f7260e56110d70",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "d7bbdc5ad9d860cd9105ce986d5e8a51e4f1f51f",
+    "parentSha": "fb8d4d7183624f767cce95578e6b06cd64e451cb",
+    "committedAt": "2026-09-02T03:55:11+02:00",
+    "summary": {
+      "subject": "gthink: load mano a mano ping pong mesh v3",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "paths": [
+        "scripts/gthink-response-word-flow.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "magnitude": 2,
+      "committedAt": "2026-09-02T03:55:11+02:00",
+      "parentSha": "fb8d4d7183624f767cce95578e6b06cd64e451cb"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/d7bbdc5ad9d860cd9105ce986d5e8a51e4f1f51f.json",
+      "vfsKey": "CTP1:d7bbdc5ad9d860cd9105ce986d5e8a51e4f1f51f:97c1ab10fdbbf6a7",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/d7bbdc5ad9d860cd9105ce986d5e8a51e4f1f51f.json"
+}
