@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "8c697dddfad702f18564bf77fd6e6f427f6781b4",
+  "parentSha": "46c940755d0ae7ff8d67116096fa549a8564d56e",
+  "committedAt": "2026-09-02T15:53:28+02:00",
+  "summary": {
+    "subject": "gthink(transport): carry and consume self-invocation through private plane",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 15,
+    "deletions": 11,
+    "paths": [
+      "scripts/gthink-page-transport-core.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 15,
+    "deletions": 11,
+    "magnitude": 26,
+    "committedAt": "2026-09-02T15:53:28+02:00",
+    "parentSha": "46c940755d0ae7ff8d67116096fa549a8564d56e"
+  },
+  "pulseKey": "CTP1:8c697dddfad702f18564bf77fd6e6f427f6781b4:5a611e7d9031b6b4",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "7bc839686a90c3e9e5fe447c8a52bdec5123efb802c5b81f639f9d2f1486dedb",
+  "typedKeys": {
+    "commit": "gitc:8c697dddfad702f18564bf77fd6e6f427f6781b4",
+    "parent": "gitc:46c940755d0ae7ff8d67116096fa549a8564d56e",
+    "pulse": "ctp1:8c697dddfad702f18564bf77fd6e6f427f6781b4:5a611e7d9031b6b4",
+    "translation": "cttrans:7bc839686a90c3e9e5fe447c8a52bdec5123efb802c5b81f639f9d2f1486dedb",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "8c697dddfad702f18564bf77fd6e6f427f6781b4",
+    "parentSha": "46c940755d0ae7ff8d67116096fa549a8564d56e",
+    "committedAt": "2026-09-02T15:53:28+02:00",
+    "summary": {
+      "subject": "gthink(transport): carry and consume self-invocation through private plane",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 15,
+      "deletions": 11,
+      "paths": [
+        "scripts/gthink-page-transport-core.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 15,
+      "deletions": 11,
+      "magnitude": 26,
+      "committedAt": "2026-09-02T15:53:28+02:00",
+      "parentSha": "46c940755d0ae7ff8d67116096fa549a8564d56e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/8c697dddfad702f18564bf77fd6e6f427f6781b4.json",
+      "vfsKey": "CTP1:8c697dddfad702f18564bf77fd6e6f427f6781b4:5a611e7d9031b6b4",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/8c697dddfad702f18564bf77fd6e6f427f6781b4.json"
+}
