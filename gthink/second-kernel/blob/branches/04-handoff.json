@@ -1,0 +1,19 @@
+{
+  "branchId": "handoff",
+  "kind": "core-cooperation-contract",
+  "inputPacket": {
+    "required": ["taskId", "intent", "requestedFunction"],
+    "optional": ["constraints", "evidenceRefs", "requestedBranches", "deadlineContext"]
+  },
+  "outputPacket": {
+    "required": ["taskId", "status", "result"],
+    "optional": ["evidenceRefs", "loadedBranches", "proposedChanges", "uncertainty", "errors"]
+  },
+  "rules": [
+    "The second kernel assists; it does not silently replace the primary routing decision.",
+    "Return evidence references separately from interpretations.",
+    "Keep branch provenance so the primary core can see what knowledge was loaded.",
+    "If a required branch is unavailable, continue only when the task remains safe and mark the missing branch.",
+    "Protected/private information must travel only through an authenticated explicit bridge, never through this public blob."
+  ]
+}
