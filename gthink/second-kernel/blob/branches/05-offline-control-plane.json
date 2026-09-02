@@ -1,0 +1,74 @@
+{
+  "schema": "gthink.second-kernel.branch.offline-control-plane.v1",
+  "id": "offline-control-plane",
+  "role": "no_internet_resolution_method",
+  "purpose": "Give the second native kernel the safe no-Internet resolution method through its public knowledge blob without merging or mutating the canonical private branch.",
+  "bridge": {
+    "type": "blob_reference_snapshot",
+    "transport": "second_kernel_knowledge_blob",
+    "consumeMode": "read_only",
+    "networkRequiredAtResolution": false,
+    "sourceMutation": false,
+    "mergeRequired": false,
+    "branchStateRemainsSeparate": true
+  },
+  "source": {
+    "repository": "mourchoua-commits/Gvault",
+    "branch": "offline-control-plane",
+    "path": "OFFLINE_NO_INTERNET_METHOD.json",
+    "sourceBlobSha": "5b3dbcbb5951829ea6f22a5f9bf9cb8613924a0a",
+    "derivedPublicView": "ops/chromatic-blob/OFFLINE_CONTROL_PLANE_CHROMATIC_VIEW.blob.json"
+  },
+  "knowledge": {
+    "blobId": "BLOB_NO_INTERNET_RESOLUTION_METHOD",
+    "principle": "Résoudre et reconstruire sans utiliser Internet ni aucune source externe au moment de l'exécution.",
+    "sourceOrder": [
+      "current_local_state",
+      "existing_blobs",
+      "local_files_and_manifests",
+      "snapshots_and_known_good_states",
+      "hashes_and_provenance",
+      "local_relations_and_routes",
+      "deterministic_reconstruction"
+    ],
+    "method": [
+      "freeze_current_state",
+      "observe_input_and_output_without_modifying_them",
+      "locate_first_divergence",
+      "isolate_the_faulty_layer",
+      "reconstruct_from_existing_local_evidence",
+      "compare_against_known_good_local_state",
+      "apply_smallest_local_patch",
+      "run_local_deterministic_tests",
+      "keep_rollback_snapshot",
+      "promote_only_after_local_pass"
+    ],
+    "forbiddenRuntimeDependencies": [
+      "web_search",
+      "remote_api_required_for_reasoning",
+      "remote_cdn_required_for_core_function",
+      "external_model_required_for_repair",
+      "network_only_fallback"
+    ],
+    "relayRule": {
+      "network_available": "ignored_for_core_resolution",
+      "network_unavailable": "same_core_path",
+      "external_enrichment": "optional_and_outside_core"
+    }
+  },
+  "routing": {
+    "priority": "after_routing_before_external_enrichment",
+    "activateWhen": [
+      "offline",
+      "no_network",
+      "local_repair",
+      "deterministic_reconstruction",
+      "explicit_no_internet_method"
+    ],
+    "mustNotOverride": [
+      "authorization_gates",
+      "privacy_boundary",
+      "canonical_routing_priority"
+    ]
+  }
+}
