@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "4288e6294ed803f5f4d212480a50aa646a2fe89a",
+  "parentSha": "d38a0a522ccc6a24dd53c0d1ba0e4159146dbaf9",
+  "committedAt": "2026-09-02T02:34:28+02:00",
+  "summary": {
+    "subject": "Add browser-address bridge for blob public gthink",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 31,
+    "deletions": 0,
+    "paths": [
+      "blob/public/gthink/index.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 31,
+    "deletions": 0,
+    "magnitude": 31,
+    "committedAt": "2026-09-02T02:34:28+02:00",
+    "parentSha": "d38a0a522ccc6a24dd53c0d1ba0e4159146dbaf9"
+  },
+  "pulseKey": "CTP1:4288e6294ed803f5f4d212480a50aa646a2fe89a:c76177d86ddb45fe",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "768aa0652eaa373926e8ebb64f58d5419ae9fd1fefef956e1be52121dee36ee9",
+  "typedKeys": {
+    "commit": "gitc:4288e6294ed803f5f4d212480a50aa646a2fe89a",
+    "parent": "gitc:d38a0a522ccc6a24dd53c0d1ba0e4159146dbaf9",
+    "pulse": "ctp1:4288e6294ed803f5f4d212480a50aa646a2fe89a:c76177d86ddb45fe",
+    "translation": "cttrans:768aa0652eaa373926e8ebb64f58d5419ae9fd1fefef956e1be52121dee36ee9",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "4288e6294ed803f5f4d212480a50aa646a2fe89a",
+    "parentSha": "d38a0a522ccc6a24dd53c0d1ba0e4159146dbaf9",
+    "committedAt": "2026-09-02T02:34:28+02:00",
+    "summary": {
+      "subject": "Add browser-address bridge for blob public gthink",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 31,
+      "deletions": 0,
+      "paths": [
+        "blob/public/gthink/index.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 31,
+      "deletions": 0,
+      "magnitude": 31,
+      "committedAt": "2026-09-02T02:34:28+02:00",
+      "parentSha": "d38a0a522ccc6a24dd53c0d1ba0e4159146dbaf9"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/4288e6294ed803f5f4d212480a50aa646a2fe89a.json",
+      "vfsKey": "CTP1:4288e6294ed803f5f4d212480a50aa646a2fe89a:c76177d86ddb45fe",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/4288e6294ed803f5f4d212480a50aa646a2fe89a.json"
+}
