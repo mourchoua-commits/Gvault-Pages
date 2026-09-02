@@ -5,7 +5,7 @@ const repoRoot=new URL('../',root);
 const urls={
  live:new URL('gvault-agent-live-blob.js?v=6',root).href,
  router:new URL('gvault-routing-fabric.js?v=1',root).href,
- bridge:new URL('gthink-public-private-bridge.js?v=5',root).href,
+ bridge:new URL('gthink-public-private-bridge.js?v=6',root).href,
  gadmin:new URL('essai/gadmin/',repoRoot).href,
  controlTower:new URL('essai/control-tower/v2.html',repoRoot).href
 };
