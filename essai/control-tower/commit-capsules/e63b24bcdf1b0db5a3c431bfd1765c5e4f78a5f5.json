@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "e63b24bcdf1b0db5a3c431bfd1765c5e4f78a5f5",
+  "parentSha": "3ca9200c0da168a12e752660e6896f41350f92d8",
+  "committedAt": "2026-09-02T23:54:12+02:00",
+  "summary": {
+    "subject": "gthink qa: run dual-heart Playwright probe",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 51,
+    "deletions": 0,
+    "paths": [
+      ".github/workflows/gthink-dual-heart-playwright.yml"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 51,
+    "deletions": 0,
+    "magnitude": 51,
+    "committedAt": "2026-09-02T23:54:12+02:00",
+    "parentSha": "3ca9200c0da168a12e752660e6896f41350f92d8"
+  },
+  "pulseKey": "CTP1:e63b24bcdf1b0db5a3c431bfd1765c5e4f78a5f5:9db1a0e1f3f1bc25",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "40eb47b5d487a3c749f54badd157cfc2bac5da01526e186829aa78af99bb01f7",
+  "typedKeys": {
+    "commit": "gitc:e63b24bcdf1b0db5a3c431bfd1765c5e4f78a5f5",
+    "parent": "gitc:3ca9200c0da168a12e752660e6896f41350f92d8",
+    "pulse": "ctp1:e63b24bcdf1b0db5a3c431bfd1765c5e4f78a5f5:9db1a0e1f3f1bc25",
+    "translation": "cttrans:40eb47b5d487a3c749f54badd157cfc2bac5da01526e186829aa78af99bb01f7",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "e63b24bcdf1b0db5a3c431bfd1765c5e4f78a5f5",
+    "parentSha": "3ca9200c0da168a12e752660e6896f41350f92d8",
+    "committedAt": "2026-09-02T23:54:12+02:00",
+    "summary": {
+      "subject": "gthink qa: run dual-heart Playwright probe",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 51,
+      "deletions": 0,
+      "paths": [
+        ".github/workflows/gthink-dual-heart-playwright.yml"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 51,
+      "deletions": 0,
+      "magnitude": 51,
+      "committedAt": "2026-09-02T23:54:12+02:00",
+      "parentSha": "3ca9200c0da168a12e752660e6896f41350f92d8"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/e63b24bcdf1b0db5a3c431bfd1765c5e4f78a5f5.json",
+      "vfsKey": "CTP1:e63b24bcdf1b0db5a3c431bfd1765c5e4f78a5f5:9db1a0e1f3f1bc25",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/e63b24bcdf1b0db5a3c431bfd1765c5e4f78a5f5.json"
+}
