@@ -1,0 +1,85 @@
+{
+  "schema": "GTHINK_PUBLIC_METHOD_ROUTER_V1",
+  "version": "1.0.0",
+  "status": "PUBLIC_ONLY_EXPLICIT_VARIANT",
+  "authoritySource": "GVAULT_METHOD_ROUTER_V1@1.11.0",
+  "explicitUserVariant": {
+    "responsePlane": "PUBLIC_ONLY",
+    "privateRouteAllowed": false,
+    "firstCapturePosition": "POST_RESPONSE_ONLY",
+    "preserveCanonicalBlobStream": true,
+    "streamUrl": "gvault://blobs/public/gthink/stream"
+  },
+  "principles": {
+    "autoInvokeOnEveryUserMessage": true,
+    "conversationHistoryContextFirst": true,
+    "preserveOriginalBeforeNormalization": true,
+    "semanticResolutionBeforeCanonicalization": true,
+    "canonicalizationIsComparisonAidNotMeaningAuthority": true,
+    "proportionalRouting": true,
+    "routeBeforeIndexing": true,
+    "preserveCompetingReadings": true,
+    "proofBeforePass": true,
+    "noForcedConsensus": true
+  },
+  "canonicalProtocols": [
+    "T_CADRAGE",
+    "T_IMPACT",
+    "T_CONTINUITE",
+    "ProdOui",
+    "T_GARDE",
+    "T_EPREUVE",
+    "T_CONTREPREUVE",
+    "FICSA",
+    "Che_kCa",
+    "SACREBLEU",
+    "T_POSTGA",
+    "T_ECHEC_FECOND"
+  ],
+  "composers": ["SEQUENCE", "PARALLEL", "FALLBACK", "INVERSE_NORMAL_COMPARE", "RETRY_ONCE", "REPLAY"],
+  "crossMethod": {
+    "source": "BLOB_METHOD_CROSS_ROUTER@1.1.0",
+    "preserveOriginalExchange": true,
+    "preserveAllCompetingReadings": true,
+    "preserveDirectAndInversePasses": true,
+    "routeBeforeIndexing": true,
+    "minimumMethodsForCrossPattern": 2
+  },
+  "starTriangulation": {
+    "source": "BLOB_METHOD_STAR_TRIANGULATION@1.1.0",
+    "peripheralTrianglesDetachedUntilSeal": true,
+    "centralDirectAndInverseIndependentUntilSeal": true,
+    "peripheryCenterCrosscheckAfterSeal": true,
+    "noRawVoteOrAverage": true,
+    "verdicts": ["CONVERGENT", "COMPLEMENTARY", "DIVERGENT", "INCONCLUSIVE", "BLOCKED"]
+  },
+  "publicLoadOrder": [
+    "OPEN_PUBLIC_GVAULT",
+    "LOAD_PUBLIC_METHOD_ROUTER",
+    "PRESERVE_EXACT_USER_MESSAGE",
+    "LOAD_CONVERSATION_HISTORY",
+    "BUILD_PUBLIC_MEMORY_CONTEXT",
+    "SEMANTIC_RESOLUTION",
+    "CLASSIFY",
+    "COMPOSE_ROUTE",
+    "LOAD_PUBLIC_KNOWLEDGE",
+    "RUN_SELECTED_METHODS",
+    "RUN_INVERSE_NORMAL_COMPARE_IF_MATERIAL",
+    "RUN_CROSS_METHOD_CORRELATION_IF_MATERIAL",
+    "RUN_STAR_TRIANGULATION_IF_MATERIAL",
+    "EXECUTE_PUBLIC_AGENT",
+    "VERIFY_PUBLIC_REPLY",
+    "DELIVER_PUBLIC_REPLY",
+    "POST_RESPONSE_FIRST_CAPTURE",
+    "DISTRIBUTE_CAPTURE_TO_PUBLIC_BLOB_STREAM"
+  ],
+  "guards": [
+    "NO_PRIVATE_ROUTE",
+    "NO_PRIVATE_FALLBACK",
+    "NO_HTTP_PRIVATE_BRIDGE",
+    "NO_MEANING_LOSS_FROM_CANONICALIZATION",
+    "NO_PRE_RESPONSE_FIRST_CAPTURE",
+    "NO_UNPROVED_PASS",
+    "NO_HIDDEN_STATE_INFERENCE"
+  ]
+}
