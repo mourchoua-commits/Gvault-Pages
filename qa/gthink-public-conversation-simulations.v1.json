@@ -1,0 +1,48 @@
+{
+  "schema": "GTHINK_PUBLIC_CONVERSATION_SIMULATIONS_V1",
+  "version": "1.0.0",
+  "status": "LOCAL_SIMULATION_PASS",
+  "target": "GTHINK_SECONDARY_CONVERSATION_BRIDGE_V4_SIM_TRAINED",
+  "method": ["T_CONTINUITE", "ProdOui", "T_EPREUVE", "T_CONTREPREUVE"],
+  "qualification": {
+    "baseCases": {"total": 93, "pass": 93, "fail": 0},
+    "typoMutationCases": {"total": 42, "pass": 42, "fail": 0},
+    "counterproofCases": {"total": 30, "pass": 30, "fail": 0},
+    "combined": {"total": 165, "pass": 165, "fail": 0}
+  },
+  "coverage": [
+    "greetings",
+    "wellbeing",
+    "common French typos",
+    "acknowledgements",
+    "thanks",
+    "ready/presence",
+    "conversation continuation",
+    "short follow-ups with history",
+    "corrections",
+    "help/problem statements",
+    "GThink identity/status",
+    "knowledge inventory",
+    "method inventory",
+    "known GVAULT projects",
+    "known GThink protocols",
+    "negative factual questions",
+    "technical phrases containing 'va/bien' that must not be misclassified as social wellbeing"
+  ],
+  "reproducedFieldFailure": {
+    "input": "Tu va bien ?",
+    "previousWrongBehavior": "knowledge_match dumping core-cognition examples",
+    "expectedIntent": "social_wellbeing",
+    "expectedBehavior": "natural brief social reply",
+    "resultAfterFix": "PASS"
+  },
+  "counterproofExamples": [
+    {"input":"Comment ça va marcher le serveur ?","mustNotBe":"social_wellbeing","result":"PASS"},
+    {"input":"Tu vas bien configurer le serveur ?","mustNotBe":"social_wellbeing","result":"PASS"},
+    {"input":"Le worker va bien ?","mustNotBe":"social_wellbeing","result":"PASS"},
+    {"input":"Comment tu vas faire ?","mustNotBe":"social_wellbeing","result":"PASS"},
+    {"input":"Quelle est la capitale du Pérou ?","mustNotBe":"project_knowledge","result":"PASS"}
+  ],
+  "interpretation": "PASS qualifies the deterministic public conversation routing layer against this simulation corpus. It does not claim equivalence to a large language model or broad world-knowledge capability.",
+  "privateRouteUsed": false
+}
