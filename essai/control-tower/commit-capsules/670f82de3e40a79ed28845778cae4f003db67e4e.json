@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "670f82de3e40a79ed28845778cae4f003db67e4e",
+  "parentSha": "a4182469e460124729cdccbb85dc3b807de7e8b4",
+  "committedAt": "2026-09-02T02:18:00+02:00",
+  "summary": {
+    "subject": "Stabilize primary responder behind dual-kernel router",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "paths": [
+      "scripts/gthink-public-responder.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1,
+    "magnitude": 2,
+    "committedAt": "2026-09-02T02:18:00+02:00",
+    "parentSha": "a4182469e460124729cdccbb85dc3b807de7e8b4"
+  },
+  "pulseKey": "CTP1:670f82de3e40a79ed28845778cae4f003db67e4e:4635033b8605c7b9",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "7c7e3eae9ac641f21540c5b79bfce02df2839eb632f9e3be39f64df442d5047d",
+  "typedKeys": {
+    "commit": "gitc:670f82de3e40a79ed28845778cae4f003db67e4e",
+    "parent": "gitc:a4182469e460124729cdccbb85dc3b807de7e8b4",
+    "pulse": "ctp1:670f82de3e40a79ed28845778cae4f003db67e4e:4635033b8605c7b9",
+    "translation": "cttrans:7c7e3eae9ac641f21540c5b79bfce02df2839eb632f9e3be39f64df442d5047d",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "670f82de3e40a79ed28845778cae4f003db67e4e",
+    "parentSha": "a4182469e460124729cdccbb85dc3b807de7e8b4",
+    "committedAt": "2026-09-02T02:18:00+02:00",
+    "summary": {
+      "subject": "Stabilize primary responder behind dual-kernel router",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "paths": [
+        "scripts/gthink-public-responder.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "magnitude": 2,
+      "committedAt": "2026-09-02T02:18:00+02:00",
+      "parentSha": "a4182469e460124729cdccbb85dc3b807de7e8b4"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/670f82de3e40a79ed28845778cae4f003db67e4e.json",
+      "vfsKey": "CTP1:670f82de3e40a79ed28845778cae4f003db67e4e:4635033b8605c7b9",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/670f82de3e40a79ed28845778cae4f003db67e4e.json"
+}
