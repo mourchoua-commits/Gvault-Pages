@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "045691b507f3728ff2230ef9a0c1621adba9991b",
+  "parentSha": "074d658077bca9886b8d263e78fc68fdf09630c7",
+  "committedAt": "2026-09-02T02:08:13+02:00",
+  "summary": {
+    "subject": "GThink: expose public knowledge adapter to second native kernel",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 43,
+    "deletions": 0,
+    "paths": [
+      "gthink/second-kernel/blob/second-kernel-adapter.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 43,
+    "deletions": 0,
+    "magnitude": 43,
+    "committedAt": "2026-09-02T02:08:13+02:00",
+    "parentSha": "074d658077bca9886b8d263e78fc68fdf09630c7"
+  },
+  "pulseKey": "CTP1:045691b507f3728ff2230ef9a0c1621adba9991b:fac3109a97a94e1e",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "1eef5230238ff8c9a48e23e176af119a27584c3efa226662b0a76bb557e17d92",
+  "typedKeys": {
+    "commit": "gitc:045691b507f3728ff2230ef9a0c1621adba9991b",
+    "parent": "gitc:074d658077bca9886b8d263e78fc68fdf09630c7",
+    "pulse": "ctp1:045691b507f3728ff2230ef9a0c1621adba9991b:fac3109a97a94e1e",
+    "translation": "cttrans:1eef5230238ff8c9a48e23e176af119a27584c3efa226662b0a76bb557e17d92",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "045691b507f3728ff2230ef9a0c1621adba9991b",
+    "parentSha": "074d658077bca9886b8d263e78fc68fdf09630c7",
+    "committedAt": "2026-09-02T02:08:13+02:00",
+    "summary": {
+      "subject": "GThink: expose public knowledge adapter to second native kernel",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 43,
+      "deletions": 0,
+      "paths": [
+        "gthink/second-kernel/blob/second-kernel-adapter.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 43,
+      "deletions": 0,
+      "magnitude": 43,
+      "committedAt": "2026-09-02T02:08:13+02:00",
+      "parentSha": "074d658077bca9886b8d263e78fc68fdf09630c7"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/045691b507f3728ff2230ef9a0c1621adba9991b.json",
+      "vfsKey": "CTP1:045691b507f3728ff2230ef9a0c1621adba9991b:fac3109a97a94e1e",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/045691b507f3728ff2230ef9a0c1621adba9991b.json"
+}
