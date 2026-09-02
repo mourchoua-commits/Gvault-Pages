@@ -1,14 +1,18 @@
 {
-  "schema": "GVAULT_BLOB_BRIDGE_CHAIN_V1",
+  "schema": "GVAULT_BLOB_BRIDGE_CHAIN_V2",
   "virtualUri": "blob://public/gthink",
   "browserEntry": "/Gvault-Pages/blob/public/gthink/",
   "target": "/Gvault-Pages/gthink/",
+  "stopCondition": "HTTP_404",
   "hops": [
     {"id":"address-blob","role":"bootstrap","from":"browser-address","to":"service-worker-blob"},
     {"id":"service-worker-blob","role":"intercept-navigation","from":"/blob/public/gthink/","to":"document-proxy-blob"},
     {"id":"document-proxy-blob","role":"serve-gthink-under-blob-path","from":"/gthink/","to":"literal-blob-layer"},
-    {"id":"literal-blob-layer","role":"blobify-structure-content-events-and-blockers","from":"document-proxy-blob","to":"gthink-stream-blob","policy":"non-destructive; blockers become routable blobs"},
-    {"id":"gthink-stream-blob","role":"runtime","stream":"gvault://blobs/public/gthink/stream"}
+    {"id":"literal-blob-layer","role":"blobify-structure-content-events-and-blockers","from":"document-proxy-blob","to":"upstream-fetch-blob","policy":"non-destructive; blockers become routable blobs"},
+    {"id":"upstream-fetch-blob","role":"fetch-target","from":"literal-blob-layer","to":"http-status-blob"},
+    {"id":"http-status-blob","role":"preserve-http-status","from":"upstream-fetch-blob","to":"gthink-stream-blob","on404":"http-404-blob"},
+    {"id":"gthink-stream-blob","role":"runtime","stream":"gvault://blobs/public/gthink/stream"},
+    {"id":"http-404-blob","role":"terminal-boundary","status":404,"terminal":true,"policy":"stop exactly at first 404; do not rewrite as 502"}
   ],
   "privateExposure": false
 }
