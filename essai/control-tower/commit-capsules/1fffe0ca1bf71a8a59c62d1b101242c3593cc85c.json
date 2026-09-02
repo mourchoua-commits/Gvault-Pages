@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "1fffe0ca1bf71a8a59c62d1b101242c3593cc85c",
+  "parentSha": "43537ecc91a05c1328652d80d3e3b8861112a1e5",
+  "committedAt": "2026-09-02T02:05:54+02:00",
+  "summary": {
+    "subject": "GThink: add public loader for second-kernel knowledge blob",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 37,
+    "deletions": 0,
+    "paths": [
+      "gthink/second-kernel/blob/loader.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 37,
+    "deletions": 0,
+    "magnitude": 37,
+    "committedAt": "2026-09-02T02:05:54+02:00",
+    "parentSha": "43537ecc91a05c1328652d80d3e3b8861112a1e5"
+  },
+  "pulseKey": "CTP1:1fffe0ca1bf71a8a59c62d1b101242c3593cc85c:71b8cd766b65b424",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "effdb7622a2a5e193b84acc5a86f7660bee9f73cf679767f8648505b0843d832",
+  "typedKeys": {
+    "commit": "gitc:1fffe0ca1bf71a8a59c62d1b101242c3593cc85c",
+    "parent": "gitc:43537ecc91a05c1328652d80d3e3b8861112a1e5",
+    "pulse": "ctp1:1fffe0ca1bf71a8a59c62d1b101242c3593cc85c:71b8cd766b65b424",
+    "translation": "cttrans:effdb7622a2a5e193b84acc5a86f7660bee9f73cf679767f8648505b0843d832",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "1fffe0ca1bf71a8a59c62d1b101242c3593cc85c",
+    "parentSha": "43537ecc91a05c1328652d80d3e3b8861112a1e5",
+    "committedAt": "2026-09-02T02:05:54+02:00",
+    "summary": {
+      "subject": "GThink: add public loader for second-kernel knowledge blob",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 37,
+      "deletions": 0,
+      "paths": [
+        "gthink/second-kernel/blob/loader.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 37,
+      "deletions": 0,
+      "magnitude": 37,
+      "committedAt": "2026-09-02T02:05:54+02:00",
+      "parentSha": "43537ecc91a05c1328652d80d3e3b8861112a1e5"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/1fffe0ca1bf71a8a59c62d1b101242c3593cc85c.json",
+      "vfsKey": "CTP1:1fffe0ca1bf71a8a59c62d1b101242c3593cc85c:71b8cd766b65b424",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/1fffe0ca1bf71a8a59c62d1b101242c3593cc85c.json"
+}
