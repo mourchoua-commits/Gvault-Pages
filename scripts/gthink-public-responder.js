@@ -17,3 +17,12 @@ async function syncConnection(){const a=api();let s={configured:false,error:'gth
 function attach(){if(attached)return true;const a=api();if(!a?.speak)return false;attached=true;void syncConnection();heartbeat=setInterval(()=>void syncConnection(),4000);window.GTHINK_PUBLIC_RESPONDER=Object.freeze({schema:SCHEMA,name:NAME,engine:'private-direct-pellicule',attached:true,transport:'pellicule-direct',respond:responder,syncConnection,get connected(){return connected},get bridge(){return window.GTHINK_PUBLIC_PRIVATE_BRIDGE||null}});void loadDualRouter();return true}
 if(!attach()){let tries=0;const timer=setInterval(()=>{tries++;if(attach()||tries>240)clearInterval(timer)},25)}
 })();
+(()=>{'use strict';
+if(window.GTHINK_RESPONSE_WORD_FLOW||document.querySelector('script[data-gthink-response-word-flow]'))return;
+const current=document.currentScript?.src||location.href;
+const script=document.createElement('script');
+script.src=new URL('gthink-response-word-flow.js?v=1',current).href;
+script.dataset.gthinkResponseWordFlow='V1';
+script.async=false;
+(document.head||document.documentElement).appendChild(script);
+})();
