@@ -1,0 +1,13 @@
+{
+  "schema": "GVAULT_BLOB_BRIDGE_CHAIN_V1",
+  "virtualUri": "blob://public/gthink",
+  "browserEntry": "/Gvault-Pages/blob/public/gthink/",
+  "target": "/Gvault-Pages/gthink/",
+  "hops": [
+    {"id":"address-blob","role":"bootstrap","from":"browser-address","to":"service-worker-blob"},
+    {"id":"service-worker-blob","role":"intercept-navigation","from":"/blob/public/gthink/","to":"document-proxy-blob"},
+    {"id":"document-proxy-blob","role":"serve-gthink-under-blob-path","from":"/gthink/","to":"gthink-stream-blob"},
+    {"id":"gthink-stream-blob","role":"runtime","stream":"gvault://blobs/public/gthink/stream"}
+  ],
+  "privateExposure": false
+}
