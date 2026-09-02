@@ -9,21 +9,24 @@
   "to": "GThink",
   "intent": "route_all_gthink_traffic_through_blob_stream",
   "language": "fr",
-  "at": "2026-09-01T00:00:00+02:00",
+  "at": "2026-09-02T00:00:00+02:00",
   "surface": "Gvault-Pages",
   "streamUrl": "gvault://blobs/public/gthink/stream",
   "understoodBy": [
     "GThink",
     "public-kernel",
-    "gateway-adapter",
     "public-ui",
-    "renderer"
+    "renderer",
+    "private-ingress"
   ],
   "payload": {
     "transport": "blob-stream",
     "streamUrl": "gvault://blobs/public/gthink/stream",
-    "domEvent": "gvault:blob",
-    "broadcastChannel": "gvault.public.blobs.v2",
+    "privateIngressStream": "gvault://blobs/private/gthink/ingress",
+    "routeBlobId": "blob:public:gthink-private-route:v1",
+    "responderBlobId": "blob:public:gthink-responder:v1",
+    "readinessGateBlobId": "blob:public:gthink-readiness-gate:v1",
+    "privateIngressBlobId": "blob:private:gthink-ingress:v1",
     "requestKind": "gateway.request",
     "responseKinds": [
       "gateway.response",
@@ -31,11 +34,17 @@
       "error"
     ],
     "requiredListenerKind": "gthink.listener.ready",
+    "requiredPrivateReadyKind": "private.ingress.ready",
     "transportReady": true,
     "responderReady": false,
+    "configured": "BY_BLOB_HANDSHAKE",
     "causalRule": "Une réponse doit référencer le gateway.request ou son utterance parent par parentBlobId/requestBlobId.",
     "httpAdapterEnabled": false,
-    "configured": false
+    "http": false,
+    "baseUrl": null,
+    "script": null,
+    "worker": null,
+    "blobOnly": true
   },
   "silent": true,
   "muted": false
