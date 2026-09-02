@@ -4,7 +4,6 @@
   "ownerBlobId": "blob:public:gvault-page:v1",
   "surface": "Gvault-Pages",
   "internal": true,
-  "externalBridge": false,
   "runtime": {
     "facade": "scripts/gthink-page-transport-organ.js",
     "core": "scripts/gthink-page-transport-core.js"
@@ -18,7 +17,7 @@
   "invariants": [
     "La page publique est le blob parent.",
     "Le transport est un organe interne du blob parent.",
-    "Aucun composant bridge externe n'est requis par l'API publique.",
+    "Le transport n'existe pas comme composant topologique séparé de la page publique.",
     "Les valeurs de saisie, secrets SAS et plaintext privé ne sont pas capturés par le blob-page."
   ]
 }
