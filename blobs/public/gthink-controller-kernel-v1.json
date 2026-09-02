@@ -6,26 +6,29 @@
   "materialized": true,
   "createdAt": "2026-09-01",
   "title": "GThink Public Controller Kernel v1",
-  "purpose": "Donner à l'agent public un noyau de routage, contexte et capacités sans exposer le contrôle privé ni les secrets.",
+  "purpose": "Donner à l'agent public un noyau blob de routage, contexte et capacités sans exposer le contrôle privé ni les secrets.",
   "architecture": {
-    "publicKernel": "thin-client blob: collecte, normalise, route et applique les réponses autorisées",
-    "privateController": "autorité de décision: politiques, mémoire privée, orchestration modèle/outils, validation des écritures",
-    "agentSurface": "interface publique consommant uniquement des enveloppes et capacités explicitement autorisées"
+    "publicKernel": "blob:public:gthink-controller-kernel:v1",
+    "publicRoute": "blob:public:gthink-private-route:v1",
+    "publicResponder": "blob:public:gthink-responder:v1",
+    "readinessGate": "blob:public:gthink-readiness-gate:v1",
+    "privateController": "blob:private:gthink-ingress:v1",
+    "agentSurface": "public-ui consommant uniquement des blobs explicitement autorisés"
   },
   "authority": {
     "publicKernelMay": [
       "lire les blobs publics",
-      "construire une enveloppe de requête",
+      "construire une enveloppe blob de requête",
       "conserver un état public non sensible",
-      "appliquer une réponse signée/autorisée",
-      "dégrader vers un mode local limité si le contrôleur privé est indisponible"
+      "appliquer une réponse blob autorisée",
+      "rester verrouillé si le blob privé est indisponible"
     ],
     "publicKernelMustNot": [
       "contenir des secrets ou jetons privés",
       "lire directement le dépôt privé",
       "prendre une décision privilégiée",
-      "écrire dans l'état privé sans médiation",
-      "présenter le noyau comme une instance autonome permanente de ChatGPT"
+      "écrire dans l'état privé sans blob de médiation",
+      "contourner la chaîne blob"
     ],
     "privateControllerIsAuthoritative": true
   },
@@ -60,7 +63,7 @@
       "warnings",
       "controllerProof"
     ],
-    "rule": "le public n'exécute que les actions explicitement autorisées par le contrôleur"
+    "rule": "le public n'applique que les réponses explicitement libérées par le blob privé"
   },
   "routing": {
     "order": [
@@ -69,18 +72,23 @@
       "emplacement logique existant",
       "index/cadastre en support"
     ],
-    "defaultRoute": "public -> private controller -> authorized response -> public agent",
-    "failClosed": true
+    "defaultRoute": "blob:public:gthink-controller-kernel:v1 -> blob:public:gthink-private-route:v1 -> blob:private:gthink-ingress:v1 -> blob:public:gthink-responder:v1 -> blob:public:gthink-readiness-gate:v1 -> public-ui",
+    "stream": "gvault://blobs/public/gthink/stream",
+    "privateIngressStream": "gvault://blobs/private/gthink/ingress",
+    "failClosed": true,
+    "blobOnly": true,
+    "nonBlobDependencies": []
   },
   "modelControl": {
-    "mode": "private-orchestrated",
-    "description": "Le contrôleur privé peut appeler le modèle/agent lorsqu'une exécution est demandée; le noyau public n'embarque pas une session assistant persistante.",
+    "mode": "private-blob-orchestrated",
+    "description": "Le blob privé GThink reste l'autorité de réponse; le noyau public ne produit pas de réponse sémantique de remplacement.",
     "humanAndPolicyOverride": true
   },
   "health": {
     "heartbeat": true,
     "lastKnownControllerState": "UNKNOWN",
-    "offlineFallback": "PUBLIC_LOCAL_LIMITED"
+    "readyProof": "private.ingress.ready -> gthink.listener.ready",
+    "offlineFallback": "LOCKED_NO_SEMANTIC_FALLBACK"
   },
   "externalBehavior": {
     "autonomousReadable": true,
