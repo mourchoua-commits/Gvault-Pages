@@ -1,21 +1,34 @@
 {
-  "schema": "GTHINK_PUBLIC_PRIVATE_BRIDGE_PUBLIC_CONTRACT_V1",
-  "version": 1,
+  "schema": "GTHINK_PUBLIC_PRIVATE_BRIDGE_PUBLIC_CONTRACT_V2_BLOB_ONLY",
+  "version": 2,
+  "blobId": "blob:public:gthink-public-private-bridge:v2",
   "stream": "gvault://blobs/public/gthink/stream",
-  "client": "scripts/gthink-public-private-bridge.js",
-  "requestSchema": "GTHINK_PUBLIC_PRIVATE_BRIDGE_REQUEST_V1",
-  "responseSchema": "GTHINK_PUBLIC_PRIVATE_BRIDGE_RESPONSE_V1",
+  "transport": "blob-stream",
+  "routeBlobId": "blob:public:gthink-private-route:v1",
+  "responderBlobId": "blob:public:gthink-responder:v1",
+  "readinessGateBlobId": "blob:public:gthink-readiness-gate:v1",
+  "privateIngressBlobId": "blob:private:gthink-ingress:v1",
+  "privateIngressStream": "gvault://blobs/private/gthink/ingress",
+  "requestKind": "gateway.request",
+  "responseKinds": ["gateway.response", "utterance", "error"],
   "publicEvents": [
     "gthink.private.handoff",
-    "gthink.private.accepted",
+    "private.ingress.ready",
     "gthink.private.release",
-    "gthink.private.error"
+    "gthink.private.error",
+    "gthink.listener.ready",
+    "gthink.listener.waiting"
   ],
   "publicEventRule": "No private payload may be emitted before explicit release authorization.",
   "release": {
     "required": true,
     "policy": "EXPLICIT_DECLASSIFICATION_V1",
-    "integrity": ["utf8ByteLength", "sha256"]
+    "integrity": ["utf8ByteLength", "sha256", "parentBlobId"]
+  },
+  "readiness": {
+    "default": "WAITING_GTHINK",
+    "readyOnlyAfter": "private.ingress.ready -> gthink.listener.ready",
+    "failClosed": true
   },
   "publicMetadataOnlyBeforeRelease": [
     "blobId",
@@ -31,5 +44,11 @@
     "provider authorization",
     "privatePayload",
     "hidden reasoning"
-  ]
+  ],
+  "nonBlobDependencies": [],
+  "http": false,
+  "baseUrl": null,
+  "script": null,
+  "worker": null,
+  "blobOnly": true
 }
