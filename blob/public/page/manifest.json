@@ -3,7 +3,7 @@
   "blobId": "blob:public:gvault-page:v1",
   "surface": "Gvault-Pages",
   "mode": "live-parent-blob",
-  "description": "La page publique GVAULT entière est l'unité blob parente. Les fonctions de transport et de routage sont des organes internes, pas des ponts externes.",
+  "description": "La page publique GVAULT entière est l'unité blob parente. Le transport et le routage sont des organes internes de cette même unité.",
   "runtime": "../../../scripts/gvault-public-page-blob.js",
   "update": {
     "dom": "MutationObserver",
@@ -15,7 +15,6 @@
     "transport": {
       "blobId": "blob:public:gvault-page:transport:v1",
       "internal": true,
-      "externalBridge": false,
       "facade": "../../../scripts/gthink-page-transport-organ.js",
       "core": "../../../scripts/gthink-page-transport-core.js",
       "chain": "./internal/transport-chain.json",
