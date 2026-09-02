@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "6a814f275e3671b55a0c69370f6f161d2ffb6352",
+  "parentSha": "4e8a3086ebc6f51b34036401b20782fe343f29fb",
+  "committedAt": "2026-09-02T02:48:27+02:00",
+  "summary": {
+    "subject": "feat(gthink): continuous fragmentable reorganising blob dynamics",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 30,
+    "deletions": 15,
+    "paths": [
+      "scripts/gthink-blob-dynamics.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 30,
+    "deletions": 15,
+    "magnitude": 45,
+    "committedAt": "2026-09-02T02:48:27+02:00",
+    "parentSha": "4e8a3086ebc6f51b34036401b20782fe343f29fb"
+  },
+  "pulseKey": "CTP1:6a814f275e3671b55a0c69370f6f161d2ffb6352:8a9320cb58a114d4",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "8688034b19af7ff730f353abfcc5c6dcd5b5207f12ccd99718d95db546a45d89",
+  "typedKeys": {
+    "commit": "gitc:6a814f275e3671b55a0c69370f6f161d2ffb6352",
+    "parent": "gitc:4e8a3086ebc6f51b34036401b20782fe343f29fb",
+    "pulse": "ctp1:6a814f275e3671b55a0c69370f6f161d2ffb6352:8a9320cb58a114d4",
+    "translation": "cttrans:8688034b19af7ff730f353abfcc5c6dcd5b5207f12ccd99718d95db546a45d89",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "6a814f275e3671b55a0c69370f6f161d2ffb6352",
+    "parentSha": "4e8a3086ebc6f51b34036401b20782fe343f29fb",
+    "committedAt": "2026-09-02T02:48:27+02:00",
+    "summary": {
+      "subject": "feat(gthink): continuous fragmentable reorganising blob dynamics",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 30,
+      "deletions": 15,
+      "paths": [
+        "scripts/gthink-blob-dynamics.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 30,
+      "deletions": 15,
+      "magnitude": 45,
+      "committedAt": "2026-09-02T02:48:27+02:00",
+      "parentSha": "4e8a3086ebc6f51b34036401b20782fe343f29fb"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/6a814f275e3671b55a0c69370f6f161d2ffb6352.json",
+      "vfsKey": "CTP1:6a814f275e3671b55a0c69370f6f161d2ffb6352:8a9320cb58a114d4",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/6a814f275e3671b55a0c69370f6f161d2ffb6352.json"
+}
