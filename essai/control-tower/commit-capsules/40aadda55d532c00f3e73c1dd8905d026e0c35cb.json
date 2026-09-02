@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "40aadda55d532c00f3e73c1dd8905d026e0c35cb",
+  "parentSha": "512d49c805a6e47e5952b2356cea9b8de9c1c980",
+  "committedAt": "2026-09-02T02:32:41+02:00",
+  "summary": {
+    "subject": "fix(gthink): remove fixed two-blob status and blobify kernel selector",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 6,
+    "deletions": 21,
+    "paths": [
+      "scripts/gthink-dual-kernel-router.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 6,
+    "deletions": 21,
+    "magnitude": 27,
+    "committedAt": "2026-09-02T02:32:41+02:00",
+    "parentSha": "512d49c805a6e47e5952b2356cea9b8de9c1c980"
+  },
+  "pulseKey": "CTP1:40aadda55d532c00f3e73c1dd8905d026e0c35cb:5037ffa2423b9e74",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "8f83e547df8a299d8a4ed17f79c52d3b3fe8fce0e0565eed643d0a4da9178f52",
+  "typedKeys": {
+    "commit": "gitc:40aadda55d532c00f3e73c1dd8905d026e0c35cb",
+    "parent": "gitc:512d49c805a6e47e5952b2356cea9b8de9c1c980",
+    "pulse": "ctp1:40aadda55d532c00f3e73c1dd8905d026e0c35cb:5037ffa2423b9e74",
+    "translation": "cttrans:8f83e547df8a299d8a4ed17f79c52d3b3fe8fce0e0565eed643d0a4da9178f52",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "40aadda55d532c00f3e73c1dd8905d026e0c35cb",
+    "parentSha": "512d49c805a6e47e5952b2356cea9b8de9c1c980",
+    "committedAt": "2026-09-02T02:32:41+02:00",
+    "summary": {
+      "subject": "fix(gthink): remove fixed two-blob status and blobify kernel selector",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 6,
+      "deletions": 21,
+      "paths": [
+        "scripts/gthink-dual-kernel-router.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 6,
+      "deletions": 21,
+      "magnitude": 27,
+      "committedAt": "2026-09-02T02:32:41+02:00",
+      "parentSha": "512d49c805a6e47e5952b2356cea9b8de9c1c980"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/40aadda55d532c00f3e73c1dd8905d026e0c35cb.json",
+      "vfsKey": "CTP1:40aadda55d532c00f3e73c1dd8905d026e0c35cb:5037ffa2423b9e74",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/40aadda55d532c00f3e73c1dd8905d026e0c35cb.json"
+}
