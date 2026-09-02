@@ -19,23 +19,41 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
       - name: Build capsule for triggering commit
         run: node scripts/build-control-tower-commit-capsule.mjs "${GITHUB_SHA}"
-      - name: Commit previous-commit image
+      - name: Commit previous-commit image race-safely
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "gvault-control-tower-capsule"
           git config user.email "actions@users.noreply.github.com"
-          git add essai/control-tower/commit-capsules/
-          if git diff --cached --quiet; then
-            echo "Capsule already present"
-            exit 0
-          fi
           short="${GITHUB_SHA:0:12}"
-          git commit -m "control-tower-capsule: summarize ${short}" -m "GVAULT-Intent: Carry the previous commit summary + pulse into the following commit so Control Tower can reconstruct its image from the known SHA."
-          git push origin HEAD:main
+
+          for attempt in 1 2 3 4; do
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Rebuild from the immutable triggering SHA after every reset so a
+            # concurrent writer cannot make us publish a stale main snapshot.
+            node scripts/build-control-tower-commit-capsule.mjs "${GITHUB_SHA}"
+            git add essai/control-tower/commit-capsules/
+
+            if git diff --cached --quiet; then
+              echo "Capsule already present on current main"
+              exit 0
+            fi
+
+            git commit -m "control-tower-capsule: summarize ${short}" -m "GVAULT-Intent: Carry the previous commit summary + pulse into the following commit so Control Tower can reconstruct its image from the known SHA."
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+
+            echo "Control Tower capsule push race on attempt ${attempt}; rebuilding from latest main." >&2
+          done
+
+          echo "Control Tower capsule could not be published after bounded retries." >&2
+          exit 1
