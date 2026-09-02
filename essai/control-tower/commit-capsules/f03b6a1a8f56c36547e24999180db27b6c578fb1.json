@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "f03b6a1a8f56c36547e24999180db27b6c578fb1",
+  "parentSha": "16a16e2bfec36faf4a72a913dd49d66d00b28f35",
+  "committedAt": "2026-09-03T00:15:13+02:00",
+  "summary": {
+    "subject": "test: full-power dual-heart saturation campaign",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 146,
+    "deletions": 26,
+    "paths": [
+      "tests/gthink-dual-heart.spec.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 146,
+    "deletions": 26,
+    "magnitude": 172,
+    "committedAt": "2026-09-03T00:15:13+02:00",
+    "parentSha": "16a16e2bfec36faf4a72a913dd49d66d00b28f35"
+  },
+  "pulseKey": "CTP1:f03b6a1a8f56c36547e24999180db27b6c578fb1:6043ef945c202712",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "ffc45fedad17f417b7e482fea83199759dc13b693164447e8b917beedf74ed62",
+  "typedKeys": {
+    "commit": "gitc:f03b6a1a8f56c36547e24999180db27b6c578fb1",
+    "parent": "gitc:16a16e2bfec36faf4a72a913dd49d66d00b28f35",
+    "pulse": "ctp1:f03b6a1a8f56c36547e24999180db27b6c578fb1:6043ef945c202712",
+    "translation": "cttrans:ffc45fedad17f417b7e482fea83199759dc13b693164447e8b917beedf74ed62",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "f03b6a1a8f56c36547e24999180db27b6c578fb1",
+    "parentSha": "16a16e2bfec36faf4a72a913dd49d66d00b28f35",
+    "committedAt": "2026-09-03T00:15:13+02:00",
+    "summary": {
+      "subject": "test: full-power dual-heart saturation campaign",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 146,
+      "deletions": 26,
+      "paths": [
+        "tests/gthink-dual-heart.spec.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 146,
+      "deletions": 26,
+      "magnitude": 172,
+      "committedAt": "2026-09-03T00:15:13+02:00",
+      "parentSha": "16a16e2bfec36faf4a72a913dd49d66d00b28f35"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/f03b6a1a8f56c36547e24999180db27b6c578fb1.json",
+      "vfsKey": "CTP1:f03b6a1a8f56c36547e24999180db27b6c578fb1:6043ef945c202712",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/f03b6a1a8f56c36547e24999180db27b6c578fb1.json"
+}
