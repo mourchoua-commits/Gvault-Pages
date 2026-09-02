@@ -1,6 +1,6 @@
 (()=>{'use strict';
 const SCHEMA='GVAULT_ROUTING_FABRIC_V1';
-const VERSION=2;
+const VERSION=3;
 const PRIVATE_POLICY='EXPLICIT_DECLASSIFICATION_V1';
 const PUBLIC_STREAM='gvault://blobs/public/gthink/stream';
 function clean(v){return String(v??'').trim()}
@@ -44,4 +44,6 @@ function plan(input={},opts={}){
 function describe(input,opts){const p=plan(input,opts);return {schema:SCHEMA,version:VERSION,primary:p.primary,routeIds:p.routes.map(x=>x.id),privatePolicy:p.privatePolicy,privateContentPublished:false}}
 window.GVAULT_ROUTING_FABRIC=Object.freeze({schema:SCHEMA,version:VERSION,privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,classify,plan,describe});
 try{window.dispatchEvent(new CustomEvent('gvault:routing-fabric-ready',{detail:{schema:SCHEMA,version:VERSION,privatePolicy:PRIVATE_POLICY,publicStream:PUBLIC_STREAM,privateContentPublished:false}}))}catch{}
+function loadTripleGeyser(){if(window.GVAULT_PUBLIC_TRIPLE_GEYSER||document.querySelector('script[data-gvault-triple-geyser]'))return;const s=document.createElement('script');s.src='./scripts/gvault-public-triple-geyser.js?v=1';s.async=false;s.setAttribute('data-gvault-triple-geyser','V1');s.onerror=()=>console.warn('GVAULT triple geyser unavailable');(document.head||document.documentElement).appendChild(s)}
+loadTripleGeyser();
 })();
