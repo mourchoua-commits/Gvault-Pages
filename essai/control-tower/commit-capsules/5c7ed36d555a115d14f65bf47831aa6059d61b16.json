@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "5c7ed36d555a115d14f65bf47831aa6059d61b16",
+  "parentSha": "26c328b6335d595d0ac25faf9c76893777cf2523",
+  "committedAt": "2026-09-02T03:52:20+02:00",
+  "summary": {
+    "subject": "Make Control Tower capsule publishing race-safe",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 28,
+    "deletions": 10,
+    "paths": [
+      ".github/workflows/control-tower-commit-capsule.yml"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 28,
+    "deletions": 10,
+    "magnitude": 38,
+    "committedAt": "2026-09-02T03:52:20+02:00",
+    "parentSha": "26c328b6335d595d0ac25faf9c76893777cf2523"
+  },
+  "pulseKey": "CTP1:5c7ed36d555a115d14f65bf47831aa6059d61b16:faa388fdfca918c9",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "d73cf5fe4946f31ee227328997bc07ae343dba8acb71c419e21dc1222b70ade3",
+  "typedKeys": {
+    "commit": "gitc:5c7ed36d555a115d14f65bf47831aa6059d61b16",
+    "parent": "gitc:26c328b6335d595d0ac25faf9c76893777cf2523",
+    "pulse": "ctp1:5c7ed36d555a115d14f65bf47831aa6059d61b16:faa388fdfca918c9",
+    "translation": "cttrans:d73cf5fe4946f31ee227328997bc07ae343dba8acb71c419e21dc1222b70ade3",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "5c7ed36d555a115d14f65bf47831aa6059d61b16",
+    "parentSha": "26c328b6335d595d0ac25faf9c76893777cf2523",
+    "committedAt": "2026-09-02T03:52:20+02:00",
+    "summary": {
+      "subject": "Make Control Tower capsule publishing race-safe",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 28,
+      "deletions": 10,
+      "paths": [
+        ".github/workflows/control-tower-commit-capsule.yml"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 28,
+      "deletions": 10,
+      "magnitude": 38,
+      "committedAt": "2026-09-02T03:52:20+02:00",
+      "parentSha": "26c328b6335d595d0ac25faf9c76893777cf2523"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/5c7ed36d555a115d14f65bf47831aa6059d61b16.json",
+      "vfsKey": "CTP1:5c7ed36d555a115d14f65bf47831aa6059d61b16:faa388fdfca918c9",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/5c7ed36d555a115d14f65bf47831aa6059d61b16.json"
+}
