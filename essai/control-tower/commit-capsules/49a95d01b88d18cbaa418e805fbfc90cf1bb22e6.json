@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "49a95d01b88d18cbaa418e805fbfc90cf1bb22e6",
+  "parentSha": "77cf5e2b486c1d7d74b2f86a30b18849b2d04d6e",
+  "committedAt": "2026-09-02T03:33:20+02:00",
+  "summary": {
+    "subject": "gthink: add ping pong alter-ego infinite health blob loop",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 30,
+    "deletions": 0,
+    "paths": [
+      "scripts/gthink-ping-pong-alter-ego-loop.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 30,
+    "deletions": 0,
+    "magnitude": 30,
+    "committedAt": "2026-09-02T03:33:20+02:00",
+    "parentSha": "77cf5e2b486c1d7d74b2f86a30b18849b2d04d6e"
+  },
+  "pulseKey": "CTP1:49a95d01b88d18cbaa418e805fbfc90cf1bb22e6:da1e9691db966d95",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "c606eb3298f35d920a295f9c9627159f8e3d368763772fa050ce97ff95d46c84",
+  "typedKeys": {
+    "commit": "gitc:49a95d01b88d18cbaa418e805fbfc90cf1bb22e6",
+    "parent": "gitc:77cf5e2b486c1d7d74b2f86a30b18849b2d04d6e",
+    "pulse": "ctp1:49a95d01b88d18cbaa418e805fbfc90cf1bb22e6:da1e9691db966d95",
+    "translation": "cttrans:c606eb3298f35d920a295f9c9627159f8e3d368763772fa050ce97ff95d46c84",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "49a95d01b88d18cbaa418e805fbfc90cf1bb22e6",
+    "parentSha": "77cf5e2b486c1d7d74b2f86a30b18849b2d04d6e",
+    "committedAt": "2026-09-02T03:33:20+02:00",
+    "summary": {
+      "subject": "gthink: add ping pong alter-ego infinite health blob loop",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 30,
+      "deletions": 0,
+      "paths": [
+        "scripts/gthink-ping-pong-alter-ego-loop.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 30,
+      "deletions": 0,
+      "magnitude": 30,
+      "committedAt": "2026-09-02T03:33:20+02:00",
+      "parentSha": "77cf5e2b486c1d7d74b2f86a30b18849b2d04d6e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/49a95d01b88d18cbaa418e805fbfc90cf1bb22e6.json",
+      "vfsKey": "CTP1:49a95d01b88d18cbaa418e805fbfc90cf1bb22e6:da1e9691db966d95",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/49a95d01b88d18cbaa418e805fbfc90cf1bb22e6.json"
+}
