@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "97a71e124d75e5175b5a89a63e0b5466c53f3cac",
+  "parentSha": "e6b46a923ee948fe8d1c76ce92db5c06b7d0202c",
+  "committedAt": "2026-09-02T02:10:55+02:00",
+  "summary": {
+    "subject": "Route scan and turret tasks to blob linker branch",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 3,
+    "deletions": 2,
+    "paths": [
+      "gthink/second-kernel/blob/second-kernel-adapter.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 3,
+    "deletions": 2,
+    "magnitude": 5,
+    "committedAt": "2026-09-02T02:10:55+02:00",
+    "parentSha": "e6b46a923ee948fe8d1c76ce92db5c06b7d0202c"
+  },
+  "pulseKey": "CTP1:97a71e124d75e5175b5a89a63e0b5466c53f3cac:b8520d51e20aa333",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "123d17688c65bd8a30b46b36b25309f21076d0d76882e5f5656beedcc042b9c5",
+  "typedKeys": {
+    "commit": "gitc:97a71e124d75e5175b5a89a63e0b5466c53f3cac",
+    "parent": "gitc:e6b46a923ee948fe8d1c76ce92db5c06b7d0202c",
+    "pulse": "ctp1:97a71e124d75e5175b5a89a63e0b5466c53f3cac:b8520d51e20aa333",
+    "translation": "cttrans:123d17688c65bd8a30b46b36b25309f21076d0d76882e5f5656beedcc042b9c5",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "97a71e124d75e5175b5a89a63e0b5466c53f3cac",
+    "parentSha": "e6b46a923ee948fe8d1c76ce92db5c06b7d0202c",
+    "committedAt": "2026-09-02T02:10:55+02:00",
+    "summary": {
+      "subject": "Route scan and turret tasks to blob linker branch",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 3,
+      "deletions": 2,
+      "paths": [
+        "gthink/second-kernel/blob/second-kernel-adapter.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 3,
+      "deletions": 2,
+      "magnitude": 5,
+      "committedAt": "2026-09-02T02:10:55+02:00",
+      "parentSha": "e6b46a923ee948fe8d1c76ce92db5c06b7d0202c"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/97a71e124d75e5175b5a89a63e0b5466c53f3cac.json",
+      "vfsKey": "CTP1:97a71e124d75e5175b5a89a63e0b5466c53f3cac:b8520d51e20aa333",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/97a71e124d75e5175b5a89a63e0b5466c53f3cac.json"
+}
