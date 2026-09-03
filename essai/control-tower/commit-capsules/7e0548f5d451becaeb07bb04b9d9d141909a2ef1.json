@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "7e0548f5d451becaeb07bb04b9d9d141909a2ef1",
+  "parentSha": "8dafb96ee5a43d5cb0e4343ea6372350eb3ba88a",
+  "committedAt": "2026-09-04T00:27:01+02:00",
+  "summary": {
+    "subject": "Harden public changelog aggregation against concurrent writes",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 22,
+    "deletions": 8,
+    "paths": [
+      ".github/workflows/gvault-unified-git-changelog.yml"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 22,
+    "deletions": 8,
+    "magnitude": 30,
+    "committedAt": "2026-09-04T00:27:01+02:00",
+    "parentSha": "8dafb96ee5a43d5cb0e4343ea6372350eb3ba88a"
+  },
+  "pulseKey": "CTP1:7e0548f5d451becaeb07bb04b9d9d141909a2ef1:409f8df810156b8d",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "da220ed2bdd8fa072a41ef4f292663d69962360d17f383647c43d7f3dfe14bd6",
+  "typedKeys": {
+    "commit": "gitc:7e0548f5d451becaeb07bb04b9d9d141909a2ef1",
+    "parent": "gitc:8dafb96ee5a43d5cb0e4343ea6372350eb3ba88a",
+    "pulse": "ctp1:7e0548f5d451becaeb07bb04b9d9d141909a2ef1:409f8df810156b8d",
+    "translation": "cttrans:da220ed2bdd8fa072a41ef4f292663d69962360d17f383647c43d7f3dfe14bd6",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "7e0548f5d451becaeb07bb04b9d9d141909a2ef1",
+    "parentSha": "8dafb96ee5a43d5cb0e4343ea6372350eb3ba88a",
+    "committedAt": "2026-09-04T00:27:01+02:00",
+    "summary": {
+      "subject": "Harden public changelog aggregation against concurrent writes",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 22,
+      "deletions": 8,
+      "paths": [
+        ".github/workflows/gvault-unified-git-changelog.yml"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 22,
+      "deletions": 8,
+      "magnitude": 30,
+      "committedAt": "2026-09-04T00:27:01+02:00",
+      "parentSha": "8dafb96ee5a43d5cb0e4343ea6372350eb3ba88a"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/7e0548f5d451becaeb07bb04b9d9d141909a2ef1.json",
+      "vfsKey": "CTP1:7e0548f5d451becaeb07bb04b9d9d141909a2ef1:409f8df810156b8d",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/7e0548f5d451becaeb07bb04b9d9d141909a2ef1.json"
+}
