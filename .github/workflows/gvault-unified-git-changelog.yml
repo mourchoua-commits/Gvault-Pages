@@ -23,6 +23,7 @@ jobs:
       - name: Checkout complete history
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
 
       - name: Setup Node
@@ -44,15 +45,28 @@ jobs:
       - name: Playwright public-feed guard
         run: npx playwright test tests/gvault-git-changelog-feed.spec.mjs --config=playwright.config.mjs
 
-      - name: Commit refreshed public projection
+      - name: Rebase, regenerate, reverify and publish latest projection
         shell: bash
         run: |
+          set -euo pipefail
           git config user.name 'gvault-unifier-bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add publications/git-changelog/index.json
-          if git diff --cached --quiet; then
-            echo 'No unified index change.'
-            exit 0
-          fi
-          git commit -m 'chore(gthink-blob): refresh public unified git changelog [skip ci]'
-          git push
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            node scripts/gvault-unify-git-changelog.mjs --visibility public --output publications/git-changelog/index.json
+            node scripts/gvault-unify-git-changelog.mjs --visibility public --output publications/git-changelog/index.json --verify-only
+            npx playwright test tests/gvault-git-changelog-feed.spec.mjs --config=playwright.config.mjs
+            git add publications/git-changelog/index.json
+            if git diff --cached --quiet; then
+              echo 'No unified index change.'
+              exit 0
+            fi
+            git commit -m 'chore(gthink-blob): refresh public unified git changelog [skip ci]'
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Concurrent main update detected; retry ${attempt}/3"
+          done
+          echo 'Unable to publish after 3 current-main retries.' >&2
+          exit 1
