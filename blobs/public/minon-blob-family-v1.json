@@ -1,0 +1,44 @@
+{
+  "schema": "GVAULT_PUBLIC_IMAGE_BLOB_V1",
+  "status": "PUBLIC",
+  "blobId": "imgblob:sha256:21dd6a4140ca684afc720c6360146a5696377ba85cda1dd1ffa5bcdff4083473",
+  "title": "Famille de minon-blobs pastel",
+  "aliases": ["miblob", "minon-blob", "minon-blobs"],
+  "kind": "image_blob",
+  "routeHead": "GThink",
+  "availability": "PUBLIC_GVAULT",
+  "origin": {
+    "type": "CHATGPT_GENERATED_IMAGE",
+    "sourceSha256": "21dd6a4140ca684afc720c6360146a5696377ba85cda1dd1ffa5bcdff4083473",
+    "sourceMime": "image/png",
+    "sourceDimensions": [1254, 1254],
+    "decodedRgbaSha256": "c7130e1c8b6237d0a4b2fcdd4ab74f000680afa5c6bc990ea0e3df9cd4ac77aa"
+  },
+  "publicAsset": {
+    "repository": "mourchoua-commits/Gvault-Pages",
+    "path": "blobs/public/assets/minon-blob-family-v1.webp",
+    "mime": "image/webp",
+    "dimensions": [768, 768],
+    "bytes": 62014,
+    "sha256": "d49075169ffb60e58109e0fc8ed97b0e1dc262fd5603d9a95121dd0bf4bd8d3c"
+  },
+  "pixelBlobContract": {
+    "enabled": true,
+    "count": 1572516,
+    "materialization": "deterministic-lazy",
+    "coordinateOrigin": "top-left",
+    "channels": ["r", "g", "b", "a"],
+    "idRule": "sha256(parentBlobId + ':' + x + ':' + y + ':' + r + ':' + g + ':' + b + ':' + a)"
+  },
+  "sharing": {
+    "visibility": "public",
+    "access": "PUBLIC_READ",
+    "gvaultUse": ["view", "reference", "derive"],
+    "canonicalSourceMutation": false
+  },
+  "provenance": {
+    "userReportedPublication": "Instagram",
+    "publicEvidencePolicy": "USER_SCREENSHOT_NOT_REPUBLISHED",
+    "note": "The Instagram screenshot supplied by the user is retained outside the public asset; only the blob artwork is published."
+  }
+}
