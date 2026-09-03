@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "03b6dc605eafa2636f95f708f1237e47d1a52860",
+  "parentSha": "e16a2b685f503f445eaf089b1239d5eab278a707",
+  "committedAt": "2026-09-04T00:29:09+02:00",
+  "summary": {
+    "subject": "feat(gthink): publish sanitized private peer heartbeat",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 32,
+    "deletions": 0,
+    "paths": [
+      "publications/gthink-peer/private-sanitized-heartbeat.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 32,
+    "deletions": 0,
+    "magnitude": 32,
+    "committedAt": "2026-09-04T00:29:09+02:00",
+    "parentSha": "e16a2b685f503f445eaf089b1239d5eab278a707"
+  },
+  "pulseKey": "CTP1:03b6dc605eafa2636f95f708f1237e47d1a52860:9c428f1ccf5e2184",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "6a7d5c07a5a88499bbe4995a99bb5afcb4fca1f1e467bf0ea453e1d486cedbed",
+  "typedKeys": {
+    "commit": "gitc:03b6dc605eafa2636f95f708f1237e47d1a52860",
+    "parent": "gitc:e16a2b685f503f445eaf089b1239d5eab278a707",
+    "pulse": "ctp1:03b6dc605eafa2636f95f708f1237e47d1a52860:9c428f1ccf5e2184",
+    "translation": "cttrans:6a7d5c07a5a88499bbe4995a99bb5afcb4fca1f1e467bf0ea453e1d486cedbed",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "03b6dc605eafa2636f95f708f1237e47d1a52860",
+    "parentSha": "e16a2b685f503f445eaf089b1239d5eab278a707",
+    "committedAt": "2026-09-04T00:29:09+02:00",
+    "summary": {
+      "subject": "feat(gthink): publish sanitized private peer heartbeat",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 32,
+      "deletions": 0,
+      "paths": [
+        "publications/gthink-peer/private-sanitized-heartbeat.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 32,
+      "deletions": 0,
+      "magnitude": 32,
+      "committedAt": "2026-09-04T00:29:09+02:00",
+      "parentSha": "e16a2b685f503f445eaf089b1239d5eab278a707"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/03b6dc605eafa2636f95f708f1237e47d1a52860.json",
+      "vfsKey": "CTP1:03b6dc605eafa2636f95f708f1237e47d1a52860:9c428f1ccf5e2184",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/03b6dc605eafa2636f95f708f1237e47d1a52860.json"
+}
