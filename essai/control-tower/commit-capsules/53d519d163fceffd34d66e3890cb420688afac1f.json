@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "53d519d163fceffd34d66e3890cb420688afac1f",
+  "parentSha": "a0fd98cf509850a0c03af3a7f6dcb7254a0a1458",
+  "committedAt": "2026-09-04T00:45:18+02:00",
+  "summary": {
+    "subject": "feat(gthink): project dual-core Playwright dialogue blob",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 42,
+    "deletions": 0,
+    "paths": [
+      "blobs/runtime/GTHINK_DUAL_CORE_PLAYWRIGHT_DIALOGUE_BLOB_V1.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 42,
+    "deletions": 0,
+    "magnitude": 42,
+    "committedAt": "2026-09-04T00:45:18+02:00",
+    "parentSha": "a0fd98cf509850a0c03af3a7f6dcb7254a0a1458"
+  },
+  "pulseKey": "CTP1:53d519d163fceffd34d66e3890cb420688afac1f:6f45655a2d65bd50",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "0b76522c01676aedfddbc4d8c91b6a536d23bd868a3a550c24bc8ba001ba1531",
+  "typedKeys": {
+    "commit": "gitc:53d519d163fceffd34d66e3890cb420688afac1f",
+    "parent": "gitc:a0fd98cf509850a0c03af3a7f6dcb7254a0a1458",
+    "pulse": "ctp1:53d519d163fceffd34d66e3890cb420688afac1f:6f45655a2d65bd50",
+    "translation": "cttrans:0b76522c01676aedfddbc4d8c91b6a536d23bd868a3a550c24bc8ba001ba1531",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "53d519d163fceffd34d66e3890cb420688afac1f",
+    "parentSha": "a0fd98cf509850a0c03af3a7f6dcb7254a0a1458",
+    "committedAt": "2026-09-04T00:45:18+02:00",
+    "summary": {
+      "subject": "feat(gthink): project dual-core Playwright dialogue blob",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 42,
+      "deletions": 0,
+      "paths": [
+        "blobs/runtime/GTHINK_DUAL_CORE_PLAYWRIGHT_DIALOGUE_BLOB_V1.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 42,
+      "deletions": 0,
+      "magnitude": 42,
+      "committedAt": "2026-09-04T00:45:18+02:00",
+      "parentSha": "a0fd98cf509850a0c03af3a7f6dcb7254a0a1458"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/53d519d163fceffd34d66e3890cb420688afac1f.json",
+      "vfsKey": "CTP1:53d519d163fceffd34d66e3890cb420688afac1f:6f45655a2d65bd50",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/53d519d163fceffd34d66e3890cb420688afac1f.json"
+}
