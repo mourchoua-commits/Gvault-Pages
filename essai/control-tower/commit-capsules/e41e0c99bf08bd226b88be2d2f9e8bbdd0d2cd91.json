@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "e41e0c99bf08bd226b88be2d2f9e8bbdd0d2cd91",
+  "parentSha": "f042d6421bc785b3c38fb6a5cb61358fe76e6566",
+  "committedAt": "2026-09-04T00:23:25+02:00",
+  "summary": {
+    "subject": "Add public GThink Playwright changelog unification workflow",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 58,
+    "deletions": 0,
+    "paths": [
+      ".github/workflows/gvault-unified-git-changelog.yml"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 58,
+    "deletions": 0,
+    "magnitude": 58,
+    "committedAt": "2026-09-04T00:23:25+02:00",
+    "parentSha": "f042d6421bc785b3c38fb6a5cb61358fe76e6566"
+  },
+  "pulseKey": "CTP1:e41e0c99bf08bd226b88be2d2f9e8bbdd0d2cd91:8ec6ff080f8e98ef",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "94ca5fa25944bec5d311e3ca74ea8c2bfc31da4f722f5bb37897ea9aa3a83bc0",
+  "typedKeys": {
+    "commit": "gitc:e41e0c99bf08bd226b88be2d2f9e8bbdd0d2cd91",
+    "parent": "gitc:f042d6421bc785b3c38fb6a5cb61358fe76e6566",
+    "pulse": "ctp1:e41e0c99bf08bd226b88be2d2f9e8bbdd0d2cd91:8ec6ff080f8e98ef",
+    "translation": "cttrans:94ca5fa25944bec5d311e3ca74ea8c2bfc31da4f722f5bb37897ea9aa3a83bc0",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "e41e0c99bf08bd226b88be2d2f9e8bbdd0d2cd91",
+    "parentSha": "f042d6421bc785b3c38fb6a5cb61358fe76e6566",
+    "committedAt": "2026-09-04T00:23:25+02:00",
+    "summary": {
+      "subject": "Add public GThink Playwright changelog unification workflow",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 58,
+      "deletions": 0,
+      "paths": [
+        ".github/workflows/gvault-unified-git-changelog.yml"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 58,
+      "deletions": 0,
+      "magnitude": 58,
+      "committedAt": "2026-09-04T00:23:25+02:00",
+      "parentSha": "f042d6421bc785b3c38fb6a5cb61358fe76e6566"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/e41e0c99bf08bd226b88be2d2f9e8bbdd0d2cd91.json",
+      "vfsKey": "CTP1:e41e0c99bf08bd226b88be2d2f9e8bbdd0d2cd91:8ec6ff080f8e98ef",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/e41e0c99bf08bd226b88be2d2f9e8bbdd0d2cd91.json"
+}
