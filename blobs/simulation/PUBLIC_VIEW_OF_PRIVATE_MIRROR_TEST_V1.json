@@ -1,0 +1,18 @@
+{
+  "schema": "GVAULT_PUBLIC_VIEW_OF_PRIVATE_MIRROR_TEST_V1",
+  "type": "mirror_blob",
+  "direction": "PRIVATE_TO_PUBLIC",
+  "synthetic": true,
+  "sanitized": true,
+  "sourceClass": "PRIVATE_GVAULT_STATE_SUMMARY",
+  "message": "Le privé signale un état de test miroir disponible. Aucun verbatim, secret, contenu brut ou donnée privée n'est exporté.",
+  "allowedFields": ["schema","type","direction","synthetic","sanitized","sourceClass","message","correlationId"],
+  "correlationId": "MIRROR-PUB-PRIV-V1",
+  "rules": [
+    "NO_RAW_PRIVATE_CONTENT",
+    "NO_VERBATIM",
+    "NO_SECRET",
+    "STATUS_SUMMARY_ONLY",
+    "TEST_ONLY_NO_RUNTIME_GRAFT"
+  ]
+}
