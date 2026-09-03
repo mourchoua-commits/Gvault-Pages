@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "8add1bb3a493ea0aae779d60e0da81809319892e",
+  "parentSha": "e41e0c99bf08bd226b88be2d2f9e8bbdd0d2cd91",
+  "committedAt": "2026-09-04T00:23:34+02:00",
+  "summary": {
+    "subject": "Add Playwright guard for public commit/changelog feed",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 45,
+    "deletions": 0,
+    "paths": [
+      "tests/gvault-git-changelog-feed.spec.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 45,
+    "deletions": 0,
+    "magnitude": 45,
+    "committedAt": "2026-09-04T00:23:34+02:00",
+    "parentSha": "e41e0c99bf08bd226b88be2d2f9e8bbdd0d2cd91"
+  },
+  "pulseKey": "CTP1:8add1bb3a493ea0aae779d60e0da81809319892e:f6bf44e64d36126f",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "81b4a4e2424e3e38fcf7db35547891ac3a03840a2d74e6d38ad9d8e4e4b86d17",
+  "typedKeys": {
+    "commit": "gitc:8add1bb3a493ea0aae779d60e0da81809319892e",
+    "parent": "gitc:e41e0c99bf08bd226b88be2d2f9e8bbdd0d2cd91",
+    "pulse": "ctp1:8add1bb3a493ea0aae779d60e0da81809319892e:f6bf44e64d36126f",
+    "translation": "cttrans:81b4a4e2424e3e38fcf7db35547891ac3a03840a2d74e6d38ad9d8e4e4b86d17",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "8add1bb3a493ea0aae779d60e0da81809319892e",
+    "parentSha": "e41e0c99bf08bd226b88be2d2f9e8bbdd0d2cd91",
+    "committedAt": "2026-09-04T00:23:34+02:00",
+    "summary": {
+      "subject": "Add Playwright guard for public commit/changelog feed",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 45,
+      "deletions": 0,
+      "paths": [
+        "tests/gvault-git-changelog-feed.spec.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 45,
+      "deletions": 0,
+      "magnitude": 45,
+      "committedAt": "2026-09-04T00:23:34+02:00",
+      "parentSha": "e41e0c99bf08bd226b88be2d2f9e8bbdd0d2cd91"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/8add1bb3a493ea0aae779d60e0da81809319892e.json",
+      "vfsKey": "CTP1:8add1bb3a493ea0aae779d60e0da81809319892e:f6bf44e64d36126f",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/8add1bb3a493ea0aae779d60e0da81809319892e.json"
+}
