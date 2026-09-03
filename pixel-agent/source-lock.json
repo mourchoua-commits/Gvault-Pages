@@ -1,0 +1,36 @@
+{
+  "schema": "GVAULT_PAGES_PIXEL_AGENT_SOURCE_LOCK_V1",
+  "version": "1.0.0",
+  "status": "PINNED_COMMIT_ACTIVE",
+  "source": {
+    "repository": "mourchoua-commits/Gvault",
+    "commitSha": "d6bfe2e3d037a8a21fa36e9890a281de0e1f0a51",
+    "commitMessage": "recover(pixel-agent): rebuild lineage from alpha 0.55 with exact-byte evidence",
+    "floatingBranchAllowed": false,
+    "refPolicy": "COMMIT_SHA_ONLY"
+  },
+  "pixelAgent": {
+    "relationship": "SIBLING_LINEAGES",
+    "paa": {
+      "version": "ALPHA 2.51",
+      "filename": "pixel_agent_arena_alpha_2_51_mobile_setup_brave_fix.html",
+      "bytes": 1027020,
+      "sha256": "11d47422a94adbea1e592b3175876964992299754ffe25a604f41ea7070e3402",
+      "exactBytesRecovered": true
+    },
+    "infinite": {
+      "version": "TRIAL 0.86",
+      "filename": "pixel_agent_infinite_trial_v0_86_adaptive_enemies_mirror50.html",
+      "bytes": 350596,
+      "sha256": "5b6ba8522eb4ff107e6d33e986c0c662763ee4de7947a40fe9478edc0faf1d12",
+      "exactBytesRecovered": true
+    }
+  },
+  "guards": [
+    "NO_FLOATING_MAIN_SOURCE",
+    "NO_BUILD_PROMOTION_WITHOUT_SHA256_MATCH",
+    "KEEP_PAA_AND_INFINITE_SEPARATE",
+    "GVAULT_PRIVATE_COMMIT_REMAINS_SOURCE_AUTHORITY",
+    "GVAULT_PAGES_IS_PUBLIC_PROJECTION"
+  ]
+}
