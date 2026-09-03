@@ -1,0 +1,74 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "796716a6e69b98a67cdde0f343936f13e311e573",
+  "parentSha": "59eccab4daa39e4510513edcb861d11e1196a7fa",
+  "committedAt": "2026-09-03T03:29:36+02:00",
+  "summary": {
+    "subject": "feat(public-blobs): publish minon-blob family artwork",
+    "intent": "Make the shared minon-blob family artwork publicly readable in the GVault public plane while preserving its source hash and GThink/image-blob lineage.",
+    "workSpecial": "",
+    "changedFiles": 2,
+    "additions": 44,
+    "deletions": 0,
+    "paths": [
+      "blobs/public/assets/minon-blob-family-v1.webp",
+      "blobs/public/minon-blob-family-v1.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 2,
+    "additions": 44,
+    "deletions": 0,
+    "magnitude": 44,
+    "committedAt": "2026-09-03T03:29:36+02:00",
+    "parentSha": "59eccab4daa39e4510513edcb861d11e1196a7fa"
+  },
+  "pulseKey": "CTP1:796716a6e69b98a67cdde0f343936f13e311e573:e5d6976d37dc8d53",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "0b3abb0e7c3789869a992862bc4475977f431348680e9b950754e6e3ed4a9637",
+  "typedKeys": {
+    "commit": "gitc:796716a6e69b98a67cdde0f343936f13e311e573",
+    "parent": "gitc:59eccab4daa39e4510513edcb861d11e1196a7fa",
+    "pulse": "ctp1:796716a6e69b98a67cdde0f343936f13e311e573:e5d6976d37dc8d53",
+    "translation": "cttrans:0b3abb0e7c3789869a992862bc4475977f431348680e9b950754e6e3ed4a9637",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "796716a6e69b98a67cdde0f343936f13e311e573",
+    "parentSha": "59eccab4daa39e4510513edcb861d11e1196a7fa",
+    "committedAt": "2026-09-03T03:29:36+02:00",
+    "summary": {
+      "subject": "feat(public-blobs): publish minon-blob family artwork",
+      "intent": "Make the shared minon-blob family artwork publicly readable in the GVault public plane while preserving its source hash and GThink/image-blob lineage.",
+      "workSpecial": "",
+      "changedFiles": 2,
+      "additions": 44,
+      "deletions": 0,
+      "paths": [
+        "blobs/public/assets/minon-blob-family-v1.webp",
+        "blobs/public/minon-blob-family-v1.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 2,
+      "additions": 44,
+      "deletions": 0,
+      "magnitude": 44,
+      "committedAt": "2026-09-03T03:29:36+02:00",
+      "parentSha": "59eccab4daa39e4510513edcb861d11e1196a7fa"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/796716a6e69b98a67cdde0f343936f13e311e573.json",
+      "vfsKey": "CTP1:796716a6e69b98a67cdde0f343936f13e311e573:e5d6976d37dc8d53",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/796716a6e69b98a67cdde0f343936f13e311e573.json"
+}
