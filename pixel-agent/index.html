@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Pixel Agent · Gvault Pages</title>
+  <style>
+    :root{color-scheme:dark;background:#080b10;color:#edf2f7;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 0,#182131 0,#080b10 48%,#050609 100%)}
+    main{width:min(760px,calc(100% - 28px));margin:0 auto;padding:32px 0 48px}.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9aa8ba}
+    h1{margin:8px 0 8px;font-size:clamp(30px,9vw,56px);line-height:1}.lead{margin:0 0 22px;color:#bac5d3;line-height:1.55}
+    .status{display:inline-flex;gap:8px;align-items:center;padding:7px 10px;border:1px solid #344154;border-radius:999px;font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:#8ff0ae;box-shadow:0 0 14px #8ff0ae}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:20px}.card{padding:16px;border:1px solid #293445;border-radius:16px;background:#0d121aeb}
+    .card h2{font-size:17px;margin:0 0 8px}.kv{display:grid;grid-template-columns:auto 1fr;gap:5px 10px;font-size:12px}.kv b{color:#94a3b8}.kv span{overflow-wrap:anywhere}
+    code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#dce8f7}.proof{margin-top:16px;padding:14px;border-left:3px solid #65758a;background:#0a0f16;color:#aeb9c8;font-size:12px;line-height:1.5}
+    a{color:#bcd9ff}.error{color:#ffb4b4}
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Gvault Pages · Pixel Agent</div>
+  <h1>Pixel Agent</h1>
+  <p class="lead">Projection publique verrouillée sur un commit Gvault exact. Aucun suivi automatique de <code>main</code>.</p>
+  <div class="status"><span class="dot"></span><span id="state">Chargement du verrou…</span></div>
+  <div id="cards" class="grid"></div>
+  <div id="proof" class="proof"></div>
+</main>
+<script>
+(async()=>{
+  const state=document.getElementById('state'),cards=document.getElementById('cards'),proof=document.getElementById('proof');
+  try{
+    const r=await fetch('./source-lock.json',{cache:'no-store'}); if(!r.ok) throw new Error('source-lock '+r.status);
+    const lock=await r.json();
+    const commit=lock.source.commitSha;
+    state.textContent='PINNED · '+commit.slice(0,12);
+    const entries=[['PIXEL AGENT ARENA',lock.pixelAgent.paa],['PIXEL AGENT // INFINITE',lock.pixelAgent.infinite]];
+    for(const [name,x] of entries){
+      const el=document.createElement('section');el.className='card';
+      el.innerHTML='<h2>'+name+'</h2><div class="kv"><b>Version</b><span>'+x.version+'</span><b>Fichier</b><span>'+x.filename+'</span><b>Octets</b><span>'+x.bytes+'</span><b>SHA-256</b><span><code>'+x.sha256+'</code></span></div>';
+      cards.appendChild(el);
+    }
+    const href='https://github.com/'+lock.source.repository+'/commit/'+commit;
+    proof.innerHTML='Source d’autorité : <a href="'+href+'"><code>'+commit+'</code></a><br>Politique : <code>'+lock.source.refPolicy+'</code> · branche flottante : <code>'+String(lock.source.floatingBranchAllowed)+'</code>';
+    window.GVAULT_PIXEL_AGENT_SOURCE_LOCK=Object.freeze(lock);
+  }catch(e){state.textContent='SOURCE LOCK ERROR';state.classList.add('error');proof.textContent=String(e);}
+})();
+</script>
+</body>
+</html>
