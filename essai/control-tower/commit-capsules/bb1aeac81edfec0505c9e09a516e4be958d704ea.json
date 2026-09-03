@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "bb1aeac81edfec0505c9e09a516e4be958d704ea",
+  "parentSha": "f3f741b8b050221b9850a274d18ddcc361270c0e",
+  "committedAt": "2026-09-04T00:45:47+02:00",
+  "summary": {
+    "subject": "test(gthink): add dual-core Playwright blob dialogue",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 235,
+    "deletions": 0,
+    "paths": [
+      "tests/gthink-dual-core-dialogue.spec.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 235,
+    "deletions": 0,
+    "magnitude": 235,
+    "committedAt": "2026-09-04T00:45:47+02:00",
+    "parentSha": "f3f741b8b050221b9850a274d18ddcc361270c0e"
+  },
+  "pulseKey": "CTP1:bb1aeac81edfec0505c9e09a516e4be958d704ea:89a20a18123d45de",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "b2a13d988e605f22f3522d093724a255ce7209975a63a50e1e2ae90fee8f34fc",
+  "typedKeys": {
+    "commit": "gitc:bb1aeac81edfec0505c9e09a516e4be958d704ea",
+    "parent": "gitc:f3f741b8b050221b9850a274d18ddcc361270c0e",
+    "pulse": "ctp1:bb1aeac81edfec0505c9e09a516e4be958d704ea:89a20a18123d45de",
+    "translation": "cttrans:b2a13d988e605f22f3522d093724a255ce7209975a63a50e1e2ae90fee8f34fc",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "bb1aeac81edfec0505c9e09a516e4be958d704ea",
+    "parentSha": "f3f741b8b050221b9850a274d18ddcc361270c0e",
+    "committedAt": "2026-09-04T00:45:47+02:00",
+    "summary": {
+      "subject": "test(gthink): add dual-core Playwright blob dialogue",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 235,
+      "deletions": 0,
+      "paths": [
+        "tests/gthink-dual-core-dialogue.spec.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 235,
+      "deletions": 0,
+      "magnitude": 235,
+      "committedAt": "2026-09-04T00:45:47+02:00",
+      "parentSha": "f3f741b8b050221b9850a274d18ddcc361270c0e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/bb1aeac81edfec0505c9e09a516e4be958d704ea.json",
+      "vfsKey": "CTP1:bb1aeac81edfec0505c9e09a516e4be958d704ea:89a20a18123d45de",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/bb1aeac81edfec0505c9e09a516e4be958d704ea.json"
+}
