@@ -1,0 +1,45 @@
+name: GThink Public Peer Observer
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/gthink-peer-observer-public.yml'
+      - 'blobs/runtime/PUBLIC_PEER_OBSERVER_BLOB_V1.json'
+      - 'publications/gthink-peer/public-heartbeat.json'
+      - 'publications/gthink-peer/private-sanitized-heartbeat.json'
+      - 'tests/gthink-peer-observer-public.spec.mjs'
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gthink-public-peer-observer
+  cancel-in-progress: true
+
+jobs:
+  observe-private-sanitized-peer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm install --no-save @playwright/test@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Public blob observes private sanitized blob
+        run: npx playwright test tests/gthink-peer-observer-public.spec.mjs --config=playwright.config.mjs
+      - name: Upload observation proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gthink-public-peer-observation
+          path: /tmp/gthink-public-peer-observation.json
+          if-no-files-found: warn
+          retention-days: 7
