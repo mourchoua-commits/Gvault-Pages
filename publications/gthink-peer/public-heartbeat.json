@@ -1,0 +1,17 @@
+{
+  "schema": "GVAULT_GTHINK_PUBLIC_HEARTBEAT_V1",
+  "blobId": "blob:gvault:gthink-public-peer-observer:v1",
+  "status": "READY",
+  "visibility": "PUBLIC",
+  "correlationId": "GTHINK-MUTUAL-OBSERVATION-V1",
+  "observerCommit": "4faf6f9c128ea5264036b30b756ac478310f1894",
+  "capabilities": [
+    "OBSERVE_PRIVATE_SANITIZED_HEARTBEAT",
+    "EMIT_PUBLIC_HEARTBEAT",
+    "KEEP_PUBLIC_CORE_AUTONOMOUS"
+  ],
+  "peerContract": {
+    "expectedDirection": "PRIVATE_TO_PUBLIC",
+    "requiresSanitized": true
+  }
+}
