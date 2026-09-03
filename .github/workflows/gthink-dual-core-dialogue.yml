@@ -1,0 +1,45 @@
+name: GThink Dual-Core Playwright Dialogue Blob
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/gthink-dual-core-dialogue.yml'
+      - 'blobs/runtime/GTHINK_DUAL_CORE_PLAYWRIGHT_DIALOGUE_BLOB_V1.json'
+      - 'publications/gthink-peer/public-heartbeat.json'
+      - 'publications/gthink-peer/private-sanitized-heartbeat.json'
+      - 'tests/gthink-dual-core-dialogue.spec.mjs'
+  schedule:
+    - cron: '11,26,41,56 * * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gthink-dual-core-playwright-dialogue
+  cancel-in-progress: true
+
+jobs:
+  dialogue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm install --no-save @playwright/test@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Run dual-core blob dialogue
+        run: npx playwright test tests/gthink-dual-core-dialogue.spec.mjs --config=playwright.config.mjs
+      - name: Upload dialogue proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gthink-dual-core-dialogue-proof
+          path: /tmp/gthink-dual-core-dialogue-proof.json
+          if-no-files-found: warn
+          retention-days: 7
