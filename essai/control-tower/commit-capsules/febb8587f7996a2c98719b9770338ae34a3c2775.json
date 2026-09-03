@@ -1,0 +1,74 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "febb8587f7996a2c98719b9770338ae34a3c2775",
+  "parentSha": "9b8b732c053a5b7fea1ce77e1329fb40625227de",
+  "committedAt": "2026-09-03T03:33:22+02:00",
+  "summary": {
+    "subject": "fix(public-blobs): publish intact minon-blob derivative",
+    "intent": "Replace the truncated public derivative with a verified 384px WebP and align its GThink public manifest with the actual bytes.",
+    "workSpecial": "",
+    "changedFiles": 2,
+    "additions": 3,
+    "deletions": 3,
+    "paths": [
+      "blobs/public/assets/minon-blob-family-v1.webp",
+      "blobs/public/minon-blob-family-v1.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 2,
+    "additions": 3,
+    "deletions": 3,
+    "magnitude": 6,
+    "committedAt": "2026-09-03T03:33:22+02:00",
+    "parentSha": "9b8b732c053a5b7fea1ce77e1329fb40625227de"
+  },
+  "pulseKey": "CTP1:febb8587f7996a2c98719b9770338ae34a3c2775:7de3521e22e5e0d3",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "631e0692f1b07aebf4c02dac46d16b3eedddf14f9716be43c50ef0e6cc139193",
+  "typedKeys": {
+    "commit": "gitc:febb8587f7996a2c98719b9770338ae34a3c2775",
+    "parent": "gitc:9b8b732c053a5b7fea1ce77e1329fb40625227de",
+    "pulse": "ctp1:febb8587f7996a2c98719b9770338ae34a3c2775:7de3521e22e5e0d3",
+    "translation": "cttrans:631e0692f1b07aebf4c02dac46d16b3eedddf14f9716be43c50ef0e6cc139193",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "febb8587f7996a2c98719b9770338ae34a3c2775",
+    "parentSha": "9b8b732c053a5b7fea1ce77e1329fb40625227de",
+    "committedAt": "2026-09-03T03:33:22+02:00",
+    "summary": {
+      "subject": "fix(public-blobs): publish intact minon-blob derivative",
+      "intent": "Replace the truncated public derivative with a verified 384px WebP and align its GThink public manifest with the actual bytes.",
+      "workSpecial": "",
+      "changedFiles": 2,
+      "additions": 3,
+      "deletions": 3,
+      "paths": [
+        "blobs/public/assets/minon-blob-family-v1.webp",
+        "blobs/public/minon-blob-family-v1.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 2,
+      "additions": 3,
+      "deletions": 3,
+      "magnitude": 6,
+      "committedAt": "2026-09-03T03:33:22+02:00",
+      "parentSha": "9b8b732c053a5b7fea1ce77e1329fb40625227de"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/febb8587f7996a2c98719b9770338ae34a3c2775.json",
+      "vfsKey": "CTP1:febb8587f7996a2c98719b9770338ae34a3c2775:7de3521e22e5e0d3",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/febb8587f7996a2c98719b9770338ae34a3c2775.json"
+}
