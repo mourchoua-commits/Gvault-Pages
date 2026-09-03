@@ -1,0 +1,52 @@
+{
+  "schema": "GVAULT_DUAL_CORE_CHATGPT_IMAGE_BLOB_PACK_V1",
+  "version": "1.0.0-public",
+  "status": "ACTIVE_ADDITIVE_CHATGPT_HOST_BRIDGE",
+  "purpose": "Greffe publique du routage image GVault : détection explicite, contexte double-cœur, déclenchement post-réponse et liaison du résultat, sans remplacer l'exécuteur image natif de ChatGPT.",
+  "authority": {
+    "firstCore": "GThink + Method Router keep intent/routing authority",
+    "secondCore": "Public Capture/page proof, context, target validation and result linkage",
+    "hostExecutor": "CHATGPT_NATIVE_IMAGE_GENERATION",
+    "singleInvocationRule": true,
+    "repositoryCannotReplaceHostExecutor": true
+  },
+  "routing": {
+    "implicitVisualTermsDoNotTriggerHostGeneration": true,
+    "explicitGenerationRequires": [
+      "direct drawing/painting intent OR create/generate/make intent paired with an image subject",
+      "GThink route present",
+      "public page/context proof available"
+    ],
+    "imageEditRequiresUsableTarget": true,
+    "selfRenditionRequiresUserImage": true,
+    "missingTargetState": "TARGET_REQUIRED",
+    "missingUserImageState": "USER_IMAGE_REQUIRED"
+  },
+  "dualCoreFlow": [
+    "PUBLIC_REQUEST_OBSERVED",
+    "FIRST_CORE_IMAGE_INTENT_CANDIDATE_VERIFIED",
+    "SECOND_CORE_PUBLIC_CONTEXT_READY",
+    "ASSISTANT_RESPONSE_OBSERVED",
+    "POST_RESPONSE_IMAGE_READY",
+    "CHATGPT_NATIVE_IMAGE_GENERATION_HOST_HANDOFF",
+    "RESULT_CAPTURE_LINKED"
+  ],
+  "publicRuntime": "scripts/gvault-public-image-bridge.js",
+  "loadedBy": "scripts/gvault-public-page-blob.js",
+  "events": [
+    "gvault:public-image-bridge-ready",
+    "gvault:post-response-image-ready",
+    "gvault:host-image-result",
+    "gvault:post-response-image-linked"
+  ],
+  "boundaries": {
+    "postResponseOnly": true,
+    "textResponseMustPrecedeImage": true,
+    "localImageExecutor": false,
+    "executorAuthority": "HOST_CHATGPT_ONLY",
+    "noAutomaticExternalProviderFallback": true,
+    "noFabricatedImageTarget": true,
+    "noFabricatedVisualSourceData": true,
+    "hostGeneratedMediaIsNotBlobTruth": true
+  }
+}
