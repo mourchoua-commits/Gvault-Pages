@@ -8,12 +8,13 @@
   "correlationId": "GTHINK-MUTUAL-OBSERVATION-V1",
   "fusion": {
     "sessionId": "GTHINK-FUSION-3602CB2B7890",
-    "status": "ACTIVE",
+    "status": "ACTIVE_FALLBACK_PROJECTION_READY",
     "mode": "COUPLED_DUAL_CORE_SHARED_ENGINE",
     "contractId": "GTHINK_SHARED_ENGINE_PACK_V1",
     "observation": "BIDIRECTIONAL",
     "stateIsolation": true,
-    "startedFromUserCaptureCommit": "3602cb2b789056884eff51282f0edcaf73eca0ab"
+    "startedFromUserCaptureCommit": "3602cb2b789056884eff51282f0edcaf73eca0ab",
+    "privateSanitizedProjectionCommit": "a39357a73410b661f818de3f41e386e896614ede"
   },
   "playwright": {
     "enabled": true,
