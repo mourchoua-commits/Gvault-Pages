@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "e9d6d4ac60505e720cb04f6033690d6832e2c86f",
+  "parentSha": "00ed632e373e146e5c79f63c0f7a34bb76e34d54",
+  "committedAt": "2026-09-03T06:14:20+02:00",
+  "summary": {
+    "subject": "Deploy Danse des gouttes to public Pages",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "paths": [
+      "knowledge-stream/games/danse_des_gouttes.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "magnitude": 1,
+    "committedAt": "2026-09-03T06:14:20+02:00",
+    "parentSha": "00ed632e373e146e5c79f63c0f7a34bb76e34d54"
+  },
+  "pulseKey": "CTP1:e9d6d4ac60505e720cb04f6033690d6832e2c86f:3b4127f561c8b9f0",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "95a097a25338a45e83a3a501d5279ae05796c07a18b927d6dbd42def8970a48e",
+  "typedKeys": {
+    "commit": "gitc:e9d6d4ac60505e720cb04f6033690d6832e2c86f",
+    "parent": "gitc:00ed632e373e146e5c79f63c0f7a34bb76e34d54",
+    "pulse": "ctp1:e9d6d4ac60505e720cb04f6033690d6832e2c86f:3b4127f561c8b9f0",
+    "translation": "cttrans:95a097a25338a45e83a3a501d5279ae05796c07a18b927d6dbd42def8970a48e",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "e9d6d4ac60505e720cb04f6033690d6832e2c86f",
+    "parentSha": "00ed632e373e146e5c79f63c0f7a34bb76e34d54",
+    "committedAt": "2026-09-03T06:14:20+02:00",
+    "summary": {
+      "subject": "Deploy Danse des gouttes to public Pages",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "paths": [
+        "knowledge-stream/games/danse_des_gouttes.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "magnitude": 1,
+      "committedAt": "2026-09-03T06:14:20+02:00",
+      "parentSha": "00ed632e373e146e5c79f63c0f7a34bb76e34d54"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/e9d6d4ac60505e720cb04f6033690d6832e2c86f.json",
+      "vfsKey": "CTP1:e9d6d4ac60505e720cb04f6033690d6832e2c86f:3b4127f561c8b9f0",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/e9d6d4ac60505e720cb04f6033690d6832e2c86f.json"
+}
