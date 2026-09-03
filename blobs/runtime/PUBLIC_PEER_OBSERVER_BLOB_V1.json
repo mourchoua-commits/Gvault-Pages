@@ -6,6 +6,15 @@
   "observer": "PUBLIC",
   "peer": "PRIVATE_SANITIZED_PROJECTION",
   "correlationId": "GTHINK-MUTUAL-OBSERVATION-V1",
+  "fusion": {
+    "sessionId": "GTHINK-FUSION-3602CB2B7890",
+    "status": "ACTIVE",
+    "mode": "COUPLED_DUAL_CORE_SHARED_ENGINE",
+    "contractId": "GTHINK_SHARED_ENGINE_PACK_V1",
+    "observation": "BIDIRECTIONAL",
+    "stateIsolation": true,
+    "startedFromUserCaptureCommit": "3602cb2b789056884eff51282f0edcaf73eca0ab"
+  },
   "playwright": {
     "enabled": true,
     "spec": "tests/gthink-peer-observer-public.spec.mjs",
