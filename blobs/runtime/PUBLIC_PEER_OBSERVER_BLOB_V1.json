@@ -1,0 +1,27 @@
+{
+  "schema": "GVAULT_GTHINK_PUBLIC_PEER_OBSERVER_BLOB_V1",
+  "blobId": "blob:gvault:gthink-public-peer-observer:v1",
+  "status": "ACTIVE",
+  "runtimeGraft": true,
+  "observer": "PUBLIC",
+  "peer": "PRIVATE_SANITIZED_PROJECTION",
+  "correlationId": "GTHINK-MUTUAL-OBSERVATION-V1",
+  "playwright": {
+    "enabled": true,
+    "spec": "tests/gthink-peer-observer-public.spec.mjs",
+    "mode": "PULL_SANITIZED_PEER_HEARTBEAT"
+  },
+  "selfHeartbeat": "publications/gthink-peer/public-heartbeat.json",
+  "peerHeartbeat": "publications/gthink-peer/private-sanitized-heartbeat.json",
+  "autonomy": {
+    "peerRequiredForExecution": false,
+    "peerObservationRequiredForMirrorHealth": true
+  },
+  "guards": [
+    "NO_RAW_PRIVATE_CONTENT",
+    "NO_PRIVATE_REPOSITORY_TOKEN_IN_PUBLIC",
+    "SANITIZED_PROJECTION_ONLY",
+    "FAIL_CLOSED_ON_UNSANITIZED_PEER",
+    "PROVENANCE_REQUIRED"
+  ]
+}
