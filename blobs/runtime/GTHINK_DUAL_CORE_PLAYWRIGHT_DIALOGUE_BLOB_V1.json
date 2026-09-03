@@ -1,0 +1,42 @@
+{
+  "schema": "GVAULT_GTHINK_DUAL_CORE_PLAYWRIGHT_DIALOGUE_BLOB_V1",
+  "blobId": "blob:gvault:gthink-dual-core-playwright-dialogue:v1",
+  "status": "ACTIVE",
+  "authority": "PUBLIC_SANITIZED_PROJECTION",
+  "sessionId": "GTHINK-FUSION-3602CB2B7890",
+  "correlationId": "GTHINK-DUAL-CORE-DIALOGUE-V1",
+  "transport": {
+    "type": "PLAYWRIGHT_ISOLATED_BROWSER_CONTEXT_RELAY",
+    "contexts": [
+      "PUBLIC",
+      "PRIVATE_SANITIZED"
+    ],
+    "directPrivateStateSharing": false,
+    "sanitizedEnvelopeOnly": true
+  },
+  "protocol": [
+    "HELLO",
+    "ACK",
+    "CONSENSUS",
+    "READY"
+  ],
+  "agreement": {
+    "sharedEngineContract": "GTHINK_SHARED_ENGINE_PACK_V1",
+    "stateIsolation": true,
+    "peerAutonomy": true
+  },
+  "guards": [
+    "NO_RAW_PRIVATE_CONTENT",
+    "NO_VERBATIM",
+    "NO_SECRET",
+    "NO_TOKEN",
+    "SANITIZED_ENVELOPE_ONLY",
+    "STATE_ISOLATION_REQUIRED",
+    "PROVENANCE_REQUIRED"
+  ],
+  "playwright": {
+    "spec": "tests/gthink-dual-core-dialogue.spec.mjs",
+    "workflow": ".github/workflows/gthink-dual-core-dialogue.yml",
+    "proofArtifact": "gthink-dual-core-dialogue-proof"
+  }
+}
