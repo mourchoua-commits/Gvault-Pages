@@ -18,9 +18,9 @@
     "repository": "mourchoua-commits/Gvault-Pages",
     "path": "blobs/public/assets/minon-blob-family-v1.webp",
     "mime": "image/webp",
-    "dimensions": [768, 768],
-    "bytes": 62014,
-    "sha256": "d49075169ffb60e58109e0fc8ed97b0e1dc262fd5603d9a95121dd0bf4bd8d3c"
+    "dimensions": [384, 384],
+    "bytes": 11164,
+    "sha256": "0a4ec8a7172e7dfff5afa0200c2382931c6ff5f5821b0361e6fdc9b7551f5f04"
   },
   "pixelBlobContract": {
     "enabled": true,
