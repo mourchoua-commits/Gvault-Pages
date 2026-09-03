@@ -6,14 +6,29 @@
   "direction": "PRIVATE_TO_PUBLIC",
   "sanitized": true,
   "correlationId": "GTHINK-MUTUAL-OBSERVATION-V1",
-  "privateObserverCommit": "b3648c6d359849779d2c02db97a9385f2994e554",
+  "privateObserverCommit": "2cc5e179cb988d889718935488b25eb793b105f4",
   "privatePlaywrightSpecCommit": "29a8d99219cd875adcdd1fee1f2ed4e5be86d494",
   "observedPublicHeartbeatCommit": "116eeacf8c08daf566a00bee6dd7fb6f9ff81b1e",
+  "fusion": {
+    "sessionId": "GTHINK-FUSION-3602CB2B7890",
+    "status": "ACTIVE_WITH_CONNECTOR_FALLBACK",
+    "mode": "COUPLED_DUAL_CORE_SHARED_ENGINE",
+    "bidirectionalObservation": true,
+    "stateIsolation": true,
+    "privateFusionProofCommit": "9abaeec24486a9ebc5582057e39f49244c3dfbac"
+  },
   "observation": {
     "peer": "PUBLIC",
     "peerStatus": "READY",
     "peerSchema": "GVAULT_GTHINK_PUBLIC_HEARTBEAT_V1",
+    "peerObserverCommit": "4faf6f9c128ea5264036b30b756ac478310f1894",
+    "peerDigestSha256": "c00230d36c050b42e8a23a377df2eefef36f3406d2804549a9c70be6f3d8bfdb",
     "autonomyPreserved": true
+  },
+  "runner": {
+    "privatePlaywrightRunId": 33813865757,
+    "privatePlaywrightConclusion": "failure_before_steps",
+    "fallback": "CONNECTED_GITHUB_READ_WRITE_PROOF"
   },
   "exportedFields": [
     "schema",
@@ -26,7 +41,9 @@
     "privateObserverCommit",
     "privatePlaywrightSpecCommit",
     "observedPublicHeartbeatCommit",
+    "fusion",
     "observation",
+    "runner",
     "exportedFields"
   ]
 }
