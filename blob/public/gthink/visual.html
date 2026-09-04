@@ -3,81 +3,122 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#05070b">
-<title>GThink · blob vivant public · GVAULT</title>
+<meta name="theme-color" content="#02050a">
+<meta name="color-scheme" content="dark">
+<title>GThink · double cœur synchronisé · GVAULT</title>
 <style>
-:root{color-scheme:dark;background:#05070b;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;overflow:hidden;background:#05070b;color:#eef6ff}body{min-height:100dvh}
-main{position:relative;width:100vw;height:100dvh;isolation:isolate;background:radial-gradient(circle at 50% 45%,#11192d 0,#070b13 44%,#020306 100%)}
-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:manipulation}
-.title{position:absolute;left:max(16px,env(safe-area-inset-left));top:max(14px,env(safe-area-inset-top));z-index:3;pointer-events:none;text-shadow:0 2px 18px #000}
-.title b{display:block;font-size:clamp(18px,4vw,30px);letter-spacing:.12em;font-weight:750}.title span{display:block;margin-top:3px;font:600 10px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em;opacity:.68}
-.legend{position:absolute;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:3;display:flex;gap:9px;align-items:center;justify-content:center;padding:8px 11px;border:1px solid #ffffff15;border-radius:999px;background:#03060aa8;backdrop-filter:blur(10px);font:600 10px/1 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:nowrap;color:#dce7f5}
-.legend i{width:7px;height:7px;border-radius:50%;display:inline-block;box-shadow:0 0 12px currentColor}.cyan{color:#5de9ff}.violet{color:#df6cff}.gold{color:#ffd47d}.white{color:#eef6ff}
-.note{position:absolute;right:max(14px,env(safe-area-inset-right));top:max(15px,env(safe-area-inset-top));z-index:3;max-width:190px;text-align:right;font:500 9px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.05em;color:#c9d4e3;opacity:.56;pointer-events:none}
-@media(max-width:520px){.note{top:auto;bottom:52px;max-width:140px}.legend{font-size:8px;gap:6px;padding:7px 9px}.title span{font-size:9px}}
-@media(prefers-reduced-motion:reduce){canvas{filter:none}}
+:root{--cyan:#42d9ff;--cyan2:#126dff;--violet:#ea5cff;--violet2:#8128ff;--gold:#ffd77c;--ink:#02050a;--panel:#06101bdc;--line:#54dfff42;--ok:#75ff9c;--muted:#90a5b8;--danger:#ff7e9a;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;background:#02050a;color:#eef7ff}body{min-height:100dvh;overflow:auto}
+a{color:inherit;text-decoration:none}.app{position:relative;min-height:100dvh;overflow:hidden;background:radial-gradient(circle at 50% 28%,#111932 0,#06101b 35%,#02050a 76%)}
+#stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.85}.scan{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,#ffffff05 0 1px,transparent 1px 4px);mix-blend-mode:soft-light;opacity:.25}
+.shell{position:relative;z-index:2;display:grid;grid-template-columns:150px minmax(0,1fr) 205px;gap:10px;min-height:100dvh;padding:10px}
+.side,.statusRail,.coreStage,.bottomGrid{border:1px solid #53cfff34;background:linear-gradient(180deg,#04101add,#02070dc9);box-shadow:inset 0 1px #ffffff0b,0 10px 40px #0008;backdrop-filter:blur(10px)}
+.side{border-radius:15px;padding:10px 8px;display:flex;flex-direction:column;gap:5px;align-self:stretch}.brand{padding:3px 6px 12px;border-bottom:1px solid #5ce4ff25}.brand strong{display:block;font-size:26px;letter-spacing:.12em;text-shadow:0 0 18px #62eaff88}.brand small{color:#64dfff;font-size:9px;letter-spacing:.12em}.nav a{display:flex;gap:8px;align-items:center;padding:8px 7px;border-radius:8px;color:#cceeff;font-size:12px}.nav a:hover,.nav a.active{background:#06304a9c;box-shadow:inset 0 0 0 1px #55deff55}.ico{width:16px;text-align:center;color:#64e2ff}.motto{margin-top:auto;padding:10px 7px 3px;color:#57cfff;font:600 9px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;opacity:.72}
+.center{display:grid;grid-template-rows:auto 1fr auto;gap:10px;min-width:0}.topline{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;padding:0 6px}.heartTitle{border:1px solid currentColor;border-radius:999px;padding:7px 14px;text-align:center;background:#06101ccc;box-shadow:0 0 18px currentColor}.heartTitle b{display:block;font-size:13px;letter-spacing:.08em}.heartTitle span{font-size:8px;letter-spacing:.08em;opacity:.76}.heartTitle.public{color:var(--cyan)}.heartTitle.private{color:var(--violet)}.gtitle{text-align:center}.gtitle strong{display:block;font-size:27px;letter-spacing:.05em;text-shadow:0 0 22px #a862ff}.gtitle small{font-size:8px;letter-spacing:.18em;color:#c8e7ff}
+.coreStage{position:relative;min-height:620px;border-radius:20px;overflow:hidden;background:radial-gradient(circle at 50% 44%,#14182c 0,#06101b 46%,#02060b 100%)}.orbit{position:absolute;left:50%;top:49%;width:min(80%,760px);aspect-ratio:1.7/1;transform:translate(-50%,-50%);border:1px solid #7ce9ff22;border-radius:50%;box-shadow:0 0 70px #358bff16,inset 0 0 70px #7b3dff0c}.orbit:before,.orbit:after{content:"";position:absolute;inset:9%;border:1px solid #ffffff10;border-radius:50%}.orbit:after{inset:20%;border-color:#ffd77c25}
+.bridgeLogo{position:absolute;left:50%;top:4%;transform:translateX(-50%);width:124px;height:72px;filter:drop-shadow(0 0 18px #bb6fffaa)}.bridgeLogo:before,.bridgeLogo:after{content:"";position:absolute;top:12px;width:54px;height:37px;border:6px solid;border-radius:50%}.bridgeLogo:before{left:5px;border-color:var(--cyan);transform:rotate(24deg)}.bridgeLogo:after{right:5px;border-color:var(--violet);transform:rotate(-24deg)}.bridgeDot{position:absolute;left:50%;top:29px;transform:translate(-50%,-50%);width:15px;height:15px;border-radius:50%;background:var(--gold);box-shadow:0 0 22px var(--gold)}
+.heart{position:absolute;top:19%;width:36%;height:43%;filter:drop-shadow(0 0 22px currentColor);transition:filter .25s,transform .25s}.heart.public{left:8%;color:var(--cyan)}.heart.private{right:8%;color:var(--violet)}.heart.pulse{transform:scale(1.018);filter:drop-shadow(0 0 42px currentColor) saturate(1.3)}.heart svg{width:100%;height:100%;overflow:visible}.heart .heartFill{fill:color-mix(in srgb,currentColor 20%,transparent);stroke:currentColor;stroke-width:2}.heart .node{fill:#f9fdff;stroke:currentColor;stroke-width:2;filter:drop-shadow(0 0 6px currentColor)}.heart .vein{fill:none;stroke:currentColor;stroke-width:1.25;opacity:.7}.heart .label{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);text-align:center;text-shadow:0 0 12px #000}.heart .label b{display:block;font-size:17px;letter-spacing:.08em}.heart .label span{display:block;margin-top:5px;font:600 9px/1.35 ui-monospace,SFMono-Regular,Consolas,monospace;opacity:.78}
+.vaultCore{position:absolute;left:50%;top:43%;transform:translate(-50%,-50%);width:128px;height:128px;border-radius:50%;display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 35% 25%,#fff6d5 0,#f4c66f 11%,#7b4d19 42%,#16100a 72%);border:2px solid #ffd77ca8;box-shadow:0 0 38px #ffd77c88,0 0 90px #ffd77c30;z-index:3}.vaultCore:before{content:"";position:absolute;inset:-14px;border:1px solid #ffd77c45;border-radius:50%;animation:spin 16s linear infinite}.vaultCore b{font-size:18px;letter-spacing:.08em}.vaultCore span{display:block;font:600 8px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace;opacity:.84}
+.flowLayer{position:absolute;inset:0;pointer-events:none}.flowLayer svg{width:100%;height:100%}.flow{fill:none;stroke-width:2;stroke-dasharray:7 9;animation:dash 5s linear infinite;opacity:.65}.flow.c{stroke:var(--cyan)}.flow.v{stroke:var(--violet)}.flow.g{stroke:var(--gold)}
+.playwright{position:absolute;left:50%;bottom:8%;transform:translateX(-50%);width:88%;text-align:center}.playwright h2{font-size:18px;letter-spacing:.07em;margin:0 0 2px;text-shadow:0 0 14px #6de6ff}.playwright p{margin:0 0 12px;font-size:9px;letter-spacing:.12em;color:#bcecff}.worlds{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}.world{position:relative;aspect-ratio:1;border-radius:50%;border:1px solid #5be5ff7a;background:radial-gradient(circle at 35% 26%,#e9fbff 0,#55cfff 8%,#174e9b 29%,#07101f 68%);box-shadow:0 0 18px #3abfff66,inset -9px -12px 20px #0008}.world:nth-child(2n){border-color:#d36cff80;background:radial-gradient(circle at 35% 26%,#fff0ff 0,#e26cff 8%,#61219f 29%,#0b0816 68%);box-shadow:0 0 18px #d15cff55}.world:nth-child(3n){border-color:#ffd77c8a;background:radial-gradient(circle at 35% 26%,#fff8df 0,#ffd77c 8%,#81551a 29%,#120d06 68%)}.world span{position:absolute;left:50%;top:-16px;transform:translateX(-50%);font:700 8px/1 ui-monospace,SFMono-Regular,Consolas,monospace;color:#d9efff;white-space:nowrap}
+.bottomGrid{border-radius:14px;padding:9px;display:grid;grid-template-columns:1.4fr 1.2fr 1fr 1.2fr;gap:8px}.card{min-height:92px;border:1px solid #6adfff35;border-radius:10px;padding:8px;background:#04101aac}.card h3{margin:0 0 7px;font-size:9px;color:#8be7ff;letter-spacing:.08em}.wave{height:50px;position:relative;overflow:hidden}.wave:before,.wave:after{content:"";position:absolute;left:-10%;width:120%;height:24px;border-top:2px solid;border-radius:50%;animation:wave 4s linear infinite}.wave:before{top:16px;color:var(--cyan);box-shadow:0 0 12px var(--cyan)}.wave:after{top:25px;color:var(--violet);animation-direction:reverse}.blobMap{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;align-content:center}.blobMap i{aspect-ratio:1;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}.blobMap i:nth-child(3n){background:var(--violet);box-shadow:0 0 8px var(--violet)}.blobMap i:nth-child(5n){background:var(--gold);box-shadow:0 0 8px var(--gold)}.bars{display:flex;gap:4px;align-items:end;height:54px}.bars i{flex:1;border-radius:4px 4px 1px 1px;background:linear-gradient(180deg,var(--cyan),#164a82);box-shadow:0 0 8px #39cfff55}.bars i:nth-child(2n){background:linear-gradient(180deg,var(--violet),#4c1f7b)}.qr{display:grid;place-items:center;height:56px;font:800 26px/1 ui-monospace,SFMono-Regular,Consolas,monospace;color:#8be7ff;text-shadow:0 0 16px #5de4ff}.qr:after{content:"◇▦◇";letter-spacing:-4px}
+.statusRail{border-radius:15px;padding:10px;display:flex;flex-direction:column;gap:9px}.statusBox{border:1px solid #48dfff42;border-radius:10px;background:#03101ac7;padding:9px}.statusBox h3{margin:0 0 8px;color:#74dcff;font-size:11px;letter-spacing:.05em}.row{display:flex;align-items:center;gap:7px;font-size:10px;margin:6px 0}.dot{width:8px;height:8px;border-radius:50%;background:#43515d;box-shadow:none}.row.ok .dot{background:var(--ok);box-shadow:0 0 8px var(--ok)}.row.wait .dot{background:#ffd36a;box-shadow:0 0 8px #ffd36a}.row.bad .dot{background:var(--danger);box-shadow:0 0 8px var(--danger)}.row span:last-child{margin-left:auto;font:700 8px ui-monospace,SFMono-Regular,Consolas,monospace;color:#b7c8d8}.activity{height:64px;display:flex;gap:2px;align-items:end}.activity i{flex:1;min-height:3px;background:linear-gradient(180deg,#51e5ff,#1451a0);box-shadow:0 0 6px #2bcfff33;transition:height .25s}.events{height:130px;overflow:hidden;font:600 8px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#c1d8e8}.event{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.event b{color:#75ff9c}.capture{font:600 8px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:#9bb7ca}.capture strong{color:#8be7ff}.lady{margin-top:auto;display:flex;gap:8px;align-items:center}.lady .bug{font-size:25px}.syncBadge{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:999px;border:1px solid #ffffff1c;background:#ffffff08;font:700 8px ui-monospace,SFMono-Regular,Consolas,monospace}.syncBadge.ok{border-color:#75ff9c55;color:#9cffb7}.syncBadge.wait{border-color:#ffd36a55;color:#ffd982}
+@keyframes dash{to{stroke-dashoffset:-64}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes wave{to{transform:translateX(8%)}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:980px){body{overflow:auto}.shell{grid-template-columns:1fr;padding:7px}.side{display:none}.statusRail{order:3}.center{order:1}.coreStage{min-height:590px}.statusRail{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.lady{margin-top:0}.bottomGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.topline{grid-template-columns:1fr 1fr}.gtitle{grid-column:1/-1;grid-row:1}.heartTitle{padding:6px 8px}.coreStage{min-height:570px}.heart{top:23%;width:43%;height:35%}.heart.public{left:2%}.heart.private{right:2%}.vaultCore{top:44%;width:92px;height:92px}.vaultCore b{font-size:13px}.worlds{gap:5px}.world span{font-size:6px}.bottomGrid{grid-template-columns:1fr}.statusRail{grid-template-columns:1fr}.playwright{bottom:7%}.playwright h2{font-size:14px}.coreStage{border-radius:14px}}
 </style>
 </head>
 <body>
-<main aria-label="Représentation abstraite et animée de la topologie GThink publique">
-  <canvas id="field"></canvas>
-  <div class="title"><b>GTHINK</b><span>blob://public/gthink/visual · GVAULT</span></div>
-  <div class="note">Représentation publique de topologie. Aucun contenu privé n’est chargé par cette page.</div>
-  <div class="legend" aria-hidden="true"><i class="cyan"></i>PUBLIC <i class="violet"></i>PRIVÉ <i class="gold"></i>IMAGE <i class="white"></i>PLAYWRIGHT</div>
-</main>
+<div class="app" data-gthink-visual="dual-heart-v2">
+<canvas id="stars" aria-hidden="true"></canvas><div class="scan"></div>
+<div class="shell">
+  <aside class="side">
+    <div class="brand"><strong>GVAULT∞</strong><small>MÉMOIRE · OUTILS · MONDES</small></div>
+    <nav class="nav">
+      <a href="../../../"><span class="ico">⌂</span>Accueil</a>
+      <a class="active" href="../../../gthink/"><span class="ico">✣</span>GThink</a>
+      <a href="../"><span class="ico">◉</span>Blob public</a>
+      <a href="../../../gthink/public-only.html"><span class="ico">◎</span>Public only</a>
+      <a href="../../../manifest.json"><span class="ico">▣</span>Manifest</a>
+    </nav>
+    <div class="motto">« L’intérieur est l’extérieur »<br><br>Explorer<br>Comprendre<br>Assembler<br>Rêver<br>Produire</div>
+  </aside>
+
+  <section class="center">
+    <div class="topline">
+      <div class="heartTitle public"><b>CŒUR PUBLIC</b><span>SECOND KERNEL · NATIVE + KNOWLEDGE</span></div>
+      <div class="gtitle"><strong>GThink</strong><small>PENSER · RELIER · EXPLORER · CRÉER</small></div>
+      <div class="heartTitle private"><b>CŒUR PRIVÉ</b><span>PRIMARY · PELLICULE AUTORISÉE</span></div>
+    </div>
+
+    <div class="coreStage" id="coreStage">
+      <div class="orbit"></div>
+      <div class="bridgeLogo"><i class="bridgeDot"></i></div>
+      <div class="flowLayer"><svg viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true"><path class="flow c" d="M260,275 C365,235 425,262 500,292"/><path class="flow v" d="M740,275 C635,235 575,262 500,292"/><path class="flow g" d="M500,95 C500,165 500,220 500,292"/><path class="flow c" d="M270,315 C390,420 620,420 730,315"/><path class="flow v" d="M730,315 C610,445 390,445 270,315"/></svg></div>
+
+      <div class="heart public" id="publicHeart">
+        <svg viewBox="0 0 240 210" aria-hidden="true"><defs><filter id="cg"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path class="heartFill" filter="url(#cg)" d="M120 196C91 167 35 133 24 86 14 43 45 14 80 21c22 4 34 20 40 34 6-14 18-30 40-34 35-7 66 22 56 65-11 47-67 81-96 110z"/><path class="vein" d="M120 176V61M120 92L81 61M120 117L56 102M120 94L160 57M120 128L181 104M120 148L84 146M120 151L157 149"/><circle class="node" cx="120" cy="95" r="7"/><circle class="node" cx="81" cy="61" r="5"/><circle class="node" cx="56" cy="102" r="4"/><circle class="node" cx="160" cy="57" r="5"/><circle class="node" cx="181" cy="104" r="4"/><circle class="node" cx="84" cy="146" r="4"/><circle class="node" cx="157" cy="149" r="4"/></svg>
+        <div class="label"><b>PUBLIC</b><span id="publicText">initialisation…</span></div>
+      </div>
+
+      <div class="heart private" id="privateHeart">
+        <svg viewBox="0 0 240 210" aria-hidden="true"><defs><filter id="vg"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path class="heartFill" filter="url(#vg)" d="M120 196C91 167 35 133 24 86 14 43 45 14 80 21c22 4 34 20 40 34 6-14 18-30 40-34 35-7 66 22 56 65-11 47-67 81-96 110z"/><path class="vein" d="M120 176V61M120 92L81 61M120 117L56 102M120 94L160 57M120 128L181 104M120 148L84 146M120 151L157 149"/><circle class="node" cx="120" cy="95" r="7"/><circle class="node" cx="81" cy="61" r="5"/><circle class="node" cx="56" cy="102" r="4"/><circle class="node" cx="160" cy="57" r="5"/><circle class="node" cx="181" cy="104" r="4"/><circle class="node" cx="84" cy="146" r="4"/><circle class="node" cx="157" cy="149" r="4"/></svg>
+        <div class="label"><b>PRIVÉ</b><span id="privateText">initialisation…</span></div>
+      </div>
+
+      <div class="vaultCore" id="vaultCore"><div><b>GVAULT</b><span>ROUTAGE<br>SYNCHRONISATION<br>TRAÇABILITÉ</span></div></div>
+
+      <div class="playwright">
+        <h2>PLAYWRIGHT BLOBS</h2><p>ZONES · PORTAILS · UNIVERS · SIMULATIONS</p>
+        <div class="worlds"><div class="world"><span>SCIENCES</span></div><div class="world"><span>HISTOIRE</span></div><div class="world"><span>SANTÉ</span></div><div class="world"><span>TECH</span></div><div class="world"><span>ARTS</span></div><div class="world"><span>UNIVERS</span></div><div class="world"><span>INCLASSABLE</span></div></div>
+      </div>
+    </div>
+
+    <div class="bottomGrid">
+      <div class="card"><h3>FLUX DE DONNÉES · TEMPS RÉEL</h3><div class="wave"></div></div>
+      <div class="card"><h3>CARTE DES BLOBS</h3><div class="blobMap" id="blobMap"></div></div>
+      <div class="card"><h3>ACTIVITÉ DES CŒURS</h3><div class="bars" id="bars"></div></div>
+      <div class="card"><h3>SOUVENIR QR / TRACE</h3><div class="qr"></div></div>
+    </div>
+  </section>
+
+  <aside class="statusRail">
+    <div class="statusBox">
+      <h3>ÉTAT GTHINK</h3>
+      <div class="row" id="rPublic"><i class="dot"></i>Cœur Public<span>WAIT</span></div>
+      <div class="row" id="rPrivate"><i class="dot"></i>Cœur Privé<span>WAIT</span></div>
+      <div class="row" id="rSync"><i class="dot"></i>Synchronisation<span>WAIT</span></div>
+      <div class="row" id="rStream"><i class="dot"></i>Blob Stream<span>WAIT</span></div>
+      <div class="row" id="rKnowledge"><i class="dot"></i>Knowledge<span>WAIT</span></div>
+      <div class="row" id="rPlaywright"><i class="dot"></i>Playwright mesh<span>READY</span></div>
+      <div style="margin-top:8px"><span class="syncBadge wait" id="syncBadge">DOUBLE CŒUR · INITIALISATION</span></div>
+    </div>
+    <div class="statusBox"><h3>ACTIVITÉ · LIVE</h3><div class="activity" id="activity"></div><div class="capture" style="margin-top:7px">événements observés: <strong id="eventCount">0</strong><br>dernier flux: <strong id="lastKind">—</strong></div></div>
+    <div class="statusBox"><h3>DERNIERS ÉVÉNEMENTS</h3><div class="events" id="events"><div class="event">attente du stream…</div></div></div>
+    <div class="statusBox"><h3>FIRST CAPTURE</h3><div class="capture">vue publique: <strong>sans contenu privé</strong><br>route: blob://public/gthink/visual<br>sync: états exposés uniquement</div></div>
+    <div class="statusBox lady"><div class="bug">🐞</div><div><b style="font-size:11px;color:#8be7ff">LADYBUG</b><div style="font-size:9px;color:#9eb5c6">veille visuelle</div></div></div>
+  </aside>
+</div>
+</div>
+<script src="../../../scripts/gvault-agent-live-blob.js?v=7" data-gvault-agent-live-blob="V7"></script>
+<script src="../../../scripts/gthink-public-responder.js?v=19" data-gthink-public-responder="V19"></script>
+<script src="../../../scripts/gthink-dual-heart-probe.js?v=2" data-gthink-dual-heart-probe="V2"></script>
 <script>
 (()=>{'use strict';
-const canvas=document.getElementById('field');
-const ctx=canvas.getContext('2d',{alpha:false,desynchronized:true});
-const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const TAU=Math.PI*2;
-let W=0,H=0,DPR=1,t0=performance.now(),last=t0;
-let pointer={x:.5,y:.5,active:false};
-const seed=0x4754484b;
-function mulberry32(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let q=Math.imul(a^a>>>15,1|a);q=q+Math.imul(q^q>>>7,61|q)^q;return((q^q>>>14)>>>0)/4294967296}}
-const rnd=mulberry32(seed);
-const palette={public:[93,233,255],private:[223,108,255],image:[255,212,125],vault:[235,242,255]};
-const cores=[
-  {id:'public',label:'PUBLIC',x:.26,y:.55,r:.12,c:palette.public,phase:0.2},
-  {id:'private',label:'PRIVÉ',x:.74,y:.55,r:.12,c:palette.private,phase:2.3},
-  {id:'image',label:'IMAGE',x:.50,y:.29,r:.095,c:palette.image,phase:4.1},
-  {id:'vault',label:'GVAULT',x:.50,y:.59,r:.055,c:palette.vault,phase:1.1}
-];
-const portals=Array.from({length:36},(_,i)=>({a:i/36*TAU+rnd()*.04,r:.39+rnd()*.07,s:.35+rnd()*.85,phase:rnd()*TAU,size:1.7+rnd()*3.4}));
-const motes=Array.from({length:110},()=>({lane:Math.floor(rnd()*6),u:rnd(),speed:.045+rnd()*.095,size:.6+rnd()*1.8,phase:rnd()*TAU}));
-const stars=Array.from({length:145},()=>({x:rnd(),y:rnd(),z:.2+rnd()*.8,p:rnd()*TAU}));
-const lanes=[['public','vault'],['private','vault'],['image','vault'],['public','private'],['public','image'],['private','image']];
-function resize(){DPR=Math.min(devicePixelRatio||1,2);W=Math.max(1,innerWidth);H=Math.max(1,innerHeight);canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0)}
-addEventListener('resize',resize,{passive:true});resize();
-canvas.addEventListener('pointermove',e=>{pointer.x=e.clientX/W;pointer.y=e.clientY/H;pointer.active=true},{passive:true});
-canvas.addEventListener('pointerleave',()=>pointer.active=false,{passive:true});
-canvas.addEventListener('pointerdown',e=>{pointer.x=e.clientX/W;pointer.y=e.clientY/H;pointer.active=true},{passive:true});
-function pos(core,time){const m=Math.min(W,H);const drift=reduced?0:Math.sin(time*.00022+core.phase)*m*.008;return{x:core.x*W+Math.cos(core.phase+time*.00011)*drift,y:core.y*H+Math.sin(core.phase*1.7+time*.00013)*drift,r:core.r*m}}
-function glowCircle(x,y,r,c,a){const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${c[0]},${c[1]},${c[2]},${a})`);g.addColorStop(.4,`rgba(${c[0]},${c[1]},${c[2]},${a*.35})`);g.addColorStop(1,`rgba(${c[0]},${c[1]},${c[2]},0)`);ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill()}
-function blobPath(x,y,r,time,phase,amp=.12){const n=46;ctx.beginPath();for(let i=0;i<=n;i++){const a=i/n*TAU;const wob=1+Math.sin(a*3+time*.0011+phase)*amp*.55+Math.sin(a*5-time*.00075+phase*2)*amp*.32+Math.sin(a*2+time*.00043)*amp*.18;const rr=r*wob;const px=x+Math.cos(a)*rr,py=y+Math.sin(a)*rr;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.closePath()}
-function drawCore(core,p,time){const [r,g,b]=core.c;glowCircle(p.x,p.y,p.r*2.3,core.c,.17);const grad=ctx.createRadialGradient(p.x-p.r*.28,p.y-p.r*.35,p.r*.05,p.x,p.y,p.r*1.25);grad.addColorStop(0,`rgba(255,255,255,.92)`);grad.addColorStop(.18,`rgba(${r},${g},${b},.90)`);grad.addColorStop(.58,`rgba(${Math.round(r*.55)},${Math.round(g*.55)},${Math.round(b*.55)},.62)`);grad.addColorStop(1,`rgba(${Math.round(r*.12)},${Math.round(g*.12)},${Math.round(b*.12)},.07)`);ctx.fillStyle=grad;blobPath(p.x,p.y,p.r,time,core.phase,core.id==='vault'?.08:.14);ctx.fill();ctx.strokeStyle=`rgba(${r},${g},${b},.58)`;ctx.lineWidth=1.1;ctx.stroke();
-  for(let k=0;k<3;k++){ctx.strokeStyle=`rgba(${r},${g},${b},${.11-k*.02})`;ctx.lineWidth=1;blobPath(p.x,p.y,p.r*(1.18+k*.16),time*(1-k*.08),core.phase+k,.08);ctx.stroke()}
-  const fs=Math.max(9,Math.min(18,p.r*.2));ctx.font=`700 ${fs}px ui-monospace,SFMono-Regular,Consolas,monospace`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=`rgba(244,249,255,${core.id==='vault'?.78:.9})`;ctx.fillText(core.label,p.x,p.y);
-}
-function curved(a,b,bend,time,color,alpha,width=1){const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;const dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy)||1;const nx=-dy/len,ny=dx/len;const pulse=reduced?1:Math.sin(time*.0005+bend)*.15+1;const cx=mx+nx*bend*len*.18*pulse,cy=my+ny*bend*len*.18*pulse;ctx.strokeStyle=`rgba(${color[0]},${color[1]},${color[2]},${alpha})`;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo(cx,cy,b.x,b.y);ctx.stroke();return{cx,cy}}
-function qPoint(a,c,b,u){const v=1-u;return{x:v*v*a.x+2*v*u*c.x+u*u*b.x,y:v*v*a.y+2*v*u*c.y+u*u*b.y}}
-function frame(now){const dt=Math.min(40,now-last);last=now;const time=reduced?t0:now;ctx.fillStyle='#03050a';ctx.fillRect(0,0,W,H);
-  const bg=ctx.createRadialGradient(W*.5,H*.48,0,W*.5,H*.48,Math.max(W,H)*.7);bg.addColorStop(0,'#10192a');bg.addColorStop(.43,'#080c15');bg.addColorStop(1,'#020307');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
-  for(const s of stars){const tw=.18+.55*(.5+.5*Math.sin(time*.0007+s.p));ctx.fillStyle=`rgba(190,220,255,${tw*s.z*.55})`;ctx.fillRect(s.x*W,s.y*H,Math.max(.6,s.z*1.3),Math.max(.6,s.z*1.3))}
-  const P={};for(const c of cores)P[c.id]=pos(c,time);
-  const center={x:W*.5,y:H*.53};const ring=Math.min(W,H)*.43;
-  ctx.save();ctx.globalCompositeOperation='lighter';
-  for(let i=0;i<portals.length;i++){const p=portals[i];const a=p.a+(reduced?0:time*.000012*p.s);const rr=ring*p.r/.43;const x=center.x+Math.cos(a)*rr*(W>H?1.2:1),y=center.y+Math.sin(a)*rr*.82;const c=i%3===0?palette.image:(i%2?palette.private:palette.public);const pull=pointer.active?Math.max(0,1-Math.hypot(pointer.x*W-x,pointer.y*H-y)/180):0;glowCircle(x,y,p.size*(4+pull*4),c,.17+.16*pull);ctx.fillStyle=`rgba(${c[0]},${c[1]},${c[2]},${.55+.3*pull})`;ctx.beginPath();ctx.arc(x,y,p.size+pull*1.5,0,TAU);ctx.fill();if(i%3===0){const target=i%2?P.image:P.vault;curved({x,y},target,(i%5-2)*.16,time,c,.08,.7)}}
-  const laneGeom=[];
-  lanes.forEach((pair,i)=>{const a=P[pair[0]],b=P[pair[1]];const color=i<3?(i===0?palette.public:i===1?palette.private:palette.image):palette.vault;const bend=(i-2.5)*.16;const q=curved(a,b,bend,time,color,i<3?.24:.10,i<3?1.15:.75);laneGeom.push({a,b,c:q,color})});
-  for(const m of motes){if(!reduced)m.u=(m.u+m.speed*dt*.001)%1;const L=laneGeom[m.lane];const p=qPoint(L.a,L.c,L.b,m.u);const pulse=.35+.65*(.5+.5*Math.sin(time*.003+m.phase));glowCircle(p.x,p.y,m.size*5,L.color,.12*pulse);ctx.fillStyle=`rgba(${L.color[0]},${L.color[1]},${L.color[2]},${.45+.4*pulse})`;ctx.beginPath();ctx.arc(p.x,p.y,m.size,0,TAU);ctx.fill()}
-  drawCore(cores[3],P.vault,time);drawCore(cores[0],P.public,time);drawCore(cores[1],P.private,time);drawCore(cores[2],P.image,time);
-  ctx.restore();
-  if(!reduced)requestAnimationFrame(frame)
-}
-requestAnimationFrame(frame);
-window.GVAULT_BLOB_STATE=Object.freeze({schema:'GVAULT_PUBLIC_GTHINK_BLOB_V1',route:'blob://public/gthink/visual',representation:'topology-only',privateContentLoaded:false,cores:['public','private','image','gvault'],mesh:'playwright-blob-portals'});
+const $=id=>document.getElementById(id),publicHeart=$('publicHeart'),privateHeart=$('privateHeart'),publicText=$('publicText'),privateText=$('privateText'),events=$('events'),activity=$('activity'),bars=$('bars'),blobMap=$('blobMap'),eventCount=$('eventCount'),lastKind=$('lastKind'),syncBadge=$('syncBadge');
+const state={public:false,private:false,knowledge:false,stream:false,sync:false,count:0,last:'—',levels:Array(28).fill(8)};
+for(let i=0;i<54;i++)blobMap.append(Object.assign(document.createElement('i'),{title:'blob '+(i+1)}));for(let i=0;i<8;i++){const x=document.createElement('i');x.style.height=(18+(i*13)%48)+'px';bars.append(x)}for(let i=0;i<28;i++){const x=document.createElement('i');x.style.height='8px';activity.append(x)}
+function row(id,ok,label){const el=$(id);el.classList.remove('ok','wait','bad');el.classList.add(ok===true?'ok':ok===false?'bad':'wait');el.lastElementChild.textContent=label||(ok===true?'OK':ok===false?'OFF':'WAIT')}
+function render(){row('rPublic',state.public,state.public?'OK':'WAIT');row('rPrivate',state.private,state.private?'OK':'WAIT');row('rKnowledge',state.knowledge,state.knowledge?'OK':'WAIT');row('rStream',state.stream,state.stream?'LIVE':'WAIT');row('rSync',state.sync,state.sync?'SYNC':'WAIT');row('rPlaywright',true,'READY');publicText.textContent=state.public?'NATIVE · KNOWLEDGE · READY':'noyau public en attente';privateText.textContent=state.private?'PELLICULE · BRIDGE · READY':'pont privé en attente';syncBadge.textContent=state.sync?'DOUBLE CŒUR · SYNCHRONISÉ':'DOUBLE CŒUR · EN ATTENTE';syncBadge.className='syncBadge '+(state.sync?'ok':'wait');eventCount.textContent=String(state.count);lastKind.textContent=state.last;[...activity.children].forEach((el,i)=>el.style.height=state.levels[i]+'px')}
+function pulse(which){const el=which==='public'?publicHeart:which==='private'?privateHeart:null;if(!el)return;el.classList.add('pulse');setTimeout(()=>el.classList.remove('pulse'),420)}
+function pushEvent(kind,detail=''){state.count++;state.last=kind;state.levels.push(Math.min(62,10+Math.round(Math.random()*48)));state.levels.shift();const line=document.createElement('div');line.className='event';const t=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});line.innerHTML=`[${t}] <b>✓</b> ${escapeHtml(kind)}${detail?' · '+escapeHtml(detail):''}`;events.prepend(line);while(events.children.length>8)events.lastElementChild.remove();render()}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function syncNow(){let router=null,dual=null;try{router=await window.GTHINK_DUAL_KERNEL_ROUTER?.status?.()}catch{}try{dual=await window.GTHINK_DUAL_HEART_PROBE?.status?.()}catch{}const publicReady=router?router.secondary?.ready===true:(dual?.secondary===true);const knowledge=router?router.secondary?.knowledgeReady===true:(dual?.knowledge===true);const privateReady=router?router.primary?.configured===true:(window.GTHINK_PUBLIC_RESPONDER?.connected===true||dual?.primary===true);const stream=!!(window.GVAULT_AGENT_LIVE_BLOB?.streamUrl||router?.sharedStream||dual?.sharedStream);state.public=publicReady;state.knowledge=knowledge;state.private=privateReady;state.stream=stream;state.sync=publicReady&&privateReady&&stream;render();return {...state,router,dual}}
+function onBlob(blob){if(!blob||blob.schema!=='GVAULT_UNIVERSAL_BLOB_V1')return;state.stream=true;const kind=String(blob.kind||'blob');let detail='';if(kind==='gthink.kernel.handoff'){detail=String(blob.payload?.to||'');if(detail==='secondary')pulse('public');if(detail==='primary')pulse('private')}else if(kind==='gthink.primary.ready'){state.private=true;pulse('private')}else if(kind==='gthink.primary.waiting'){state.private=false}else if(kind==='gthink.kernel.link.ready'){state.private=blob.payload?.primaryReady===true;state.public=blob.payload?.secondaryReady===true;state.knowledge=blob.payload?.secondaryKnowledgeReady===true;detail='primary '+(state.private?'OK':'WAIT')+' / secondary '+(state.public?'OK':'WAIT')}else if(kind==='gthink.dual-heart.start'){pulse('public');pulse('private');detail='same input · parallel'}else if(kind==='gthink.dual-heart.primary.sealed'){pulse('private');detail=blob.payload?.ok===false?'failed':'sealed'}else if(kind==='gthink.dual-heart.secondary.sealed'){pulse('public');detail=blob.payload?.ok===false?'failed':'sealed'}else if(kind==='gthink.dual-heart.compare'){pulse('public');pulse('private');detail=String(blob.payload?.comparison?.verdict||'compare')}else if(kind==='gateway.request'){pulse('public');pulse('private')}else if(kind==='gthink.kernel.reply'){detail=String(blob.payload?.selected||'')}
+state.sync=state.public&&state.private&&state.stream;pushEvent(kind,detail)}
+function attach(){const api=window.GVAULT_AGENT_LIVE_BLOB;if(api?.listen){api.listen(onBlob);state.stream=!!api.streamUrl;pushEvent('blob.stream.attached',api.streamUrl||'public.bus')}else setTimeout(attach,80)}attach();setInterval(()=>void syncNow(),4000);setTimeout(()=>void syncNow(),350);setTimeout(()=>void syncNow(),1300);setTimeout(()=>void syncNow(),3500);
+window.GVAULT_GTHINK_VISUAL_SYNC=Object.freeze({schema:'GVAULT_GTHINK_VISUAL_DUAL_HEART_V2',route:'blob://public/gthink/visual',privacy:'EXPOSED_AUTHORIZED_STATE_ONLY',syncNow,get state(){return {...state}},hearts:{public:'secondary-native+knowledge',private:'primary-private-direct-pellicule'},sharedStream:'gvault://blobs/public/gthink/stream'});
+const canvas=$('stars'),ctx=canvas.getContext('2d');let W=0,H=0,dpr=1;const pts=Array.from({length:170},()=>({x:Math.random(),y:Math.random(),r:.3+Math.random()*1.3,p:Math.random()*6.28,s:.2+Math.random()}));function resize(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=Math.max(innerHeight,document.documentElement.scrollHeight);canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);canvas.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0)}function draw(t){ctx.clearRect(0,0,W,H);for(const p of pts){const a=.2+.55*(.5+.5*Math.sin(t*.0007*p.s+p.p));ctx.fillStyle=`rgba(170,220,255,${a})`;ctx.beginPath();ctx.arc(p.x*W,p.y*H,p.r,0,Math.PI*2);ctx.fill()}requestAnimationFrame(draw)}addEventListener('resize',resize,{passive:true});resize();requestAnimationFrame(draw);render();
 })();
 </script>
 </body>
