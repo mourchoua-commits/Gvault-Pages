@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#020712">
+<meta name="color-scheme" content="dark">
+<link rel="manifest" href="./manifest.webmanifest">
+<title>GVAULT GA · Projet</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#e9f7ff;background:#01050c;--glass:rgba(2,10,22,.78);--line:rgba(96,196,255,.34);--blue:#55c8ff;--violet:#d06cff}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#01050c}body{min-height:100dvh}.app{position:fixed;inset:0;background:#01050c}.view{position:absolute;inset:0;width:100%;height:100%;border:0;background:#01050c}.top{position:absolute;z-index:20;top:max(10px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:7px 9px;border:1px solid var(--line);border-radius:999px;background:var(--glass);backdrop-filter:blur(14px);box-shadow:0 10px 36px rgba(0,0,0,.38),0 0 22px rgba(54,163,255,.14);max-width:calc(100vw - 20px)}.brand{font-size:11px;letter-spacing:.12em;white-space:nowrap}.state{font-size:10px;color:#8fffa0;white-space:nowrap}.state::before{content:"";display:inline-block;width:7px;height:7px;margin-right:5px;border-radius:50%;background:#69f06f;box-shadow:0 0 9px #55ff6e}.dock{position:absolute;z-index:21;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:7px;padding:8px;border:1px solid var(--line);border-radius:18px;background:var(--glass);backdrop-filter:blur(14px);box-shadow:0 12px 40px rgba(0,0,0,.42),0 0 24px rgba(60,145,255,.12);max-width:calc(100vw - 16px);overflow-x:auto;scrollbar-width:none}.dock::-webkit-scrollbar{display:none}button,a.action{appearance:none;border:1px solid rgba(112,207,255,.25);background:rgba(11,31,54,.76);color:#dff6ff;border-radius:12px;padding:9px 11px;font:600 11px/1 system-ui,sans-serif;white-space:nowrap;text-decoration:none;cursor:pointer;box-shadow:inset 0 0 15px rgba(70,150,220,.06)}button:hover,a.action:hover,button:focus-visible,a.action:focus-visible{outline:none;border-color:#68cfff;background:rgba(17,54,89,.9);box-shadow:0 0 16px rgba(82,190,255,.2)}button.primary{border-color:rgba(215,113,255,.4);background:linear-gradient(135deg,rgba(38,111,180,.8),rgba(119,43,153,.76))}.panel{position:absolute;z-index:30;right:12px;top:64px;width:min(340px,calc(100vw - 24px));padding:14px;border:1px solid var(--line);border-radius:16px;background:rgba(2,10,22,.94);backdrop-filter:blur(16px);box-shadow:0 18px 60px rgba(0,0,0,.48);display:none}.panel.open{display:block}.panel h2{font-size:14px;margin:0 0 10px}.panel p{font-size:12px;line-height:1.45;color:#b8d4e3;margin:7px 0}.panel code{font:11px ui-monospace,SFMono-Regular,Consolas,monospace;color:#aee8ff}.panel .row{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.toast{position:absolute;z-index:40;left:50%;top:60px;transform:translate(-50%,-8px);padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(2,10,22,.94);font-size:11px;opacity:0;pointer-events:none;transition:.2s ease}.toast.show{opacity:1;transform:translate(-50%,0)}.focus .top,.focus .dock{opacity:.12;transition:.2s ease}.focus .top:hover,.focus .dock:hover,.focus .top:focus-within,.focus .dock:focus-within{opacity:1}
+@media(max-width:640px){.top{left:10px;right:10px;transform:none;justify-content:space-between}.brand{overflow:hidden;text-overflow:ellipsis}.dock{left:8px;right:8px;transform:none;justify-content:flex-start}.panel{top:58px}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+<iframe class="view" id="view" name="ga-view" title="GVAULT GA" src="../GA.html"></iframe>
+<header class="top" aria-label="État du projet"><strong class="brand">GVAULT GA · PROJET</strong><span class="state" id="state">UTILISABLE</span></header>
+<nav class="dock" aria-label="Commandes rapides">
+<button class="primary" data-route="../GA.html">Vue GA</button>
+<button data-route="../gthink/index.html">GThink</button>
+<button data-route="../index.html">Accueil GVAULT</button>
+<button id="back" type="button">Retour</button>
+<button id="reload" type="button">Actualiser</button>
+<button id="focus" type="button">Focus</button>
+<button id="full" type="button">Plein écran</button>
+<button id="info" type="button">Projet</button>
+</nav>
+<aside class="panel" id="panel" aria-hidden="true">
+<h2>GVAULT GA · projet utilisable</h2>
+<p>Le rendu GA reste intact dans la vue principale. Cette couche ajoute une navigation utilisable sans casser le jumeau visuel.</p>
+<p>Entrée : <code>/Gvault-Pages/GA/</code><br>Jumeau visuel : <code>/Gvault-Pages/GA.html</code><br>GThink : <code>/Gvault-Pages/gthink/</code></p>
+<div class="row"><a class="action" href="../GA.html" target="_blank" rel="noopener">Ouvrir GA seul</a><a class="action" href="../gthink/index.html" target="_blank" rel="noopener">Ouvrir GThink</a><button id="close" type="button">Fermer</button></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+<script>
+(()=>{'use strict';
+const app=document.getElementById('app'),view=document.getElementById('view'),panel=document.getElementById('panel'),toast=document.getElementById('toast');
+const allowed=new Set(['../GA.html','../gthink/index.html','../index.html']);
+let history=['../GA.html'];
+function say(text){toast.textContent=text;toast.classList.add('show');clearTimeout(say.t);say.t=setTimeout(()=>toast.classList.remove('show'),1500)}
+function openRoute(route,{push=true}={}){if(!allowed.has(route))return;view.src=route;if(push&&history.at(-1)!==route)history.push(route);localStorage.setItem('gvault.ga.lastRoute',route);say(route.includes('gthink')?'GThink ouvert':route.includes('GA.html')?'Vue GA ouverte':'Accueil GVAULT ouvert')}
+document.querySelectorAll('[data-route]').forEach(el=>el.addEventListener('click',()=>openRoute(el.dataset.route)));
+document.getElementById('back').addEventListener('click',()=>{if(history.length>1){history.pop();openRoute(history.at(-1),{push:false})}else{openRoute('../GA.html',{push:false})}});
+document.getElementById('reload').addEventListener('click',()=>{try{view.contentWindow.location.reload()}catch{view.src=view.src}say('Vue actualisée')});
+document.getElementById('focus').addEventListener('click',()=>{app.classList.toggle('focus');say(app.classList.contains('focus')?'Mode focus':'Commandes visibles')});
+document.getElementById('full').addEventListener('click',async()=>{try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();else await document.exitFullscreen()}catch{say('Plein écran non disponible')}});
+function togglePanel(force){const open=force??!panel.classList.contains('open');panel.classList.toggle('open',open);panel.setAttribute('aria-hidden',String(!open))}
+document.getElementById('info').addEventListener('click',()=>togglePanel());document.getElementById('close').addEventListener('click',()=>togglePanel(false));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){togglePanel(false);if(document.fullscreenElement)document.exitFullscreen().catch(()=>{})}if(e.key==='1')openRoute('../GA.html');if(e.key==='2')openRoute('../gthink/index.html');if(e.key==='3')openRoute('../index.html');if(e.key.toLowerCase()==='f')app.classList.toggle('focus')});
+const saved=localStorage.getItem('gvault.ga.lastRoute');if(saved&&allowed.has(saved)&&saved!=='../GA.html'){history.push(saved);view.src=saved}
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+})();
+</script>
+</body>
+</html>
