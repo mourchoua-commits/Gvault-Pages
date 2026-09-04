@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "50c759aea0e11b0ed02c9f20dd1b3f7befdaa723",
+  "parentSha": "093ba051a055127b2060c3699db0645c3b5c41aa",
+  "committedAt": "2026-09-04T15:14:59+02:00",
+  "summary": {
+    "subject": "feat(GA): add GVAULT visual twin page",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 57,
+    "deletions": 0,
+    "paths": [
+      "GA.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 57,
+    "deletions": 0,
+    "magnitude": 57,
+    "committedAt": "2026-09-04T15:14:59+02:00",
+    "parentSha": "093ba051a055127b2060c3699db0645c3b5c41aa"
+  },
+  "pulseKey": "CTP1:50c759aea0e11b0ed02c9f20dd1b3f7befdaa723:c254014683da161d",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "eed69495ea46d4ed8f6b55ac4b80535afb0126a7b8196b58f9fa20fffa26bd40",
+  "typedKeys": {
+    "commit": "gitc:50c759aea0e11b0ed02c9f20dd1b3f7befdaa723",
+    "parent": "gitc:093ba051a055127b2060c3699db0645c3b5c41aa",
+    "pulse": "ctp1:50c759aea0e11b0ed02c9f20dd1b3f7befdaa723:c254014683da161d",
+    "translation": "cttrans:eed69495ea46d4ed8f6b55ac4b80535afb0126a7b8196b58f9fa20fffa26bd40",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "50c759aea0e11b0ed02c9f20dd1b3f7befdaa723",
+    "parentSha": "093ba051a055127b2060c3699db0645c3b5c41aa",
+    "committedAt": "2026-09-04T15:14:59+02:00",
+    "summary": {
+      "subject": "feat(GA): add GVAULT visual twin page",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 57,
+      "deletions": 0,
+      "paths": [
+        "GA.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 57,
+      "deletions": 0,
+      "magnitude": 57,
+      "committedAt": "2026-09-04T15:14:59+02:00",
+      "parentSha": "093ba051a055127b2060c3699db0645c3b5c41aa"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/50c759aea0e11b0ed02c9f20dd1b3f7befdaa723.json",
+      "vfsKey": "CTP1:50c759aea0e11b0ed02c9f20dd1b3f7befdaa723:c254014683da161d",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/50c759aea0e11b0ed02c9f20dd1b3f7befdaa723.json"
+}
