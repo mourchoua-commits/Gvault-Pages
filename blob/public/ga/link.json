@@ -23,6 +23,8 @@
     "direction": "blob<->GA",
     "authority": "last-write-wins-runtime",
     "stateUrl": "../blob/public/ga/state.json",
+    "dataUrl": "../blob/public/ga/data.json",
+    "visualDataGraph": true,
     "broadcastChannel": "gvault-ga-blob-v1",
     "runtimeSnapshot": true,
     "remotePersistence": "commit-or-ci"
