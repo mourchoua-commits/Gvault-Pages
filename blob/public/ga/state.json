@@ -1,0 +1,29 @@
+{
+  "schema": "GVAULT_GA_EVOLUTION_STATE_V1",
+  "blobId": "blob:public:ga:evolution:v1",
+  "targetBlobId": "blob:public:ga:v1",
+  "revision": 1,
+  "updatedAt": "2026-09-04T14:56:01Z",
+  "mode": "bidirectional-runtime",
+  "authority": "last-write-wins-runtime",
+  "patches": [
+    {
+      "type": "statusline",
+      "label": "Synchronisation",
+      "value": "✓ LIVE ↔ BLOB"
+    },
+    {
+      "type": "attribute",
+      "selector": "html",
+      "name": "data-ga-blob-mode",
+      "value": "bidirectional"
+    }
+  ],
+  "runtime": {
+    "acceptGASnapshots": true,
+    "broadcastChannel": "gvault-ga-blob-v1",
+    "localStorageKey": "gvault.ga.runtime.blob.v1",
+    "remotePersistence": "commit-or-ci",
+    "browserWritesRepository": false
+  }
+}
