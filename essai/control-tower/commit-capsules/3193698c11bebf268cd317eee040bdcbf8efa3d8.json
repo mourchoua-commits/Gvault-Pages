@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "3193698c11bebf268cd317eee040bdcbf8efa3d8",
+  "parentSha": "06e2488b740a8f2bd91f9a4b3e6d58a498bf68a3",
+  "committedAt": "2026-09-04T21:30:16+02:00",
+  "summary": {
+    "subject": "gthink: load non-detachable tri-heart tether",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 2,
+    "deletions": 1,
+    "paths": [
+      "scripts/gthink-dual-heart-probe.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 2,
+    "deletions": 1,
+    "magnitude": 3,
+    "committedAt": "2026-09-04T21:30:16+02:00",
+    "parentSha": "06e2488b740a8f2bd91f9a4b3e6d58a498bf68a3"
+  },
+  "pulseKey": "CTP1:3193698c11bebf268cd317eee040bdcbf8efa3d8:8c7d6fe93eb8c6fc",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "67800504f0d60fd119cfdf0d0ba7771e2ed88c3e2eaeccd5513bef6e39500194",
+  "typedKeys": {
+    "commit": "gitc:3193698c11bebf268cd317eee040bdcbf8efa3d8",
+    "parent": "gitc:06e2488b740a8f2bd91f9a4b3e6d58a498bf68a3",
+    "pulse": "ctp1:3193698c11bebf268cd317eee040bdcbf8efa3d8:8c7d6fe93eb8c6fc",
+    "translation": "cttrans:67800504f0d60fd119cfdf0d0ba7771e2ed88c3e2eaeccd5513bef6e39500194",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "3193698c11bebf268cd317eee040bdcbf8efa3d8",
+    "parentSha": "06e2488b740a8f2bd91f9a4b3e6d58a498bf68a3",
+    "committedAt": "2026-09-04T21:30:16+02:00",
+    "summary": {
+      "subject": "gthink: load non-detachable tri-heart tether",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 1,
+      "paths": [
+        "scripts/gthink-dual-heart-probe.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 1,
+      "magnitude": 3,
+      "committedAt": "2026-09-04T21:30:16+02:00",
+      "parentSha": "06e2488b740a8f2bd91f9a4b3e6d58a498bf68a3"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/3193698c11bebf268cd317eee040bdcbf8efa3d8.json",
+      "vfsKey": "CTP1:3193698c11bebf268cd317eee040bdcbf8efa3d8:8c7d6fe93eb8c6fc",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/3193698c11bebf268cd317eee040bdcbf8efa3d8.json"
+}
