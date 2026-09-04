@@ -1,0 +1,53 @@
+name: GThink factual mirror bind
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'blob/public/gthink/factual-state.json'
+      - 'blob/public/gthink/factual-state.latest.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gthink-factual-mirror-bind
+  cancel-in-progress: true
+
+jobs:
+  bind-live-refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bind factual manifest to live public view
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('blob/public/gthink/visual.html')
+          s=p.read_text(encoding='utf-8')
+          before=s
+          s=s.replace("fetch('./factual-state.json?v=1',{cache:'no-store'})","fetch('./factual-state.json?mirror='+Date.now(),{cache:'no-store'})")
+          s=s.replace("loadFacts();device();commits();attach();setTimeout(runtime,400);setInterval(runtime,4000);","loadFacts();setInterval(loadFacts,5000);device();commits();attach();setTimeout(runtime,400);setInterval(runtime,4000);")
+          if s==before:
+              print('mirror binding already present or source shape changed; no rewrite required')
+          else:
+              p.write_text(s,encoding='utf-8')
+              print('bound factual-state no-store polling at 5s')
+          PY
+      - name: Commit binding only when needed
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- blob/public/gthink/visual.html; then
+            echo 'No visual binding change.'
+            exit 0
+          fi
+          git config user.name 'gvault-factual-mirror-blob'
+          git config user.email 'actions@users.noreply.github.com'
+          git add blob/public/gthink/visual.html
+          git commit -m 'mirror(gthink): bind live factual-state refresh'
+          git push
