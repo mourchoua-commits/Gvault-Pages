@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "80a755d8b0fdc4d7ea1c2c4da11068c6664781d3",
+  "parentSha": "cbce81551d22e66f25006707c744ab1729f51dda",
+  "committedAt": "2026-09-04T15:56:10+02:00",
+  "summary": {
+    "subject": "fix(gthink): restore single-lane Playwright dialogue",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 5,
+    "deletions": 10,
+    "paths": [
+      ".github/workflows/gthink-dual-core-dialogue.yml"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 5,
+    "deletions": 10,
+    "magnitude": 15,
+    "committedAt": "2026-09-04T15:56:10+02:00",
+    "parentSha": "cbce81551d22e66f25006707c744ab1729f51dda"
+  },
+  "pulseKey": "CTP1:80a755d8b0fdc4d7ea1c2c4da11068c6664781d3:05d2eefbe5a6975f",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "1fe3d78ff5dad9ee40b52a49e68a626d6fe91cf992f7b85c87138e02eaf76a70",
+  "typedKeys": {
+    "commit": "gitc:80a755d8b0fdc4d7ea1c2c4da11068c6664781d3",
+    "parent": "gitc:cbce81551d22e66f25006707c744ab1729f51dda",
+    "pulse": "ctp1:80a755d8b0fdc4d7ea1c2c4da11068c6664781d3:05d2eefbe5a6975f",
+    "translation": "cttrans:1fe3d78ff5dad9ee40b52a49e68a626d6fe91cf992f7b85c87138e02eaf76a70",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "80a755d8b0fdc4d7ea1c2c4da11068c6664781d3",
+    "parentSha": "cbce81551d22e66f25006707c744ab1729f51dda",
+    "committedAt": "2026-09-04T15:56:10+02:00",
+    "summary": {
+      "subject": "fix(gthink): restore single-lane Playwright dialogue",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 5,
+      "deletions": 10,
+      "paths": [
+        ".github/workflows/gthink-dual-core-dialogue.yml"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 5,
+      "deletions": 10,
+      "magnitude": 15,
+      "committedAt": "2026-09-04T15:56:10+02:00",
+      "parentSha": "cbce81551d22e66f25006707c744ab1729f51dda"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/80a755d8b0fdc4d7ea1c2c4da11068c6664781d3.json",
+      "vfsKey": "CTP1:80a755d8b0fdc4d7ea1c2c4da11068c6664781d3:05d2eefbe5a6975f",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/80a755d8b0fdc4d7ea1c2c4da11068c6664781d3.json"
+}
