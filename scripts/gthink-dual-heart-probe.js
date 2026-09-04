@@ -74,3 +74,4 @@ async function runSuite(messages,opts={}){const out=[];for(const message of mess
 async function status(){let knowledge=false;try{knowledge=!!(await loadKnowledge())?.contextForTask}catch{}const primary=!!window.GTHINK_PUBLIC_RESPONDER?.respond,secondary=!!window.GTHINK_PUBLIC_NATIVE_ENGINE?.answer;return {schema:SCHEMA,ready:primary&&secondary&&knowledge,primary,secondary,knowledge,sharedStream:api()?.streamUrl||null}}
 window.GTHINK_DUAL_HEART_PROBE=Object.freeze({schema:SCHEMA,run,runSuite,status,get lastRun(){return lastRun}});
 })();
+(()=>{'use strict';try{if(document.getElementById('gthinkTriHeartTetherLoader'))return;const base=new URL('.',document.currentScript?.src||location.href),s=document.createElement('script');s.id='gthinkTriHeartTetherLoader';s.src=new URL('./gthink-tri-heart-tether.js?v=1',base).href;s.async=false;s.dataset.parentBlobId='GTHINK_IMAGE';s.dataset.detachable='false';(document.head||document.documentElement).append(s)}catch{}})();
