@@ -1,0 +1,12 @@
+{
+  "schema": "GVAULT_PUBLIC_GTHINK_MIRROR_POINTER_V1",
+  "status": "READY",
+  "sourceHeadSha": "7447ee7263943776d62067e5cac835a4539348d4",
+  "projectionSha256": "1eb3b1aef61f14b8660c22c4d5bd4b4022c4ede3c22b74a46f696c8e84fa8bc5",
+  "targetPath": "blob/public/gthink/factual-state.json",
+  "blobGraphPath": "blob/public/gthink/factual-state.json.blob.json",
+  "graphSha256": null,
+  "updatedAt": "2026-09-04T18:20:31Z",
+  "bootstrap": true,
+  "blobGraphStatus": "PENDING_AUTOMATIC_SOURCE_WORKFLOW"
+}
