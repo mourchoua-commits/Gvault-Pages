@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "a3da760bd150372c9310d140736a8f1b9473650e",
+  "parentSha": "5821cd481cc3b775218cb08ad51ee8a1c070dae0",
+  "committedAt": "2026-09-04T22:14:12+02:00",
+  "summary": {
+    "subject": "mirror: add fail-closed Pages-side rescue route",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 58,
+    "deletions": 0,
+    "paths": [
+      ".github/workflows/gvault-private-factual-mirror-rescue.yml"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 58,
+    "deletions": 0,
+    "magnitude": 58,
+    "committedAt": "2026-09-04T22:14:12+02:00",
+    "parentSha": "5821cd481cc3b775218cb08ad51ee8a1c070dae0"
+  },
+  "pulseKey": "CTP1:a3da760bd150372c9310d140736a8f1b9473650e:3bc712dbe695a8f7",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "55681d130ab51d690072c18a5b96823e171e6c4f82787dd83235dbf6d375b01f",
+  "typedKeys": {
+    "commit": "gitc:a3da760bd150372c9310d140736a8f1b9473650e",
+    "parent": "gitc:5821cd481cc3b775218cb08ad51ee8a1c070dae0",
+    "pulse": "ctp1:a3da760bd150372c9310d140736a8f1b9473650e:3bc712dbe695a8f7",
+    "translation": "cttrans:55681d130ab51d690072c18a5b96823e171e6c4f82787dd83235dbf6d375b01f",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "a3da760bd150372c9310d140736a8f1b9473650e",
+    "parentSha": "5821cd481cc3b775218cb08ad51ee8a1c070dae0",
+    "committedAt": "2026-09-04T22:14:12+02:00",
+    "summary": {
+      "subject": "mirror: add fail-closed Pages-side rescue route",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 58,
+      "deletions": 0,
+      "paths": [
+        ".github/workflows/gvault-private-factual-mirror-rescue.yml"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 58,
+      "deletions": 0,
+      "magnitude": 58,
+      "committedAt": "2026-09-04T22:14:12+02:00",
+      "parentSha": "5821cd481cc3b775218cb08ad51ee8a1c070dae0"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/a3da760bd150372c9310d140736a8f1b9473650e.json",
+      "vfsKey": "CTP1:a3da760bd150372c9310d140736a8f1b9473650e:3bc712dbe695a8f7",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/a3da760bd150372c9310d140736a8f1b9473650e.json"
+}
