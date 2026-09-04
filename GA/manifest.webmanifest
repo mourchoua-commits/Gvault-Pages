@@ -1,0 +1,14 @@
+{
+  "name": "GVAULT GA · Projet",
+  "short_name": "GVAULT GA",
+  "description": "Couche projet utilisable pour le jumeau visuel GVAULT GA.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#01050c",
+  "theme_color": "#020712",
+  "lang": "fr",
+  "icons": [
+    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
