@@ -1,0 +1,16 @@
+{
+  "schema": "GTHINK_PUBLIC_SIMULATION_LAUNCH_V1",
+  "ledgerId": "CVL-690bf136ccf3",
+  "ordinal": 23,
+  "requested": [
+    "PLAYWRIGHT",
+    "BLOB_DIALOGUE",
+    "DUAL_HEART",
+    "SILLAGE",
+    "USUAL_GTHINK_SIMULATIONS"
+  ],
+  "scope": "EXISTING_WORKFLOWS_ONLY",
+  "preserveExistingMethods": true,
+  "preserveExistingRoutes": true,
+  "noAuthorityChange": true
+}
