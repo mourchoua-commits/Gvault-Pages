@@ -4,7 +4,7 @@
   "ownerBlobId": "blob:public:ga:v1",
   "parentBlobId": "blob:public:gvault-page:v1",
   "surface": "Gvault-Pages/GA",
-  "mode": "live-branch-link",
+  "mode": "bidirectional-runtime-link",
   "source": {
     "repository": "mourchoua-commits/Gvault-Pages",
     "ref": "refs/heads/main",
@@ -14,15 +14,23 @@
     "parentManifest": "../page/manifest.json"
   },
   "sync": {
-    "pollMs": 15000,
+    "pollMs": 2000,
+    "headPollMs": 15000,
     "cache": "no-store",
     "reloadVisualOnHeadChange": true,
     "followBranch": true,
-    "pinCommit": false
+    "pinCommit": false,
+    "direction": "blob<->GA",
+    "authority": "last-write-wins-runtime",
+    "stateUrl": "../blob/public/ga/state.json",
+    "broadcastChannel": "gvault-ga-blob-v1",
+    "runtimeSnapshot": true,
+    "remotePersistence": "commit-or-ci"
   },
   "privacy": {
     "privateRepositoryFetchedByBrowser": false,
     "privatePlaintextPublished": false,
-    "credentialsStored": false
+    "credentialsStored": false,
+    "browserWritesRepository": false
   }
 }
