@@ -2,14 +2,23 @@
   "schema": "GVAULT_GA_EVOLUTION_STATE_V1",
   "blobId": "blob:public:ga:evolution:v1",
   "targetBlobId": "blob:public:ga:v1",
-  "revision": 2,
-  "updatedAt": "2026-09-04T16:59:54Z",
+  "revision": 3,
+  "updatedAt": "2026-09-04T17:18:20Z",
   "mode": "bidirectional-runtime",
   "authority": "last-write-wins-runtime",
+  "visualDataGraph": {
+    "status": "ACTIVE",
+    "blobId": "blob:public:ga:visual-data:v1",
+    "dataUrl": "../blob/public/ga/data.json",
+    "bindingMode": "semantic-dom-data-attributes",
+    "runtimeRebind": true,
+    "note": "Visible GA regions are data-bound; visual counters remain source values until a real telemetry producer replaces them."
+  },
   "health": {
     "overall": "orange",
     "publicDualCore": "green",
     "gaBlobBus": "green",
+    "visualDataGraph": "green",
     "networkEffectBlobBridge": "active",
     "privateCi": "degraded-before-steps",
     "ledger": "INDEX_PENDING",
@@ -20,78 +29,38 @@
     }
   },
   "sourceHeads": {
-    "privateMain": "6186fab3101c8532d9c4cc780f53bfa47bece54b",
-    "publicMain": "9c0cb7f12e8d6caaa2f0d9dab125f08df3a2e586",
+    "privateMain": "bb5919cd9013fd48b09f41457da30a2a9f7ed422",
+    "publicMain": "54e230a1c27086e0b8000c1016849451354ee430",
     "networkEffectBlobBridge": "a8674de7cd74ea405cb8c523a5501da616d86ab0",
     "fullPowerHarness": "ba2ed20e0e0e5fb07090653393bde36956c6b644",
-    "gaLiveBlob": "d6ae26b41b26beecb57627fe703ef3cc313be42c"
+    "gaVisualDataBlob": "572c65968e0b17ac8de80a1a733ffe7035a8904b",
+    "gaDataBinder": "3bddf21b19f242fe9efffaa146abc7e4af82c058"
   },
   "patches": [
-    {
-      "type": "statusline",
-      "label": "Cœur Public",
-      "value": "✓ OK"
-    },
-    {
-      "type": "statusline",
-      "label": "Cœur Privé",
-      "value": "⚠ CI"
-    },
-    {
-      "type": "statusline",
-      "label": "Noyau Central",
-      "value": "✓ LIVE"
-    },
-    {
-      "type": "statusline",
-      "label": "Routage",
-      "value": "✓ BLOB"
-    },
-    {
-      "type": "statusline",
-      "label": "Playwright",
-      "value": "✓ DUAL"
-    },
-    {
-      "type": "statusline",
-      "label": "Blobs",
-      "value": "✓ ACTIFS"
-    },
-    {
-      "type": "statusline",
-      "label": "Synchronisation",
-      "value": "↔ LIVE"
-    },
-    {
-      "type": "statusline",
-      "label": "Mémoire",
-      "value": "⚠ INDEX"
-    },
-    {
-      "type": "statusline",
-      "label": "Production",
-      "value": "⚠ CI"
-    },
-    {
-      "type": "text",
-      "selector": ".events",
-      "value": "[18:59] Blob GA actualisé • [18:53] Full-power 15 familles / 30 cœurs • [18:52] Réseau + effets routés en Blobs • [18:47] Dialogue dual-core Playwright ✓ • Ledger: INDEX_PENDING"
-    },
-    {
-      "type": "attribute",
-      "selector": "html",
-      "name": "data-ga-blob-mode",
-      "value": "bidirectional"
-    },
-    {
-      "type": "attribute",
-      "selector": "html",
-      "name": "data-ga-health",
-      "value": "orange"
-    }
+    {"type":"statusline","label":"Cœur Public","value":"✓ OK"},
+    {"type":"statusline","label":"Cœur Privé","value":"⚠ CI"},
+    {"type":"statusline","label":"Noyau Central","value":"✓ DATA"},
+    {"type":"statusline","label":"Routage","value":"✓ BLOB"},
+    {"type":"statusline","label":"Playwright","value":"✓ DUAL"},
+    {"type":"statusline","label":"Blobs","value":"✓ DATA"},
+    {"type":"statusline","label":"Synchronisation","value":"↔ LIVE"},
+    {"type":"statusline","label":"Mémoire","value":"⚠ INDEX"},
+    {"type":"statusline","label":"Production","value":"⚠ CI"},
+    {"type":"metric","label":"Blobs actifs","value":"482"},
+    {"type":"metric","label":"Simulations en cours","value":"37"},
+    {"type":"metric","label":"Routages / min","value":"128"},
+    {"type":"metric","label":"Nouveaux souvenirs","value":"306"},
+    {"type":"metric","label":"Images générées","value":"24"},
+    {"type":"metric","label":"Conversations","value":"91"},
+    {"type":"metric","label":"Tests en cours","value":"17"},
+    {"type":"text","selector":".events","value":"[19:18] Graphe visuel → données relié • [19:18] Bus GA rebind automatique • [19:18] Data blob public actif • [18:53] Full-power 15 familles / 30 cœurs • Ledger: INDEX_PENDING"},
+    {"type":"attribute","selector":"html","name":"data-ga-blob-mode","value":"bidirectional"},
+    {"type":"attribute","selector":"html","name":"data-ga-visual-data","value":"active"},
+    {"type":"attribute","selector":"html","name":"data-ga-health","value":"orange"}
   ],
   "runtime": {
     "acceptGASnapshots": true,
+    "acceptVisualDataGraph": true,
     "broadcastChannel": "gvault-ga-blob-v1",
     "localStorageKey": "gvault.ga.runtime.blob.v1",
     "remotePersistence": "commit-or-ci",
