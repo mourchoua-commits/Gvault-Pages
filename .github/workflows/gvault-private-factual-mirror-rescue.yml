@@ -1,0 +1,58 @@
+name: GVAULT Private Factual Mirror Rescue
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/gvault-private-factual-mirror-rescue.yml'
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gvault-private-factual-mirror-rescue
+  cancel-in-progress: true
+
+jobs:
+  rescue-private-to-public-projection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GVAULT_PUBLIC_CHAIN_TOKEN: ${{ secrets.GVAULT_PUBLIC_CHAIN_TOKEN }}
+    steps:
+      - name: Detect already-authorized mirror credential
+        id: auth
+        shell: bash
+        run: |
+          if [ -n "${GVAULT_PUBLIC_CHAIN_TOKEN:-}" ]; then
+            echo 'available=true' >> "$GITHUB_OUTPUT"
+            echo 'Authorized rescue route available.'
+          else
+            echo 'available=false' >> "$GITHUB_OUTPUT"
+            echo '::notice title=Rescue route dormant::GVAULT_PUBLIC_CHAIN_TOKEN is not configured in Gvault-Pages; no private repository access attempted.'
+          fi
+      - name: Checkout private Gvault through existing authorized token
+        if: steps.auth.outputs.available == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: mourchoua-commits/Gvault
+          token: ${{ secrets.GVAULT_PUBLIC_CHAIN_TOKEN }}
+          path: private-gvault
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Node
+        if: steps.auth.outputs.available == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verify mirror invariants
+        if: steps.auth.outputs.available == 'true'
+        working-directory: private-gvault
+        run: node tests/gvault-public-page-factual-mirror.test.mjs
+      - name: Publish fresh public-safe factual projection
+        if: steps.auth.outputs.available == 'true'
+        working-directory: private-gvault
+        run: node scripts/gvault-public-page-factual-mirror.mjs --publish
