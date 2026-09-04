@@ -1,0 +1,86 @@
+name: GThink factual live page patch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/gthink-factual-live-page-patch.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-live-factual-refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch factual refresh without lowering 32-portal floor
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          p=Path('blob/public/gthink/visual.html')
+          s=p.read_text(encoding='utf-8')
+          original=s
+
+          old="const $=id=>document.getElementById(id);let facts=null;let events=0;"
+          new="const $=id=>document.getElementById(id);let facts=null;let events=0;let factsRefreshTimer=0;"
+          if old not in s and new not in s: raise SystemExit('anchor_state_not_found')
+          s=s.replace(old,new,1)
+
+          anchor="function makePortals(n){const root=$('portals');root.replaceChildren();for(let i=0;i<n;i++)root.append(document.createElement('i')).className='portal'}\n"
+          addition="""function factsRefreshMs(){return Math.max(2000,Math.min(60000,Number(facts?.mirror?.browserRefreshMs)||5000))}\nfunction scheduleFactsRefresh(){clearTimeout(factsRefreshTimer);factsRefreshTimer=setTimeout(async()=>{await loadFacts();scheduleFactsRefresh()},factsRefreshMs())}\n"""
+          if addition not in s:
+            if anchor not in s: raise SystemExit('anchor_make_portals_not_found')
+            s=s.replace(anchor,anchor+addition,1)
+
+          old_fetch="fetch('./factual-state.json?v=1',{cache:'no-store'})"
+          new_fetch="fetch(`./factual-state.json?ts=${Date.now()}`,{cache:'no-store'})"
+          if old_fetch in s: s=s.replace(old_fetch,new_fetch,1)
+          elif new_fetch not in s: raise SystemExit('anchor_fetch_not_found')
+
+          old_prefix="function renderFacts(){const c=facts.firstCapture,d=facts.duplex,p=facts.playwrightPortalZone,h=facts.fullPowerHarness,v=d.runtimeVerificationBoundary; "
+          new_prefix="function renderFacts(){const c=facts.firstCapture,d=facts.duplex,p=facts.playwrightPortalZone,h=facts.fullPowerHarness,v=d.runtimeVerificationBoundary,declaredPortalCount=Number(p.defaultPortalCount)||0,duplexPortalCount=Number(d.performancePortalCount)||0,effectivePortalCount=Math.max(32,declaredPortalCount,duplexPortalCount),perPeer=Number(d.portalsPerPeer)||Math.floor(effectivePortalCount/2),publicPortalCount=Math.max(Number(p.distribution?.GTHINK_PUBLIC)||0,perPeer),privatePortalCount=Math.max(Number(p.distribution?.GTHINK_PRIVATE)||0,perPeer),refreshMs=factsRefreshMs(),generatedAt=Date.parse(facts.generatedAt||''),ageMs=Number.isFinite(generatedAt)?Date.now()-generatedAt:Infinity,stale=ageMs>Math.max(30000,refreshMs*6);text('factMode',stale?'FACTUAL MODE · MANIFESTE REÇU · SOURCE EN RETARD':'FACTUAL MODE · MANIFESTE LIVE',stale?'wait':'ok'); "
+          if old_prefix in s: s=s.replace(old_prefix,new_prefix,1)
+          elif new_prefix not in s: raise SystemExit('anchor_render_prefix_not_found')
+
+          old_portal_stats="text('pDefault',p.defaultPortalCount,'decl');text('pPub',p.distribution.GTHINK_PUBLIC,'decl');text('pPriv',p.distribution.GTHINK_PRIVATE,'decl');text('pPerf',d.performancePortalCount,'decl');"
+          new_portal_stats="text('pDefault',effectivePortalCount,'decl');text('pPub',publicPortalCount,'decl');text('pPriv',privatePortalCount,'decl');text('pPerf',duplexPortalCount,'decl');"
+          if old_portal_stats in s: s=s.replace(old_portal_stats,new_portal_stats,1)
+          elif new_portal_stats not in s: raise SystemExit('anchor_portal_stats_not_found')
+
+          old_portal_render="text('portalText',`${p.defaultPortalCount} portails par défaut (${p.distribution.GTHINK_PUBLIC} public + ${p.distribution.GTHINK_PRIVATE} privé) · profil duplex ${d.performancePortalCount}`);makePortals(p.defaultPortalCount);"
+          new_portal_render="text('portalText',`${effectivePortalCount} portails effectifs (${publicPortalCount} public + ${privatePortalCount} privé) · source portail ${declaredPortalCount} · profil duplex ${duplexPortalCount}`);makePortals(effectivePortalCount);"
+          if old_portal_render in s: s=s.replace(old_portal_render,new_portal_render,1)
+          elif new_portal_render not in s: raise SystemExit('anchor_portal_render_not_found')
+
+          old_boot="loadFacts();device();commits();attach();setTimeout(runtime,400);setInterval(runtime,4000);"
+          new_boot="loadFacts().finally(scheduleFactsRefresh);device();commits();attach();setTimeout(runtime,400);setInterval(runtime,4000);setInterval(commits,15000);"
+          if old_boot in s: s=s.replace(old_boot,new_boot,1)
+          elif new_boot not in s: raise SystemExit('anchor_boot_not_found')
+
+          if s==original: raise SystemExit('no_change')
+          p.write_text(s,encoding='utf-8')
+          PY
+
+          grep -F 'factual-state.json?ts=${Date.now()}' blob/public/gthink/visual.html
+          grep -F 'effectivePortalCount=Math.max(32' blob/public/gthink/visual.html
+          grep -F 'makePortals(effectivePortalCount)' blob/public/gthink/visual.html
+          grep -F 'loadFacts().finally(scheduleFactsRefresh)' blob/public/gthink/visual.html
+      - name: Commit patched page
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- blob/public/gthink/visual.html; then
+            echo 'No patch needed.'
+            exit 0
+          fi
+          git config user.name 'gvault-live-page-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add blob/public/gthink/visual.html
+          git commit -m 'page: continuously refresh factual mirror and preserve 32 portals [skip ci]'
+          git push origin HEAD:main
