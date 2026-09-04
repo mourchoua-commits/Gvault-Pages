@@ -1,0 +1,18 @@
+{
+  "schema": "GVAULT_PUBLIC_GTHINK_FACTUAL_MIRROR_CLIENT_V1",
+  "status": "ACTIVE_ADDITIVE",
+  "sourceManifest": "blob/public/gthink/factual-state.json",
+  "sourcePointer": "blob/public/gthink/factual-state.latest.json",
+  "browserRefreshMs": 5000,
+  "behavior": "REFETCH_NO_STORE_AND_RERENDER_IN_PLACE",
+  "unknownNeverBecomesOk": true,
+  "preserveExistingVisualStructure": true,
+  "preserveExistingPlaywrightRoutes": true,
+  "guards": {
+    "noPrivateRepositoryFetchFromBrowser": true,
+    "noCredentialsInBrowser": true,
+    "noSecretValues": true,
+    "noRawPrivateState": true,
+    "failClosedOnManifestError": true
+  }
+}
