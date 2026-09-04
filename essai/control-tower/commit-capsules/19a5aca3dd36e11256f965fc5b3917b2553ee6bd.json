@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "19a5aca3dd36e11256f965fc5b3917b2553ee6bd",
+  "parentSha": "56257bc49489fa2f47dcae73e5e574b3aa377033",
+  "committedAt": "2026-09-04T21:28:58+02:00",
+  "summary": {
+    "subject": "gthink: add non-detachable tri-heart Playwright blob tether",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 63,
+    "deletions": 0,
+    "paths": [
+      "scripts/gthink-tri-heart-tether.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 63,
+    "deletions": 0,
+    "magnitude": 63,
+    "committedAt": "2026-09-04T21:28:58+02:00",
+    "parentSha": "56257bc49489fa2f47dcae73e5e574b3aa377033"
+  },
+  "pulseKey": "CTP1:19a5aca3dd36e11256f965fc5b3917b2553ee6bd:3c23862f2da486f8",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "f296d0cb86e1c3ef232e1f0ff57c3c69832851be6b35a8830a8ccd570ce46ff9",
+  "typedKeys": {
+    "commit": "gitc:19a5aca3dd36e11256f965fc5b3917b2553ee6bd",
+    "parent": "gitc:56257bc49489fa2f47dcae73e5e574b3aa377033",
+    "pulse": "ctp1:19a5aca3dd36e11256f965fc5b3917b2553ee6bd:3c23862f2da486f8",
+    "translation": "cttrans:f296d0cb86e1c3ef232e1f0ff57c3c69832851be6b35a8830a8ccd570ce46ff9",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "19a5aca3dd36e11256f965fc5b3917b2553ee6bd",
+    "parentSha": "56257bc49489fa2f47dcae73e5e574b3aa377033",
+    "committedAt": "2026-09-04T21:28:58+02:00",
+    "summary": {
+      "subject": "gthink: add non-detachable tri-heart Playwright blob tether",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 63,
+      "deletions": 0,
+      "paths": [
+        "scripts/gthink-tri-heart-tether.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 63,
+      "deletions": 0,
+      "magnitude": 63,
+      "committedAt": "2026-09-04T21:28:58+02:00",
+      "parentSha": "56257bc49489fa2f47dcae73e5e574b3aa377033"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/19a5aca3dd36e11256f965fc5b3917b2553ee6bd.json",
+      "vfsKey": "CTP1:19a5aca3dd36e11256f965fc5b3917b2553ee6bd:3c23862f2da486f8",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/19a5aca3dd36e11256f965fc5b3917b2553ee6bd.json"
+}
