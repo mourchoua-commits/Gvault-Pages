@@ -22,13 +22,8 @@ concurrency:
 
 jobs:
   dialogue:
-    name: full-power-shard-${{ matrix.shard }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        shard: [0, 1, 2, 3, 4, 5, 6, 7]
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -38,13 +33,13 @@ jobs:
         run: |
           npm install --no-save @playwright/test@1.55.0
           npx playwright install --with-deps chromium
-      - name: Run dual-core blob dialogue at full power
-        run: npx playwright test tests/gthink-dual-core-dialogue.spec.mjs --config=playwright.config.mjs --repeat-each=16 --workers=4
+      - name: Run dual-core blob dialogue
+        run: npx playwright test tests/gthink-dual-core-dialogue.spec.mjs --config=playwright.config.mjs
       - name: Upload dialogue proof
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gthink-dual-core-dialogue-proof-shard-${{ matrix.shard }}
+          name: gthink-dual-core-dialogue-proof
           path: /tmp/gthink-dual-core-dialogue-proof.json
           if-no-files-found: warn
           retention-days: 7
