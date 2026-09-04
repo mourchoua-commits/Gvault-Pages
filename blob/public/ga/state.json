@@ -2,21 +2,92 @@
   "schema": "GVAULT_GA_EVOLUTION_STATE_V1",
   "blobId": "blob:public:ga:evolution:v1",
   "targetBlobId": "blob:public:ga:v1",
-  "revision": 1,
-  "updatedAt": "2026-09-04T14:56:01Z",
+  "revision": 2,
+  "updatedAt": "2026-09-04T16:59:54Z",
   "mode": "bidirectional-runtime",
   "authority": "last-write-wins-runtime",
+  "health": {
+    "overall": "orange",
+    "publicDualCore": "green",
+    "gaBlobBus": "green",
+    "networkEffectBlobBridge": "active",
+    "privateCi": "degraded-before-steps",
+    "ledger": "INDEX_PENDING",
+    "fullPower": {
+      "families": 15,
+      "cores": 30,
+      "virtualOperations": 62914560
+    }
+  },
+  "sourceHeads": {
+    "privateMain": "6186fab3101c8532d9c4cc780f53bfa47bece54b",
+    "publicMain": "9c0cb7f12e8d6caaa2f0d9dab125f08df3a2e586",
+    "networkEffectBlobBridge": "a8674de7cd74ea405cb8c523a5501da616d86ab0",
+    "fullPowerHarness": "ba2ed20e0e0e5fb07090653393bde36956c6b644",
+    "gaLiveBlob": "d6ae26b41b26beecb57627fe703ef3cc313be42c"
+  },
   "patches": [
     {
       "type": "statusline",
+      "label": "Cœur Public",
+      "value": "✓ OK"
+    },
+    {
+      "type": "statusline",
+      "label": "Cœur Privé",
+      "value": "⚠ CI"
+    },
+    {
+      "type": "statusline",
+      "label": "Noyau Central",
+      "value": "✓ LIVE"
+    },
+    {
+      "type": "statusline",
+      "label": "Routage",
+      "value": "✓ BLOB"
+    },
+    {
+      "type": "statusline",
+      "label": "Playwright",
+      "value": "✓ DUAL"
+    },
+    {
+      "type": "statusline",
+      "label": "Blobs",
+      "value": "✓ ACTIFS"
+    },
+    {
+      "type": "statusline",
       "label": "Synchronisation",
-      "value": "✓ LIVE ↔ BLOB"
+      "value": "↔ LIVE"
+    },
+    {
+      "type": "statusline",
+      "label": "Mémoire",
+      "value": "⚠ INDEX"
+    },
+    {
+      "type": "statusline",
+      "label": "Production",
+      "value": "⚠ CI"
+    },
+    {
+      "type": "text",
+      "selector": ".events",
+      "value": "[18:59] Blob GA actualisé • [18:53] Full-power 15 familles / 30 cœurs • [18:52] Réseau + effets routés en Blobs • [18:47] Dialogue dual-core Playwright ✓ • Ledger: INDEX_PENDING"
     },
     {
       "type": "attribute",
       "selector": "html",
       "name": "data-ga-blob-mode",
       "value": "bidirectional"
+    },
+    {
+      "type": "attribute",
+      "selector": "html",
+      "name": "data-ga-health",
+      "value": "orange"
     }
   ],
   "runtime": {
