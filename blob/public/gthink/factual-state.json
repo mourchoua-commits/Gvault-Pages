@@ -1,7 +1,30 @@
 {
-  "schema": "GVAULT_PUBLIC_GTHINK_FACTUAL_STATE_V1",
+  "schema": "GVAULT_PUBLIC_GTHINK_FACTUAL_STATE_V2_MIRROR_BLOB",
   "policy": "ONLY_PROVEN_OR_EXPLICITLY_DECLARED_VALUES; UNKNOWN_NEVER_BECOMES_OK",
   "snapshotDate": "2026-09-04",
+  "generatedAt": "2026-09-04T18:20:31Z",
+  "source": {
+    "repository": "mourchoua-commits/Gvault",
+    "headSha": "7447ee7263943776d62067e5cac835a4539348d4",
+    "projection": "GVAULT_PUBLIC_PAGE_FACTUAL_MIRROR_BLOB_V1"
+  },
+  "privacy": {
+    "publicSafeProjection": true,
+    "rawPrivateStateExported": false,
+    "credentialValuesExported": false,
+    "secretValuesExported": false,
+    "hiddenReasoningExported": false,
+    "conversationTextExported": false
+  },
+  "mirror": {
+    "status": "READY",
+    "mode": "PRIVATE_GVAULT_TO_PUBLIC_PAGE_BLOB_PROJECTION",
+    "targetRepository": "mourchoua-commits/Gvault-Pages",
+    "targetPath": "blob/public/gthink/factual-state.json",
+    "browserRefreshMs": 5000,
+    "blobBacked": true,
+    "failClosed": true
+  },
   "firstCapture": {
     "status": "PROVED_READBACK",
     "commitSha": "aff41470f2e2998bc26f3b9578124675b7cd2642",
@@ -14,12 +37,25 @@
     "sourceBlobSha": "b3b9f87fc55a05a64897047c5fc660b8e4a44fa6",
     "status": "ACTIVE",
     "mode": "FULL_DUPLEX_MAXIMAL_SAFE_SHARE",
-    "endpoints": ["GTHINK_PUBLIC", "GTHINK_PRIVATE"],
+    "endpoints": [
+      "GTHINK_PUBLIC",
+      "GTHINK_PRIVATE"
+    ],
     "hub": "GTHINK_IMAGE",
     "logicalTopology": "FULL_DUPLEX_LOGICAL_MESH_OVER_IMAGE_PORTAL_HUB",
     "directions": [
-      {"from":"GTHINK_PUBLIC","to":"GTHINK_PRIVATE","status":"CONNECTED","transportMode":"IMAGE_CORE_RELAY"},
-      {"from":"GTHINK_PRIVATE","to":"GTHINK_PUBLIC","status":"CONNECTED","transportMode":"IMAGE_CORE_RELAY"}
+      {
+        "from": "GTHINK_PUBLIC",
+        "to": "GTHINK_PRIVATE",
+        "status": "CONNECTED",
+        "transportMode": "IMAGE_CORE_RELAY"
+      },
+      {
+        "from": "GTHINK_PRIVATE",
+        "to": "GTHINK_PUBLIC",
+        "status": "CONNECTED",
+        "transportMode": "IMAGE_CORE_RELAY"
+      }
     ],
     "performancePortalCount": 32,
     "portalsPerPeer": 16,
@@ -46,23 +82,34 @@
     "placement": "EXTERIOR_SHELL",
     "mode": "AUTHORIZED_BROWSER_EXECUTION_AND_TEST_SURFACE",
     "defaultPortalCount": 16,
-    "distribution": {"GTHINK_PUBLIC":8,"GTHINK_PRIVATE":8},
+    "distribution": {
+      "GTHINK_PUBLIC": 8,
+      "GTHINK_PRIVATE": 8
+    },
     "direction": "BIDIRECTIONAL_DESCRIPTOR_ONLY",
     "rawPeerStateVisible": false,
     "credentialPropagation": false
   },
   "publicDualHeartProbe": {
     "sourcePath": "scripts/gthink-dual-heart-probe.js",
-    "sourceBlobSha": "7cb8f3959fd8b80b94e4e85c3d0a6f8c64d694e1",
+    "sourceBlobSha": null,
     "schema": "GTHINK_DUAL_HEART_PROBE_V2_SYNTAX_SAFE",
     "readyRule": "PRIMARY_AND_SECONDARY_AND_KNOWLEDGE",
     "runtimeStatus": "MEASURE_IN_BROWSER"
   },
   "fullPowerHarness": {
-    "sourceCommit": "ba2ed20e0e0e5fb07090653393bde36956c6b644",
+    "sourceCommit": "7447ee7263943776d62067e5cac835a4539348d4",
     "declaredFamilyCount": 15,
     "declaredCoreCount": 30,
-    "ciStatusObserved": "NO_COMBINED_STATUS_RETURNED",
+    "ciStatusObserved": "MEASURE_SEPARATELY",
     "displayRule": "DECLARED_NOT_LIVE"
-  }
+  },
+  "directCoreBlobBridge": {
+    "schema": "GVAULT_DIRECT_CORE_PLAYWRIGHT_BLOB_BRIDGE_V1",
+    "channelCount": 15,
+    "allBidirectional": true,
+    "allBlobTransport": true,
+    "preservesExistingRoutes": true
+  },
+  "projectionSha256": "1eb3b1aef61f14b8660c22c4d5bd4b4022c4ede3c22b74a46f696c8e84fa8bc5"
 }
