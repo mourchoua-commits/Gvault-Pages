@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "572c65968e0b17ac8de80a1a733ffe7035a8904b",
+  "parentSha": "9ea4522a49e33e02ef7eb5b84a277cbb0dc43a0b",
+  "committedAt": "2026-09-04T19:15:58+02:00",
+  "summary": {
+    "subject": "feat(ga): add visual data graph blob",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "paths": [
+      "blob/public/ga/data.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "magnitude": 1,
+    "committedAt": "2026-09-04T19:15:58+02:00",
+    "parentSha": "9ea4522a49e33e02ef7eb5b84a277cbb0dc43a0b"
+  },
+  "pulseKey": "CTP1:572c65968e0b17ac8de80a1a733ffe7035a8904b:02aca4812cff27a9",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "089bae30b4e176eee0dc5eb3089d5a453dc1ed79eacff855bdc25c224a4436bb",
+  "typedKeys": {
+    "commit": "gitc:572c65968e0b17ac8de80a1a733ffe7035a8904b",
+    "parent": "gitc:9ea4522a49e33e02ef7eb5b84a277cbb0dc43a0b",
+    "pulse": "ctp1:572c65968e0b17ac8de80a1a733ffe7035a8904b:02aca4812cff27a9",
+    "translation": "cttrans:089bae30b4e176eee0dc5eb3089d5a453dc1ed79eacff855bdc25c224a4436bb",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "572c65968e0b17ac8de80a1a733ffe7035a8904b",
+    "parentSha": "9ea4522a49e33e02ef7eb5b84a277cbb0dc43a0b",
+    "committedAt": "2026-09-04T19:15:58+02:00",
+    "summary": {
+      "subject": "feat(ga): add visual data graph blob",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "paths": [
+        "blob/public/ga/data.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "magnitude": 1,
+      "committedAt": "2026-09-04T19:15:58+02:00",
+      "parentSha": "9ea4522a49e33e02ef7eb5b84a277cbb0dc43a0b"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/572c65968e0b17ac8de80a1a733ffe7035a8904b.json",
+      "vfsKey": "CTP1:572c65968e0b17ac8de80a1a733ffe7035a8904b:02aca4812cff27a9",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/572c65968e0b17ac8de80a1a733ffe7035a8904b.json"
+}
