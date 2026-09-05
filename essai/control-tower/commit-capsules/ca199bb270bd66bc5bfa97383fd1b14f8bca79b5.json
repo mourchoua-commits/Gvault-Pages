@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "ca199bb270bd66bc5bfa97383fd1b14f8bca79b5",
+  "parentSha": "4d4fa91fa0e4ea29f1c95b6f10b1bf4ab72b908a",
+  "committedAt": "2026-09-05T03:50:47+02:00",
+  "summary": {
+    "subject": "feat(blob): add generic persistent blob runtime",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 34,
+    "deletions": 0,
+    "paths": [
+      "scripts/gthink-blob-runtime.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 34,
+    "deletions": 0,
+    "magnitude": 34,
+    "committedAt": "2026-09-05T03:50:47+02:00",
+    "parentSha": "4d4fa91fa0e4ea29f1c95b6f10b1bf4ab72b908a"
+  },
+  "pulseKey": "CTP1:ca199bb270bd66bc5bfa97383fd1b14f8bca79b5:baa609d3bb2f3f0c",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "3b773832aa183d055e5f1aa52107613164712e1564018cd1e0ae4fbc6b07e7c5",
+  "typedKeys": {
+    "commit": "gitc:ca199bb270bd66bc5bfa97383fd1b14f8bca79b5",
+    "parent": "gitc:4d4fa91fa0e4ea29f1c95b6f10b1bf4ab72b908a",
+    "pulse": "ctp1:ca199bb270bd66bc5bfa97383fd1b14f8bca79b5:baa609d3bb2f3f0c",
+    "translation": "cttrans:3b773832aa183d055e5f1aa52107613164712e1564018cd1e0ae4fbc6b07e7c5",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "ca199bb270bd66bc5bfa97383fd1b14f8bca79b5",
+    "parentSha": "4d4fa91fa0e4ea29f1c95b6f10b1bf4ab72b908a",
+    "committedAt": "2026-09-05T03:50:47+02:00",
+    "summary": {
+      "subject": "feat(blob): add generic persistent blob runtime",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 34,
+      "deletions": 0,
+      "paths": [
+        "scripts/gthink-blob-runtime.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 34,
+      "deletions": 0,
+      "magnitude": 34,
+      "committedAt": "2026-09-05T03:50:47+02:00",
+      "parentSha": "4d4fa91fa0e4ea29f1c95b6f10b1bf4ab72b908a"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/ca199bb270bd66bc5bfa97383fd1b14f8bca79b5.json",
+      "vfsKey": "CTP1:ca199bb270bd66bc5bfa97383fd1b14f8bca79b5:baa609d3bb2f3f0c",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/ca199bb270bd66bc5bfa97383fd1b14f8bca79b5.json"
+}
