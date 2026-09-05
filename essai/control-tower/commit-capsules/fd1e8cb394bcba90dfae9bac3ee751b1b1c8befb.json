@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "fd1e8cb394bcba90dfae9bac3ee751b1b1c8befb",
+  "parentSha": "ec707c6a630911552e61eb887287284d4b464613",
+  "committedAt": "2026-09-05T04:05:51+02:00",
+  "summary": {
+    "subject": "gthink: load dormant blob host from transport organ",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "paths": [
+      "scripts/gthink-page-transport-organ.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "magnitude": 1,
+    "committedAt": "2026-09-05T04:05:51+02:00",
+    "parentSha": "ec707c6a630911552e61eb887287284d4b464613"
+  },
+  "pulseKey": "CTP1:fd1e8cb394bcba90dfae9bac3ee751b1b1c8befb:36668b56db4f7fc3",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "4f73586cc2cc76212cbaa9d66355b46814502a8c75a2b874b89910d9bdae5bae",
+  "typedKeys": {
+    "commit": "gitc:fd1e8cb394bcba90dfae9bac3ee751b1b1c8befb",
+    "parent": "gitc:ec707c6a630911552e61eb887287284d4b464613",
+    "pulse": "ctp1:fd1e8cb394bcba90dfae9bac3ee751b1b1c8befb:36668b56db4f7fc3",
+    "translation": "cttrans:4f73586cc2cc76212cbaa9d66355b46814502a8c75a2b874b89910d9bdae5bae",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "fd1e8cb394bcba90dfae9bac3ee751b1b1c8befb",
+    "parentSha": "ec707c6a630911552e61eb887287284d4b464613",
+    "committedAt": "2026-09-05T04:05:51+02:00",
+    "summary": {
+      "subject": "gthink: load dormant blob host from transport organ",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "paths": [
+        "scripts/gthink-page-transport-organ.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "magnitude": 1,
+      "committedAt": "2026-09-05T04:05:51+02:00",
+      "parentSha": "ec707c6a630911552e61eb887287284d4b464613"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/fd1e8cb394bcba90dfae9bac3ee751b1b1c8befb.json",
+      "vfsKey": "CTP1:fd1e8cb394bcba90dfae9bac3ee751b1b1c8befb:36668b56db4f7fc3",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/fd1e8cb394bcba90dfae9bac3ee751b1b1c8befb.json"
+}
