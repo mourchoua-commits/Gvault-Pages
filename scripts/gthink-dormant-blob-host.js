@@ -3,8 +3,8 @@ const SCHEMA='GTHINK_DORMANT_BLOB_HOST_V1';
 const BLOB_SCHEMA='GVAULT_UNIVERSAL_BLOB_V1';
 const STORAGE_KEY='gvault.gthink.dormant.blob.host.v1';
 const BASE=new URL('.',document.currentScript?.src||location.href);
-const SW_URL=new URL('../gthink/gthink-dormant-blob-sw.js?v=1',BASE).href;
-const SW_SCOPE=new URL('../gthink/',BASE).href;
+const SW_URL=new URL('../gthink-dormant-blob-sw.js?v=1',BASE).href;
+const SW_SCOPE=new URL('../',BASE).href;
 let mode='BOOT',lastSleep=null,lastWake=null,lastCheckpoint=null,wakePromise=null,serviceWorkerState='UNPROVEN';
 function api(){return window.GVAULT_AGENT_LIVE_BLOB||null}
 function clean(v){return String(v??'').trim()}
