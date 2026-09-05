@@ -1,0 +1,19 @@
+{
+  "schema": "GVAULT_FIRST_CAPTURE_V1",
+  "status": "CAPTURED",
+  "capturedAt": "2026-09-05T04:03:00+02:00",
+  "source": "chat_user_message",
+  "message": "Tu peu first capture et go la laisser entre chargée et exécuter grâce a des blobs dormant ? ",
+  "utf8": true,
+  "sha256": "3913f6bc14fd20312fa98e404c1fb7c6a568bdc29c27957aa1c68dcb1057dae5",
+  "intent": [
+    "first_capture_before_action",
+    "keep_blob_runtime_preloaded",
+    "resume_execution_with_dormant_blobs"
+  ],
+  "failClosed": {
+    "backgroundExecutionWhileBrowserSuspendedClaimed": false,
+    "persistentHostClaimed": false,
+    "captureClaimedOnlyAfterCommit": true
+  }
+}
