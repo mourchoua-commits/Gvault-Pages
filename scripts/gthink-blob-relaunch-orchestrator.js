@@ -65,7 +65,7 @@ const notParallel=Object.freeze([
 function api(){return window.GVAULT_AGENT_LIVE_BLOB||null}
 function clean(v){return String(v??'').trim()}
 function now(){return new Date().toISOString()}
-function hasGlobal(name){return !name||typeof window[name]!=='undefined'}
+function hasGlobal(name){return !!name&&typeof window[name]!=='undefined'}
 function scriptPath(src){try{return new URL(src,BASE).pathname}catch{return src}}
 function existingScript(src){const path=scriptPath(src);return [...document.scripts].find(s=>{try{return new URL(s.src,location.href).pathname===path}catch{return false}})||null}
 function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
@@ -73,9 +73,9 @@ function emit(kind,payload={}){const a=api();if(!a?.speak)return null;try{return
 async function waitProbe(entry,ms=PROBE_MS){if(!entry.global)return true;const started=Date.now();while(Date.now()-started<ms){if(hasGlobal(entry.global))return true;await sleep(25)}return hasGlobal(entry.global)}
 async function loadModule(entry){
   const started=performance.now();
-  if(hasGlobal(entry.global))return {id:entry.id,state:'ACTIVE_ALREADY',global:entry.global,elapsedMs:0};
+  if(entry.global&&hasGlobal(entry.global))return {id:entry.id,state:'ACTIVE_ALREADY',global:entry.global,elapsedMs:0};
   const old=existingScript(entry.src);
-  if(old){const probed=await waitProbe(entry);return {id:entry.id,state:probed?'ACTIVE_EXISTING':'LOADED_EXISTING_UNPROVEN',global:entry.global,elapsedMs:Number((performance.now()-started).toFixed(1))};}
+  if(old){if(!entry.global)return {id:entry.id,state:'LOADED_EXISTING_SELF_EXECUTING',global:null,elapsedMs:Number((performance.now()-started).toFixed(1))};const probed=await waitProbe(entry);return {id:entry.id,state:probed?'ACTIVE_EXISTING':'LOADED_EXISTING_UNPROVEN',global:entry.global,elapsedMs:Number((performance.now()-started).toFixed(1))};}
   const result=await new Promise(resolve=>{
     const s=document.createElement('script');let settled=false;
     const finish=(state,error=null)=>{if(settled)return;settled=true;clearTimeout(timer);resolve({state,error})};
@@ -84,8 +84,9 @@ async function loadModule(entry){
     s.onload=()=>finish('LOADED');s.onerror=()=>finish('LOAD_ERROR','script_error');
     (document.head||document.documentElement).appendChild(s);
   });
-  const probed=result.state==='LOADED'?await waitProbe(entry):false;
-  return {id:entry.id,state:result.state==='LOADED'?(probed?'ACTIVE':'LOADED_UNPROBED'):result.state,global:entry.global,error:result.error||null,elapsedMs:Number((performance.now()-started).toFixed(1))};
+  const probed=result.state==='LOADED'&&entry.global?await waitProbe(entry):false;
+  const state=result.state==='LOADED'?(!entry.global?'LOADED_SELF_EXECUTING':probed?'ACTIVE':'LOADED_UNPROBED'):result.state;
+  return {id:entry.id,state,global:entry.global,error:result.error||null,elapsedMs:Number((performance.now()-started).toFixed(1))};
 }
 async function launchPrivateWorker(){
   const started=performance.now();
@@ -125,7 +126,7 @@ async function relaunchAll(){
     const actions=await wakeExposedApis();
     const failed=results.filter(x=>/ERROR|TIMEOUT/.test(x.state));
     const unproven=results.filter(x=>/UNPROVEN/.test(x.state));
-    const active=results.filter(x=>/^ACTIVE/.test(x.state)).length;
+    const active=results.filter(x=>/^ACTIVE/.test(x.state)||/SELF_EXECUTING$/.test(x.state)).length;
     const summary={schema:SCHEMA,startedAt,completedAt:now(),elapsedMs:Number((performance.now()-t0).toFixed(1)),requested:modules.length+1,active,failed:failed.length,unproven:unproven.length,results,actions,notParallel,legacyDuplicatesStarted:false,testFilesStarted:false,buildFilesStarted:false,scope:'Gvault-Pages browser runtime while the page is open'};
     lastRun=Object.freeze(summary);
     emit('gthink.relaunch.complete',{requested:summary.requested,active,failed:failed.length,unproven:unproven.length,completedAt:summary.completedAt});
