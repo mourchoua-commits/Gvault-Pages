@@ -1,0 +1,9 @@
+'use strict';
+const SCHEMA='GTHINK_DORMANT_BLOB_SERVICE_WORKER_V1';
+const CACHE_NAME='gvault-gthink-dormant-blobs-v1';
+const CACHE_PREFIX='gvault-gthink-dormant-blobs-';
+self.addEventListener('install',event=>{event.waitUntil(self.skipWaiting())});
+self.addEventListener('activate',event=>{event.waitUntil((async()=>{for(const name of await caches.keys())if(name.startsWith(CACHE_PREFIX)&&name!==CACHE_NAME)await caches.delete(name);await self.clients.claim()})())});
+async function warm(urls){const cache=await caches.open(CACHE_NAME);for(const raw of Array.isArray(urls)?urls:[]){try{const url=new URL(raw,self.location.origin);if(url.origin!==self.location.origin)continue;const req=new Request(url.href,{method:'GET',credentials:'same-origin',cache:'reload'});const res=await fetch(req);if(res.ok)await cache.put(req,res.clone())}catch{}}}
+self.addEventListener('message',event=>{const d=event.data||{};if(d.type==='gvault.dormant.warm')event.waitUntil(warm(d.urls));if(d.type==='gvault.dormant.status')event.source?.postMessage?.({type:'gvault.dormant.status',schema:SCHEMA,cache:CACHE_NAME,at:new Date().toISOString()})});
+self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='GET')return;let url;try{url=new URL(req.url)}catch{return}if(url.origin!==self.location.origin)return;const isRuntime=/\/scripts\//.test(url.pathname)||/\/gthink\//.test(url.pathname);if(!isRuntime)return;event.respondWith((async()=>{const cache=await caches.open(CACHE_NAME);try{const network=await fetch(req);if(network&&network.ok)event.waitUntil(cache.put(req,network.clone()));return network}catch{const cached=await cache.match(req,{ignoreSearch:false})||await cache.match(new Request(url.origin+url.pathname,{method:'GET'}),{ignoreSearch:true});if(cached)return cached;throw new Error('gvault_dormant_cache_miss')}})())});
