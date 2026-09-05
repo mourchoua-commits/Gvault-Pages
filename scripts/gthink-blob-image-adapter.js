@@ -1,0 +1,8 @@
+(()=>{'use strict';
+const SCHEMA='GTHINK_BLOB_IMAGE_ADAPTER_V1';
+const ORGAN_ID='blob:organ:image-pipe:v1';
+const HOST_ID='blob:persistent-host:gthink:v1';
+let attached=false;
+function tryAttach(){if(attached)return true;const runtime=window.GTHINK_BLOB_RUNTIME,pipe=window.GTHINK_BLOB_IMAGE_PIPE;if(!runtime?.registerBlob||!pipe)return false;runtime.registerBlob({blobId:ORGAN_ID,parentBlobId:HOST_ID,role:'image-organ',capabilities:['image-select','image-store','image-frame','image-route','image-reconstruct'],state:{adapterSchema:SCHEMA,imagePipeSchema:pipe.schema||null,maxImageBytes:pipe.maxImageBytes||null}});runtime.grant(HOST_ID,'image-payload','image-organ');runtime.connect(HOST_ID,ORGAN_ID,true);window.addEventListener('gthink:image-payload',e=>{const d=e.detail||{};if(!d.kind)return;if(d.kind==='gthink.image.pipe.accepted'||d.kind==='gthink.image.pipe.completed'||d.kind==='gthink.image.pipe.transport.commit'){void runtime.route({payloadId:d.payloadId,type:'image',from:d.originBlobId||ORGAN_ID,ttl:Number(d.ttl)||8,meta:{sourceSchema:d.schema||null,imagePipeEvent:d.kind,mime:d.mime||null,name:d.name||null,size:d.size||null,payloadSha256:d.payloadSha256||null,frameCount:d.frameCount||null,idbKey:d.idbKey||null},data:null},{from:d.originBlobId||ORGAN_ID,broadcast:d.kind==='gthink.image.pipe.completed',ttl:Number(d.ttl)||8})}});attached=true;window.GTHINK_BLOB_IMAGE_ADAPTER=Object.freeze({schema:SCHEMA,blobId:ORGAN_ID,hostBlobId:HOST_ID,imageIsPayload:true,get attached(){return attached}});return true}
+if(!tryAttach()){let tries=0;const timer=setInterval(()=>{tries++;if(tryAttach()||tries>320)clearInterval(timer)},25)}
+})();
