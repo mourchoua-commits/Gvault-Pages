@@ -13,3 +13,4 @@ const api=Object.freeze({schema:SCHEMA,blobId:BLOB_ID,ownerBlobId:OWNER_BLOB_ID,
 window.GVAULT_PUBLIC_PAGE_TRANSPORT_ORGAN=api;
 window.dispatchEvent(new CustomEvent('gvault:public-page-transport-ready',{detail:{schema:SCHEMA,blobId:BLOB_ID,ownerBlobId:OWNER_BLOB_ID,internal:true}}));
 })();
+(()=>{'use strict';try{if(window.GTHINK_BLOB_RELAUNCH||document.querySelector('script[data-gthink-blob-relaunch="V1"]'))return;const base=new URL('.',document.currentScript?.src||location.href),s=document.createElement('script');s.src=new URL('gthink-blob-relaunch-orchestrator.js?v=1',base).href;s.async=false;s.dataset.gthinkBlobRelaunch='V1';(document.head||document.documentElement).appendChild(s)}catch{}})();
