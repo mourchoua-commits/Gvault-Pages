@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "9d9dd605326587c9aa58f86b6b9e6d31710f2052",
+  "parentSha": "3fe4af71f025729c9997c84a33a818d55e8b80c1",
+  "committedAt": "2026-09-05T04:05:34+02:00",
+  "summary": {
+    "subject": "gthink: add dormant service-worker cache blob",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 9,
+    "deletions": 0,
+    "paths": [
+      "gthink/gthink-dormant-blob-sw.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 9,
+    "deletions": 0,
+    "magnitude": 9,
+    "committedAt": "2026-09-05T04:05:34+02:00",
+    "parentSha": "3fe4af71f025729c9997c84a33a818d55e8b80c1"
+  },
+  "pulseKey": "CTP1:9d9dd605326587c9aa58f86b6b9e6d31710f2052:e68f7a01d3be87ca",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "9261381e0301328558346bcefdc8c238d9de7d62c81e4c4ed832f051d0047eb0",
+  "typedKeys": {
+    "commit": "gitc:9d9dd605326587c9aa58f86b6b9e6d31710f2052",
+    "parent": "gitc:3fe4af71f025729c9997c84a33a818d55e8b80c1",
+    "pulse": "ctp1:9d9dd605326587c9aa58f86b6b9e6d31710f2052:e68f7a01d3be87ca",
+    "translation": "cttrans:9261381e0301328558346bcefdc8c238d9de7d62c81e4c4ed832f051d0047eb0",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "9d9dd605326587c9aa58f86b6b9e6d31710f2052",
+    "parentSha": "3fe4af71f025729c9997c84a33a818d55e8b80c1",
+    "committedAt": "2026-09-05T04:05:34+02:00",
+    "summary": {
+      "subject": "gthink: add dormant service-worker cache blob",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 9,
+      "deletions": 0,
+      "paths": [
+        "gthink/gthink-dormant-blob-sw.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 9,
+      "deletions": 0,
+      "magnitude": 9,
+      "committedAt": "2026-09-05T04:05:34+02:00",
+      "parentSha": "3fe4af71f025729c9997c84a33a818d55e8b80c1"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/9d9dd605326587c9aa58f86b6b9e6d31710f2052.json",
+      "vfsKey": "CTP1:9d9dd605326587c9aa58f86b6b9e6d31710f2052:e68f7a01d3be87ca",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/9d9dd605326587c9aa58f86b6b9e6d31710f2052.json"
+}
