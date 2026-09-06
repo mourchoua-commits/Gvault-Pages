@@ -1,0 +1,113 @@
+name: GThink P2P Remote Validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/gthink-p2p-remote-validation.yml'
+      - 'scripts/gvault-p2p-remote-validator.mjs'
+      - 'tests/gvault-p2p-remote-validator.test.mjs'
+      - 'blobs/runtime/P2P_REMOTE_VALIDATOR_BLOB_V1.json'
+      - 'publications/gthink-peer/validation/request.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gthink-p2p-remote-validation
+  cancel-in-progress: true
+
+jobs:
+  remote-peer-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PRIVATE_READ_TOKEN: ${{ secrets.GVAULT_PAGES_TOKEN || secrets.GVAULT_STABLE_TOKEN }}
+      REQUEST_PATH: publications/gthink-peer/validation/request.json
+      RECEIPT_PATH: publications/gthink-peer/validation/latest-receipt.json
+    steps:
+      - name: Checkout public peer
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Test public P2P validator contract
+        run: node --test tests/gvault-p2p-remote-validator.test.mjs
+
+      - name: Probe private-read capability
+        id: capability
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "${PRIVATE_READ_TOKEN:-}" ]; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+            echo 'P2P_PRIVATE_READ_CAPABILITY_READY'
+          else
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            echo 'P2P_PRIVATE_READ_CAPABILITY_MISSING'
+          fi
+
+      - name: Clone private peer source without exposing private ref
+        if: steps.capability.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/gvault-p2p-private
+          BASIC="$(printf 'x-access-token:%s' "$PRIVATE_READ_TOKEN" | base64 -w0)"
+          hdr="AUTHORIZATION: basic $BASIC"
+          git -c http.https://github.com/.extraheader="$hdr" clone --quiet --depth 500 https://github.com/mourchoua-commits/Gvault.git /tmp/gvault-p2p-private
+
+      - name: Execute allowlisted suite on exact private target
+        if: steps.capability.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/gvault-p2p-remote-validator.mjs \
+            --request "$REQUEST_PATH" \
+            --private-root /tmp/gvault-p2p-private \
+            --receipt /tmp/gvault-p2p-validation-receipt.json
+
+      - name: Produce fail-closed receipt when private capability is unavailable
+        if: steps.capability.outputs.ready != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/gvault-p2p-remote-validator.mjs \
+            --request "$REQUEST_PATH" \
+            --receipt /tmp/gvault-p2p-validation-receipt.json \
+            --capability-fail
+
+      - name: Publish P2P receipt only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s /tmp/gvault-p2p-validation-receipt.json
+          mkdir -p "$(dirname "$RECEIPT_PATH")"
+          cp /tmp/gvault-p2p-validation-receipt.json "$RECEIPT_PATH"
+          git add "$RECEIPT_PATH"
+          if git diff --cached --quiet; then
+            echo 'P2P_RECEIPT_ALREADY_CURRENT'
+            exit 0
+          fi
+          changed="$(git diff --cached --name-only)"
+          [ "$changed" = "$RECEIPT_PATH" ] || { echo 'FORBIDDEN_PUBLIC_MUTATION'; exit 1; }
+          git config user.name 'GThink P2P Remote Validator Blob'
+          git config user.email 'actions@users.noreply.github.com'
+          git commit -m 'p2p validation: publish remote receipt [skip ci]' >/dev/null
+          git push origin HEAD:main >/dev/null
+
+      - name: Enforce remote receipt status
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs=require('fs');
+          const r=JSON.parse(fs.readFileSync(process.env.RECEIPT_PATH,'utf8'));
+          console.log(`P2P_REMOTE_VALIDATION_STATUS=${r.status}`);
+          console.log(`P2P_REMOTE_VALIDATION_RECEIPT_SHA256=${r.receiptSha256}`);
+          if(r.status!=='PASS') process.exit(1);
+          NODE
