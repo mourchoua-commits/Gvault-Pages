@@ -1,0 +1,30 @@
+{
+  "name": "P2P_REMOTE_VALIDATOR_BLOB_V1",
+  "version": "1.0.0",
+  "visibility": "PUBLIC_EXECUTOR_PRIVATE_SOURCE_NOT_PUBLISHED",
+  "peerId": "GVAULT_PAGES_PUBLIC_RUNNER_BLOB",
+  "role": "equal_peer_remote_validation_executor",
+  "request": "publications/gthink-peer/validation/request.json",
+  "receipt": "publications/gthink-peer/validation/latest-receipt.json",
+  "executor": "scripts/gvault-p2p-remote-validator.mjs",
+  "privateSource": {
+    "repository": "mourchoua-commits/Gvault",
+    "readViaServerSecretOnly": true,
+    "acceptedSecretAliases": ["GVAULT_PAGES_TOKEN", "GVAULT_STABLE_TOKEN"],
+    "publishPrivateContent": false,
+    "publishPrivateCommitSha": false
+  },
+  "targetResolution": "sha256(privateCommitSha) matched inside private clone",
+  "suitePolicy": {
+    "allowArbitraryCommands": false,
+    "allowlistedSuites": ["VERBATIM_INGRESS_V2"]
+  },
+  "guards": [
+    "FAIL_CLOSED_ON_MISSING_PRIVATE_READ_CAPABILITY",
+    "FAIL_CLOSED_ON_TARGET_HASH_MISMATCH",
+    "FAIL_CLOSED_ON_SUITE_DIGEST_MISMATCH",
+    "RECEIPT_SELF_HASH_REQUIRED",
+    "NO_PRIVATE_SOURCE_IN_RECEIPT",
+    "NO_RAW_PRIVATE_COMMIT_SHA_IN_RECEIPT"
+  ]
+}
