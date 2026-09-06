@@ -5,11 +5,14 @@ import path from 'node:path';
 import test from 'node:test';
 import { execFileSync } from 'node:child_process';
 import {
+  capsuleDigestSha256,
   capabilityFailureReceipt,
+  executeCapsuleValidation,
   findTargetCommitByDigest,
   receiptDigestSha256,
   sha256,
   suiteDigestSha256,
+  validateCapsule,
   validateRequest
 } from '../scripts/gvault-p2p-remote-validator.mjs';
 
@@ -30,6 +33,33 @@ function requestFor(commitSha) {
     privateContentRequestedForPublication: false,
     requestId: 'P2PVAL-d154a08c09fc9558b0ca86fe'
   };
+}
+
+function capsuleFor(request) {
+  const paths = [
+    'scripts/gvault-verbatim-ingress.mjs',
+    'scripts/gvault-verbatim-reference-registry.mjs',
+    'scripts/gvault-verbatim-side-ref-reader.mjs',
+    'scripts/gvault-p2p-validation-protocol.mjs',
+    'scripts/gvault-verbatim-ingress.test.mjs',
+    'scripts/gvault-verbatim-reference-registry-ingress.test.mjs',
+    'tests/gvault-verbatim-ingress-v2.test.mjs',
+    'tests/gvault-p2p-validation-protocol.test.mjs'
+  ];
+  const core = {
+    schema: 'GVAULT_P2P_VALIDATION_CAPSULE_V1',
+    protocolVersion: 1,
+    requestId: request.requestId,
+    suiteId: request.suiteId,
+    suiteCommandDigestSha256: request.suiteCommandDigestSha256,
+    targetCommitSha256: request.targetCommitSha256,
+    attestationMode: 'PRIVATE_MANIFEST_HASH_ONLY',
+    privateSourceIncluded: false,
+    privateCommitShaIncluded: false,
+    fileManifest: paths.map((p, i) => ({ path: p, gitBlobSha: String(i + 1).padStart(40, 'a').slice(0, 40), utf8Bytes: i + 1 })),
+    createdAt: '2026-09-06T19:12:00Z'
+  };
+  return { ...core, capsuleSha256: capsuleDigestSha256(core) };
 }
 
 test('finds exact private commit from one-way public digest', () => {
@@ -62,4 +92,27 @@ test('capability failure produces a self-verifying fail receipt', () => {
   assert.equal(receipt.privateContentPublished, false);
   assert.equal(receipt.privateCommitShaPublished, false);
   assert.equal(receipt.receiptSha256, receiptDigestSha256(receipt));
+});
+
+test('valid secretless capsule produces an explicitly weaker PASS receipt', () => {
+  const request = requestFor('c'.repeat(40));
+  const capsule = capsuleFor(request);
+  const check = validateCapsule({ request, capsule });
+  assert.equal(check.status, 'PASS');
+  const receipt = executeCapsuleValidation({ request, capsule });
+  assert.equal(receipt.status, 'PASS');
+  assert.equal(receipt.executionMode, 'CAPSULE_ATTESTATION');
+  assert.equal(receipt.assuranceLevel, 'REMOTE_PROTOCOL_AND_MANIFEST_ATTESTATION');
+  assert.equal(receipt.capsuleSha256, capsule.capsuleSha256);
+  assert.equal(receipt.privateContentPublished, false);
+  assert.equal(receipt.privateCommitShaPublished, false);
+});
+
+test('capsule tampering fails closed', () => {
+  const request = requestFor('d'.repeat(40));
+  const capsule = capsuleFor(request);
+  capsule.fileManifest[0].utf8Bytes += 1;
+  const check = validateCapsule({ request, capsule });
+  assert.equal(check.status, 'INVALID');
+  assert.ok(check.errors.includes('CAPSULE_DIGEST_MISMATCH'));
 });
