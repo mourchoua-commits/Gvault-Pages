@@ -1,0 +1,23 @@
+{
+  "schema": "GVAULT_P2P_REMOTE_VALIDATION_RECEIPT_V1",
+  "protocolVersion": 1,
+  "peerId": "GVAULT_PAGES_PUBLIC_RUNNER_BLOB",
+  "requestId": "P2PVAL-d154a08c09fc9558b0ca86fe",
+  "suiteId": "VERBATIM_INGRESS_V2",
+  "suiteCommandDigestSha256": "20229673181914984390f130060a3bdee477a74864d6ec6d463755da4210de31",
+  "targetCommitSha256": "001c6c55bd6f8ec3dd46d5d809594e926bd0874dc46da0b0f074c241802733dd",
+  "executionMode": "PRIVATE_CLONE_REMOTE_EXECUTOR",
+  "assuranceLevel": "REMOTE_EXACT_PRIVATE_COMMIT_EXECUTION",
+  "privateContentPublished": false,
+  "privateCommitShaPublished": false,
+  "observedAt": "2026-09-06T19:23:48.152Z",
+  "status": "FAIL",
+  "reason": "PRIVATE_READ_CAPABILITY_MISSING",
+  "tests": {
+    "exitCode": 126,
+    "passed": 0,
+    "failed": 1,
+    "outputSha256": "de97b5c1900dfb46a811c0e5d0db7df23c3b5c6ebc06d0b7b203305e4a53e7bb"
+  },
+  "receiptSha256": "75f7f0a0b54d0ecc223ce516789a300b3df8b6e1e1999b242ce69e6ed423eb3b"
+}
