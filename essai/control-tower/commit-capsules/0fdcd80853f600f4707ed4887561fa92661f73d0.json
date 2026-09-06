@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "0fdcd80853f600f4707ed4887561fa92661f73d0",
+  "parentSha": "4335027889611024612ab57d58268b13ef558ed5",
+  "committedAt": "2026-09-06T21:13:33+02:00",
+  "summary": {
+    "subject": "p2p: activate remote validation executor peer",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 113,
+    "deletions": 0,
+    "paths": [
+      ".github/workflows/gthink-p2p-remote-validation.yml"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 113,
+    "deletions": 0,
+    "magnitude": 113,
+    "committedAt": "2026-09-06T21:13:33+02:00",
+    "parentSha": "4335027889611024612ab57d58268b13ef558ed5"
+  },
+  "pulseKey": "CTP1:0fdcd80853f600f4707ed4887561fa92661f73d0:eff7eb2d2ed8b855",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "6cbfc9fb0de20218364633e73f7b9f79e37250debac9dc6e25ce4bec003f50cd",
+  "typedKeys": {
+    "commit": "gitc:0fdcd80853f600f4707ed4887561fa92661f73d0",
+    "parent": "gitc:4335027889611024612ab57d58268b13ef558ed5",
+    "pulse": "ctp1:0fdcd80853f600f4707ed4887561fa92661f73d0:eff7eb2d2ed8b855",
+    "translation": "cttrans:6cbfc9fb0de20218364633e73f7b9f79e37250debac9dc6e25ce4bec003f50cd",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "0fdcd80853f600f4707ed4887561fa92661f73d0",
+    "parentSha": "4335027889611024612ab57d58268b13ef558ed5",
+    "committedAt": "2026-09-06T21:13:33+02:00",
+    "summary": {
+      "subject": "p2p: activate remote validation executor peer",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 113,
+      "deletions": 0,
+      "paths": [
+        ".github/workflows/gthink-p2p-remote-validation.yml"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 113,
+      "deletions": 0,
+      "magnitude": 113,
+      "committedAt": "2026-09-06T21:13:33+02:00",
+      "parentSha": "4335027889611024612ab57d58268b13ef558ed5"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/0fdcd80853f600f4707ed4887561fa92661f73d0.json",
+      "vfsKey": "CTP1:0fdcd80853f600f4707ed4887561fa92661f73d0:eff7eb2d2ed8b855",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/0fdcd80853f600f4707ed4887561fa92661f73d0.json"
+}
