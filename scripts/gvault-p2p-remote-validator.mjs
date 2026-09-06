@@ -8,6 +8,7 @@ import { pathToFileURL } from 'node:url';
 
 export const REQUEST_SCHEMA = 'GVAULT_P2P_REMOTE_VALIDATION_REQUEST_V1';
 export const RECEIPT_SCHEMA = 'GVAULT_P2P_REMOTE_VALIDATION_RECEIPT_V1';
+export const CAPSULE_SCHEMA = 'GVAULT_P2P_VALIDATION_CAPSULE_V1';
 export const PEER_ID = 'GVAULT_PAGES_PUBLIC_RUNNER_BLOB';
 
 export const SUITES = Object.freeze({
@@ -15,6 +16,16 @@ export const SUITES = Object.freeze({
     suiteId: 'VERBATIM_INGRESS_V2',
     argv: Object.freeze([
       'node', '--test',
+      'scripts/gvault-verbatim-ingress.test.mjs',
+      'scripts/gvault-verbatim-reference-registry-ingress.test.mjs',
+      'tests/gvault-verbatim-ingress-v2.test.mjs',
+      'tests/gvault-p2p-validation-protocol.test.mjs'
+    ]),
+    requiredManifestPaths: Object.freeze([
+      'scripts/gvault-verbatim-ingress.mjs',
+      'scripts/gvault-verbatim-reference-registry.mjs',
+      'scripts/gvault-verbatim-side-ref-reader.mjs',
+      'scripts/gvault-p2p-validation-protocol.mjs',
       'scripts/gvault-verbatim-ingress.test.mjs',
       'scripts/gvault-verbatim-reference-registry-ingress.test.mjs',
       'tests/gvault-verbatim-ingress-v2.test.mjs',
@@ -69,6 +80,45 @@ function countTap(text, label) {
   return match ? Number(match[1]) : null;
 }
 
+export function capsuleDigestSha256(capsule) {
+  const { capsuleSha256, ...core } = capsule || {};
+  return sha256(Buffer.from(stable(core), 'utf8'));
+}
+
+export function validateCapsule({ request, capsule }) {
+  const errors = [];
+  const requestCheck = validateRequest(request);
+  if (requestCheck.status !== 'PASS') errors.push(...requestCheck.errors.map(x => `REQUEST:${x}`));
+  if (capsule?.schema !== CAPSULE_SCHEMA) errors.push('CAPSULE_SCHEMA_INVALID');
+  if (capsule?.protocolVersion !== 1) errors.push('CAPSULE_PROTOCOL_VERSION_INVALID');
+  if (capsule?.requestId !== request?.requestId) errors.push('CAPSULE_REQUEST_ID_MISMATCH');
+  if (capsule?.suiteId !== request?.suiteId) errors.push('CAPSULE_SUITE_ID_MISMATCH');
+  if (capsule?.suiteCommandDigestSha256 !== request?.suiteCommandDigestSha256) errors.push('CAPSULE_SUITE_DIGEST_MISMATCH');
+  if (capsule?.targetCommitSha256 !== request?.targetCommitSha256) errors.push('CAPSULE_TARGET_MISMATCH');
+  if (capsule?.attestationMode !== 'PRIVATE_MANIFEST_HASH_ONLY') errors.push('CAPSULE_ATTESTATION_MODE_INVALID');
+  if (capsule?.privateSourceIncluded !== false) errors.push('CAPSULE_PRIVATE_SOURCE_FLAG');
+  if (capsule?.privateCommitShaIncluded !== false) errors.push('CAPSULE_PRIVATE_COMMIT_FLAG');
+  if (!/^[a-f0-9]{64}$/.test(String(capsule?.capsuleSha256 || ''))) errors.push('CAPSULE_DIGEST_MISSING');
+  else if (capsuleDigestSha256(capsule) !== capsule.capsuleSha256) errors.push('CAPSULE_DIGEST_MISMATCH');
+
+  const manifest = Array.isArray(capsule?.fileManifest) ? capsule.fileManifest : [];
+  const seen = new Set();
+  for (const entry of manifest) {
+    const p = String(entry?.path || '');
+    if (!p || seen.has(p)) errors.push('CAPSULE_MANIFEST_PATH_INVALID_OR_DUPLICATE');
+    seen.add(p);
+    if (!/^[a-f0-9]{40}$/.test(String(entry?.gitBlobSha || ''))) errors.push(`CAPSULE_BLOB_SHA_INVALID:${p}`);
+    if (!Number.isInteger(entry?.utf8Bytes) || entry.utf8Bytes < 0) errors.push(`CAPSULE_BYTES_INVALID:${p}`);
+  }
+  const suite = SUITES[request?.suiteId];
+  if (suite) {
+    for (const required of suite.requiredManifestPaths) {
+      if (!seen.has(required)) errors.push(`CAPSULE_REQUIRED_PATH_MISSING:${required}`);
+    }
+  }
+  return { status: errors.length ? 'INVALID' : 'PASS', errors, manifestCount: manifest.length };
+}
+
 export function receiptDigestSha256(receipt) {
   const { receiptSha256, ...core } = receipt || {};
   return sha256(Buffer.from(stable(core), 'utf8'));
@@ -78,7 +128,7 @@ export function finalizeReceipt(core) {
   return { ...core, receiptSha256: receiptDigestSha256(core) };
 }
 
-function baseReceipt(request, observedAt = new Date().toISOString()) {
+function baseReceipt(request, { executionMode, assuranceLevel, observedAt = new Date().toISOString() } = {}) {
   return {
     schema: RECEIPT_SCHEMA,
     protocolVersion: 1,
@@ -87,7 +137,8 @@ function baseReceipt(request, observedAt = new Date().toISOString()) {
     suiteId: request?.suiteId || null,
     suiteCommandDigestSha256: request?.suiteCommandDigestSha256 || null,
     targetCommitSha256: request?.targetCommitSha256 || null,
-    executionMode: 'PRIVATE_CLONE_REMOTE_EXECUTOR',
+    executionMode,
+    assuranceLevel,
     privateContentPublished: false,
     privateCommitShaPublished: false,
     observedAt
@@ -96,10 +147,29 @@ function baseReceipt(request, observedAt = new Date().toISOString()) {
 
 export function capabilityFailureReceipt(request, reason = 'PRIVATE_READ_CAPABILITY_MISSING') {
   return finalizeReceipt({
-    ...baseReceipt(request),
+    ...baseReceipt(request, { executionMode: 'PRIVATE_CLONE_REMOTE_EXECUTOR', assuranceLevel: 'REMOTE_EXACT_PRIVATE_COMMIT_EXECUTION' }),
     status: 'FAIL',
     reason,
     tests: { exitCode: 126, passed: 0, failed: 1, outputSha256: sha256(Buffer.from(reason, 'utf8')) }
+  });
+}
+
+export function executeCapsuleValidation({ request, capsule }) {
+  const check = validateCapsule({ request, capsule });
+  const status = check.status === 'PASS' ? 'PASS' : 'FAIL';
+  const output = JSON.stringify({ errors: check.errors, manifestCount: check.manifestCount });
+  return finalizeReceipt({
+    ...baseReceipt(request, { executionMode: 'CAPSULE_ATTESTATION', assuranceLevel: 'REMOTE_PROTOCOL_AND_MANIFEST_ATTESTATION' }),
+    status,
+    reason: status === 'PASS' ? 'CAPSULE_PROTOCOL_AND_MANIFEST_VALIDATED' : 'CAPSULE_VALIDATION_FAILED',
+    capsuleSha256: capsule?.capsuleSha256 || null,
+    tests: {
+      exitCode: status === 'PASS' ? 0 : 123,
+      passed: status === 'PASS' ? 1 + check.manifestCount : 0,
+      failed: check.errors.length,
+      outputSha256: sha256(Buffer.from(output, 'utf8'))
+    },
+    capsuleErrors: check.errors
   });
 }
 
@@ -107,7 +177,7 @@ export function executeValidation({ request, privateRoot }) {
   const requestCheck = validateRequest(request);
   if (requestCheck.status !== 'PASS') {
     return finalizeReceipt({
-      ...baseReceipt(request),
+      ...baseReceipt(request, { executionMode: 'PRIVATE_CLONE_REMOTE_EXECUTOR', assuranceLevel: 'REMOTE_EXACT_PRIVATE_COMMIT_EXECUTION' }),
       status: 'FAIL',
       reason: 'REQUEST_INVALID',
       requestErrors: requestCheck.errors,
@@ -118,7 +188,7 @@ export function executeValidation({ request, privateRoot }) {
   const targetCommit = findTargetCommitByDigest({ root: privateRoot, targetCommitSha256: request.targetCommitSha256 });
   if (!targetCommit) {
     return finalizeReceipt({
-      ...baseReceipt(request),
+      ...baseReceipt(request, { executionMode: 'PRIVATE_CLONE_REMOTE_EXECUTOR', assuranceLevel: 'REMOTE_EXACT_PRIVATE_COMMIT_EXECUTION' }),
       status: 'FAIL',
       reason: 'TARGET_COMMIT_NOT_FOUND',
       tests: { exitCode: 124, passed: 0, failed: 1, outputSha256: sha256(Buffer.from('TARGET_COMMIT_NOT_FOUND', 'utf8')) }
@@ -144,7 +214,7 @@ export function executeValidation({ request, privateRoot }) {
   const status = exitCode === 0 && failed === 0 ? 'PASS' : 'FAIL';
 
   return finalizeReceipt({
-    ...baseReceipt(request),
+    ...baseReceipt(request, { executionMode: 'PRIVATE_CLONE_REMOTE_EXECUTOR', assuranceLevel: 'REMOTE_EXACT_PRIVATE_COMMIT_EXECUTION' }),
     status,
     reason: status === 'PASS' ? 'ALLOWLISTED_SUITE_PASSED' : 'ALLOWLISTED_SUITE_FAILED',
     tests: {
@@ -172,11 +242,14 @@ function cli() {
   const receiptFile = argValue(argv, '--receipt');
   if (!requestFile || !receiptFile) throw new Error('REQUEST_AND_RECEIPT_PATH_REQUIRED');
   const request = JSON.parse(fs.readFileSync(requestFile, 'utf8'));
-  const receipt = argv.includes('--capability-fail')
-    ? capabilityFailureReceipt(request)
-    : executeValidation({ request, privateRoot: argValue(argv, '--private-root') });
+  const capsuleFile = argValue(argv, '--capsule');
+  const receipt = capsuleFile
+    ? executeCapsuleValidation({ request, capsule: JSON.parse(fs.readFileSync(capsuleFile, 'utf8')) })
+    : argv.includes('--capability-fail')
+      ? capabilityFailureReceipt(request)
+      : executeValidation({ request, privateRoot: argValue(argv, '--private-root') });
   writeReceipt(receiptFile, receipt);
-  process.stdout.write(`${JSON.stringify({ status: receipt.status, requestId: receipt.requestId, peerId: receipt.peerId, receiptSha256: receipt.receiptSha256 })}\n`);
+  process.stdout.write(`${JSON.stringify({ status: receipt.status, executionMode: receipt.executionMode, assuranceLevel: receipt.assuranceLevel, requestId: receipt.requestId, peerId: receipt.peerId, receiptSha256: receipt.receiptSha256 })}\n`);
 }
 
 const invoked = process.argv[1] ? pathToFileURL(path.resolve(process.argv[1])).href : null;
