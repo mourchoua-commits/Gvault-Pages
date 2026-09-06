@@ -1,0 +1,12 @@
+{
+  "schema": "GVAULT_P2P_REMOTE_VALIDATION_REQUEST_V1",
+  "protocolVersion": 1,
+  "suiteId": "VERBATIM_INGRESS_V2",
+  "suiteCommandDigestSha256": "20229673181914984390f130060a3bdee477a74864d6ec6d463755da4210de31",
+  "targetCommitSha256": "001c6c55bd6f8ec3dd46d5d809594e926bd0874dc46da0b0f074c241802733dd",
+  "requestedAt": "2026-09-06T19:11:30Z",
+  "nonce": "c7f4c98178d24ecfa57e67dd2b1a9831",
+  "targetRefDisclosure": "SHA256_ONLY",
+  "privateContentRequestedForPublication": false,
+  "requestId": "P2PVAL-d154a08c09fc9558b0ca86fe"
+}
