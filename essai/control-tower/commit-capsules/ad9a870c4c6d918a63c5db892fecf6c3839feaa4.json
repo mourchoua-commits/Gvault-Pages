@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "ad9a870c4c6d918a63c5db892fecf6c3839feaa4",
+  "parentSha": "4d3659d1218be41407ed4dcfa64879bc2532e24d",
+  "committedAt": "2026-09-06T21:12:51+02:00",
+  "summary": {
+    "subject": "test: cover public p2p remote validator",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 65,
+    "deletions": 0,
+    "paths": [
+      "tests/gvault-p2p-remote-validator.test.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 65,
+    "deletions": 0,
+    "magnitude": 65,
+    "committedAt": "2026-09-06T21:12:51+02:00",
+    "parentSha": "4d3659d1218be41407ed4dcfa64879bc2532e24d"
+  },
+  "pulseKey": "CTP1:ad9a870c4c6d918a63c5db892fecf6c3839feaa4:47fc839e728aab4b",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "20cfa3a66751b0d4b235b8ceac6b3f2da18ebb95ba47eae0ba94211cf80bc9f1",
+  "typedKeys": {
+    "commit": "gitc:ad9a870c4c6d918a63c5db892fecf6c3839feaa4",
+    "parent": "gitc:4d3659d1218be41407ed4dcfa64879bc2532e24d",
+    "pulse": "ctp1:ad9a870c4c6d918a63c5db892fecf6c3839feaa4:47fc839e728aab4b",
+    "translation": "cttrans:20cfa3a66751b0d4b235b8ceac6b3f2da18ebb95ba47eae0ba94211cf80bc9f1",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "ad9a870c4c6d918a63c5db892fecf6c3839feaa4",
+    "parentSha": "4d3659d1218be41407ed4dcfa64879bc2532e24d",
+    "committedAt": "2026-09-06T21:12:51+02:00",
+    "summary": {
+      "subject": "test: cover public p2p remote validator",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 65,
+      "deletions": 0,
+      "paths": [
+        "tests/gvault-p2p-remote-validator.test.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 65,
+      "deletions": 0,
+      "magnitude": 65,
+      "committedAt": "2026-09-06T21:12:51+02:00",
+      "parentSha": "4d3659d1218be41407ed4dcfa64879bc2532e24d"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/ad9a870c4c6d918a63c5db892fecf6c3839feaa4.json",
+      "vfsKey": "CTP1:ad9a870c4c6d918a63c5db892fecf6c3839feaa4:47fc839e728aab4b",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/ad9a870c4c6d918a63c5db892fecf6c3839feaa4.json"
+}
