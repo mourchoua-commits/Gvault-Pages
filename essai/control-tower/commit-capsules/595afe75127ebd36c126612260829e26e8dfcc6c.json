@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "595afe75127ebd36c126612260829e26e8dfcc6c",
+  "parentSha": "9536940756533f1bae39e32aba8d941ef7652945",
+  "committedAt": "2026-09-06T21:23:17+02:00",
+  "summary": {
+    "subject": "p2p: add secretless capsule attestation mode",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 83,
+    "deletions": 10,
+    "paths": [
+      "scripts/gvault-p2p-remote-validator.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 83,
+    "deletions": 10,
+    "magnitude": 93,
+    "committedAt": "2026-09-06T21:23:17+02:00",
+    "parentSha": "9536940756533f1bae39e32aba8d941ef7652945"
+  },
+  "pulseKey": "CTP1:595afe75127ebd36c126612260829e26e8dfcc6c:83c7deffe88d3f2a",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "05e82b5cd616871de321cf3163026acc1e75b647eb65bec756937be323cb45ef",
+  "typedKeys": {
+    "commit": "gitc:595afe75127ebd36c126612260829e26e8dfcc6c",
+    "parent": "gitc:9536940756533f1bae39e32aba8d941ef7652945",
+    "pulse": "ctp1:595afe75127ebd36c126612260829e26e8dfcc6c:83c7deffe88d3f2a",
+    "translation": "cttrans:05e82b5cd616871de321cf3163026acc1e75b647eb65bec756937be323cb45ef",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "595afe75127ebd36c126612260829e26e8dfcc6c",
+    "parentSha": "9536940756533f1bae39e32aba8d941ef7652945",
+    "committedAt": "2026-09-06T21:23:17+02:00",
+    "summary": {
+      "subject": "p2p: add secretless capsule attestation mode",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 83,
+      "deletions": 10,
+      "paths": [
+        "scripts/gvault-p2p-remote-validator.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 83,
+      "deletions": 10,
+      "magnitude": 93,
+      "committedAt": "2026-09-06T21:23:17+02:00",
+      "parentSha": "9536940756533f1bae39e32aba8d941ef7652945"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/595afe75127ebd36c126612260829e26e8dfcc6c.json",
+      "vfsKey": "CTP1:595afe75127ebd36c126612260829e26e8dfcc6c:83c7deffe88d3f2a",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/595afe75127ebd36c126612260829e26e8dfcc6c.json"
+}
