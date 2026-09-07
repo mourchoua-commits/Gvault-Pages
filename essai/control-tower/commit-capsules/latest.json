@@ -1,17 +1,17 @@
 {
   "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_LATEST_V1",
-  "commitSha": "3e445dcfd5f9a8c0fd7b34a9bb8eac312b4b32c6",
-  "parentSha": "7ee8ea218117e2a2bf4c44de1beccabaf015fe6b",
-  "pulseKey": "CTP1:3e445dcfd5f9a8c0fd7b34a9bb8eac312b4b32c6:98fd19889abb1152",
+  "commitSha": "779b714a6f2f8510eb521a8f2a3f78e4ff7c7304",
+  "parentSha": "37cd3161fb885cfae8183191510ad67cdb48fbf9",
+  "pulseKey": "CTP1:779b714a6f2f8510eb521a8f2a3f78e4ff7c7304:a63172cf2e631fd9",
   "functionImageVersion": "1.0.0",
-  "translationSha256": "ef499e9787d6180a38c815f75a98f8379830978f26e09c6837c711feeccff5e3",
+  "translationSha256": "1724df260c61dfc1769650d25ba52fd610dffea190f5af8836d136ee826c637a",
   "typedKeys": {
-    "commit": "gitc:3e445dcfd5f9a8c0fd7b34a9bb8eac312b4b32c6",
-    "parent": "gitc:7ee8ea218117e2a2bf4c44de1beccabaf015fe6b",
-    "pulse": "ctp1:3e445dcfd5f9a8c0fd7b34a9bb8eac312b4b32c6:98fd19889abb1152",
-    "translation": "cttrans:ef499e9787d6180a38c815f75a98f8379830978f26e09c6837c711feeccff5e3",
+    "commit": "gitc:779b714a6f2f8510eb521a8f2a3f78e4ff7c7304",
+    "parent": "gitc:37cd3161fb885cfae8183191510ad67cdb48fbf9",
+    "pulse": "ctp1:779b714a6f2f8510eb521a8f2a3f78e4ff7c7304:a63172cf2e631fd9",
+    "translation": "cttrans:1724df260c61dfc1769650d25ba52fd610dffea190f5af8836d136ee826c637a",
     "functionImage": "ctfunc:1.0.0"
   },
-  "capsulePath": "commit-capsules/3e445dcfd5f9a8c0fd7b34a9bb8eac312b4b32c6.json",
-  "committedAt": "2026-09-08T01:19:22+02:00"
+  "capsulePath": "commit-capsules/779b714a6f2f8510eb521a8f2a3f78e4ff7c7304.json",
+  "committedAt": "2026-09-08T01:20:48+02:00"
 }
