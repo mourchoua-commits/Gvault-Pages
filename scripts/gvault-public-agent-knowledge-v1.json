@@ -1,0 +1,52 @@
+{
+  "schema": "GVAULT_PUBLIC_AGENT_KNOWLEDGE_V1",
+  "version": 1,
+  "status": "READY",
+  "mode": "GVAULT_AUTONOMOUS_READ_ONLY",
+  "source": {
+    "repo": "mourchoua-commits/Gvault",
+    "ref": "main",
+    "anchorCommit": "c56ed625be251dc305d7563ce22406cf40b243bc",
+    "gthinkEntrypoint": "GTHINK_ENTRYPOINT.md",
+    "gthinkManifest": "GThink/MANIFEST.json"
+  },
+  "gthink": {
+    "discovery": "manifest -> router -> narrowest authoritative route -> safe public projection",
+    "publicRules": [
+      "truth_before_certainty",
+      "public_context_only",
+      "no_secret_or_private_content",
+      "separate_verified_state_from_hypothesis",
+      "do_not_claim_live_remote_state_when_using_snapshot_data"
+    ]
+  },
+  "catalog": {
+    "schema": "GVAULT_PUBLIC_PROJECT_CATALOG_PART_V2",
+    "parts": [
+      "../essai/project-catalog/catalog-part-1.v2.json",
+      "../essai/project-catalog/catalog-part-2.v2.json",
+      "../essai/project-catalog/catalog-part-3.v2.json",
+      "../essai/project-catalog/catalog-part-4.v2.json"
+    ]
+  },
+  "capabilities": {
+    "conversation": true,
+    "projectLookup": true,
+    "projectComparison": true,
+    "projectStatus": true,
+    "projectVersion": true,
+    "publicLaunchPath": true,
+    "recentLocalConversation": true,
+    "browserNativeLanguageModelWhenAvailable": true,
+    "deterministicFallback": true,
+    "directBackend": false,
+    "privateWrites": false,
+    "secrets": false
+  },
+  "fallback": {
+    "preferred": "browser-native-language-model",
+    "alwaysAvailable": "gvault-deterministic-project-engine",
+    "futureProvider": "DIRECT"
+  },
+  "containsSecret": false
+}
