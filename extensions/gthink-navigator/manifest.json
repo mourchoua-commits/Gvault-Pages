@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "GThink Navigator",
+  "version": "0.1.0",
+  "description": "VAULT AGENT // LIGHT comme allié de navigation : voit la page à la demande, dialogue dans un panneau flottant et peut utiliser des outils de navigation sûrs.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "gthink-navigator@gvault.local",
+      "strict_min_version": "121.0"
+    }
+  },
+  "permissions": [
+    "tabs",
+    "storage",
+    "scripting",
+    "contextMenus"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "GThink Navigator"
+  },
+  "commands": {
+    "toggle-gthink-navigator": {
+      "suggested_key": {
+        "default": "Alt+G"
+      },
+      "description": "Ouvrir ou fermer GThink Navigator"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://mourchoua-commits.github.io/*"],
+      "js": ["bridge-isolated.js"],
+      "run_at": "document_idle",
+      "world": "ISOLATED"
+    },
+    {
+      "matches": ["https://mourchoua-commits.github.io/*"],
+      "js": ["bridge-main.js"],
+      "run_at": "document_idle",
+      "world": "MAIN"
+    }
+  ]
+}
