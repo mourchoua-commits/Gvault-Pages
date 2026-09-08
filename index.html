@@ -56,8 +56,9 @@ if(!h.includes(needle))throw new Error('Point de greffe outils privés introuvab
 h=h.replace(needle,graft);
 const documentClose='<'+'/body>\n<'+'/html>';
 if(!h.includes('gvault-public-agent-conversation.js'))h=h.replace(/<\/body>\s*<\/html>\s*$/i,'<script src="./scripts/gvault-public-agent-conversation.js?v=4"><\/script>\n'+documentClose);
-if(!h.includes('gthink-universal-provider-router.js'))h=h.replace(/<\/body>\s*<\/html>\s*$/i,'<script src="./scripts/gthink-universal-provider-router.js?v=1"><\/script>\n'+documentClose);
-if(!h.includes('gthink-inline-conversation-relay.js'))h=h.replace(/<\/body>\s*<\/html>\s*$/i,'<script src="./scripts/gthink-inline-conversation-relay.js?v=1"><\/script>\n'+documentClose);
+if(!h.includes('gthink-universal-tool-bus.js'))h=h.replace(/<\/body>\s*<\/html>\s*$/i,'<script src="./scripts/gthink-universal-tool-bus.js?v=1"><\/script>\n'+documentClose);
+if(!h.includes('gthink-universal-provider-router.js'))h=h.replace(/<\/body>\s*<\/html>\s*$/i,'<script src="./scripts/gthink-universal-provider-router.js?v=2"><\/script>\n'+documentClose);
+if(!h.includes('gthink-inline-conversation-relay.js'))h=h.replace(/<\/body>\s*<\/html>\s*$/i,'<script src="./scripts/gthink-inline-conversation-relay.js?v=2"><\/script>\n'+documentClose);
 if(!h.includes('gthink-light-best-functional-checkup.js'))h=h.replace(/<\/body>\s*<\/html>\s*$/i,'<script src="./scripts/gthink-light-best-functional-checkup.js?v=1"><\/script>\n'+documentClose);
 if(!h.includes('gvault-public-page-blob.js'))h=h.replace(/<\/body>\s*<\/html>\s*$/i,'<script src="./scripts/gvault-public-page-blob.js?v=1"><\/script>\n'+documentClose);
 document.open();document.write(h);document.close();
