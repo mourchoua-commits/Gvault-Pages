@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const VERSION='1.3.1';
+const VERSION='1.4.1';
 const STYLE=Object.freeze({
  schema:'GVAULT_PUBLIC_AGENT_CONVERSATION_STYLE_V1',
  version:VERSION,
@@ -35,9 +35,16 @@ const INTERNAL_PREFIXES=[
  /^Version\s*:/i,
  /^Prochaine action\s*:/i
 ];
+const SCRIPT_BASE=new URL('.',document.currentScript?.src||location.href);
+const TEST_INTENT_URL=new URL('gthink-public-test-intent-router.js?v=1',SCRIPT_BASE).href;
+const CONVERSATION_URL=new URL('gthink-secondary-conversation-bridge.js?v=4',SCRIPT_BASE).href;
+const targetHistory=new WeakMap();
+const targetWrapped=new WeakSet();
+let dependencyPromise=null;
+function clean(v){return String(v??'').trim()}
 function diagnosticIntent(query=''){return DIAGNOSTIC_INTENT.test(String(query||''))}
 function sanitizeConversationPlane(answer,query=''){
- const raw=String(answer??'').trim();
+ const raw=clean(answer);
  if(!raw||diagnosticIntent(query))return raw;
  const lines=raw.replace(/\r\n?/g,'\n').split('\n');
  const kept=[];
@@ -75,21 +82,89 @@ function conversationalize(answer,query=''){
             .replace('Tu peux me l’apprendre avec :','Si tu veux me l’apprendre :')
             .replace('Ou reformuler avec','Sinon donne-moi');
  }
- if(out.startsWith('GTHINK_ACTION_BLOCKED\n')){
-  out=out.replace(/^GTHINK_ACTION_BLOCKED\n/,'Action bloquée par GThink.\n');
- }
+ if(out.startsWith('GTHINK_ACTION_BLOCKED\n'))out=out.replace(/^GTHINK_ACTION_BLOCKED\n/,'Action bloquée par GThink.\n');
  return out;
 }
-function installLocalLayer(){
- const fn=window.applyAgentModel;
- if(typeof fn!=='function'||fn.__gvaultConversationStyleV1)return false;
- const wrapped=function(answer,query,ctx){return conversationalize(fn.call(this,answer,query,ctx),query)};
- Object.defineProperty(wrapped,'__gvaultConversationStyleV1',{value:true});
- try{window.applyAgentModel=wrapped;return window.applyAgentModel===wrapped}catch{return false}
+function loadScript(url,attr){
+ return new Promise(resolve=>{
+  const existing=document.querySelector(`script[${attr}]`);
+  if(existing){
+   if(existing.dataset.ready==='1')return resolve(true);
+   existing.addEventListener('load',()=>resolve(true),{once:true});
+   existing.addEventListener('error',()=>resolve(false),{once:true});
+   return;
+  }
+  const s=document.createElement('script');
+  s.src=url;
+  s.async=false;
+  s.setAttribute(attr,'1');
+  s.addEventListener('load',()=>{s.dataset.ready='1';resolve(true)},{once:true});
+  s.addEventListener('error',()=>resolve(false),{once:true});
+  (document.head||document.documentElement).appendChild(s);
+ });
 }
-function installRemoteLayer(){
- if(window.__GVAULT_PUBLIC_AGENT_FETCH_STYLE_V1)return true;
- const nativeFetch=window.fetch.bind(window);
+function loadConversationDependencies(){
+ if(dependencyPromise)return dependencyPromise;
+ dependencyPromise=Promise.all([
+  loadScript(TEST_INTENT_URL,'data-gvault-light-test-intent'),
+  loadScript(CONVERSATION_URL,'data-gvault-light-conversation')
+ ]).then(()=>true).catch(()=>false);
+ return dependencyPromise;
+}
+function historyFor(target){
+ let h=targetHistory.get(target);
+ if(!h){h=[];targetHistory.set(target,h)}
+ return h;
+}
+function remember(target,query,answer){
+ const h=historyFor(target);
+ if(clean(query))h.push({role:'user',content:clean(query)});
+ if(clean(answer))h.push({role:'assistant',content:clean(answer)});
+ if(h.length>24)h.splice(0,h.length-24);
+}
+function routeSynchronous(target,query,ctx){
+ const q=clean(query);
+ if(!q)return null;
+ const request={text:q,payload:{message:q,history:historyFor(target).slice(-24),context:ctx||null}};
+ try{
+  const test=window.GTHINK_PUBLIC_TEST_INTENT_ROUTER?.answer?.(request,ctx);
+  if(test?.handled&&clean(test.text))return clean(test.text);
+ }catch{}
+ try{
+  const convo=window.GTHINK_SECONDARY_CONVERSATION_BRIDGE?.answer?.(request,ctx);
+  if(convo?.handled&&clean(convo.text))return clean(convo.text);
+ }catch{}
+ return null;
+}
+function transformLocal(target,answer,query,ctx){
+ const routed=routeSynchronous(target,query,ctx);
+ const out=routed||conversationalize(answer,query);
+ remember(target,query,out);
+ return out;
+}
+function installLocalLayer(target=window){
+ let fn;
+ try{fn=target.applyAgentModel}catch{return false}
+ if(typeof fn!=='function')return false;
+ if(fn.__gvaultConversationStyleV1){targetWrapped.add(target);return true}
+ const wrapped=function(answer,query,ctx){
+  const result=fn.call(this,answer,query,ctx);
+  if(result&&typeof result.then==='function')return result.then(v=>transformLocal(target,v,query,ctx));
+  return transformLocal(target,result,query,ctx);
+ };
+ Object.defineProperty(wrapped,'__gvaultConversationStyleV1',{value:true});
+ Object.defineProperty(wrapped,'__gvaultLightRuntimeBridge',{value:true});
+ try{
+  target.applyAgentModel=wrapped;
+  const ok=target.applyAgentModel===wrapped;
+  if(ok)targetWrapped.add(target);
+  return ok;
+ }catch{return false}
+}
+function installRemoteLayer(target=window){
+ try{if(target.__GVAULT_PUBLIC_AGENT_FETCH_STYLE_V1)return true}catch{return false}
+ let nativeFetch;
+ try{nativeFetch=target.fetch.bind(target)}catch{return false}
  const wrapped=async function(input,init){
   let next=init;
   let query='';
@@ -114,30 +189,91 @@ function installRemoteLayer(){
   try{
    const data=await response.clone().json();
    if(data&&typeof data==='object'&&(data.schema==='GVAULT_AGENT_CHAT_RESPONSE_V1'||data.schema==='GVAULT_AGENT_CHAT_RESPONSE_V2'||data.schema==='GVAULT_BLOB_STREAM_RESPONSE_V1')&&typeof data.text==='string'){
-    const text=conversationalize(data.text,query);
+    const text=routeSynchronous(target,query,data?.context)||conversationalize(data.text,query);
+    remember(target,query,text);
     let blob=data.blob,pair=data.pair;
     if(blob&&typeof blob==='object'){
-     if(blob.agentSide&&typeof blob.agentSide==='object'&&typeof blob.agentSide.display==='string')blob={...blob,agentSide:{...blob.agentSide,display:conversationalize(blob.agentSide.display,query)}};
-     else if(typeof blob.text==='string'||typeof blob.display==='string'){const bt=conversationalize(blob.text||blob.display,query);blob={...blob,text:bt,display:bt}}
+     if(blob.agentSide&&typeof blob.agentSide==='object'&&typeof blob.agentSide.display==='string')blob={...blob,agentSide:{...blob.agentSide,display:text}};
+     else if(typeof blob.text==='string'||typeof blob.display==='string')blob={...blob,text,display:text};
     }
-    if(pair?.responseBlob&&typeof pair.responseBlob==='object'){const rb=pair.responseBlob,rt=conversationalize(rb.text||rb.display||text,query);pair={...pair,responseBlob:{...rb,text:rt,display:rt}}}
-    const headers=new Headers(response.headers);headers.set('content-type','application/json');
-    return new Response(JSON.stringify({...data,text,blob,pair}),{status:response.status,statusText:response.statusText,headers});
+    if(pair?.responseBlob&&typeof pair.responseBlob==='object')pair={...pair,responseBlob:{...pair.responseBlob,text,display:text}};
+    const HeadersCtor=target.Headers||Headers;
+    const ResponseCtor=target.Response||Response;
+    const headers=new HeadersCtor(response.headers);
+    headers.set('content-type','application/json');
+    return new ResponseCtor(JSON.stringify({...data,text,blob,pair}),{status:response.status,statusText:response.statusText,headers});
    }
   }catch{}
   return response;
  };
- try{window.fetch=wrapped;window.__GVAULT_PUBLIC_AGENT_FETCH_STYLE_V1=true;return true}catch{return false}
+ try{
+  target.fetch=wrapped;
+  target.__GVAULT_PUBLIC_AGENT_FETCH_STYLE_V1=true;
+  return true;
+ }catch{return false}
 }
 function loadLiveBlobLayer(){
  if(window.GVAULT_AGENT_LIVE_BLOB||document.querySelector('script[data-gvault-agent-live-blob]'))return;
- const s=document.createElement('script');s.src='./scripts/gvault-agent-live-blob.js?v=5';s.async=false;s.setAttribute('data-gvault-agent-live-blob','V5');s.onerror=()=>console.warn('GVAULT blob stream layer unavailable');(document.head||document.documentElement).appendChild(s);
+ const s=document.createElement('script');
+ s.src='./scripts/gvault-agent-live-blob.js?v=5';
+ s.async=false;
+ s.setAttribute('data-gvault-agent-live-blob','V5');
+ s.onerror=()=>console.warn('GVAULT blob stream layer unavailable');
+ (document.head||document.documentElement).appendChild(s);
+}
+function installRuntimeFrame(){
+ const frame=document.getElementById('gvaultRuntime');
+ if(!frame)return false;
+ let target;
+ try{target=frame.contentWindow}catch{return false}
+ if(!target)return false;
+ installRemoteLayer(target);
+ installLocalLayer(target);
+ if(!frame.__gvaultLightRuntimeLoadHook){
+  frame.__gvaultLightRuntimeLoadHook=true;
+  frame.addEventListener('load',()=>{
+   setTimeout(()=>{
+    try{installRemoteLayer(frame.contentWindow);installLocalLayer(frame.contentWindow)}catch{}
+   },30);
+  });
+ }
+ return targetWrapped.has(target);
 }
 function announce(){
- try{window.dispatchEvent(new CustomEvent('gvault:public-agent-conversation-style-ready',{detail:{schema:STYLE.schema,version:VERSION}}))}catch{}
+ try{
+  window.dispatchEvent(new CustomEvent('gvault:public-agent-conversation-style-ready',{detail:{
+   schema:STYLE.schema,
+   version:VERSION,
+   runtimeBridge:installRuntimeFrame()
+  }}));
+ }catch{}
 }
-installRemoteLayer();loadLiveBlobLayer();
-let tries=0;const timer=setInterval(()=>{tries++;if(installLocalLayer()||tries>=80){clearInterval(timer);announce()}},125);
-if(installLocalLayer()){clearInterval(timer);announce()}
-window.GVAULT_PUBLIC_AGENT_CONVERSATION=Object.freeze({version:VERSION,style:STYLE,systemInstruction:SYSTEM_INSTRUCTION,diagnosticIntent,sanitizeConversationPlane,conversationalize,status:()=>({localLayer:!!window.applyAgentModel?.__gvaultConversationStyleV1,remoteLayer:!!window.__GVAULT_PUBLIC_AGENT_FETCH_STYLE_V1,liveBlobLayer:!!window.GVAULT_AGENT_LIVE_BLOB})});
+installRemoteLayer(window);
+loadLiveBlobLayer();
+void loadConversationDependencies().then(()=>{installLocalLayer(window);installRuntimeFrame();announce()});
+let tries=0;
+const timer=setInterval(()=>{
+ tries++;
+ installLocalLayer(window);
+ installRuntimeFrame();
+ if(tries>=480){clearInterval(timer);announce()}
+},125);
+if(installLocalLayer(window))announce();
+window.GVAULT_PUBLIC_AGENT_CONVERSATION=Object.freeze({
+ version:VERSION,
+ style:STYLE,
+ systemInstruction:SYSTEM_INSTRUCTION,
+ diagnosticIntent,
+ sanitizeConversationPlane,
+ conversationalize,
+ status:()=>({
+  localLayer:!!window.applyAgentModel?.__gvaultConversationStyleV1,
+  remoteLayer:!!window.__GVAULT_PUBLIC_AGENT_FETCH_STYLE_V1,
+  liveBlobLayer:!!window.GVAULT_AGENT_LIVE_BLOB,
+  runtimeFrame:!!document.getElementById('gvaultRuntime'),
+  runtimeLocalLayer:(()=>{try{return !!document.getElementById('gvaultRuntime')?.contentWindow?.applyAgentModel?.__gvaultLightRuntimeBridge}catch{return false}})(),
+  testIntent:!!window.GTHINK_PUBLIC_TEST_INTENT_ROUTER,
+  conversationBridge:!!window.GTHINK_SECONDARY_CONVERSATION_BRIDGE
+ })
+});
 })();
