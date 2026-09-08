@@ -5,6 +5,7 @@ const CORE_URL=new URL('gthink-public-native-engine-core.js?v=1',SCRIPT_BASE).hr
 const TEST_INTENT_URL=new URL('gthink-public-test-intent-router.js?v=1',SCRIPT_BASE).href;
 const CONVERSATION_URL=new URL('gthink-secondary-conversation-bridge.js?v=5',SCRIPT_BASE).href;
 const FEDERATION_URL=new URL('gthink-provider-federation.js?v=1',SCRIPT_BASE).href;
+const UNIVERSAL_URL=new URL('gthink-universal-provider-router.js?v=1',SCRIPT_BASE).href;
 let coreRef=null,testIntentRef=null,conversationRef=null,federationRef=null,wrapper=null;
 function clean(v){return String(v??'').trim()}
 function loadScript(url,attr){return new Promise((resolve,reject)=>{const existing=document.querySelector(`script[${attr}]`);if(existing){if(existing.dataset.ready==='1')return resolve();existing.addEventListener('load',()=>resolve(),{once:true});existing.addEventListener('error',()=>reject(new Error('secondary_script_load_failed')),{once:true});return}const s=document.createElement('script');s.src=url;s.async=false;s.setAttribute(attr,'1');s.addEventListener('load',()=>{s.dataset.ready='1';resolve()},{once:true});s.addEventListener('error',()=>reject(new Error('secondary_script_load_failed')),{once:true});(document.head||document.documentElement).appendChild(s)})}
@@ -12,7 +13,8 @@ const readyPromise=Promise.all([
   loadScript(CORE_URL,'data-gthink-secondary-native-core'),
   loadScript(TEST_INTENT_URL,'data-gthink-public-test-intent-router-v1'),
   loadScript(CONVERSATION_URL,'data-gthink-secondary-conversation-bridge-v5'),
-  loadScript(FEDERATION_URL,'data-gthink-provider-federation-v1').catch(()=>null)
+  loadScript(FEDERATION_URL,'data-gthink-provider-federation-v1').catch(()=>null),
+  loadScript(UNIVERSAL_URL,'data-gthink-universal-provider-router-v1').catch(()=>null)
 ]).then(()=>{
   coreRef=window.GTHINK_PUBLIC_NATIVE_ENGINE;
   testIntentRef=window.GTHINK_PUBLIC_TEST_INTENT_ROUTER||null;
@@ -45,7 +47,7 @@ async function answer(request){
  const result=await core.answer(request);
  return typeof result==='string'?{schema:SCHEMA,handled:true,text:result,engine:'gthink-public-native-js',model:'native-rules-v1',publicNative:true,offlineCapable:true,actionsAuthorized:false,knowledgeAware:false,coDevelopmentAware:true,simulationTrained:true}:{...result,schema:result?.schema||SCHEMA,knowledgeAware:false,coDevelopmentAware:true,simulationTrained:true}
 }
-function status(){let base={configured:true,ready:false,mode:'public-native-loading',engine:'gthink-public-native-js+core-cognition+co-development+free-conversation+intent-router+provider-federation',model:'conversation-guard-v6',offlineCapable:true,networkRequired:false,knowledgeAware:true,coreCognitionAware:true,coDevelopmentAware:true,simulationTrained:true,testIntentRouted:true,freeConversationGuard:true,providerFederation:true};try{if(coreRef?.status)base={...base,...coreRef.status(),ready:true,engine:'gthink-public-native-js+core-cognition+co-development+free-conversation+intent-router+provider-federation',model:'conversation-guard-v6',knowledgeAware:true,coreCognitionAware:true,coDevelopmentAware:true,simulationTrained:true,testIntentRouted:true,freeConversationGuard:true,testIntentRouterSchema:testIntentRef?.schema||null,conversationBridge:!!conversationRef,conversationBridgeSchema:conversationRef?.schema||null,providerFederation:!!federationRef,providerFederationSchema:federationRef?.schema||null}}catch{}return base}
+function status(){let base={configured:true,ready:false,mode:'public-native-loading',engine:'gthink-public-native-js+core-cognition+co-development+free-conversation+intent-router+provider-federation',model:'conversation-guard-v6',offlineCapable:true,networkRequired:false,knowledgeAware:true,coreCognitionAware:true,coDevelopmentAware:true,simulationTrained:true,testIntentRouted:true,freeConversationGuard:true,providerFederation:true};try{if(coreRef?.status)base={...base,...coreRef.status(),ready:true,engine:'gthink-public-native-js+core-cognition+co-development+free-conversation+intent-router+provider-federation',model:'conversation-guard-v6',knowledgeAware:true,coreCognitionAware:true,coDevelopmentAware:true,simulationTrained:true,testIntentRouted:true,freeConversationGuard:true,testIntentRouterSchema:testIntentRef?.schema||null,conversationBridge:!!conversationRef,conversationBridgeSchema:conversationRef?.schema||null,providerFederation:!!federationRef,providerFederationSchema:federationRef?.schema||null,universalProviderRouter:!!window.GTHINK_UNIVERSAL_PROVIDER_ROUTER}}catch{}return base}
 wrapper=Object.freeze({schema:SCHEMA,name:'GThinkPublicNativeFederatedGeneral',answer,status,get core(){return coreRef},get testIntent(){return testIntentRef},get conversation(){return conversationRef},get federation(){return federationRef},ready:()=>readyPromise});
 window.GTHINK_PUBLIC_NATIVE_ENGINE=wrapper;
 })();
