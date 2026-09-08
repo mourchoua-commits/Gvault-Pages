@@ -1,20 +1,22 @@
 {
   "schema": "GTHINK_MODEL_RUNTIME_V0_CONTRACT",
-  "status": "SOURCE_CONTRACT_PASS_BROWSER_E2E_PENDING",
+  "status": "BROWSER_COMPONENT_E2E_PASS_REAL_SAS_ANDROID_PENDING",
   "branch": "staging/gthink-model-runtime-v0-20260908",
   "checks": [
     {"name":"portable_conductor_source","status":"PASS","evidence":"node --check + mock contract on canonical conductor source"},
     {"name":"browser_runtime_source","status":"PASS","evidence":"node --check on browser adapter source before commit"},
     {"name":"light_adapter_source","status":"PASS","evidence":"node --check on LIGHT adapter source before commit"},
     {"name":"direct_tool_route","status":"PASS","evidence":"mock local_calculate route returned verified tool result"},
-    {"name":"specialist_fanout","status":"PASS","evidence":"mock deep runtime request selected multiple specialists"},
-    {"name":"counterproof_route","status":"PASS","evidence":"mock deep/verification route received counterproof"},
-    {"name":"public_private_guard","status":"PASS","evidence":"mock destructive public request returned PRIVATE_RELAY_REQUIRED"},
+    {"name":"specialist_fanout","status":"PASS","evidence":"deep runtime request selected multiple specialists"},
+    {"name":"counterproof_route","status":"PASS","evidence":"deep/verification route received counterproof"},
+    {"name":"public_private_guard","status":"PASS","evidence":"destructive public request returned PRIVATE_RELAY_REQUIRED"},
     {"name":"light_script_injection","status":"PASS_STATIC","evidence":"index injects gthink-model-light-adapter-v0.js after inline relay"},
-    {"name":"staging_browser_execution","status":"PENDING"},
+    {"name":"staging_browser_model_boot","status":"PASS","evidence":"Playwright run 34227734432 boots GThink Model runtime and exercises inspect/direct tool/private guard"},
+    {"name":"light_applyAgentModel_contract","status":"PASS_COMPONENT","evidence":"Playwright run 34227734432 injects a same-origin LIGHT-compatible runtime and proves applyAgentModel returns the GThink Model tool result through the same contract"},
+    {"name":"real_live_sas_light_frame","status":"PENDING_DEVICE","evidence":"CI deliberately does not fake the authenticated SAS lifecycle that creates the production gvaultRuntime"},
     {"name":"huggingface_openrouter_live_loop","status":"PENDING_USER_AUTH"},
     {"name":"android_light_e2e","status":"PENDING"}
   ],
-  "promotionRule": "Do not promote this model runtime to main until staging browser execution proves the conductor is actually invoked from VAULT AGENT // LIGHT and returns through the same conversation surface.",
+  "promotionRule": "Keep the model runtime on staging until the real authenticated VAULT AGENT // LIGHT frame is observed invoking the conductor on-device. Browser component integration is proven, but it is not a substitute for the live SAS/Android test.",
   "finalPassAllowed": false
 }
