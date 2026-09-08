@@ -1,0 +1,61 @@
+name: GThink Model Staging Contract
+
+on:
+  push:
+    branches:
+      - staging/gthink-model-runtime-v0-20260908
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax checks
+        run: |
+          node --check scripts/gthink-model-conductor-v0.js
+          node --check scripts/gthink-model-runtime-v0.js
+          node --check scripts/gthink-model-light-adapter-v0.js
+      - name: Conductor contract
+        run: |
+          node <<'NODE'
+          const assert=require('assert');
+          const core=require('./scripts/gthink-model-conductor-v0.js');
+          assert(core.classify('fais un check up global du Gvault').labels.includes('verification_and_counterproof'));
+          assert(core.classify('ouvre ce lien sur la page',{navigator:true}).labels.includes('browser_navigation'));
+          assert.equal(core.classify('supprime ce fichier',{publicOnly:true}).privateRelayRequired,true);
+          const toolBus={
+            quickClassify:m=>/2\+2/.test(m)?'local_calculate':null,
+            execute:async(_n,a)=>({ok:true,expression:a.expression,value:4})
+          };
+          const provider={
+            ask:async(_msg,_history,meta)=>({
+              ok:true,
+              text:meta.specialist==='pineal_safe_synthesis'
+                ?'Synthèse OK'
+                :meta.specialist==='verification_and_counterproof'
+                  ?'{"verdict":"PASS","confidence":0.9,"riskFlags":[]}'
+                  :`Projection ${meta.specialist}`,
+              provider:'mock',
+              toolCalls:0
+            })
+          };
+          (async()=>{
+            const c=new core.GThinkModelConductor({toolBus,provider,makeId:()=> 'contract-task',now:()=> '2026-09-08T00:00:00Z'});
+            let r=await c.run({message:'2+2'});
+            assert.equal(r.text,'2+2 = 4');
+            assert.equal(r.safeState.status,'COMPLETED');
+            r=await c.run({message:'analyse profondément le runtime et vérifie les risques'});
+            assert.equal(r.ok,true);
+            assert(r.safeState.workforce.length>=2);
+            assert(r.trace.counterproof);
+            r=await c.run({message:'supprime ce fichier',context:{publicOnly:true}});
+            assert.equal(r.ok,false);
+            assert.equal(r.safeState.status,'PRIVATE_RELAY_REQUIRED');
+            console.log('GThink Model conductor contract PASS');
+          })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
