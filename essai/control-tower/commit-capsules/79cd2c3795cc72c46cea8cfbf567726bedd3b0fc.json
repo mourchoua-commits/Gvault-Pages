@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "79cd2c3795cc72c46cea8cfbf567726bedd3b0fc",
+  "parentSha": "a3db0895e9f052dc3fcc8cad48930525c4f6dd02",
+  "committedAt": "2026-09-08T02:56:23+02:00",
+  "summary": {
+    "subject": "gthink public: launch Sep 1 best functional method on LIGHT checkup",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 126,
+    "deletions": 0,
+    "paths": [
+      "scripts/gthink-light-best-functional-checkup.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 126,
+    "deletions": 0,
+    "magnitude": 126,
+    "committedAt": "2026-09-08T02:56:23+02:00",
+    "parentSha": "a3db0895e9f052dc3fcc8cad48930525c4f6dd02"
+  },
+  "pulseKey": "CTP1:79cd2c3795cc72c46cea8cfbf567726bedd3b0fc:603d8904608ff67a",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "1468c959f13e1ae135cd23080315974ff146290e0ff980d5bd72d4cc5469c08e",
+  "typedKeys": {
+    "commit": "gitc:79cd2c3795cc72c46cea8cfbf567726bedd3b0fc",
+    "parent": "gitc:a3db0895e9f052dc3fcc8cad48930525c4f6dd02",
+    "pulse": "ctp1:79cd2c3795cc72c46cea8cfbf567726bedd3b0fc:603d8904608ff67a",
+    "translation": "cttrans:1468c959f13e1ae135cd23080315974ff146290e0ff980d5bd72d4cc5469c08e",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "79cd2c3795cc72c46cea8cfbf567726bedd3b0fc",
+    "parentSha": "a3db0895e9f052dc3fcc8cad48930525c4f6dd02",
+    "committedAt": "2026-09-08T02:56:23+02:00",
+    "summary": {
+      "subject": "gthink public: launch Sep 1 best functional method on LIGHT checkup",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 126,
+      "deletions": 0,
+      "paths": [
+        "scripts/gthink-light-best-functional-checkup.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 126,
+      "deletions": 0,
+      "magnitude": 126,
+      "committedAt": "2026-09-08T02:56:23+02:00",
+      "parentSha": "a3db0895e9f052dc3fcc8cad48930525c4f6dd02"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/79cd2c3795cc72c46cea8cfbf567726bedd3b0fc.json",
+      "vfsKey": "CTP1:79cd2c3795cc72c46cea8cfbf567726bedd3b0fc:603d8904608ff67a",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/79cd2c3795cc72c46cea8cfbf567726bedd3b0fc.json"
+}
