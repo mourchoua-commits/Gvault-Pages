@@ -55,7 +55,7 @@ if(document.readyState==='loading')window.addEventListener('DOMContentLoaded',in
 if(!h.includes(needle))throw new Error('Point de greffe outils privés introuvable');
 h=h.replace(needle,graft);
 const documentClose='<'+'/body>\n<'+'/html>';
-if(!h.includes('gvault-public-agent-conversation.js'))h=h.replace(/<\/body>\s*<\/html>\s*$/i,'<script src="./scripts/gvault-public-agent-conversation.js?v=3"><\/script>\n'+documentClose);
+if(!h.includes('gvault-public-agent-conversation.js'))h=h.replace(/<\/body>\s*<\/html>\s*$/i,'<script src="./scripts/gvault-public-agent-conversation.js?v=4"><\/script>\n'+documentClose);
 if(!h.includes('gvault-public-page-blob.js'))h=h.replace(/<\/body>\s*<\/html>\s*$/i,'<script src="./scripts/gvault-public-page-blob.js?v=1"><\/script>\n'+documentClose);
 document.open();document.write(h);document.close();
 })().catch(e=>{const s=document.getElementById('state');if(s){s.classList.add('err');s.textContent='GVAULT INDISPONIBLE · '+String(e&&e.message||e)}console.error(e)});
