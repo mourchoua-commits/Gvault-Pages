@@ -47,10 +47,12 @@ function scrollPage(direction,amount='page'){
 function openLink(query){
  const q=norm(query);if(!q)return{ok:false,error:'empty_query'};
  const links=[...document.querySelectorAll('a[href]')].map(a=>({a,text:norm(a.innerText||a.textContent||a.getAttribute('aria-label')),href:a.href}));
- let hit=links.find(x=>x.href===query)||links.find(x=>x.text===q)||links.find(x=>x.text.includes(q));
+ const hit=links.find(x=>x.href===query)||links.find(x=>x.text===q)||links.find(x=>x.text.includes(q));
  if(!hit)return{ok:false,error:'link_not_found'};
  const href=hit.href;if(!/^https?:/i.test(href))return{ok:false,error:'unsupported_link_scheme'};
- location.assign(href);return{ok:true,navigating:true,href,text:clean(hit.a.innerText||hit.a.textContent)};
+ const result={ok:true,navigating:true,href,text:clean(hit.a.innerText||hit.a.textContent)};
+ setTimeout(()=>location.assign(href),120);
+ return result;
 }
 const host=document.createElement('div');host.id=HOST_ID;host.setAttribute('data-gthink-navigator','1');document.documentElement.appendChild(host);
 const root=host.attachShadow({mode:'open'});
@@ -74,8 +76,9 @@ orb.addEventListener('click',()=>setOpen(!panel.classList.contains('open')));clo
 ext.runtime.onMessage.addListener((message,_sender,sendResponse)=>{
  const run=async()=>{
   if(message?.type==='gthink.navigator.toggle'){setOpen(!panel.classList.contains('open'));return{ok:true}}
+  if(message?.type==='gthink.navigator.context')return{ok:true,context:pageContext(message.mode||'auto')};
   if(message?.type==='gthink.navigator.show'){setOpen(true);if(message.prefill)input.value=message.prefill;if(message.pending)setPending(true);return{ok:true}}
-  if(message?.type==='gthink.navigator.result'){setOpen(true);setPending(false);const r=message.result||{};add('assistant',r.ok&&r.text?r.text:`Je n’ai pas obtenu de réponse${r.error?` : ${r.error}`:''}.`);return{ok:true}}
+  if(message?.type==='gthink.navigator.result'){setOpen(true);setPending(false);const r=message.result||{};add('assistant',r.ok&&r.text?r.text:(r.needsConnection?'Le cœur Gvault est prêt, mais il faut autoriser le renfort IA dans le Vault avec ☁ IA.':`Je n’ai pas obtenu de réponse${r.error?` : ${r.error}`:''}.`));return{ok:true}}
   if(message?.type==='gthink.navigator.tool.execute'){
    const tool=clean(message.tool),args=message.args||{};
    if(tool==='navigator_page_snapshot')return{ok:true,...pageContext(args.mode||'auto'),links:linksSnapshot(30)};
