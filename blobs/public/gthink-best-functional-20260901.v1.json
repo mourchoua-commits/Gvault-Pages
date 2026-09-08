@@ -1,0 +1,56 @@
+{
+  "schema": "GVAULT_PUBLIC_GTHINK_BEST_FUNCTIONAL_20260901_V1",
+  "version": "1.0.0",
+  "status": "ACTIVE_PUBLIC_ADAPTATION",
+  "purpose": "Public read-only adaptation of the best functional GThink routing baseline identified on 2026-09-01. It preserves later compatible improvements and does not roll back the repository.",
+  "source": {
+    "repository": "mourchoua-commits/Gvault",
+    "ref": "backup/best-functional-adapted-20260901-1315",
+    "binding": "ops/gthink/best-functional-state.binding.v1.json",
+    "routeSpine": "ops/gthink/route-spine.binding.v1.json",
+    "lastFunctionalSnapshot": "f5f4338d2655db8a2d5b96e8f9ca7ebb4de74c30"
+  },
+  "decisionOrder": [
+    "CURRENT_EXPLICIT_USER_INTENT",
+    "CANONICAL_METHOD_ROUTER_POLICY",
+    "EXISTING_CANONICAL_ARCHITECTURE_AND_CONSTRAINTS",
+    "CURRENT_FUNCTIONAL_RUNTIME",
+    "DERIVED_INDEX_CADASTRE_SEMANTIC_AND_OBSERVABILITY_SUPPORT"
+  ],
+  "followingTurnRoute": [
+    "GVAULT_PING",
+    "GTHINK_ORCHESTRATION",
+    "CONVERSATION_CAPTURE_SAFETY",
+    "ROUTE_SPINE",
+    "DEEP_ROUTE_EXPANSION"
+  ],
+  "authority": {
+    "methodRouter": "CANONICAL_POLICY",
+    "routeSpine": "NAVIGATION_ONLY",
+    "derivedIndexes": "SUPPORT_ONLY",
+    "cadastreViews": "SUPPORT_ONLY",
+    "semanticMarkers": "OBSERVABILITY_ONLY",
+    "continuityProfile": "ADVISORY_NON_BLOCKING"
+  },
+  "checkup": {
+    "intent": "checkup_best_functional",
+    "exactUserMessageFirst": true,
+    "passes": [
+      "EXACT_REQUEST",
+      "COHERENCE_CONTINUITY_COUNTERPROOF"
+    ],
+    "publicOnly": true,
+    "privateRouteAllowed": false,
+    "fallbackProjectCardAllowed": false,
+    "resultTruth": "NO_PASS_WITHOUT_METHOD_PROOF"
+  },
+  "guards": [
+    "USER_INTENT_OUTRANKS_DERIVED_CONTEXT",
+    "METHOD_ROUTER_REMAINS_CANONICAL_POLICY",
+    "NO_DESTRUCTIVE_ROLLBACK",
+    "NO_PRIVATE_ROUTE_FROM_PUBLIC_PAGE",
+    "NO_PROJECT_CARD_FALLBACK_FOR_CHECKUP_INTENT",
+    "DERIVED_SUPPORT_CANNOT_RECLASSIFY_ROUTE"
+  ],
+  "containsSecret": false
+}
