@@ -1,0 +1,23 @@
+{
+  "schema": "GVAULT_GTHINK_BEST_OF_20260824_INTEGRATION_V1",
+  "status": "INTEGRATED_PENDING_ANDROID_E2E",
+  "integratedCommit": "62355a737c2dc0e1d5d0d11c26986f74d13ffba6",
+  "stagingBranch": "staging/best-of-20260824-gthink-toolbus-20260908",
+  "rollbackBranch": "backup/pre-best-of-toolbus-20260908-74c05057",
+  "testedBlobs": {
+    "policy": "56e9115bd6c92ec9770f054c299f7cce3ab4b96b",
+    "toolBus": "8cde179956464c261a1bd89dc2271f101319bad9",
+    "providerFederation": "b474edf88e0af18a77fabdf8c3f56dada98a9e09",
+    "inlineRelay": "8850008446150dde266eb96cc9046e2e640367ea",
+    "providerRouter": "3487eff956a684998ced15775fef1e3a5ecd70d3",
+    "index": "09ec43bfc1bde09a41dd068953d6a8d6fb2be6c0",
+    "contractEvidence": "9039b8103c0c7616ecbc54f00afe5ea7d27a24cc"
+  },
+  "quality": {
+    "localContract": "PASS",
+    "androidSameFieldE2E": "PENDING",
+    "privateActions": "SECURE_RELAY_REQUIRED",
+    "finalPassAllowed": false
+  },
+  "containsSecret": false
+}
