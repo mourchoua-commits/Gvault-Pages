@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "ce668d184f143c6a8641382d6f91be51b775d0f9",
+  "parentSha": "23d3d77cd58fb44a647fcf410983b80cf7f0f7f0",
+  "committedAt": "2026-09-08T03:16:52+02:00",
+  "summary": {
+    "subject": "agent: add universal public provider routing and OAuth controls",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 60,
+    "deletions": 0,
+    "paths": [
+      "scripts/gthink-universal-provider-router.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 60,
+    "deletions": 0,
+    "magnitude": 60,
+    "committedAt": "2026-09-08T03:16:52+02:00",
+    "parentSha": "23d3d77cd58fb44a647fcf410983b80cf7f0f7f0"
+  },
+  "pulseKey": "CTP1:ce668d184f143c6a8641382d6f91be51b775d0f9:2cde52228036d112",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "bdcdf0cbcc778668441db95c9897ac7897d3ef2d7aa0731440945a7c5bef37d7",
+  "typedKeys": {
+    "commit": "gitc:ce668d184f143c6a8641382d6f91be51b775d0f9",
+    "parent": "gitc:23d3d77cd58fb44a647fcf410983b80cf7f0f7f0",
+    "pulse": "ctp1:ce668d184f143c6a8641382d6f91be51b775d0f9:2cde52228036d112",
+    "translation": "cttrans:bdcdf0cbcc778668441db95c9897ac7897d3ef2d7aa0731440945a7c5bef37d7",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "ce668d184f143c6a8641382d6f91be51b775d0f9",
+    "parentSha": "23d3d77cd58fb44a647fcf410983b80cf7f0f7f0",
+    "committedAt": "2026-09-08T03:16:52+02:00",
+    "summary": {
+      "subject": "agent: add universal public provider routing and OAuth controls",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 60,
+      "deletions": 0,
+      "paths": [
+        "scripts/gthink-universal-provider-router.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 60,
+      "deletions": 0,
+      "magnitude": 60,
+      "committedAt": "2026-09-08T03:16:52+02:00",
+      "parentSha": "23d3d77cd58fb44a647fcf410983b80cf7f0f7f0"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/ce668d184f143c6a8641382d6f91be51b775d0f9.json",
+      "vfsKey": "CTP1:ce668d184f143c6a8641382d6f91be51b775d0f9:2cde52228036d112",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/ce668d184f143c6a8641382d6f91be51b775d0f9.json"
+}
