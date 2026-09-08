@@ -1,0 +1,9 @@
+{
+  "client_id": "https://mourchoua-commits.github.io/Gvault/.well-known/oauth-cimd",
+  "client_name": "GVAULT · GThink Public",
+  "redirect_uris": [
+    "https://mourchoua-commits.github.io/Gvault/oauth/huggingface-callback.html"
+  ],
+  "token_endpoint_auth_method": "none",
+  "client_uri": "https://mourchoua-commits.github.io/Gvault/"
+}
