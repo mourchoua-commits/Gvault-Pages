@@ -1,0 +1,77 @@
+{
+  "schema": "GVAULT_GTHINK_BEST_OF_20260824_20260908_V1",
+  "version": "1.0.0",
+  "status": "INTEGRATED_PENDING_ANDROID_E2E",
+  "purpose": "Combine the strongest proven GVAULT/GThink decisions since 2026-08-24 without replacing working architecture or weakening public/private boundaries.",
+  "window": {"from": "2026-08-24", "to": "2026-09-08"},
+  "preserveSurface": {
+    "name": "VAULT AGENT // LIGHT",
+    "principle": "LIGHT_IS_SURFACE_NOT_CAPABILITY_LIMIT",
+    "uiRewrite": false,
+    "projectContextMayBecomeDefaultAnswer": false
+  },
+  "canonical": {
+    "entrypoint": "GTHINK_ENTRYPOINT.md",
+    "manifest": "GThink/MANIFEST.json",
+    "router": "GThink/ROUTER.md",
+    "bestFunctionalRef": "backup/best-functional-adapted-20260901-1315",
+    "bestFunctionalBinding": "ops/gthink/best-functional-state.binding.v1.json",
+    "routeSpineBinding": "ops/gthink/route-spine.binding.v1.json",
+    "hardFunctionalSnapshot": "f5f4338d2655db8a2d5b96e8f9ca7ebb4de74c30",
+    "destructiveRollback": false
+  },
+  "decisionOrder": [
+    "CURRENT_EXPLICIT_USER_INTENT",
+    "CANONICAL_METHOD_ROUTER_POLICY",
+    "EXISTING_CANONICAL_ARCHITECTURE_AND_CONSTRAINTS",
+    "CURRENT_FUNCTIONAL_RUNTIME",
+    "CAPABILITY_BROKER_TOOL_BUS",
+    "PUBLIC_GVAULT_KNOWLEDGE",
+    "EXTERNAL_PROVIDER_FEDERATION",
+    "DERIVED_INDEX_CADASTRE_SEMANTIC_OBSERVABILITY_SUPPORT_ONLY"
+  ],
+  "bestMethods": {
+    "stagingFirst": {"rule": "Develop on isolated staging, preserve a clean checkpoint, test, then integrate only if functional/coherent/persistent/responsive/secure/performance-safe and rollbackable."},
+    "SACREBLEU": {"use": "Multi-source reconstruction/double validation when a route, memory or artifact needs recovery; do not assume an existing branch is sufficient proof."},
+    "BaGeCaToProdOui": {"use": "Convert important ideas into real testable implementations rather than passive descriptions."},
+    "FiCsa": {"use": "For recovery or ambiguous history, walk the reverse path first, then the normal path."},
+    "ATLAS": {"principles": ["ACTOR_ISOLATION_SUPERVISION","HOMEOSTATIC_CONTROL","OPERATING_MODE_SWITCH","REQUISITE_VARIETY","DOMAIN_MATCHED_DECISION_MODE","CONTEXT_PAIRED_OBSERVATION","OBSERVATION_INTERVENTION_SEPARATION","DEEP_UNCERTAINTY_MODE"]},
+    "GThink22Families": {"use": "Use the narrowest authoritative route and preserve full facts/evidence/provenance rather than a lossy summary when research is persisted."},
+    "bestFunctionalSep1": {"use": "Preserve explicit user intent and canonical Method Router; derived indexes/cadastres/semantic markers are support only; adapt later improvements instead of destructive rollback."},
+    "multiPlaneBlobFabric": {"use": "Keep public/private/image/tool planes isolated; exchange descriptors/results through controlled routes; EDGE_DOWN must not imply CORE_DOWN."},
+    "firstCaptureLedger": {"use": "Git evidence remains canonical for conversation capture; derived indexes may lag and must not become interpretation authority."}
+  },
+  "agentArchitecture": {
+    "surface": "VAULT_AGENT_LIGHT",
+    "brain": "GThink",
+    "hands": "GTHINK_UNIVERSAL_TOOL_BUS",
+    "localFirst": true,
+    "autonomousFallback": true,
+    "providerFederation": ["Hugging Face Inference Providers","OpenRouter","local WebLLM fallback"],
+    "singleConversationField": true,
+    "toolCalling": true,
+    "toolLoopMaxRounds": 4,
+    "webGrounding": "OpenRouter server web_search/web_fetch when authorized",
+    "privateActions": "SECURE_RELAY_REQUIRED",
+    "secretsInPublicRepo": false
+  },
+  "toolBusGuards": [
+    "PUBLIC_TOOL_SCHEMAS_ONLY",
+    "VALIDATE_MODEL_ARGUMENTS",
+    "EXPLICIT_USER_INTENT_REQUIRED_FOR_CONTROLLED_ACTIONS",
+    "NO_PRIVATE_TOOL_EXECUTION_FROM_PUBLIC_PAGE",
+    "NO_ACTION_CLAIM_WITHOUT_TOOL_RESULT",
+    "NO_FAKE_PASS",
+    "GVAULT_LOCAL_ROUTE_BEFORE_EXTERNAL_FEDERATION",
+    "EXTERNAL_PROVIDER_RECEIVES_VISIBLE_MESSAGE_AND_SHORT_PUBLIC_HISTORY_ONLY"
+  ],
+  "qualityGate": {
+    "stagingBranch": "staging/best-of-20260824-gthink-toolbus-20260908",
+    "rollbackBranch": "backup/pre-best-of-toolbus-20260908-74c05057",
+    "syntaxRequired": true,
+    "contractTestsRequired": true,
+    "androidE2ERequiredBeforeFinalPass": true,
+    "rollbackCheckpointRequired": true
+  },
+  "containsSecret": false
+}
