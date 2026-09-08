@@ -1,0 +1,64 @@
+{
+  "schema": "GVAULT_GTHINK_BEST_OF_TOOLBUS_CONTRACT_TEST_V1",
+  "at": "2026-09-08T11:30:00Z",
+  "branch": "staging/best-of-20260824-gthink-toolbus-20260908",
+  "status": "PASS_LOCAL_CONTRACT_PENDING_ANDROID_E2E",
+  "tests": [
+    {
+      "name": "tool_bus_syntax",
+      "status": "PASS",
+      "command": "node --check gthink-universal-tool-bus.js"
+    },
+    {
+      "name": "provider_federation_syntax",
+      "status": "PASS",
+      "command": "node --check gthink-provider-federation.js"
+    },
+    {
+      "name": "inline_relay_syntax",
+      "status": "PASS",
+      "command": "node --check gthink-inline-conversation-relay.js"
+    },
+    {
+      "name": "provider_router_syntax",
+      "status": "PASS",
+      "command": "node --check gthink-universal-provider-router.js"
+    },
+    {
+      "name": "tool_bus_contract",
+      "status": "PASS",
+      "assertions": 10,
+      "details": [
+        "8 public tools registered",
+        "arithmetic precedence",
+        "calculation injection guard",
+        "check-up routing",
+        "greeting remains conversational",
+        "unknown tool arguments rejected",
+        "controlled action requires explicit user intent"
+      ]
+    },
+    {
+      "name": "provider_tool_call_loop",
+      "status": "PASS",
+      "details": "Mock Hugging Face completion requested local_calculate, Tool Bus executed once, tool result was returned to the model, final answer came back on the second completion call."
+    },
+    {
+      "name": "inline_relay_contract",
+      "status": "PASS",
+      "details": "Simple greeting stayed local; a general request with an authorized cloud provider returned through the same applyAgentModel relay."
+    },
+    {
+      "name": "android_same_field_e2e",
+      "status": "PENDING",
+      "details": "Must be verified on the actual VAULT AGENT // LIGHT mobile surface before final PASS."
+    }
+  ],
+  "guards": {
+    "noPrivateToolExecution": true,
+    "explicitIntentForControlledActions": true,
+    "noFakePass": true,
+    "stagingFirst": true,
+    "rollbackRequiredBeforeMainIntegration": true
+  }
+}
