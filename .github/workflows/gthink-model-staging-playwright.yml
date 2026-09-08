@@ -1,0 +1,47 @@
+name: GThink Model Staging Playwright
+
+on:
+  push:
+    branches:
+      - staging/gthink-model-runtime-v0-20260908
+    paths:
+      - 'index.html'
+      - 'scripts/gthink-model-*.js'
+      - 'scripts/gthink-universal-tool-bus.js'
+      - 'scripts/gthink-provider-federation.js'
+      - 'scripts/gthink-inline-conversation-relay.js'
+      - 'tests/gthink-model-runtime-v0.spec.mjs'
+      - 'playwright.gthink-model.config.mjs'
+      - '.github/workflows/gthink-model-staging-playwright.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Playwright
+        run: npm install --no-save @playwright/test@1.55.0
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run GThink Model browser E2E
+        run: npx playwright test tests/gthink-model-runtime-v0.spec.mjs --config=playwright.gthink-model.config.mjs
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gthink-model-staging-playwright-report
+          path: |
+            playwright-report-gthink-model
+            test-results
+          if-no-files-found: ignore
+          retention-days: 14
