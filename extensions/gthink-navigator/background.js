@@ -27,14 +27,14 @@ async function ensureHeartTab(){
 async function askViaHeart(request){
  const heart=await ensureHeartTab();
  const result=await sendTab(heart.id,{type:'gthink.bridge.ask',request});
- if(!result?.ok)throw new Error(result?.error||'gvault_bridge_failed');
+ if(!result)throw new Error('gvault_bridge_empty');
+ if(result.ok===false&&!result.needsConnection)throw new Error(result.error||'gvault_bridge_failed');
  return result;
 }
 async function askFromTab(senderTab,request){
  const sourceTabId=senderTab?.id??request?.sourceTabId;
  if(!sourceTabId)throw new Error('source_tab_missing');
- const payload={...request,sourceTabId};
- return await askViaHeart(payload);
+ return await askViaHeart({...request,sourceTabId});
 }
 async function executeNavigatorTool(message){
  const tabId=Number(message?.targetTabId);
@@ -47,18 +47,22 @@ async function contextAsk(info,tab){
  const selection=clean(info?.selectionText);
  const request={message:mode==='selection'?'Explique-moi clairement cette sélection.':'Aide-moi à comprendre cette page et dis-moi ce qui est utile ici.',contextMode:mode,selection,source:'context-menu'};
  try{
+  const ctx=await sendTab(tab.id,{type:'gthink.navigator.context',mode}).catch(()=>null);
+  request.context=ctx?.ok?ctx.context:null;
+  if(selection&&request.context)request.context.selection=selection;
   await sendTab(tab.id,{type:'gthink.navigator.show',pending:true,prefill:request.message});
   const result=await askFromTab(tab,request);
   await sendTab(tab.id,{type:'gthink.navigator.result',result});
  }catch(error){await sendTab(tab.id,{type:'gthink.navigator.result',result:{ok:false,error:clean(error?.message||error)}}).catch(()=>{})}
 }
-function setupMenus(){
- try{ext.contextMenus.removeAll(()=>{
+async function setupMenus(){
+ try{
+  await ext.contextMenus.removeAll();
   ext.contextMenus.create({id:'gthink-selection',title:'Demander à GThink sur la sélection',contexts:['selection']});
   ext.contextMenus.create({id:'gthink-page',title:'Demander à GThink sur cette page',contexts:['page']});
- })}catch{}
+ }catch{}
 }
-ext.runtime.onInstalled?.addListener(()=>setupMenus());
+ext.runtime.onInstalled?.addListener(()=>{void setupMenus()});
 ext.contextMenus?.onClicked?.addListener((info,tab)=>{void contextAsk(info,tab)});
 ext.action?.onClicked?.addListener(tab=>{if(tab?.id)void toggle(tab.id)});
 ext.commands?.onCommand?.addListener(async command=>{if(command!=='toggle-gthink-navigator')return;const tab=await activeTab();if(tab?.id)void toggle(tab.id)});
@@ -74,5 +78,5 @@ ext.runtime.onMessage.addListener((message,sender,sendResponse)=>{
  run().then(x=>sendResponse(x)).catch(error=>sendResponse({ok:false,error:clean(error?.message||error)||'background_failed'}));
  return true;
 });
-setupMenus();
+void setupMenus();
 })();
