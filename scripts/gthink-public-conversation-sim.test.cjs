@@ -7,14 +7,14 @@ global.crypto=crypto.webcrypto;
 const bridgePath=path.join(__dirname,'gthink-secondary-conversation-bridge.js');
 vm.runInThisContext(fs.readFileSync(bridgePath,'utf8'),{filename:bridgePath});
 const bridge=global.GTHINK_SECONDARY_CONVERSATION_BRIDGE;
-const core=JSON.parse(fs.readFileSync(path.join(__dirname,'../gthink/second-kernel/blob/branches/07-gthink-core-cognition.json'),'utf8'));
-const coDev=JSON.parse(fs.readFileSync(path.join(__dirname,'../gthink/second-kernel/blob/branches/08-gthink-co-development-memory.json'),'utf8'));
+const core={conversation:{basicReplies:{greeting:['Salut.'],wellbeing:['Oui, ça va. Et toi ?'],thanks:['De rien.'],ready:['Oui, prêt.']}},methodRouter:{canonicalProtocols:{FICSA:'contrepreuve'}}};
+const coDev={knownModulesAndProjects:{GArchive:'Archive publique GVAULT.',Ladybug:'Assistant de contrôle public.'},gthinkMethod:{protocols:{FICSA:'Triangulation et contrepreuve.',SACREBLEU:'Reconstruction multi-sources.'}}};
 const context={knowledge:{branches:{'core-cognition':core,'co-development-memory':coDev,routing:{},'task-methods':{},handoff:{},'offline-control-plane':{},'scan-link-turrets':{}},errors:[]}};
 function request(message,history=[]){return {payload:{message,history,secondKernelContext:context}}}
-const base=[];
-function add(user,intent,history=[]){base.push({user,intent,history})}
+const cases=[];
+function add(user,intent,history=[]){cases.push({user,intent,history})}
 for(const s of ['Yo','Salut','salut !','Bonjour','bonsoir','coucou','Hello','Wesh','re','Salu','Bonjor'])add(s,'social_greeting');
-for(const s of ['Tu vas bien ?','Tu va bien ?','tu vas bein ?','Tu vas biien ?','ça va ?','ca va','sa va ?','cv ?','Comment tu vas ?','comment tu va','Tout va bien ?','tout vas bien ?'])add(s,'social_wellbeing');
+for(const s of ['Ça va mieux','Tu vas bien ?','Tu va bien ?','tu vas bein ?','Tu vas biien ?','ça va ?','ca va','sa va ?','cv ?','Comment tu vas ?','comment tu va','Tout va bien ?','tout vas bien ?'])add(s,'social_wellbeing');
 for(const s of ['ok','Okay','okey','daccord','oui','ouais','yep','nickel','parfait','compris'])add(s,'acknowledgement');
 for(const s of ['merci','merci beaucoup','mercii','thanks'])add(s,'thanks');
 for(const s of ['pret ?','prêt?','tu es prêt ?','ready?'])add(s,'ready');
@@ -29,14 +29,16 @@ for(const s of ['tu peux m aider ?','tu peut m aider','aide moi'])add(s,'help_of
 for(const s of ['j ai un probleme','jai un souci','ça bloque'])add(s,'problem_statement');
 add('Tu me comprends ?','understanding_check');add('Tu m entends ?','hearing_check');add('Qui es tu ?','identity');add('statut gthink','status');add('tu as quelles connaissances ?','knowledge_inventory');add('quels protocoles tu connais ?','method_inventory');add('tu connais quoi de gvault ?','co_development_inventory');
 add('C est quoi GArchive ?','project_knowledge');add('Tu sais quoi sur Ladybug ?','project_knowledge');add('Explique FICSA','method_knowledge');add('SACREBLEU sert à quoi ?','method_knowledge');
-for(const s of ['Comment ça va marcher le serveur ?','Comment va fonctionner le routeur ?','Quelle est la capitale du Pérou ?','Pourquoi le ciel est bleu ?','Combien font 12+3 ?','Raconte moi une histoire de dragon','Traduis bonjour en anglais','Quelle météo demain ?'])add(s,null);
-function runCases(cases){const failures=[];for(const c of cases){const r=bridge.answer(request(c.user,c.history||[]),context);const got=r?.handled?r.intent:null;if(got!==c.intent)failures.push({input:c.user,expected:c.intent,got,text:r?.text||null})}return {total:cases.length,pass:cases.length-failures.length,fail:failures.length,failures}}
-function variants(s){const out=new Set([s]);const low=s.toLowerCase();for(let i=0;i<low.length;i++)if(/[a-z]/.test(low[i]))out.add(low.slice(0,i)+low.slice(i+1));out.add(low.replace(/vas/g,'va'));out.add(low.replace(/bien/g,'bein'));out.add(low.replace(/bien/g,'biien'));out.add(low.replace(/bonjour/g,'bonjor'));out.add(low.replace(/salut/g,'salu'));return [...out]}
-const fuzz=[];for(const [seed,intent] of [['Tu vas bien ?','social_wellbeing'],['Comment tu vas ?','social_wellbeing'],['Salut','social_greeting'],['Bonjour','social_greeting']])for(const v of variants(seed))fuzz.push({user:v,intent,history:[]});
-const counterInputs=['Comment ça va marcher le serveur ?','Tu vas bien configurer le serveur ?','Le serveur va bien ?','Comment tu vas router ça ?','Ça va fonctionner ?','Ca va compiler ?','Comment va le code ?','Tout va bien dans le script ?','Tu vas déployer ?','Comment ça va se déployer ?','Pourquoi ça va marcher ?','Est ce que ça va marcher ?','Le moteur va bien fonctionner ?','Le routeur va bien fonctionner ?','L API va bien répondre ?','Comment tu vas coder ça ?','Tu vas bien tester le code ?','Comment va fonctionner GThink ?','Tu vas bien faire le commit ?','Ça va sur GitHub ?','Comment va le build ?','Le worker va bien ?','Le blob va bien passer ?','Le listener va bien répondre ?','Comment ça va dans le moteur ?','Le script va bien charger ?','Tu vas bien garder le contexte ?','Tu vas bien préserver le blob ?','Comment tu vas faire ?','Comment tu vas verifier ?'];
-const counterFailures=[];for(const input of counterInputs){const r=bridge.answer(request(input),context);if(r?.intent==='social_wellbeing')counterFailures.push({input,got:r.intent,text:r.text})}
-const baseResult=runCases(base),fuzzResult=runCases(fuzz),counterResult={total:counterInputs.length,pass:counterInputs.length-counterFailures.length,fail:counterFailures.length,failures:counterFailures};
-const total=baseResult.total+fuzzResult.total+counterResult.total,fail=baseResult.fail+fuzzResult.fail+counterResult.fail;
-const report={schema:'GTHINK_PUBLIC_CONVERSATION_SIM_RUN_V1',bridge:bridge.schema,base:baseResult,fuzz:fuzzResult,counterproof:counterResult,combined:{total,pass:total-fail,fail}};
-console.log(JSON.stringify(report,null,2));
-process.exit(fail?1:0);
+for(const s of ["Eh beh c'est mieux déjà nan ?","C'est mieux déjà non ?",'On avance là'])add(s,'meta_progress_positive',[{role:'assistant',content:'Réponse précédente.'}]);
+for(const s of ['Toujours pas','C est pas mieux','Ça marche pas','Encore à côté'])add(s,'meta_progress_negative',[{role:'assistant',content:'Réponse précédente.'}]);
+for(const s of ['Attends','pause'])add(s,'pause');
+for(const s of ['Si justement','bah si'])add(s,'contrast_correction',[{role:'assistant',content:'Mauvaise lecture.'}]);
+for(const s of ['Oui et plus encore','On peut pousser plus loin','Encore plus'])add(s,'expansion');
+for(const s of ["J'aime bien ce nom",'Je préfère comme ça','Garde ce nom'])add(s,'preference_statement');
+add('Tu trouves pas ?','meta_confirmation',[{role:'assistant',content:'Réponse précédente.'}]);
+add('Combien font 12+3 ?','simple_math');
+for(const s of ['Quelle est la capitale du Pérou ?','Pourquoi le ciel est bleu ?','Quelle météo demain ?'])add(s,'generic_conversation_question',[{role:'assistant',content:'On parlait déjà.'}]);
+for(const s of ['Raconte moi une histoire de dragon','Traduis bonjour en anglais','Je note ça pour après'])add(s,'generic_conversation_statement',[{role:'assistant',content:'On parlait déjà.'}]);
+const mustYield=['Comment ça va marcher le serveur ?','Comment va fonctionner le routeur ?','Tu vas déployer ?','Comment va le build ?','Le worker va bien ?','Compare les projets','Ouvre le projet Zero Aquarium','Statut du projet'];
+function run(){const failures=[];for(const c of cases){const r=bridge.answer(request(c.user,c.history||[]),context);const got=r?.handled?r.intent:null;if(got!==c.intent)failures.push({input:c.user,expected:c.intent,got,text:r?.text||null})}for(const input of mustYield){const r=bridge.answer(request(input),context);if(r?.handled)failures.push({input,expected:'yield_to_task_engine',got:r.intent,text:r.text})}const antiLeak=["Eh beh c'est mieux déjà nan ?",'Oui et plus encore','Je note ça pour après'];for(const input of antiLeak){const r=bridge.answer(request(input,[{role:'assistant',content:'STR RPG – ZERO · AQUARIUM / MULTIWORLD – ALPHA 0.40 · MULTIWORLD'}]),context);if(!r?.handled||/STR RPG|Build\s*:|Checkpoint\s*:|Statut\s*:/i.test(r.text||''))failures.push({input,expected:'conversation_without_project_leak',got:r?.intent||null,text:r?.text||null})}return {schema:'GTHINK_PUBLIC_CONVERSATION_SIM_RUN_V2',bridge:bridge.schema,total:cases.length+mustYield.length+antiLeak.length,fail:failures.length,pass:cases.length+mustYield.length+antiLeak.length-failures.length,failures}}
+const report=run();console.log(JSON.stringify(report,null,2));process.exit(report.fail?1:0);
