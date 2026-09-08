@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GVAULT · OpenRouter</title>
+<style>html,body{margin:0;min-height:100%;background:#050805;color:#c9ffd4;font-family:ui-monospace,monospace}body{display:grid;place-items:center;padding:20px}.box{max-width:520px;border:1px solid #31553a;border-radius:14px;padding:18px;background:#071009}.muted{color:#6ea57b;font-size:12px;line-height:1.5}</style>
+</head>
+<body><div class="box"><b>GVAULT · OPENROUTER</b><div class="muted" id="state">Validation OAuth PKCE…</div></div>
+<script>
+(async()=>{'use strict';
+const K={key:'gvault.provider.openrouter.key.v1',verifier:'gvault.provider.openrouter.pkce.verifier.v1',state:'gvault.provider.openrouter.oauth.state.v1',ret:'gvault.provider.oauth.return.v1'};
+const clean=v=>String(v??'').trim(),q=new URLSearchParams(location.search),code=clean(q.get('code')),state=clean(q.get('state')),error=clean(q.get('error')||q.get('error_description'));
+if(error)throw new Error(error);
+const expected=clean(sessionStorage.getItem(K.state)),verifier=clean(sessionStorage.getItem(K.verifier));
+if(!code)throw new Error('code OAuth absent');
+if(!expected||state!==expected)throw new Error('state OAuth invalide');
+if(!verifier)throw new Error('verifier PKCE absent');
+const r=await fetch('https://openrouter.ai/api/v1/auth/keys',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({code,code_verifier:verifier,code_challenge_method:'S256'}),credentials:'omit',cache:'no-store',referrerPolicy:'no-referrer'});
+let data={};try{data=await r.json()}catch{}
+if(!r.ok||!clean(data.key))throw new Error(clean(data.error?.message||data.error||data.message)||('HTTP '+r.status));
+sessionStorage.setItem(K.key,clean(data.key));sessionStorage.removeItem(K.verifier);sessionStorage.removeItem(K.state);
+const ret=clean(sessionStorage.getItem(K.ret));let target='../';try{const u=new URL(ret||'../',location.href);target=u.origin===location.origin?u.href:new URL('../',location.href).href}catch{target=new URL('../',location.href).href}
+document.getElementById('state').textContent='OpenRouter connecté. Recherche web prête. Retour à GVAULT…';setTimeout(()=>location.replace(target),250);
+})().catch(e=>{const out=document.getElementById('state');out.textContent='Connexion refusée : '+String(e?.message||e);out.style.color='#ff9b9b'});
+</script></body></html>
