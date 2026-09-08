@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const VERSION='1.4.1';
+const VERSION='1.5.0';
 const STYLE=Object.freeze({
  schema:'GVAULT_PUBLIC_AGENT_CONVERSATION_STYLE_V1',
  version:VERSION,
@@ -37,7 +37,7 @@ const INTERNAL_PREFIXES=[
 ];
 const SCRIPT_BASE=new URL('.',document.currentScript?.src||location.href);
 const TEST_INTENT_URL=new URL('gthink-public-test-intent-router.js?v=1',SCRIPT_BASE).href;
-const CONVERSATION_URL=new URL('gthink-secondary-conversation-bridge.js?v=4',SCRIPT_BASE).href;
+const CONVERSATION_URL=new URL('gthink-secondary-conversation-bridge.js?v=5',SCRIPT_BASE).href;
 const targetHistory=new WeakMap();
 const targetWrapped=new WeakSet();
 let dependencyPromise=null;
