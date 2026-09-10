@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "9ed6ef7b838b0caa83554e455208f6c62d9ee24a",
+  "parentSha": "204a5b7b9eb539c4101606d788839c953bdc812d",
+  "committedAt": "2026-09-10T02:56:57+02:00",
+  "summary": {
+    "subject": "ProdOui: add isolated public GVAULT Galaxy interface",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 50,
+    "deletions": 0,
+    "paths": [
+      "prodoui-galaxy/index.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 50,
+    "deletions": 0,
+    "magnitude": 50,
+    "committedAt": "2026-09-10T02:56:57+02:00",
+    "parentSha": "204a5b7b9eb539c4101606d788839c953bdc812d"
+  },
+  "pulseKey": "CTP1:9ed6ef7b838b0caa83554e455208f6c62d9ee24a:428f773c2e46e1f3",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "9393965b3e5014139a8277053b69949e108b95e9b609862deee0cb7ced40598e",
+  "typedKeys": {
+    "commit": "gitc:9ed6ef7b838b0caa83554e455208f6c62d9ee24a",
+    "parent": "gitc:204a5b7b9eb539c4101606d788839c953bdc812d",
+    "pulse": "ctp1:9ed6ef7b838b0caa83554e455208f6c62d9ee24a:428f773c2e46e1f3",
+    "translation": "cttrans:9393965b3e5014139a8277053b69949e108b95e9b609862deee0cb7ced40598e",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "9ed6ef7b838b0caa83554e455208f6c62d9ee24a",
+    "parentSha": "204a5b7b9eb539c4101606d788839c953bdc812d",
+    "committedAt": "2026-09-10T02:56:57+02:00",
+    "summary": {
+      "subject": "ProdOui: add isolated public GVAULT Galaxy interface",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 50,
+      "deletions": 0,
+      "paths": [
+        "prodoui-galaxy/index.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 50,
+      "deletions": 0,
+      "magnitude": 50,
+      "committedAt": "2026-09-10T02:56:57+02:00",
+      "parentSha": "204a5b7b9eb539c4101606d788839c953bdc812d"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/9ed6ef7b838b0caa83554e455208f6c62d9ee24a.json",
+      "vfsKey": "CTP1:9ed6ef7b838b0caa83554e455208f6c62d9ee24a:428f773c2e46e1f3",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/9ed6ef7b838b0caa83554e455208f6c62d9ee24a.json"
+}
