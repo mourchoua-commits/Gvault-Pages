@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "1d65fcdd974e735854ee25940bf16caf446ce68f",
+  "parentSha": "2723a276682c96476273eb72861ac6449c7a921d",
+  "committedAt": "2026-09-10T03:45:20+02:00",
+  "summary": {
+    "subject": "GThink: evolve ProdOui Galaxy into organic Blob AI constellation",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 63,
+    "deletions": 75,
+    "paths": [
+      "prodoui-galaxy/index.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 63,
+    "deletions": 75,
+    "magnitude": 138,
+    "committedAt": "2026-09-10T03:45:20+02:00",
+    "parentSha": "2723a276682c96476273eb72861ac6449c7a921d"
+  },
+  "pulseKey": "CTP1:1d65fcdd974e735854ee25940bf16caf446ce68f:caf45a99fffbed50",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "913cb126809b9f83c8e62d2cd6942fa9aad290b248f0aac6c5910b6203af084f",
+  "typedKeys": {
+    "commit": "gitc:1d65fcdd974e735854ee25940bf16caf446ce68f",
+    "parent": "gitc:2723a276682c96476273eb72861ac6449c7a921d",
+    "pulse": "ctp1:1d65fcdd974e735854ee25940bf16caf446ce68f:caf45a99fffbed50",
+    "translation": "cttrans:913cb126809b9f83c8e62d2cd6942fa9aad290b248f0aac6c5910b6203af084f",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "1d65fcdd974e735854ee25940bf16caf446ce68f",
+    "parentSha": "2723a276682c96476273eb72861ac6449c7a921d",
+    "committedAt": "2026-09-10T03:45:20+02:00",
+    "summary": {
+      "subject": "GThink: evolve ProdOui Galaxy into organic Blob AI constellation",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 63,
+      "deletions": 75,
+      "paths": [
+        "prodoui-galaxy/index.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 63,
+      "deletions": 75,
+      "magnitude": 138,
+      "committedAt": "2026-09-10T03:45:20+02:00",
+      "parentSha": "2723a276682c96476273eb72861ac6449c7a921d"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/1d65fcdd974e735854ee25940bf16caf446ce68f.json",
+      "vfsKey": "CTP1:1d65fcdd974e735854ee25940bf16caf446ce68f:caf45a99fffbed50",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/1d65fcdd974e735854ee25940bf16caf446ce68f.json"
+}
