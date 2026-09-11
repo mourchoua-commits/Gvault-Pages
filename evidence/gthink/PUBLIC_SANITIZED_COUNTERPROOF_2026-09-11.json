@@ -1,0 +1,44 @@
+{
+  "schema": "GVAULT_GTHINK_PUBLIC_SANITIZED_COUNTERPROOF_V1",
+  "status": "PASS",
+  "scope": "PUBLIC counter-verifies the sanitized PRIVATE off-Actions proof while fusion remains deferred",
+  "privateOffActionsEvidence": {
+    "repository": "mourchoua-commits/Gvault",
+    "commit": "20621abb7f7ef1b37f99f4a5411828e4d4901502",
+    "path": "evidence/gthink/private-peer-observer/OFF_ACTIONS_PROOF_2026-09-11.json"
+  },
+  "sanitizedProjection": {
+    "commit": "e3d8458d9299d391a652ddd3688fe146adbe1d6d",
+    "path": "publications/gthink-peer/private-sanitized-heartbeat.json",
+    "fusion": "DEFERRED",
+    "sanitized": true,
+    "autonomyPreserved": true
+  },
+  "publicVerifier": {
+    "testCommit": "81bd5876cf7035c73e1df8445671b194ebca88a0",
+    "workflowCommit": "e1c4aa95aa2b1e2e6c0532e0ff2d1751585eaf73",
+    "workflow": "GThink Public Sanitized Contract",
+    "runId": 34596212751,
+    "jobId": 103252447904,
+    "runnerId": 1000023475,
+    "runner": "GitHub Actions 1000023475",
+    "conclusion": "success",
+    "verifyStep": "success"
+  },
+  "assertedProperties": [
+    "PUBLIC_READY",
+    "PRIVATE_SANITIZED_READY",
+    "CORRELATION_MATCH",
+    "PRIVATE_TO_PUBLIC_DIRECTION",
+    "SANITIZED_BOUNDARY",
+    "AUTONOMY_PRESERVED",
+    "PRIVATE_RAW_CONTENT_INACCESSIBLE",
+    "PRIVATE_HOSTED_RUNNER_NOT_REQUIRED_FOR_PROOF",
+    "FUSION_DEFERRED"
+  ],
+  "result": "RECIPROCAL_PROOF_CLOSED",
+  "limits": [
+    "The PRIVATE GitHub-hosted Playwright runner remains unavailable for its own workflow.",
+    "This counterproof validates the sanitized contract and the sealed off-Actions PRIVATE proof; it does not claim the unavailable PRIVATE runner executed."
+  ]
+}
