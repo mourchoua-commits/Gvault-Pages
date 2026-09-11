@@ -1,0 +1,32 @@
+name: GThink Pre-Fusion Regen Gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - regen/fertile-heartbeat-pre-fusion-20260911
+    paths:
+      - 'blobs/runtime/PUBLIC_PEER_OBSERVER_BLOB_V1.json'
+      - 'publications/gthink-peer/public-heartbeat.json'
+      - 'publications/gthink-peer/private-sanitized-heartbeat.json'
+      - 'tests/gthink-pre-fusion-regen-gate.mjs'
+      - '.github/workflows/gthink-pre-fusion-regen-gate.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gthink-pre-fusion-regen-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-fertile-heartbeat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify regenerated pre-fusion heartbeat
+        run: node tests/gthink-pre-fusion-regen-gate.mjs
