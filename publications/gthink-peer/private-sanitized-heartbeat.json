@@ -6,17 +6,11 @@
   "direction": "PRIVATE_TO_PUBLIC",
   "sanitized": true,
   "correlationId": "GTHINK-MUTUAL-OBSERVATION-V1",
-  "privateObserverCommit": "2cc5e179cb988d889718935488b25eb793b105f4",
-  "privatePlaywrightSpecCommit": "29a8d99219cd875adcdd1fee1f2ed4e5be86d494",
-  "observedPublicHeartbeatCommit": "116eeacf8c08daf566a00bee6dd7fb6f9ff81b1e",
-  "fusion": {
-    "sessionId": "GTHINK-FUSION-3602CB2B7890",
-    "status": "ACTIVE_WITH_CONNECTOR_FALLBACK",
-    "mode": "COUPLED_DUAL_CORE_SHARED_ENGINE",
-    "bidirectionalObservation": true,
-    "stateIsolation": true,
-    "privateFusionProofCommit": "9abaeec24486a9ebc5582057e39f49244c3dfbac"
-  },
+  "privateObserverCommit": "75312b6af5ee7445025776c65cd187cd4f99dde5",
+  "privatePlaywrightSpecCommit": "a5b628720be97b5e8910e47f28187506bc06cba1",
+  "observedPublicHeartbeatCommit": "4faf6f9c128ea5264036b30b756ac478310f1894",
+  "observedPublicRepositoryHead": "1caaec405db63d716cb50d1c7520f14d0710968c",
+  "fusion": "DEFERRED",
   "observation": {
     "peer": "PUBLIC",
     "peerStatus": "READY",
@@ -26,9 +20,19 @@
     "autonomyPreserved": true
   },
   "runner": {
-    "privatePlaywrightRunId": 33813865757,
-    "privatePlaywrightConclusion": "failure_before_steps",
-    "fallback": "CONNECTED_GITHUB_READ_WRITE_PROOF"
+    "privatePlaywrightRunId": 34595397901,
+    "privatePlaywrightConclusion": "RUNNER_UNAVAILABLE_ZERO_STEP",
+    "runnerId": 0,
+    "stepsExecuted": 0,
+    "usedAsProof": false
+  },
+  "proof": {
+    "mode": "PRIVATE_OFF_ACTIONS_CONNECTOR_LOCAL_ASSERTION",
+    "status": "PASS",
+    "privateEvidenceCommit": "20621abb7f7ef1b37f99f4a5411828e4d4901502",
+    "privateEvidencePath": "evidence/gthink/private-peer-observer/OFF_ACTIONS_PROOF_2026-09-11.json",
+    "githubHostedRunnerRequired": false,
+    "privateRawContentAccessible": false
   },
   "exportedFields": [
     "schema",
@@ -41,9 +45,11 @@
     "privateObserverCommit",
     "privatePlaywrightSpecCommit",
     "observedPublicHeartbeatCommit",
+    "observedPublicRepositoryHead",
     "fusion",
     "observation",
     "runner",
+    "proof",
     "exportedFields"
   ]
 }
