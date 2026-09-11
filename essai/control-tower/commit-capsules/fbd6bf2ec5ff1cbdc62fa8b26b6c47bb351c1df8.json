@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "fbd6bf2ec5ff1cbdc62fa8b26b6c47bb351c1df8",
+  "parentSha": "11896fa2ee02adc2805f79a9d807cc6ee3b24d96",
+  "committedAt": "2026-09-11T13:41:47+02:00",
+  "summary": {
+    "subject": "repair(gthink): restore public pre-fusion peer observer on main",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 0,
+    "deletions": 10,
+    "paths": [
+      "blobs/runtime/PUBLIC_PEER_OBSERVER_BLOB_V1.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 0,
+    "deletions": 10,
+    "magnitude": 10,
+    "committedAt": "2026-09-11T13:41:47+02:00",
+    "parentSha": "11896fa2ee02adc2805f79a9d807cc6ee3b24d96"
+  },
+  "pulseKey": "CTP1:fbd6bf2ec5ff1cbdc62fa8b26b6c47bb351c1df8:b189a6759ef99651",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "f8efecddc624a09d8a417b51b724f9d0ee5f51f11bcba0b8fb8bf4b3a92f74b7",
+  "typedKeys": {
+    "commit": "gitc:fbd6bf2ec5ff1cbdc62fa8b26b6c47bb351c1df8",
+    "parent": "gitc:11896fa2ee02adc2805f79a9d807cc6ee3b24d96",
+    "pulse": "ctp1:fbd6bf2ec5ff1cbdc62fa8b26b6c47bb351c1df8:b189a6759ef99651",
+    "translation": "cttrans:f8efecddc624a09d8a417b51b724f9d0ee5f51f11bcba0b8fb8bf4b3a92f74b7",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "fbd6bf2ec5ff1cbdc62fa8b26b6c47bb351c1df8",
+    "parentSha": "11896fa2ee02adc2805f79a9d807cc6ee3b24d96",
+    "committedAt": "2026-09-11T13:41:47+02:00",
+    "summary": {
+      "subject": "repair(gthink): restore public pre-fusion peer observer on main",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 0,
+      "deletions": 10,
+      "paths": [
+        "blobs/runtime/PUBLIC_PEER_OBSERVER_BLOB_V1.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 0,
+      "deletions": 10,
+      "magnitude": 10,
+      "committedAt": "2026-09-11T13:41:47+02:00",
+      "parentSha": "11896fa2ee02adc2805f79a9d807cc6ee3b24d96"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/fbd6bf2ec5ff1cbdc62fa8b26b6c47bb351c1df8.json",
+      "vfsKey": "CTP1:fbd6bf2ec5ff1cbdc62fa8b26b6c47bb351c1df8:b189a6759ef99651",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/fbd6bf2ec5ff1cbdc62fa8b26b6c47bb351c1df8.json"
+}
