@@ -1,0 +1,265 @@
+name: Physical exact main backup
+
+on:
+  push:
+    branches:
+      - backup/physical-export-20260911-1919
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      PRIVATE_TOKEN: ${{ secrets.GVAULT_PUBLIC_CHAIN_TOKEN }}
+      PRIVATE_SHA: 70fb60438d2d96b31e01fefe57f58da15489cedf
+      PUBLIC_SHA: ad845a655371d1ff1e154c5a76ae905fa5936506
+    steps:
+      - name: Require existing authorized private route
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${PRIVATE_TOKEN:-}" || { echo 'GVAULT_PUBLIC_CHAIN_TOKEN is missing'; exit 41; }
+
+      - name: Checkout private main source exactly
+        uses: actions/checkout@v4
+        with:
+          repository: mourchoua-commits/Gvault
+          ref: 70fb60438d2d96b31e01fefe57f58da15489cedf
+          token: ${{ secrets.GVAULT_PUBLIC_CHAIN_TOKEN }}
+          fetch-depth: 0
+          lfs: true
+          submodules: recursive
+          persist-credentials: true
+          path: private-src
+
+      - name: Checkout public main source exactly
+        uses: actions/checkout@v4
+        with:
+          repository: mourchoua-commits/Gvault-Pages
+          ref: ad845a655371d1ff1e154c5a76ae905fa5936506
+          fetch-depth: 0
+          lfs: true
+          submodules: recursive
+          persist-credentials: true
+          path: public-src
+
+      - name: Build verified physical archives
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out tools stage
+
+          cat > tools/zip_tree.py <<'PY'
+          import os, shutil, stat, sys, zipfile
+          from pathlib import Path
+
+          root = Path(sys.argv[1]).resolve()
+          out = Path(sys.argv[2]).resolve()
+          skip_git = sys.argv[3].lower() == 'true'
+
+          def info(name, mode, directory=False):
+              if directory and not name.endswith('/'):
+                  name += '/'
+              zi = zipfile.ZipInfo(name, (1980, 1, 1, 0, 0, 0))
+              zi.create_system = 3
+              zi.external_attr = (mode & 0xFFFF) << 16
+              if directory:
+                  zi.external_attr |= 0x10
+              zi.compress_type = zipfile.ZIP_DEFLATED
+              return zi
+
+          with zipfile.ZipFile(out, 'w', allowZip64=True) as z:
+              def walk(base, arc=''):
+                  for e in sorted(os.scandir(base), key=lambda x: x.name):
+                      if skip_git and e.name == '.git':
+                          continue
+                      p = Path(e.path)
+                      rel = f'{arc}/{e.name}' if arc else e.name
+                      st = os.lstat(p)
+                      if stat.S_ISLNK(st.st_mode):
+                          z.writestr(info(rel, st.st_mode), os.readlink(p).encode('utf-8', 'surrogateescape'))
+                      elif stat.S_ISDIR(st.st_mode):
+                          z.writestr(info(rel, st.st_mode, True), b'')
+                          walk(p, rel)
+                      elif stat.S_ISREG(st.st_mode):
+                          zi = info(rel, st.st_mode)
+                          with z.open(zi, 'w') as dst, open(p, 'rb') as src:
+                              shutil.copyfileobj(src, dst, 1024 * 1024)
+                      else:
+                          raise RuntimeError(f'Unsupported object {p} mode={oct(st.st_mode)}')
+              walk(root)
+          PY
+
+          cat > tools/verify_zip.py <<'PY'
+          import hashlib, os, stat, sys, zipfile
+          from pathlib import Path
+
+          root = Path(sys.argv[1]).resolve()
+          zpath = Path(sys.argv[2]).resolve()
+          skip_git = sys.argv[3].lower() == 'true'
+
+          def filehash_file(p):
+              h = hashlib.sha256()
+              with open(p, 'rb') as f:
+                  for b in iter(lambda: f.read(1024*1024), b''):
+                      h.update(b)
+              return h.hexdigest()
+
+          expected = {}
+          def walk(base, arc=''):
+              for e in sorted(os.scandir(base), key=lambda x: x.name):
+                  if skip_git and e.name == '.git':
+                      continue
+                  p = Path(e.path)
+                  rel = f'{arc}/{e.name}' if arc else e.name
+                  st = os.lstat(p)
+                  mode = stat.S_IMODE(st.st_mode)
+                  if stat.S_ISLNK(st.st_mode):
+                      expected[rel] = ('L', mode, os.readlink(p))
+                  elif stat.S_ISDIR(st.st_mode):
+                      expected[rel + '/'] = ('D', mode, None)
+                      walk(p, rel)
+                  elif stat.S_ISREG(st.st_mode):
+                      expected[rel] = ('F', mode, filehash_file(p))
+                  else:
+                      raise RuntimeError(f'Unsupported object {p}')
+          walk(root)
+
+          got = {}
+          with zipfile.ZipFile(zpath) as z:
+              bad = z.testzip()
+              if bad:
+                  raise RuntimeError(f'CRC failure: {bad}')
+              for zi in z.infolist():
+                  fullmode = (zi.external_attr >> 16) & 0xFFFF
+                  mode = stat.S_IMODE(fullmode)
+                  if zi.filename.endswith('/'):
+                      got[zi.filename] = ('D', mode, None)
+                  elif stat.S_ISLNK(fullmode):
+                      got[zi.filename] = ('L', mode, z.read(zi).decode('utf-8','surrogateescape'))
+                  else:
+                      h = hashlib.sha256()
+                      with z.open(zi) as f:
+                          for b in iter(lambda: f.read(1024*1024), b''):
+                              h.update(b)
+                      got[zi.filename] = ('F', mode, h.hexdigest())
+
+          if expected != got:
+              missing = sorted(set(expected) - set(got))[:30]
+              extra = sorted(set(got) - set(expected))[:30]
+              changed = sorted(k for k in set(expected) & set(got) if expected[k] != got[k])[:30]
+              raise RuntimeError(f'Archive mismatch missing={missing} extra={extra} changed={changed}')
+          print(f'VERIFIED {zpath.name}: {len(expected)} filesystem entries')
+          PY
+
+          cat > tools/package_one.sh <<'SH'
+          set -euo pipefail
+          slug="$1"
+          src="$2"
+          sha="$3"
+          short="${sha:0:12}"
+          workzip="out/${slug}-main-${short}-WORKTREE.zip"
+          pkg="stage/${slug}-main-${short}-MIRROR"
+          mirrorzip="out/${slug}-main-${short}-GIT-MIRROR-WITH-LFS.zip"
+
+          actual="$(git -C "$src" rev-parse HEAD)"
+          test "$actual" = "$sha" || { echo "SHA mismatch $slug expected=$sha actual=$actual" >&2; exit 51; }
+
+          git -C "$src" status --porcelain=v1 --untracked-files=all --ignore-submodules=none > "stage/${slug}-status.txt"
+          test ! -s "stage/${slug}-status.txt" || { echo "Dirty checkout $slug" >&2; cat "stage/${slug}-status.txt" >&2; exit 52; }
+
+          if command -v git-lfs >/dev/null 2>&1; then
+            if [ -n "$(git -C "$src" lfs ls-files 2>/dev/null || true)" ]; then
+              git -C "$src" lfs pull
+              git -C "$src" lfs fetch --all origin
+              git -C "$src" lfs fsck
+            fi
+          fi
+
+          git -C "$src" submodule status --recursive > "stage/${slug}-submodules.txt" || true
+          if grep -Eq '^[+-U]' "stage/${slug}-submodules.txt"; then
+            echo "Submodule mismatch or uninitialized in $slug" >&2
+            cat "stage/${slug}-submodules.txt" >&2
+            exit 53
+          fi
+
+          python tools/zip_tree.py "$src" "$workzip" true
+          python tools/verify_zip.py "$src" "$workzip" true
+
+          rm -rf "$pkg"
+          mkdir -p "$pkg/submodules"
+          git -C "$src" update-ref refs/heads/main "$sha"
+          git init --bare "$pkg/parent.git" >/dev/null
+          git --git-dir="$pkg/parent.git" fetch --force "$PWD/$src" "+refs/heads/main:refs/heads/main" >/dev/null
+          test "$(git --git-dir="$pkg/parent.git" rev-parse refs/heads/main)" = "$sha"
+          git --git-dir="$pkg/parent.git" fsck --full
+
+          gd="$(git -C "$src" rev-parse --absolute-git-dir)"
+          if [ -d "$gd/lfs" ]; then
+            cp -a "$gd/lfs" "$pkg/parent.git/lfs"
+          fi
+
+          git -C "$src" submodule foreach --recursive --quiet 'printf "%s\n" "$displaypath"' > "stage/${slug}-submodule-paths.txt" || true
+          while IFS= read -r p; do
+            [ -n "$p" ] || continue
+            sub="$src/$p"
+            subsha="$(git -C "$sub" rev-parse HEAD)"
+            git -C "$sub" update-ref refs/backup/pinned "$subsha"
+            if command -v git-lfs >/dev/null 2>&1 && [ -n "$(git -C "$sub" lfs ls-files 2>/dev/null || true)" ]; then
+              git -C "$sub" lfs pull
+              git -C "$sub" lfs fetch --all origin
+              git -C "$sub" lfs fsck
+            fi
+            dest="$pkg/submodules/$p.git"
+            mkdir -p "$(dirname "$dest")"
+            git init --bare "$dest" >/dev/null
+            git --git-dir="$dest" fetch --force "$PWD/$sub" "+refs/backup/pinned:refs/backup/pinned" >/dev/null
+            test "$(git --git-dir="$dest" rev-parse refs/backup/pinned)" = "$subsha"
+            git --git-dir="$dest" fsck --full
+            sgd="$(git -C "$sub" rev-parse --absolute-git-dir)"
+            if [ -d "$sgd/lfs" ]; then
+              cp -a "$sgd/lfs" "$dest/lfs"
+            fi
+          done < "stage/${slug}-submodule-paths.txt"
+
+          python tools/zip_tree.py "$pkg" "$mirrorzip" false
+          python tools/verify_zip.py "$pkg" "$mirrorzip" false
+
+          sha256sum "$workzip" "$mirrorzip" > "out/${slug}-SHA256SUMS.txt"
+          stat -c '%s  %n' "$workzip" "$mirrorzip" > "out/${slug}-SIZES.txt"
+          printf '%s\n' "$sha" > "out/${slug}-SOURCE_SHA.txt"
+          cp "stage/${slug}-submodules.txt" "out/${slug}-SUBMODULES.txt"
+          SH
+          chmod +x tools/package_one.sh
+
+          tools/package_one.sh Gvault-private private-src "$PRIVATE_SHA"
+          tools/package_one.sh Gvault-Pages-public public-src "$PUBLIC_SHA"
+
+          cat > out/VERIFICATION.txt <<EOF
+          VERIFIED SOURCE SHAS
+          private main: $PRIVATE_SHA
+          public main:  $PUBLIC_SHA
+
+          WORKTREE ZIP verification:
+          Each ZIP was fully re-read with CRC validation and every archived regular-file SHA-256, Unix permission mode, directory entry and symlink target was compared to its checked-out source tree. Git administrative .git data is intentionally excluded from WORKTREE ZIPs.
+
+          GIT-MIRROR-WITH-LFS verification:
+          parent.git contains refs/heads/main pinned to the source SHA and passed git fsck --full before packaging. Git LFS storage present in the checkout was copied into the mirror package after git lfs fetch --all and git lfs fsck when LFS-tracked files existed. Recursive initialized submodules are included as pinned bare mirrors under submodules/ and each passed git fsck --full.
+
+          ZIP metadata preserves Unix mode bits and symlink entries. Git does not version filesystem modification timestamps, so ZIP timestamps are deliberately normalized.
+          EOF
+
+          sha256sum out/*.zip > out/ALL_ARCHIVE_SHA256SUMS.txt
+          ls -lah out
+
+      - name: Upload exact physical backup set
+        uses: actions/upload-artifact@v4
+        with:
+          name: GVAULT-PHYSICAL-MAINS-20260911
+          path: out/*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
