@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>GVAULT · acteurs vérifiés</title>
+<style>
+:root{color-scheme:dark;--bg:#070907;--panel:#101510;--line:#344038;--text:#edf4ee;--muted:#87958b}*{box-sizing:border-box}html,body{margin:0;min-height:100%}body{min-height:100vh;display:grid;place-items:center;padding:18px;background:radial-gradient(circle at 50% 0,rgba(123,31,162,.13),transparent 34rem),var(--bg);color:var(--text);font:14px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.card{width:min(760px,100%);padding:18px;border:1px solid var(--line);border-radius:18px;background:rgba(16,21,16,.96);box-shadow:0 24px 80px rgba(0,0,0,.46)}h1{margin:0 0 6px;font-size:20px}.sub{margin:0 0 16px;color:var(--muted);font-size:12px}.actorLine{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:62px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#070a07}.gvaultActorSegment{--actor-color:#d4ddd6;display:inline-flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid color-mix(in srgb,var(--actor-color) 56%,#263027);border-radius:999px;color:var(--actor-color);background:color-mix(in srgb,var(--actor-color) 7%,transparent);box-shadow:0 0 18px color-mix(in srgb,var(--actor-color) 12%,transparent);font-weight:900}.fallback{color:var(--muted)}.meta{margin-top:14px;padding-top:12px;border-top:1px solid #263029;color:var(--muted);font-size:11px}code{color:#cfe7d4}
+</style>
+</head>
+<body>
+<main class="card">
+<h1>GVAULT · acteurs vérifiés</h1>
+<p class="sub">Surface navigateur pour <code>ACTOR_COLOR_SEGMENTS</code>.</p>
+<div id="actorLine" class="actorLine" data-gvault-actor-presentation><span class="fallback">En attente d'une présentation vérifiée…</span></div>
+<div class="meta">API locale : <code>GVAULT_ACTOR_PRESENTATION_RECEIVE(presentation)</code></div>
+</main>
+<script src="../../scripts/gthink-actor-presentation-browser.js"></script>
+<script>
+const target=document.getElementById('actorLine');
+window.GVAULT_ACTOR_PRESENTATION_RECEIVE=presentation=>window.GVAULT_ACTOR_PRESENTATION_BROWSER.receive(presentation,target);
+if(new URLSearchParams(location.search).get('demo')==='1')window.GVAULT_ACTOR_PRESENTATION_RECEIVE({mode:'ACTOR_COLOR_SEGMENTS',segments:[{role:'host_actor',id:'chatgpt',label:'ChatGPT',marker:'🔷',color:'#00BCD4',verified:true},{role:'companion',id:'gthink',label:'GThink',marker:'🟣',color:'#7B1FA2',verified:true}]});
+</script>
+</body>
+</html>
