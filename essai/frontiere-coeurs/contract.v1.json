@@ -1,0 +1,96 @@
+{
+  "schema": "GVAULT_PROVISIONAL_HEART_BORDER_C_V1",
+  "version": "1.0.0",
+  "status": "EXPLICIT_ONLY_LOCAL_SELF_SERVICE",
+  "publishedSurface": "Gvault-Pages/essai/frontiere-coeurs/",
+  "scope": "PROVISIONAL_DEMONSTRATOR_NOT_RUNTIME_BINDING",
+  "hearts": [
+    "GTHINK_PUBLIC",
+    "GTHINK_PRIVATE",
+    "GTHINK_IMAGE"
+  ],
+  "ownership": {
+    "orchestrator": "GThink",
+    "methodPolicy": "Canonical Method Router in private Gvault",
+    "bridge": "TRANSPORT_FORMAT_AND_LOCAL_VALIDATION_ONLY",
+    "mayRoute": false,
+    "mayExecute": false,
+    "mayReadPrivate": false,
+    "mayAuthorize": false,
+    "mayMutateCanonical": false
+  },
+  "isolation": {
+    "historyTopology": "UNRELATED_PUBLIC_BRANCH",
+    "runtimeActivation": "EXPLICIT_ONLY",
+    "informationFlow": "NONE_BY_DEFAULT",
+    "mutationScope": "NONE",
+    "authority": "NONE"
+  },
+  "wire": {
+    "grammar": "C-BORDER/1|FROM|TO|KIND|NONCE|TTL",
+    "fieldCount": 6,
+    "nonce": "16 lowercase hexadecimal characters (correlation only, NOT authentication)",
+    "ttlAllowed": [
+      1,
+      2,
+      3
+    ],
+    "kinds": [
+      "HELLO",
+      "CAPABILITY",
+      "EVIDENCE_REF",
+      "ACK",
+      "STOP"
+    ],
+    "payloadAllowed": false,
+    "arbitraryTextAllowed": false,
+    "fromMustDifferFromTo": true
+  },
+  "stations": [
+    {
+      "id": "C-01",
+      "role": "CHECK_GRAMMAR_AND_VERSION",
+      "result": "LOCAL_ONLY"
+    },
+    {
+      "id": "C-02",
+      "role": "CHECK_HEART_PAIR_KIND_NONCE_TTL",
+      "result": "LOCAL_ONLY"
+    },
+    {
+      "id": "C-03",
+      "role": "EMIT_LOCAL_VALIDATION_RECEIPT",
+      "result": "NO_REMOTE_ACK"
+    }
+  ],
+  "explicitTransfer": {
+    "delivery": "MANUAL_ONLY",
+    "network": "NONE",
+    "remoteHeartbeat": "NOT_IMPLEMENTED",
+    "remoteAck": "NOT_IMPLEMENTED",
+    "privateCoreConnection": "NOT_IMPLEMENTED",
+    "userChoiceRequired": true
+  },
+  "forbidden": [
+    "SECRETS",
+    "TOKENS",
+    "PASSWORDS",
+    "RAW_CONVERSATION",
+    "HIDDEN_REASONING",
+    "AUTONOMOUS_PUBLIC_TO_PRIVATE_SEND",
+    "GIT_WRITE",
+    "EXECUTABLE_PAYLOAD",
+    "HTML_INJECTION",
+    "FAKE_REMOTE_ACK"
+  ],
+  "tests": {
+    "command": "cc -std=c11 -Wall -Wextra -Werror -pedantic -o c_border c_border.c && ./c_border --self-test",
+    "mustPassBeforeMerge": true
+  },
+  "lineage": [
+    "ops/p2p/GVAULT_P2P_BLOB_MESH.contract.v1.json",
+    "ops/isolation/isolation-semantics.v1.json",
+    "ops/method-router/dual-core-conversation.binding.v1.json",
+    ".github/workflows/tri-core-dialogue-bus.yml"
+  ]
+}
