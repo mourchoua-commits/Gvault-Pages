@@ -51,3 +51,9 @@ Contrat : UTF-8 strict, maximum 512 scalaires, rejet des séquences mal formées
 - En cas de divergence, le résultat reste opaque ou non concluant. Aucun consensus fictif.
 
 Voir [le paquet de démonstration](public-demo-language-pack.json) et [le contrat](c-alphabet.contract.v1.json).
+
+## Tic et petits cœurs
+
+Chaque station affichée possède un petit cœur, ainsi que les boutons de l'alphabet et les points des mots traduits. Les frappes au clavier et les pressions sur les lettres font **battre un seul cœur par événement d'entrée**, avec un compteur temporaire « Tics ». Une saisie collée affiche un cœur sur chaque caractère mais ne déclenche qu'une pulsation visuelle pour le collage. Le compteur repart de zéro à chaque ouverture de page.
+
+Cette représentation est **uniquement visuelle et locale** : elle ne constitue ni un battement réel des cœurs GThink, ni un heartbeat réseau, ni un accusé de réception distant. La préférence système de réduction des animations est respectée ; aucun son, stockage ou accès réseau supplémentaire.
