@@ -1,0 +1,90 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "c2931cee827eb9a1f6ec47d8c38474b88e315c2f",
+  "parentSha": "af62b2acc49a7ead7e2704a84ccbff7e8536b716",
+  "committedAt": "2026-11-05T18:07:11+01:00",
+  "summary": {
+    "subject": "feat(border): relier TIC TAC aux passerelles locales et huit besoins",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 10,
+    "additions": 561,
+    "deletions": 19,
+    "paths": [
+      "essai/frontiere-coeurs/README.md",
+      "essai/frontiere-coeurs/alphabet-readme.md",
+      "essai/frontiere-coeurs/alphabet.html",
+      "essai/frontiere-coeurs/alphabet.js",
+      "essai/frontiere-coeurs/c-alphabet.contract.v1.json",
+      "essai/frontiere-coeurs/contract.v1.json",
+      "essai/frontiere-coeurs/index.html",
+      "essai/frontiere-coeurs/local-gateway.contract.v1.json",
+      "essai/frontiere-coeurs/local-gateway.js",
+      "essai/frontiere-coeurs/local-gateway.test.mjs"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "FULL",
+    "changedFiles": 10,
+    "additions": 561,
+    "deletions": 19,
+    "magnitude": 580,
+    "committedAt": "2026-11-05T18:07:11+01:00",
+    "parentSha": "af62b2acc49a7ead7e2704a84ccbff7e8536b716"
+  },
+  "pulseKey": "CTP1:c2931cee827eb9a1f6ec47d8c38474b88e315c2f:c9ca87960bac5ec4",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "16849607a9532b4926946b28462c03158e0d52d4dfaac794362f420272fe26a7",
+  "typedKeys": {
+    "commit": "gitc:c2931cee827eb9a1f6ec47d8c38474b88e315c2f",
+    "parent": "gitc:af62b2acc49a7ead7e2704a84ccbff7e8536b716",
+    "pulse": "ctp1:c2931cee827eb9a1f6ec47d8c38474b88e315c2f:c9ca87960bac5ec4",
+    "translation": "cttrans:16849607a9532b4926946b28462c03158e0d52d4dfaac794362f420272fe26a7",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "c2931cee827eb9a1f6ec47d8c38474b88e315c2f",
+    "parentSha": "af62b2acc49a7ead7e2704a84ccbff7e8536b716",
+    "committedAt": "2026-11-05T18:07:11+01:00",
+    "summary": {
+      "subject": "feat(border): relier TIC TAC aux passerelles locales et huit besoins",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 10,
+      "additions": 561,
+      "deletions": 19,
+      "paths": [
+        "essai/frontiere-coeurs/README.md",
+        "essai/frontiere-coeurs/alphabet-readme.md",
+        "essai/frontiere-coeurs/alphabet.html",
+        "essai/frontiere-coeurs/alphabet.js",
+        "essai/frontiere-coeurs/c-alphabet.contract.v1.json",
+        "essai/frontiere-coeurs/contract.v1.json",
+        "essai/frontiere-coeurs/index.html",
+        "essai/frontiere-coeurs/local-gateway.contract.v1.json",
+        "essai/frontiere-coeurs/local-gateway.js",
+        "essai/frontiere-coeurs/local-gateway.test.mjs"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "FULL",
+      "changedFiles": 10,
+      "additions": 561,
+      "deletions": 19,
+      "magnitude": 580,
+      "committedAt": "2026-11-05T18:07:11+01:00",
+      "parentSha": "af62b2acc49a7ead7e2704a84ccbff7e8536b716"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/c2931cee827eb9a1f6ec47d8c38474b88e315c2f.json",
+      "vfsKey": "CTP1:c2931cee827eb9a1f6ec47d8c38474b88e315c2f:c9ca87960bac5ec4",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/c2931cee827eb9a1f6ec47d8c38474b88e315c2f.json"
+}
