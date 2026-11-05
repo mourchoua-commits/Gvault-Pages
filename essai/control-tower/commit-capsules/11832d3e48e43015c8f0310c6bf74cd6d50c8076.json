@@ -1,0 +1,84 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "11832d3e48e43015c8f0310c6bf74cd6d50c8076",
+  "parentSha": "8bd0fe9772e2247bc2ff6365f7abb406f5641dee",
+  "committedAt": "2026-11-05T17:47:54+01:00",
+  "summary": {
+    "subject": "feat(essai): alphabet C Unicode et lexiques Blob en libre-service",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 7,
+    "additions": 548,
+    "deletions": 0,
+    "paths": [
+      "essai/frontiere-coeurs/alphabet-readme.md",
+      "essai/frontiere-coeurs/alphabet.html",
+      "essai/frontiere-coeurs/alphabet.js",
+      "essai/frontiere-coeurs/c-alphabet.contract.v1.json",
+      "essai/frontiere-coeurs/c_letters.c",
+      "essai/frontiere-coeurs/index.html",
+      "essai/frontiere-coeurs/public-demo-language-pack.json"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "FULL",
+    "changedFiles": 7,
+    "additions": 548,
+    "deletions": 0,
+    "magnitude": 548,
+    "committedAt": "2026-11-05T17:47:54+01:00",
+    "parentSha": "8bd0fe9772e2247bc2ff6365f7abb406f5641dee"
+  },
+  "pulseKey": "CTP1:11832d3e48e43015c8f0310c6bf74cd6d50c8076:2e4fbe414f025a49",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "678c116e1370f4da478ffef438482332d5ad51ae78c42a591b7739b00b635910",
+  "typedKeys": {
+    "commit": "gitc:11832d3e48e43015c8f0310c6bf74cd6d50c8076",
+    "parent": "gitc:8bd0fe9772e2247bc2ff6365f7abb406f5641dee",
+    "pulse": "ctp1:11832d3e48e43015c8f0310c6bf74cd6d50c8076:2e4fbe414f025a49",
+    "translation": "cttrans:678c116e1370f4da478ffef438482332d5ad51ae78c42a591b7739b00b635910",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "11832d3e48e43015c8f0310c6bf74cd6d50c8076",
+    "parentSha": "8bd0fe9772e2247bc2ff6365f7abb406f5641dee",
+    "committedAt": "2026-11-05T17:47:54+01:00",
+    "summary": {
+      "subject": "feat(essai): alphabet C Unicode et lexiques Blob en libre-service",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 7,
+      "additions": 548,
+      "deletions": 0,
+      "paths": [
+        "essai/frontiere-coeurs/alphabet-readme.md",
+        "essai/frontiere-coeurs/alphabet.html",
+        "essai/frontiere-coeurs/alphabet.js",
+        "essai/frontiere-coeurs/c-alphabet.contract.v1.json",
+        "essai/frontiere-coeurs/c_letters.c",
+        "essai/frontiere-coeurs/index.html",
+        "essai/frontiere-coeurs/public-demo-language-pack.json"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "FULL",
+      "changedFiles": 7,
+      "additions": 548,
+      "deletions": 0,
+      "magnitude": 548,
+      "committedAt": "2026-11-05T17:47:54+01:00",
+      "parentSha": "8bd0fe9772e2247bc2ff6365f7abb406f5641dee"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/11832d3e48e43015c8f0310c6bf74cd6d50c8076.json",
+      "vfsKey": "CTP1:11832d3e48e43015c8f0310c6bf74cd6d50c8076:2e4fbe414f025a49",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/11832d3e48e43015c8f0310c6bf74cd6d50c8076.json"
+}
