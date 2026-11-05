@@ -1,0 +1,76 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "e303af91e0426480de079bc9ee4caad80f01fc67",
+  "parentSha": "ebb1e4f51b02b55db265d464aa8d1beac243f791",
+  "committedAt": "2026-11-05T17:52:36+01:00",
+  "summary": {
+    "subject": "feat(c-letter): faire battre un petit coeur a chaque tic",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 3,
+    "additions": 35,
+    "deletions": 10,
+    "paths": [
+      "essai/frontiere-coeurs/alphabet-readme.md",
+      "essai/frontiere-coeurs/alphabet.html",
+      "essai/frontiere-coeurs/alphabet.js"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 3,
+    "additions": 35,
+    "deletions": 10,
+    "magnitude": 45,
+    "committedAt": "2026-11-05T17:52:36+01:00",
+    "parentSha": "ebb1e4f51b02b55db265d464aa8d1beac243f791"
+  },
+  "pulseKey": "CTP1:e303af91e0426480de079bc9ee4caad80f01fc67:5c6e51f03360109c",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "5bc428c82bc1172db6f270d459482d2806d816b9c627b54a2e4342bdcb4b216f",
+  "typedKeys": {
+    "commit": "gitc:e303af91e0426480de079bc9ee4caad80f01fc67",
+    "parent": "gitc:ebb1e4f51b02b55db265d464aa8d1beac243f791",
+    "pulse": "ctp1:e303af91e0426480de079bc9ee4caad80f01fc67:5c6e51f03360109c",
+    "translation": "cttrans:5bc428c82bc1172db6f270d459482d2806d816b9c627b54a2e4342bdcb4b216f",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "e303af91e0426480de079bc9ee4caad80f01fc67",
+    "parentSha": "ebb1e4f51b02b55db265d464aa8d1beac243f791",
+    "committedAt": "2026-11-05T17:52:36+01:00",
+    "summary": {
+      "subject": "feat(c-letter): faire battre un petit coeur a chaque tic",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 3,
+      "additions": 35,
+      "deletions": 10,
+      "paths": [
+        "essai/frontiere-coeurs/alphabet-readme.md",
+        "essai/frontiere-coeurs/alphabet.html",
+        "essai/frontiere-coeurs/alphabet.js"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 3,
+      "additions": 35,
+      "deletions": 10,
+      "magnitude": 45,
+      "committedAt": "2026-11-05T17:52:36+01:00",
+      "parentSha": "ebb1e4f51b02b55db265d464aa8d1beac243f791"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/e303af91e0426480de079bc9ee4caad80f01fc67.json",
+      "vfsKey": "CTP1:e303af91e0426480de079bc9ee4caad80f01fc67:5c6e51f03360109c",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/e303af91e0426480de079bc9ee4caad80f01fc67.json"
+}
