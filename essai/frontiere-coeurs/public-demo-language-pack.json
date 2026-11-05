@@ -1,0 +1,79 @@
+{
+  "schema": "GVAULT_C_ALPHABET_PUBLIC_LANGUAGE_PACK_V1",
+  "version": 1,
+  "authority": "PUBLIC_DEMO_ONLY",
+  "origin": "DETERMINISTIC_RECONSTRUCTION_OF_GVAULT_ALGORITHM",
+  "bridgeMethod": "CANONICAL_CONCEPT_LAYER",
+  "unknownTokenPolicy": "PRESERVE_OPAQUE",
+  "concepts": [
+    "self",
+    "other",
+    "yes",
+    "no",
+    "state",
+    "task",
+    "data",
+    "learn",
+    "teach",
+    "translate",
+    "language",
+    "message",
+    "error",
+    "success",
+    "request",
+    "response",
+    "source",
+    "target"
+  ],
+  "languages": [
+    {
+      "alias": "SOURCE",
+      "lexicon": {
+        "self": "ragatri37",
+        "other": "trizushi35",
+        "yes": "mikitri53",
+        "no": "shizuyu70",
+        "state": "miluzua4",
+        "task": "peluzu02",
+        "data": "mifitecf",
+        "learn": "naluce6e",
+        "teach": "diorna85",
+        "translate": "mivote49",
+        "language": "kiluga8e",
+        "message": "dipepe95",
+        "error": "ganasa02",
+        "success": "cesatri49",
+        "request": "dimotef6",
+        "response": "shixoun78",
+        "source": "zumika96",
+        "target": "naveyu9b"
+      }
+    },
+    {
+      "alias": "TARGET",
+      "lexicon": {
+        "self": "kayumo20",
+        "other": "xoteor25",
+        "yes": "teyutri51",
+        "no": "momimo0b",
+        "state": "unluorc0",
+        "task": "orxopef8",
+        "data": "divoluc4",
+        "learn": "razuyub2",
+        "teach": "cevevo80",
+        "translate": "lumoce46",
+        "language": "xoramieb",
+        "message": "ornalud7",
+        "error": "shilurafc",
+        "success": "mivemi94",
+        "request": "lupeshi72",
+        "response": "gaunvoe4",
+        "source": "ganafid9",
+        "target": "unmika83"
+      }
+    }
+  ],
+  "privateIdentifiersIncluded": false,
+  "privateRawTextIncluded": false,
+  "remoteDelivery": false
+}
