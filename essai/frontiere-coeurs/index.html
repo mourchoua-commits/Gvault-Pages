@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="robots" content="noindex,nofollow">
+<title>GVAULT · Frontière des cœurs · C-BORDER/1</title>
+<style>
+:root{color-scheme:dark;--bg:#080d11;--card:#101b22;--line:#334a55;--ink:#eef6f8;--soft:#a4bdc5;--mint:#77e3c1;--gold:#eac47c;--bad:#ff9f9f}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 5% 0%,#1a3339 0%,var(--bg) 52%);color:var(--ink);font:16px/1.55 system-ui,-apple-system,sans-serif}
+main{max-width:990px;margin:auto;padding:24px 16px 65px}
+header{padding:18px 2px 24px}
+h1{margin:0;font-size:clamp(1.75rem,4.3vw,3rem);line-height:1.12;letter-spacing:-.035em}
+h2{font-size:1.12rem;margin:0 0 12px}
+p{margin:8px 0 0;color:var(--soft)}
+.kicker{color:var(--mint);font:700 .77rem ui-monospace,Consolas,monospace;letter-spacing:.13em;text-transform:uppercase}
+.tag{display:inline-block;background:#233636;border:1px solid #3e685f;border-radius:99px;padding:3px 11px;color:var(--mint);font-size:.81rem;margin:12px 8px 6px 0}
+.tag.lock{background:#382c1e;border-color:#806340;color:#f4d49c}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}
+section{background:rgba(16,27,34,.94);border:1px solid var(--line);border-radius:16px;padding:20px;margin:0 0 14px}
+label{display:block;color:#c5d9df;font-size:.85rem;font-weight:650;margin:14px 0 5px}
+select,textarea,output{font:inherit}
+select,textarea{width:100%;padding:11px;color:var(--ink);background:#081218;border:1px solid #48616c;border-radius:10px;outline-offset:3px}
+textarea{resize:vertical;min-height:98px;font:13px/1.6 ui-monospace,Consolas,monospace;word-break:break-word}
+button{appearance:none;border:1px solid #50766d;background:#214a42;color:#e8fff5;border-radius:10px;padding:10px 13px;font:700 .9rem system-ui;cursor:pointer;margin:10px 7px 0 0}
+button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--mint)}
+button.secondary{border-color:#466171;background:#1c303c}
+button:disabled{opacity:.45;cursor:not-allowed}
+.route{display:grid;grid-template-columns:1fr;gap:7px;margin-top:16px}
+.stop{display:flex;gap:12px;align-items:center;border:1px solid #47646b;border-radius:11px;padding:10px;background:#0b1820}
+.num{display:grid;place-items:center;min-width:51px;height:43px;border-radius:7px;color:#07271f;background:var(--mint);font:800 .78rem ui-monospace,monospace}
+.stop span{display:block;color:var(--soft);font-size:.81rem}
+.arrow{color:var(--gold);text-align:center;font-size:1.2rem;line-height:.8}
+pre{padding:12px;background:#050c11;border:1px solid #3f5761;border-radius:10px;overflow-wrap:anywhere;white-space:pre-wrap;font:13px/1.65 ui-monospace,Consolas,monospace;min-height:4em;color:#e7d5a2}
+.status{min-height:42px;color:var(--gold);font:650 .85rem/1.5 system-ui;display:block;margin:12px 0 0}
+.status.ok{color:var(--mint)}.status.bad{color:var(--bad)}
+footer{color:var(--soft);font-size:.84rem;padding:8px 3px}
+a{color:var(--mint)}
+@media(max-width:730px){.grid{grid-template-columns:1fr}section{padding:16px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="kicker">GVAULT / passerelle provisoire / C-BORDER 1</div>
+<h1>La frontière des cœurs</h1>
+<p>Trois identités, aucune fusion forcée. Des points de « deal » en langage C pour préparer, vérifier et reprendre un échange, sans livrer de données privées.</p>
+<div><span class="tag">Libre-service local</span><span class="tag lock">Cœurs réels non connectés</span><span class="tag lock">Aucun envoi automatique</span></div>
+</header>
+<div class="grid">
+<div>
+<section>
+<h2>01 · Préparer une traversée</h2>
+<label for="from">Cœur de départ</label>
+<select id="from"><option>GTHINK_PUBLIC</option><option>GTHINK_PRIVATE</option><option>GTHINK_IMAGE</option></select>
+<label for="to">Cœur destinataire</label>
+<select id="to"><option>GTHINK_IMAGE</option><option>GTHINK_PUBLIC</option><option>GTHINK_PRIVATE</option></select>
+<label for="kind">Type de signal autorisé</label>
+<select id="kind">
+<option>HELLO</option><option>CAPABILITY</option><option>EVIDENCE_REF</option><option>ACK</option><option>STOP</option>
+</select>
+<label for="ttl">Limite de sauts</label>
+<select id="ttl"><option>1</option><option selected>2</option><option>3</option></select>
+<button id="prepare" type="button">Préparer le passage</button>
+<button id="swap" type="button" class="secondary">Inverser le sens</button>
+<p>Le paquet n'embarque ni texte libre, ni instruction, ni URL. Son identifiant aléatoire sert seulement à distinguer les trames, pas à s'authentifier.</p>
+</section>
+<section>
+<h2>02 · Trame et reçu locaux</h2>
+<pre id="packet" aria-live="polite">Prépare un passage pour obtenir une trame C-BORDER/1.</pre>
+<button id="copy" disabled type="button">Copier la trame</button>
+<button id="download" disabled type="button" class="secondary">Exporter le paquet</button>
+<pre id="receipt" aria-live="polite">Pas de reçu pour le moment.</pre>
+<output id="status" class="status" aria-live="polite">Tout reste dans ce navigateur.</output>
+</section>
+</div>
+<div>
+<section>
+<h2>Points de deal · Langage C</h2>
+<div class="route">
+<div class="stop"><b class="num">C-01</b><div><strong>Grammaire</strong><span>Version, six champs fixes, taille limitée</span></div></div>
+<div class="arrow">↓</div>
+<div class="stop"><b class="num">C-02</b><div><strong>Douane des identités</strong><span>Paire de cœurs, signal autorisé, nonce et TTL</span></div></div>
+<div class="arrow">↓</div>
+<div class="stop"><b class="num">C-03</b><div><strong>Retour local</strong><span>Acceptation ou refus, jamais un faux ACK distant</span></div></div>
+</div>
+<p>Ces postes reproduisent la grammaire du <a href="./c_border.c">validateur C11</a> consultable dans le dépôt. Un poste accepte une forme de trame, pas une commande sur les cœurs.</p>
+</section>
+<section>
+<h2>03 · Vérifier une trame reçue</h2>
+<label for="incoming">Coller une trame C-BORDER/1, sans autres données</label>
+<textarea id="incoming" spellcheck="false" placeholder="C-BORDER/1|GTHINK_PUBLIC|GTHINK_IMAGE|HELLO|0123456789abcdef|2"></textarea>
+<button id="verify" type="button">Contrôler aux points C</button>
+<p>La vérification est locale. La destination devra autoriser et réaliser une éventuelle livraison par son propre mécanisme.</p>
+</section>
+</div>
+</div>
+<footer>
+<strong>Frontière virtuelle, pas tunnel réseau.</strong> GThink garde l'orchestration, le Method Router privé reste l'autorité de sélection, et aucun cœur ne délègue sa propre identité. Cette surface ne contacte aucun service par son code, ne stocke aucune trame et ne peut pas rendre l'assistant présent en permanence.
+<p><a href="./contract.v1.json">Contrat d'isolation vérifiable</a> · <a href="./README.md">Mode d'emploi et tests du validateur C</a></p>
+</footer>
+</main>
+<script>
+"use strict";
+(function(){
+  const HEARTS = ["GTHINK_PUBLIC","GTHINK_PRIVATE","GTHINK_IMAGE"];
+  const KINDS = ["HELLO","CAPABILITY","EVIDENCE_REF","ACK","STOP"];
+  const el = id => document.getElementById(id);
+  let current = "";
+  const clean = s => s.replace(/\r?\n$/, "");
+  function check(raw) {
+    if (typeof raw !== "string" || raw.length < 1 || raw.length > 159) return null;
+    const s = clean(raw);
+    if (s.length < 1 || s.length > 150 || /[^\x21-\x7e]/.test(s)) return null;
+    const p = s.split("|");
+    if (p.length !== 6 || p[0] !== "C-BORDER/1") return null;
+    if (!HEARTS.includes(p[1]) || !HEARTS.includes(p[2]) || p[1] === p[2]) return null;
+    if (!KINDS.includes(p[3]) || !/^[0-9a-f]{16}$/.test(p[4]) || !/^[123]$/.test(p[5])) return null;
+    return p;
+  }
+  function note(ok, message) {
+    el("status").textContent = message;
+    el("status").className = "status " + (ok ? "ok" : "bad");
+  }
+  function receipt(parts) {
+    return "C-01 PASS · grammaire\nC-02 PASS · " + parts[1] + " → " + parts[2] +
+      " · " + parts[3] + " · TTL " + parts[5] +
+      "\nC-03 LOCAL_ACCEPT · id=" + parts[4] +
+      "\nAUCUNE LIVRAISON DISTANTE / AUCUN ACK DISTANT";
+  }
+  el("prepare").addEventListener("click", () => {
+    if (!window.crypto || !window.crypto.getRandomValues) {
+      note(false, "Générateur aléatoire indisponible : passage refusé."); return;
+    }
+    const b = new Uint8Array(8); crypto.getRandomValues(b);
+    const nonce = Array.from(b, x => x.toString(16).padStart(2,"0")).join("");
+    const raw = ["C-BORDER/1",el("from").value,el("to").value,el("kind").value,nonce,el("ttl").value].join("|");
+    const parts = check(raw);
+    current = parts ? raw : "";
+    el("packet").textContent = current || "LOCAL_REJECT : sélection non autorisée.";
+    el("receipt").textContent = parts ? receipt(parts) : "C-01 / C-02 · refus local";
+    el("copy").disabled = !parts;
+    el("download").disabled = !parts;
+    note(!!parts,parts ? "Passage prêt à copier manuellement. Rien n'a été transmis." : "Passage refusé.");
+  });
+  el("swap").addEventListener("click", () => {
+    const a=el("from").value; el("from").value=el("to").value; el("to").value=a;
+    current=""; el("copy").disabled=true;el("download").disabled=true;
+    el("packet").textContent="Sens inversé. Prépare une nouvelle trame.";
+    el("receipt").textContent="Pas de reçu pour ce nouveau trajet.";
+    note(true, "Aucun paquet transmis.");
+  });
+  el("verify").addEventListener("click", () => {
+    const parts=check(el("incoming").value);
+    el("receipt").textContent=parts ? receipt(parts) : "C-01 / C-02 · LOCAL_REJECT";
+    note(!!parts,parts ? "Trame locale validée. Le destinataire n'a pas été contacté." : "Trame refusée : format, identités, signal, nonce ou TTL.");
+  });
+  el("copy").addEventListener("click", async () => {
+    if (!current) return;
+    try {
+      await navigator.clipboard.writeText(current);
+      note(true,"Copiée localement. Choisis toi-même un canal de transmission.");
+    } catch (_) { note(false,"Copie bloquée par le navigateur. Sélectionne la trame manuellement."); }
+  });
+  el("download").addEventListener("click", () => {
+    if (!current) return;
+    const blob=new Blob([current+"\n"],{type:"text/plain"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");a.href=url;a.download="c-border-trame.txt";a.click();
+    URL.revokeObjectURL(url);
+    note(true,"Export local demandé. Aucune transmission.");
+  });
+})();
+</script>
+</body>
+</html>
