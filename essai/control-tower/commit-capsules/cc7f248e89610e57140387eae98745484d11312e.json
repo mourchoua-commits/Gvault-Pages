@@ -1,0 +1,78 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "cc7f248e89610e57140387eae98745484d11312e",
+  "parentSha": "24a6623cc0a88e1023a3bfd5de1b7e86e815a73b",
+  "committedAt": "2026-11-05T17:33:52+01:00",
+  "summary": {
+    "subject": "feat(essai): frontière C-BORDER/1 en libre-service local",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 4,
+    "additions": 409,
+    "deletions": 0,
+    "paths": [
+      "essai/frontiere-coeurs/README.md",
+      "essai/frontiere-coeurs/c_border.c",
+      "essai/frontiere-coeurs/contract.v1.json",
+      "essai/frontiere-coeurs/index.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "FULL",
+    "changedFiles": 4,
+    "additions": 409,
+    "deletions": 0,
+    "magnitude": 409,
+    "committedAt": "2026-11-05T17:33:52+01:00",
+    "parentSha": "24a6623cc0a88e1023a3bfd5de1b7e86e815a73b"
+  },
+  "pulseKey": "CTP1:cc7f248e89610e57140387eae98745484d11312e:9044f522d8923904",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "ceaf84ebc8b644dbf20c10da7d9b09ed3e0fd5e2c1320794c315fff6a243b98d",
+  "typedKeys": {
+    "commit": "gitc:cc7f248e89610e57140387eae98745484d11312e",
+    "parent": "gitc:24a6623cc0a88e1023a3bfd5de1b7e86e815a73b",
+    "pulse": "ctp1:cc7f248e89610e57140387eae98745484d11312e:9044f522d8923904",
+    "translation": "cttrans:ceaf84ebc8b644dbf20c10da7d9b09ed3e0fd5e2c1320794c315fff6a243b98d",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "cc7f248e89610e57140387eae98745484d11312e",
+    "parentSha": "24a6623cc0a88e1023a3bfd5de1b7e86e815a73b",
+    "committedAt": "2026-11-05T17:33:52+01:00",
+    "summary": {
+      "subject": "feat(essai): frontière C-BORDER/1 en libre-service local",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 4,
+      "additions": 409,
+      "deletions": 0,
+      "paths": [
+        "essai/frontiere-coeurs/README.md",
+        "essai/frontiere-coeurs/c_border.c",
+        "essai/frontiere-coeurs/contract.v1.json",
+        "essai/frontiere-coeurs/index.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "FULL",
+      "changedFiles": 4,
+      "additions": 409,
+      "deletions": 0,
+      "magnitude": 409,
+      "committedAt": "2026-11-05T17:33:52+01:00",
+      "parentSha": "24a6623cc0a88e1023a3bfd5de1b7e86e815a73b"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/cc7f248e89610e57140387eae98745484d11312e.json",
+      "vfsKey": "CTP1:cc7f248e89610e57140387eae98745484d11312e:9044f522d8923904",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/cc7f248e89610e57140387eae98745484d11312e.json"
+}
