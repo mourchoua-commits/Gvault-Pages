@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="robots" content="noindex,nofollow">
+<title>GVAULT · Alphabet C · Langues des blobs</title>
+<style>
+:root{color-scheme:dark;--bg:#070d11;--panel:#101c22;--line:#334a53;--ink:#edf5f6;--muted:#9bb8bf;--mint:#76e6c4;--yellow:#eed298}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 25% 2%,#233a37 0%,var(--bg) 55%);color:var(--ink);font:15px/1.5 system-ui,-apple-system,sans-serif}
+main{max-width:1120px;margin:0 auto;padding:20px 16px 64px}
+h1{font-size:clamp(1.9rem,5vw,3.6rem);line-height:1.06;letter-spacing:-.045em;margin:8px 0 12px}
+h2{font-size:1.24rem;margin:0 0 12px}
+h3{font-size:1rem;margin:0 0 6px}
+p{color:var(--muted);margin:9px 0}
+small{color:var(--muted)}
+.topline{font:700 .8rem ui-monospace,monospace;letter-spacing:.14em;color:var(--mint);text-transform:uppercase}
+.subtitle{font-size:1.08rem;max-width:68ch}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:25px}
+.panel{border:1px solid var(--line);border-radius:16px;background:rgba(16,28,34,.96);padding:20px;min-width:0}
+.wide{grid-column:1/-1}
+label{display:block;font-size:.87rem;color:#cedfe3;font-weight:700;margin:13px 0 6px}
+textarea,input,select{font:inherit;border:1px solid #536c76;border-radius:9px;color:var(--ink);background:#081217;padding:10px;width:100%;outline-offset:3px}
+textarea{min-height:72px;resize:vertical;font-family:ui-monospace,Consolas,monospace;font-size:.87rem}
+button{border:1px solid #4b897d;background:#183e38;color:var(--ink);border-radius:10px;padding:10px 12px;cursor:pointer;font:700 .9rem system-ui}
+button:focus-visible,a:focus-visible{outline:2px solid #94ffdf;outline-offset:3px}
+button.secondary{border-color:#4d6471;background:#1a2f3a}
+a{color:var(--mint)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:11px 0}
+.alphabet{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:6px}
+.alphabet button{padding:10px 2px;font:700 .88rem ui-monospace,monospace;background:#17353d}
+.alphabet .special{background:#3c3322;border-color:#8a7148;color:#f6dba4;font-size:.75rem}
+.points{display:flex;gap:6px;flex-wrap:wrap;max-height:300px;overflow:auto;padding:9px 0}
+.char-point{border:1px solid #4c666d;border-radius:10px;background:#09171d;min-width:72px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.char-point strong{font-size:1.2rem;font-weight:650;min-height:1.6rem}
+.char-point code{font:750 .72rem ui-monospace,monospace;color:var(--mint)}
+.char-point small{font:.67rem ui-monospace,monospace}
+pre{font:.82rem/1.6 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid #2e4651;background:#060f14;padding:11px;border-radius:10px;max-height:140px;overflow:auto}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.word{padding:13px;background:#08171b;border:1px solid #3c5962;border-radius:10px}
+.word b{display:block;color:var(--yellow);font-size:.73rem;letter-spacing:.06em;margin-bottom:5px}
+.word strong{font:700 clamp(.9rem,2.1vw,1.2rem) ui-monospace,monospace;overflow-wrap:anywhere}
+.lexeme-lane{padding:12px;border-radius:10px;border:1px solid #395459;margin:10px 0;background:#0a161b}
+.lexeme-lane b{font:700 .8rem ui-monospace,monospace}
+.route{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.route code{border:1px solid #52766e;border-radius:6px;padding:5px;background:#1b3737;color:var(--mint);font-size:.77rem}
+#notice{margin-top:15px;border-left:3px solid var(--mint);padding:10px;color:var(--ink);background:#14282a}
+#notice[data-state=error]{border-color:#ff9f9f;color:#ffb5b5}
+.hint{font-size:.84rem}
+footer{padding:18px 3px;color:var(--muted);font-size:.83rem}
+@media(max-width:720px){.layout{grid-template-columns:1fr}.wide{grid-column:auto}.alphabet{grid-template-columns:repeat(6,minmax(0,1fr))}.panel{padding:15px}.compare{grid-template-columns:1fr}}
+</style>
+<script src="./alphabet.js" defer></script>
+</head>
+<body>
+<main>
+<header>
+<div class="topline">GVAULT · Stations alphabétiques · C-LETTER/1</div>
+<h1>Une frontière, autant de lettres que de passages.</h1>
+<p class="subtitle">Chaque lettre possède un point C ; chaque blob conserve sa langue. Les significations se traduisent seulement lorsqu'un concept partagé est connu.</p>
+<p><a href="./index.html">Retour à la frontière des trois cœurs</a> · <a href="./c_letters.c">Code C11</a> · <a href="./alphabet-readme.md">Contrat d'emploi</a></p>
+</header>
+<div class="layout">
+<section class="panel">
+<h2>01 · Tous les points des lettres</h2>
+<p>Les 26 lettres A–Z sont des stations individuelles. Les caractères accentués, espaces, chiffres et autres signes obtiennent leurs propres identifiants Unicode.</p>
+<div id="alphabet" class="alphabet" aria-label="Alphabet de points C"></div>
+<label for="phrase">Compose un texte (local uniquement)</label>
+<textarea id="phrase" maxlength="2048" spellcheck="false" aria-label="Texte à décomposer par caractère"></textarea>
+<div class="actions"><button id="clear" class="secondary" type="button">Effacer</button><button id="copyRoute" type="button">Copier les points C</button></div>
+<p>Nombre de stations : <strong id="pointCount">0</strong>. Aucun texte n'est envoyé à GitHub ou aux cœurs par cette page.</p>
+<div id="letterStations" class="points" aria-live="polite"></div>
+<h3>Route locale produite</h3>
+<pre id="lastRoute">Vide</pre>
+</section>
+<section class="panel">
+<h2>02 · Les langues des blobs</h2>
+<p id="packStatus" class="hint">Lecture du paquet de démonstration…</p>
+<label for="concept">Concept sémantique canonique</label>
+<select id="concept" aria-label="Concept commun aux deux langues"></select>
+<div id="conceptMeaning" class="hint"></div>
+<div class="compare">
+<div class="word"><b>LANGUE SOURCE</b><strong id="sourceToken">…</strong></div>
+<div class="word"><b>LANGUE CIBLE</b><strong id="targetToken">…</strong></div>
+</div>
+<div id="lexemeStations"></div>
+<p class="hint">Les deux mots diffèrent, mais renvoient au même concept déclaré. Les stations C montrent leurs lettres sans remplacer la traduction sémantique.</p>
+</section>
+<section class="panel">
+<h2>03 · Un mot dans l'autre langue</h2>
+<label for="wordInput">Mot de la langue source</label>
+<input id="wordInput" spellcheck="false" maxlength="128" autocomplete="off">
+<div class="actions"><button type="button" id="loadDemo" class="secondary">Revenir à la démonstration</button></div>
+<h3>Traduction ou conservation opaque</h3>
+<pre id="wordOutput">…</pre>
+<p id="wordStatus" class="hint">Prêt.</p>
+<div id="translatedRoute" class="route"></div>
+</section>
+<section class="panel">
+<h2>04 · Accueil libre-service d'un lexique GVault</h2>
+<p>Colle uniquement un <strong>paquet public volontairement exporté</strong> par l'adaptateur GVault. Le vocabulaire est limité aux concepts sûrs du moteur. Ne colle jamais de verbatim, token, mot de passe ou snapshot privé.</p>
+<label for="packInput">JSON de deux langues, SOURCE et TARGET</label>
+<textarea id="packInput" spellcheck="false" maxlength="12000" placeholder="Coller ici le paquet GVAULT_C_ALPHABET_PUBLIC_LANGUAGE_PACK_V1"></textarea>
+<div class="actions"><button type="button" id="import">Importer localement</button><a href="./public-demo-language-pack.json">Voir un exemple public</a></div>
+<p class="hint">L'import vérifie la structure, pas la signature ni l'authenticité. Les identifiants de blobs privés restent absents du paquet.</p>
+</section>
+</div>
+<p id="notice" aria-live="polite">Démarrage local…</p>
+<footer>
+C-LETTER/1 est un atelier autonome, pas une connexion privée. Le langage natif des blobs reste défini dans <code>scripts/gvault-blob-language-runtime.mjs</code> du GVault privé. GThink demeure orchestrateur et le Method Router garde le choix des méthodes. Les mots inconnus restent opaques. Aucun accusé de réception distant n'est produit.
+</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,57 @@
+{
+  "schema": "GVAULT_PUBLIC_C_LETTER_POINTS_V1",
+  "version": "1.0.0",
+  "status": "PUBLIC_LOCAL_SELF_SERVICE",
+  "publicPage": "essai/frontiere-coeurs/alphabet.html",
+  "javascript": "essai/frontiere-coeurs/alphabet.js",
+  "c11": "essai/frontiere-coeurs/c_letters.c",
+  "range": {
+    "latinStations": "C_A through C_Z",
+    "otherScalars": "C_U<hex>",
+    "space": "C_SPACE",
+    "newline": "C_NEWLINE",
+    "digits": "C_DIGIT_<digit>",
+    "maxScalars": 512,
+    "unicodeNormalization": "NFC"
+  },
+  "demo": {
+    "path": "essai/frontiere-coeurs/public-demo-language-pack.json",
+    "fictionalOwnerIds": true,
+    "algorithm": "DETERMINISTIC_GVAULT_BLOB_LANGUAGE_RUNTIME_RECONSTRUCTION",
+    "isLivePrivateData": false
+  },
+  "import": {
+    "schema": "GVAULT_C_ALPHABET_PUBLIC_LANGUAGE_PACK_V1",
+    "maxInputChars": 12000,
+    "conceptAllowlist": "GVAULT_CORE_CONCEPTS_18_ONLY",
+    "twoLanguageAliases": [
+      "SOURCE",
+      "TARGET"
+    ],
+    "authenticity": "NOT_VERIFIED",
+    "privateInformation": "FORBIDDEN"
+  },
+  "semantic": {
+    "knownConcepts": "CANONICAL_CONCEPT_LAYER",
+    "unknownWords": "PRESERVE_OPAQUE",
+    "lettersHaveIndependentMeaning": false,
+    "sourceAndTargetLanguagesRemainSeparate": true
+  },
+  "permissions": {
+    "network": "NONE",
+    "git": "NONE",
+    "privateRepository": "NONE",
+    "remoteDelivery": false,
+    "remoteAcknowledgment": false,
+    "methodRouterDecision": false
+  },
+  "existingCBorder": "STRICT_SIX_FIELDS_NO_PAYLOAD_UNCHANGED",
+  "privateAdapter": "scripts/gvault-letter-language-points.mjs (private draft PR only)",
+  "guards": [
+    "NO_AUTO_PRIVATE_EXPORT",
+    "NO_RAW_PRIVATE_TOKENS",
+    "NO_FAKE_TRANSLATION",
+    "NO_CROSS_CORE_SEND",
+    "NO_CANONICAL_AUTHORITY"
+  ]
+}
