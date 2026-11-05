@@ -28,6 +28,15 @@
     codepoint: "U+" + char.codePointAt(0).toString(16).toUpperCase().padStart(4, "0")
   }));
   let currentPack = DEMO, packKind = "demo";
+  let tickCount = 0;
+  function heartTick() {
+    const heart = el("heartBeat");
+    tickCount += 1;
+    el("heartTicks").textContent = String(tickCount);
+    heart.classList.remove("beat");
+    void heart.offsetWidth;
+    heart.classList.add("beat");
+  }
   const inform = (message, error=false) => {
     el("notice").textContent = message;
     el("notice").dataset.state = error ? "error" : "ok";
@@ -43,7 +52,9 @@
       const glyph=document.createElement("strong");glyph.textContent=item.char===" "?"␠":item.char==="\n"?"↵":item.char;
       const point=document.createElement("code");point.textContent=item.point;
       const meta=document.createElement("small");meta.textContent=item.codepoint;
-      cell.append(glyph,point,meta);out.append(cell);
+      const heart=document.createElement("span");heart.className="station-heart";
+      heart.textContent="♥";heart.setAttribute("aria-hidden","true");
+      cell.append(glyph,heart,point,meta);out.append(cell);
     }
     el("pointCount").textContent=String(items.length);
     el("lastRoute").textContent=items.map(x=>x.point).join(" → ");
@@ -123,18 +134,18 @@
   for(const char of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
     const button=document.createElement("button");button.type="button";button.textContent=char;
     button.setAttribute("aria-label","Ajouter le point C_"+char);
-    button.addEventListener("click",()=>{el("phrase").value+=char;renderStations(el("phrase").value,"letterStations");});
+    button.addEventListener("click",()=>{el("phrase").value+=char;renderStations(el("phrase").value,"letterStations");heartTick();});
     alphabet.append(button);
   }
   for(const char of ["É","À","Ç","È","Ê","Ü","Ω","💚"," "]) {
     const button=document.createElement("button");button.type="button";button.textContent=char===" "?"ESPACE":char;button.className="special";
-    button.addEventListener("click",()=>{el("phrase").value+=char;renderStations(el("phrase").value,"letterStations");});
+    button.addEventListener("click",()=>{el("phrase").value+=char;renderStations(el("phrase").value,"letterStations");heartTick();});
     alphabet.append(button);
   }
-  el("phrase").addEventListener("input",()=>renderStations(el("phrase").value,"letterStations"));
-  el("clear").addEventListener("click",()=>{el("phrase").value="";renderStations("","letterStations");});
-  el("concept").addEventListener("change",drawConcept);
-  el("wordInput").addEventListener("input",translateWord);
+  el("phrase").addEventListener("input",()=>{renderStations(el("phrase").value,"letterStations");heartTick();});
+  el("clear").addEventListener("click",()=>{el("phrase").value="";renderStations("","letterStations");heartTick();});
+  el("concept").addEventListener("change",()=>{drawConcept();heartTick();});
+  el("wordInput").addEventListener("input",()=>{translateWord();heartTick();});
   el("loadDemo").addEventListener("click",()=>{currentPack=DEMO;packKind="demo";showPack();inform("Démonstration rechargée.");});
   el("import").addEventListener("click",()=>{
     const raw=el("packInput").value;
