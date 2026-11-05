@@ -54,3 +54,27 @@ Voir [le contrat détaillé](contract.v1.json), puis les contrats canoniques du 
 Il faudrait un adaptateur de transport **séparé**, authentifié côté serveur, avec consentement explicite de chaque cœur, contrôles de provenance, anti-rejeu, expiration, traces minimales et preuves de livraison. Rien de cela n'est activé ici. Ne jamais utiliser la trame seule comme autorisation.
 
 Cette expérience n'effectue aucune modification sur `GvaultStable`, les manifestes chiffrés, les payloads Vault ou les workflows existants.
+
+
+## Passerelle locale TIC/TAC : connexion volontaire des deux pages
+
+1. Ouvrir [l'alphabet C-LETTER/1](alphabet.html) et [la frontière C-BORDER/1](index.html) dans deux onglets de **la même origine** et du même navigateur.
+2. Cliquer sur **Ouvrir le récepteur local** côté frontière, puis **Activer le relais local** côté alphabet.
+3. Appuyer sur une lettre ou faire circuler un besoin. TIC et TAC restent alternés : le récepteur affiche la catégorie et une trame validée, puis renvoie seulement un reçu **de page à page**.
+4. Fermer l'un des récepteurs pour couper le flux. Aucun déclenchement automatique au démarrage, aucune file d'attente persistante.
+
+Le canal est un `BroadcastChannel` du navigateur. Il ne traverse **aucun réseau** et ne relie pas réellement les processus `GTHINK_PRIVATE`, `GTHINK_IMAGE` ou `GTHINK_PUBLIC`. Les noms de cœurs dans la trame sont des **étiquettes logiques**. Un reçu est auto-déclaré par une page du même site, non signé et non authentifié : ce n'est ni un ACK d'un cœur réel ni une preuve de provenance forte.
+
+Le message C-BORDER/1 reste limité à six champs. Un enrobage local strictement typé ajoute seulement `need` (une des huit catégories fixes) et `phase` (TIC ou TAC). **Les lettres, phrases, lexiques, concepts exacts, tokens privés, identifiants et mots inconnus ne circulent jamais.**
+
+Les huit catégories : `HEART_TICK`, `LETTER_POINT`, `LANGUAGE_CONCEPT`, `OPAQUE_UNKNOWN`, `BOUNDARY_CHECK`, `PROVENANCE_CHECK`, `CONSENT_REQUIRED`, `LOAD_LIMIT`. La classification est indicative. Elle n'autorise aucune méthode, exécution ou écriture dans les cœurs. Un maximum de **32 signaux par seconde par émetteur** réduit les rafales ; rejet de doublon par identifiant dans une fenêtre bornée et aucune retransmission automatique.
+
+Voir [contrat du relais local](local-gateway.contract.v1.json), [implémentation](local-gateway.js) et [tests](local-gateway.test.mjs).
+
+Test de régression depuis un checkout du dépôt avec Node 20+ :
+
+```sh
+node --test essai/frontiere-coeurs/local-gateway.test.mjs
+```
+
+Selon le navigateur mobile, un onglet en arrière-plan peut être suspendu : un signal émis ne garantit donc pas de réponse de la deuxième page. Pour un transport réel entre cœurs, il faut une couche séparée et authentifiée avec consentement et preuves de livraison.

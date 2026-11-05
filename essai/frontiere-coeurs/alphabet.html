@@ -69,10 +69,17 @@ body[data-heart-phase="tac"] .route code:nth-child(even)::before{opacity:1}
   .relay-heart.beat{animation:none}
   .relay-heart,.station-heart,.alphabet button::after,.route code::before{transition:none}
 }
+.local-bridge{background:rgba(7,24,29,.95);border:1px solid #43635f;border-radius:12px;padding:14px;margin-top:15px}
+.local-bridge .control{display:flex;gap:8px;flex-wrap:wrap;margin:9px 0}
+.local-bridge button:disabled{opacity:.45;cursor:not-allowed}
+.local-bridge select{max-width:360px}
+#localBridgeStatus{color:var(--mint);font-size:.84rem;overflow-wrap:anywhere}
+#localBridgeStats{color:var(--muted);font:700 .78rem ui-monospace,monospace}
 .hint{font-size:.84rem}
 footer{padding:18px 3px;color:var(--muted);font-size:.83rem}
 @media(max-width:720px){.layout{grid-template-columns:1fr}.wide{grid-column:auto}.alphabet{grid-template-columns:repeat(6,minmax(0,1fr))}.panel{padding:15px}.compare{grid-template-columns:1fr}}
 </style>
+<script src="./local-gateway.js" defer></script>
 <script src="./alphabet.js" defer></script>
 </head>
 <body>
@@ -99,6 +106,29 @@ footer{padding:18px 3px;color:var(--muted);font-size:.83rem}
 </div>
 <p class="hint">Au premier geste, TIC s'allume. Au geste suivant, il s'éteint pendant que TAC s'allume. Les mini-cœurs des lettres suivent la même alternance, sans minuterie.</p>
 <p class="hint">Aucun texte n'est envoyé à GitHub ou aux cœurs par cette page.</p>
+<div class="local-bridge">
+  <h3>Passerelle locale · TIC/TAC et besoins</h3>
+  <p class="hint">Relais facultatif entre deux pages publiques ouvertes sur le même site et dans le même navigateur. Les trames C-BORDER/1 contiennent des catégories prédéfinies, jamais tes lettres, mots ou textes. Ni GThink privé, ni le cœur image réel ne sont connectés.</p>
+  <div class="control">
+    <button type="button" id="startLocalBridge">Activer le relais local</button>
+    <button type="button" id="stopLocalBridge" class="secondary" disabled>Couper le relais</button>
+    <a href="./index.html#local-gateway" target="_blank" rel="noopener">Ouvrir la passerelle réceptrice</a>
+  </div>
+  <label for="needClass">Un besoin à faire passer au point de contrôle</label>
+  <select id="needClass">
+    <option value="HEART_TICK">TIC/TAC · synchronisation visuelle</option>
+    <option value="LETTER_POINT">Lettre · station C disponible</option>
+    <option value="LANGUAGE_CONCEPT">Langue · concept connu</option>
+    <option value="OPAQUE_UNKNOWN">Mot inconnu · demander une preuve</option>
+    <option value="BOUNDARY_CHECK">Frontière · contrôle requis</option>
+    <option value="PROVENANCE_CHECK">Provenance · vérification requise</option>
+    <option value="CONSENT_REQUIRED">Accord requis · arrêter le passage</option>
+    <option value="LOAD_LIMIT">Charge · limite de flux</option>
+  </select>
+  <button type="button" id="sendNeed" class="secondary">Faire circuler ce besoin</button>
+  <p id="localBridgeStatus" aria-live="polite">Canal désactivé.</p>
+  <p id="localBridgeStats">Émis : 0 · Reçus par une page : 0 · Ignorés : 0</p>
+</div>
 <div id="letterStations" class="points" aria-live="polite"></div>
 <h3>Route locale produite</h3>
 <pre id="lastRoute">Vide</pre>

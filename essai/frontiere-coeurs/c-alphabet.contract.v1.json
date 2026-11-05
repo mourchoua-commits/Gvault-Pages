@@ -1,6 +1,6 @@
 {
   "schema": "GVAULT_PUBLIC_C_LETTER_POINTS_V1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "PUBLIC_LOCAL_SELF_SERVICE",
   "publicPage": "essai/frontiere-coeurs/alphabet.html",
   "javascript": "essai/frontiere-coeurs/alphabet.js",
@@ -38,7 +38,7 @@
     "sourceAndTargetLanguagesRemainSeparate": true
   },
   "permissions": {
-    "network": "NONE",
+    "network": "NO_EXTERNAL_NETWORK_OR_PRIVATE_API_CALL",
     "git": "NONE",
     "privateRepository": "NONE",
     "remoteDelivery": false,
@@ -52,6 +52,22 @@
     "NO_RAW_PRIVATE_TOKENS",
     "NO_FAKE_TRANSLATION",
     "NO_CROSS_CORE_SEND",
-    "NO_CANONICAL_AUTHORITY"
-  ]
+    "NO_CANONICAL_AUTHORITY",
+    "OPT_IN_BOTH_ENDPOINTS",
+    "NO_REMOTE_HEART_ACK",
+    "LIMIT_32_SIGNALS_PER_SECOND"
+  ],
+  "localRelay": {
+    "sharedLibrary": "essai/frontiere-coeurs/local-gateway.js",
+    "status": "EXPLICIT_OPT_IN",
+    "endpoints": [
+      "alphabet.html",
+      "index.html"
+    ],
+    "transport": "SAME_ORIGIN_BROADCAST_CHANNEL",
+    "needClasses": 8,
+    "localPageReceiptOnly": true,
+    "rawTextOnChannel": false,
+    "remoteDelivery": false
+  }
 }

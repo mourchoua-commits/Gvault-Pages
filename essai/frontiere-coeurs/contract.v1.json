@@ -1,7 +1,7 @@
 {
   "schema": "GVAULT_PROVISIONAL_HEART_BORDER_C_V1",
-  "version": "1.0.0",
-  "status": "EXPLICIT_ONLY_LOCAL_SELF_SERVICE",
+  "version": "1.1.0",
+  "status": "EXPLICIT_ONLY_LOCAL_SELF_SERVICE_AND_OPT_IN_BROWSER_BUS",
   "publishedSurface": "Gvault-Pages/essai/frontiere-coeurs/",
   "scope": "PROVISIONAL_DEMONSTRATOR_NOT_RUNTIME_BINDING",
   "hearts": [
@@ -64,12 +64,16 @@
     }
   ],
   "explicitTransfer": {
-    "delivery": "MANUAL_ONLY",
+    "delivery": "MANUAL_OR_OPT_IN_SAME_ORIGIN_BROWSER_CHANNEL",
     "network": "NONE",
     "remoteHeartbeat": "NOT_IMPLEMENTED",
     "remoteAck": "NOT_IMPLEMENTED",
     "privateCoreConnection": "NOT_IMPLEMENTED",
-    "userChoiceRequired": true
+    "userChoiceRequired": true,
+    "localBrowserBus": "BroadcastChannel, sender and receiver enabled manually, no network",
+    "channelSchema": "GVAULT_LOCAL_GATEWAY_V1",
+    "localPageReceipt": "UNAUTHENTICATED_LOCAL_PAGE_ONLY_NOT_A_HEART_ACK",
+    "rawTextAllowed": false
   },
   "forbidden": [
     "SECRETS",
@@ -81,7 +85,8 @@
     "GIT_WRITE",
     "EXECUTABLE_PAYLOAD",
     "HTML_INJECTION",
-    "FAKE_REMOTE_ACK"
+    "FAKE_REMOTE_ACK",
+    "FALSE_LOCAL_PAGE_AUTHENTICATION"
   ],
   "tests": {
     "command": "cc -std=c11 -Wall -Wextra -Werror -pedantic -o c_border c_border.c && ./c_border --self-test",
@@ -92,5 +97,6 @@
     "ops/isolation/isolation-semantics.v1.json",
     "ops/method-router/dual-core-conversation.binding.v1.json",
     ".github/workflows/tri-core-dialogue-bus.yml"
-  ]
+  ],
+  "localRelayContract": "essai/frontiere-coeurs/local-gateway.contract.v1.json"
 }

@@ -63,3 +63,14 @@ Cette représentation est **uniquement visuelle et locale** : elle ne constitue 
 Chaque événement de saisie ou interaction sur les lettres déclenche un relais **alternatif et exclusif** : TIC allumé / TAC éteint, puis TIC éteint / TAC allumé. Le compteur local progresse d'une unité par geste. Tous les mini-cœurs des stations et des lexèmes restent associés en alternance à l'une de ces deux voies ; seule la voie active est lumineuse, l'autre est réellement masquée (opacité zéro). Quand le suivant s'allume, le précédent s'éteint immédiatement. Les deux cœurs sont éteints au chargement.
 
 Les tests simulés vérifient le cycle TIC → TAC → TIC → TAC, l'exclusion des deux états actifs simultanés et l'affectation alternée des stations. La page conserve les garde-fous existants : pas de son, pas de réseau ni de persistance ajoutés, et aucune connexion aux vrais cœurs GThink. Le paramètre de réduction des animations est toujours respecté.
+
+
+## Jumelage TIC/TAC vers la passerelle, et multiplication des besoins
+
+La page [alphabet.html](alphabet.html) et la [frontière C-BORDER](index.html) peuvent désormais se parler à travers **un relais local entre onglets du même site**. Les deux boutons d'activation doivent être pressés volontairement. Le cœur TIC s'allume lorsque TAC s'éteint, puis l'inverse. Une pulsation peut émettre l'un des huit besoins : tic, station de lettre disponible, concept linguistique connu, mot opaque inconnu, contrôle de frontière, provenance à vérifier, consentement requis ou limite de charge. Les catégories n'emportent **jamais le contenu de la lettre ou du mot**.
+
+Les reçus signifient uniquement que le récepteur du navigateur a traité une trame, pas qu'un véritable cœur a entendu ou répondu. Le canal est de type `BroadcastChannel`, sans stockage, sans réseau ni liaison au dépôt privé. Deux onglets ouverts sous une même origine sont nécessaires ; certains téléphones suspendent les onglets inactifs.
+
+La vérification porte sur les six champs C-BORDER/1 et deux enums locaux `need` et `phase`. Les classes sont mappées aux types autorisés `HELLO`, `CAPABILITY`, `EVIDENCE_REF` ou `STOP` sans changer le validateur en C. On ne confond donc pas un besoin d'indice avec une preuve réelle. L'ancien service manuel reste disponible.
+
+Documentation commune : [contrat du relais](local-gateway.contract.v1.json), [tests](local-gateway.test.mjs).

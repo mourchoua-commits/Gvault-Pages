@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="robots" content="noindex,nofollow">
 <title>GVAULT · Frontière des cœurs · C-BORDER/1</title>
 <style>
@@ -36,6 +36,12 @@ button:disabled{opacity:.45;cursor:not-allowed}
 pre{padding:12px;background:#050c11;border:1px solid #3f5761;border-radius:10px;overflow-wrap:anywhere;white-space:pre-wrap;font:13px/1.65 ui-monospace,Consolas,monospace;min-height:4em;color:#e7d5a2}
 .status{min-height:42px;color:var(--gold);font:650 .85rem/1.5 system-ui;display:block;margin:12px 0 0}
 .status.ok{color:var(--mint)}.status.bad{color:var(--bad)}
+.local-gateway{margin-top:16px;border-color:#47766e}
+.gateway-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.gateway-actions button:disabled{opacity:.45;cursor:not-allowed}
+.gateway-counters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.gateway-counters span{border:1px solid #39565a;border-radius:8px;padding:8px;background:#0c1c20;color:#a8c5c9;overflow-wrap:anywhere;font-size:.85rem}
+#gatewayLog{max-height:200px;overflow:auto;min-height:3em}
 footer{color:var(--soft);font-size:.84rem;padding:8px 3px}
 a{color:var(--mint)}
 @media(max-width:730px){.grid{grid-template-columns:1fr}section{padding:16px}}
@@ -98,17 +104,83 @@ a{color:var(--mint)}
 </section>
 </div>
 </div>
+<section id="local-gateway" class="local-gateway" aria-label="Récepteur local des cœurs et des besoins">
+  <h2>04 · Récepteur local TIC/TAC et besoins</h2>
+  <p>Ouvre aussi <a href="./alphabet.html" target="_blank" rel="noopener">l'alphabet C-LETTER/1</a>, puis active explicitement les deux pages. Elles échangent seulement des trames de catégories autorisées, via un canal entre onglets du même site. Rien n'est transmis à GThink privé, au cœur image réel ou à GitHub.</p>
+  <div class="gateway-actions">
+    <button type="button" id="gatewayStart">Ouvrir le récepteur local</button>
+    <button type="button" id="gatewayStop" class="secondary" disabled>Fermer le récepteur</button>
+  </div>
+  <p id="gatewayState" class="status" role="status" aria-live="polite">Récepteur fermé. Aucun signal écouté.</p>
+  <p>Trames locales acceptées : <strong id="gatewayAccepted">0</strong> · Refus ou doublons : <strong id="gatewayRejected">0</strong>.</p>
+  <h2>Les huit besoins distribués</h2>
+  <div id="gatewayCounters" class="gateway-counters"></div>
+  <h2>Dernier passage validé</h2>
+  <pre id="gatewayLog" aria-live="polite">Aucune réception.</pre>
+  <p>Le reçu confirme uniquement qu'une <em>page locale</em> a traité une trame. Il n'authentifie pas l'émetteur, ne prouve aucune réception par un cœur réel et ne commande aucune méthode.</p>
+</section>
 <footer>
 <strong>Frontière virtuelle, pas tunnel réseau.</strong> GThink garde l'orchestration, le Method Router privé reste l'autorité de sélection, et aucun cœur ne délègue sa propre identité. Cette surface ne contacte aucun service par son code, ne stocke aucune trame et ne peut pas rendre l'assistant présent en permanence.
 <p><a href="./contract.v1.json">Contrat d'isolation vérifiable</a> · <a href="./README.md">Mode d'emploi et tests du validateur C</a></p>
 </footer>
 </main>
+<script src="./local-gateway.js"></script>
 <script>
 "use strict";
 (function(){
   const HEARTS = ["GTHINK_PUBLIC","GTHINK_PRIVATE","GTHINK_IMAGE"];
   const KINDS = ["HELLO","CAPABILITY","EVIDENCE_REF","ACK","STOP"];
   const el = id => document.getElementById(id);
+  const localBridge = window.GVaultLocalGateway;
+  let gatewayPort = null, acceptedCount = 0, rejectedCount = 0;
+  const needs = localBridge ? Object.keys(localBridge.needs) : [];
+  const counters = Object.fromEntries(needs.map(need => [need, 0]));
+  function showCounts() {
+    const out = el("gatewayCounters");
+    out.replaceChildren();
+    for (const need of needs) {
+      const line = document.createElement("span");
+      line.textContent = need + " : " + counters[need];
+      out.append(line);
+    }
+    el("gatewayAccepted").textContent = String(acceptedCount);
+    el("gatewayRejected").textContent = String(rejectedCount);
+  }
+  function gateStatus(message,good) {
+    el("gatewayState").textContent=message;
+    el("gatewayState").className="status "+(good?"ok":"bad");
+  }
+  el("gatewayStart").addEventListener("click",()=>{
+    if (gatewayPort || !localBridge) return;
+    try {
+      gatewayPort = localBridge.openPort("GATEWAY",{
+        onSignal({frame,need,phase}) {
+          counters[need] += 1;acceptedCount += 1;
+          showCounts();
+          el("gatewayLog").textContent="C-01/C-02/C-03 LOCAL_PAGE_ACCEPT\n"+
+            "Besoin : "+need+" · "+phase+"\n"+
+            "Trame : C-BORDER/1|"+frame.from+"|"+frame.to+"|"+frame.kind+"|"+frame.nonce+"|"+frame.ttl+
+            "\nAucun cœur distant contacté.";
+          gateStatus("Une page de ce navigateur a déposé un signal conforme, sans livraison aux cœurs.",true);
+        },
+        onRejected() {
+          rejectedCount += 1;showCounts();
+          gateStatus("Signal refusé ou doublon ignoré par le récepteur local.",false);
+        }
+      });
+      el("gatewayStart").disabled=true;el("gatewayStop").disabled=false;
+      gateStatus("Récepteur prêt : en attente de la page Alphabet activée.",true);
+    } catch(error) {
+      gateStatus("Récepteur indisponible : "+(error?.message || "non autorisé"),false);
+    }
+  });
+  el("gatewayStop").addEventListener("click",()=>{
+    gatewayPort?.close();gatewayPort=null;
+    el("gatewayStart").disabled=false;el("gatewayStop").disabled=true;
+    gateStatus("Récepteur fermé, aucun transfert actif.",false);
+  });
+  window.addEventListener("pagehide",()=>{gatewayPort?.close();gatewayPort=null;});
+  showCounts();
   let current = "";
   const clean = s => s.replace(/\r?\n$/, "");
   function check(raw) {
