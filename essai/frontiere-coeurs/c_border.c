@@ -37,7 +37,38 @@ static int check(char *buf) {
                               (f[4][i] >= 'a' && f[4][i] <= 'f'))) return 0;
     return !strcmp(f[5], "1") || !strcmp(f[5], "2") || !strcmp(f[5], "3");
 }
-int main(void) {
+
+static int self_test(void) {
+    const char *cases[] = {
+        "C-BORDER/1|GTHINK_PUBLIC|GTHINK_IMAGE|HELLO|0123456789abcdef|2",
+        "C-BORDER/1|GTHINK_IMAGE|GTHINK_PRIVATE|ACK|fedcba9876543210|3",
+        "C-BORDER/1|GTHINK_PUBLIC|GTHINK_PUBLIC|HELLO|0123456789abcdef|2",
+        "C-BORDER/1|GTHINK_PUBLIC|UNKNOWN|HELLO|0123456789abcdef|2",
+        "C-BORDER/1|GTHINK_PUBLIC|GTHINK_IMAGE|EXEC|0123456789abcdef|2",
+        "C-BORDER/1|GTHINK_PUBLIC|GTHINK_IMAGE|HELLO|0123456789abcdef|9",
+        "C-BORDER/1|GTHINK_PUBLIC|GTHINK_IMAGE|HELLO|abc|2",
+        "C-BORDER/1|GTHINK_PUBLIC|GTHINK_IMAGE|HELLO|0123456789abcdef|2|EXTRA"
+    };
+    const int expected[] = {1,1,0,0,0,0,0,0};
+    size_t i;
+    for (i = 0; i < sizeof(expected)/sizeof(expected[0]); ++i) {
+        char copy[160];
+        strcpy(copy, cases[i]);
+        if (check(copy) != expected[i]) {
+            fprintf(stderr, "SELF_TEST_FAIL:%zu\n", i);
+            return 1;
+        }
+    }
+    puts("SELF_TEST_PASS:8");
+    return 0;
+}
+
+int main(int argc, char **argv) {
+    if (argc == 2 && !strcmp(argv[1], "--self-test")) return self_test();
+    if (argc != 2 || strcmp(argv[1], "--validate")) {
+        fputs("Usage: c_border --self-test | --validate < packet.txt\n", stderr);
+        return 64;
+    }
     char buf[160], next[2];
     if (!fgets(buf, sizeof(buf), stdin)) return 2;
     if (!strchr(buf, '\n') && !feof(stdin)) return 2;
