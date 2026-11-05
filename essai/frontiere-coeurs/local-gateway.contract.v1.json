@@ -1,0 +1,79 @@
+{
+  "schema": "GVAULT_C_BORDER_LOCAL_BUS_V1",
+  "version": "1.0.0",
+  "status": "PUBLIC_BROWSER_OPT_IN",
+  "source": "essai/frontiere-coeurs/alphabet.html",
+  "receiver": "essai/frontiere-coeurs/index.html",
+  "library": "essai/frontiere-coeurs/local-gateway.js",
+  "medium": "BroadcastChannel(same-origin, same-browser, separate open pages)",
+  "networkTransport": false,
+  "persistence": false,
+  "default": "CLOSED_BOTH_ENDS",
+  "requiresExplicitOpeningBothPages": true,
+  "principals": {
+    "routeLabels": [
+      "GTHINK_PUBLIC",
+      "GTHINK_IMAGE"
+    ],
+    "theseAreLogicalMetadataOnly": true,
+    "actualHeartProcessConnection": false,
+    "privateHeartConnection": false,
+    "methodRouterAuthority": "UNCHANGED"
+  },
+  "envelope": {
+    "format": "C-BORDER/1|FROM|TO|KIND|NONCE|TTL",
+    "fields": 6,
+    "ttl": 1,
+    "nonceLength": 16,
+    "remoteAck": false,
+    "localPageReceipt": "GVAULT_LOCAL_PAGE_RECEIPT_V1",
+    "receiptMeaning": "UNAUTHENTICATED_PAGE_ONLY"
+  },
+  "sideband": {
+    "schema": "GVAULT_LOCAL_GATEWAY_V1",
+    "allowedOnly": [
+      "schema",
+      "frame",
+      "need",
+      "phase"
+    ],
+    "phase": [
+      "TIC",
+      "TAC"
+    ],
+    "noRawText": true,
+    "noStationContent": true,
+    "noWordContent": true,
+    "noCredentials": true,
+    "noPrivateIdentifiers": true
+  },
+  "needs": {
+    "HEART_TICK": "HELLO",
+    "LETTER_POINT": "CAPABILITY",
+    "LANGUAGE_CONCEPT": "CAPABILITY",
+    "OPAQUE_UNKNOWN": "EVIDENCE_REF",
+    "BOUNDARY_CHECK": "EVIDENCE_REF",
+    "PROVENANCE_CHECK": "EVIDENCE_REF",
+    "CONSENT_REQUIRED": "STOP",
+    "LOAD_LIMIT": "STOP"
+  },
+  "guardrails": {
+    "validation": "FAIL_CLOSED",
+    "replay": "NONCE_DEDUPE_RECENT_128_PER_RECEIVER_SESSION",
+    "burst": "MAX_32_MESSAGES_PER_1000MS_PER_SENDER_PORT",
+    "noAutomaticRouting": true,
+    "noAutomaticForwarding": true,
+    "noUserContent": true,
+    "restrictStrictKeys": true,
+    "provenanceAuthentication": false,
+    "noPersistentAgent": true,
+    "noRemoteDelivery": true,
+    "closeOnPagehide": true
+  },
+  "verification": {
+    "regression": "node --test essai/frontiere-coeurs/local-gateway.test.mjs",
+    "networkTests": "NOT_REQUIRED_LOCAL_ONLY",
+    "browserManualTest": "OPEN_BOTH_PAGES_THEN_START_RECEIVER_AND_SENDER",
+    "mainActivation": "PUBLIC_PAGE_ONLY"
+  }
+}
