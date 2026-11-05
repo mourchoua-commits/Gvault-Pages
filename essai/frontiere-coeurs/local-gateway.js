@@ -74,6 +74,7 @@
     channel.onmessage = ({data}) => {
       if (closed) return;
       if (role === "GATEWAY") {
+        if (parseReceipt(data)) return; // Acknowledge only another page, not a new request.
         const valid = parseSignal(data);
         if (!valid || seen.has(valid.frame.nonce)) {
           callbacks.onRejected?.("INVALID_OR_DUPLICATE");
