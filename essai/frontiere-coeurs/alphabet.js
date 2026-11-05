@@ -30,12 +30,22 @@
   let currentPack = DEMO, packKind = "demo";
   let tickCount = 0;
   function heartTick() {
-    const heart = el("heartBeat");
     tickCount += 1;
+    const activeLane = tickCount % 2 === 1 ? "tic" : "tac";
+    document.body.dataset.heartPhase = activeLane;
     el("heartTicks").textContent = String(tickCount);
-    heart.classList.remove("beat");
-    void heart.offsetWidth;
-    heart.classList.add("beat");
+    el("heartState").textContent = activeLane === "tic"
+      ? "TIC allumé · TAC éteint"
+      : "TIC éteint · TAC allumé";
+    const tic = el("heartBeatTic");
+    const tac = el("heartBeatTac");
+    for (const heart of [tic, tac]) {
+      heart.classList.remove("beat");
+      heart.classList.toggle("lit", heart === (activeLane === "tic" ? tic : tac));
+    }
+    const active = activeLane === "tic" ? tic : tac;
+    void active.offsetWidth;
+    active.classList.add("beat");
   }
   const inform = (message, error=false) => {
     el("notice").textContent = message;
@@ -49,6 +59,7 @@
     if(items.length===0){out.textContent="Aucun caractère.";return;}
     for(const item of items) {
       const cell=document.createElement("div");cell.className="char-point";
+      cell.dataset.heartLane = item.index % 2 === 0 ? "tic" : "tac";
       const glyph=document.createElement("strong");glyph.textContent=item.char===" "?"␠":item.char==="\n"?"↵":item.char;
       const point=document.createElement("code");point.textContent=item.point;
       const meta=document.createElement("small");meta.textContent=item.codepoint;
@@ -146,13 +157,13 @@
   el("clear").addEventListener("click",()=>{el("phrase").value="";renderStations("","letterStations");heartTick();});
   el("concept").addEventListener("change",()=>{drawConcept();heartTick();});
   el("wordInput").addEventListener("input",()=>{translateWord();heartTick();});
-  el("loadDemo").addEventListener("click",()=>{currentPack=DEMO;packKind="demo";showPack();inform("Démonstration rechargée.");});
+  el("loadDemo").addEventListener("click",()=>{currentPack=DEMO;packKind="demo";showPack();heartTick();inform("Démonstration rechargée.");});
   el("import").addEventListener("click",()=>{
     const raw=el("packInput").value;
     if(raw.length>12000){inform("Paquet trop volumineux.",true);return;}
     try{
       const p=validatePack(JSON.parse(raw));
-      currentPack=p;packKind="import";showPack();
+      currentPack=p;packKind="import";showPack();heartTick();
       inform("Lexiques chargés en mémoire locale ; aucune requête réseau.");
       el("packInput").value="";
     }catch(e){inform("Import refusé : "+String(e.message??e),true);}
