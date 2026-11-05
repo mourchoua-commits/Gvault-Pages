@@ -1,0 +1,53 @@
+# C-LETTER/1 · Alphabet intégral et langues de blobs
+
+## Libre-service
+
+Ouvrir [alphabet.html](alphabet.html) depuis un navigateur. Les **26 lettres A–Z** ont leurs stations `C_A` à `C_Z` ; les minuscules partagent la station de leur majuscule, sans perdre le caractère original. Les accents (`é` → `C_U00E9`), alphabets non latins (`Ω` → `C_U03A9`), emojis et autres scalaires Unicode ont des stations `C_U...`. Les espaces et les chiffres ont des points spécifiques. **Aucune lettre n'est interprétée comme un concept à elle seule.**
+
+La page découpe les mots en points C et montre deux lexiques séparés, sans réunir leurs identités. Le paquet de démonstration est reconstruit de manière déterministe avec l'algorithme observé dans le moteur GVault privé, mais **emploie des identifiants fictifs**.
+
+La traduction ne porte que sur des **concepts explicitement connus** des deux langues. Un mot inconnu est conservé comme **OPAQUE**, sans traduction inventée.
+
+## Pont vers les langues réellement développées à l'intérieur
+
+Le GVault privé possède maintenant une proposition d'adaptateur sur la branche expérimentale : `scripts/gvault-letter-language-points.mjs`. Il appelle `ensureBlobLanguage`, `encodeBlobConcepts` et `translateBlobLanguage` du moteur natif ; la langue propre de chaque blob est conservée.
+
+L'export facultatif `exportPublicLetterLanguagePack({sourceBlob,targetBlob,approved:true})` exige un accord explicite et ne garde que les 18 concepts de base publics du moteur, sans ID de blob, ID de langue, texte de conversation ou preuve privée. L'export n'envoie rien : il construit un objet JSON que l'opérateur peut décider de coller dans l'interface.
+
+Exemple autonome avec **identités fictives**, à exécuter dans un checkout autorisé du GVault privé une fois la PR expérimentale disponible :
+
+```sh
+node --input-type=module <<'NODE'
+import { exportPublicLetterLanguagePack } from './scripts/gvault-letter-language-points.mjs';
+const packet = exportPublicLetterLanguagePack({
+  sourceBlob: { blobId: 'C_LOCAL_DEMO_SOURCE' },
+  targetBlob: { blobId: 'C_LOCAL_DEMO_TARGET' },
+  approved: true
+});
+console.log(JSON.stringify(packet,null,2));
+NODE
+```
+
+Pour des blobs réels, l'appel doit se faire **dans GVault privé**, uniquement avec des objets autorisés. Un paquet collé est **structurellement vérifié mais non authentifié**.
+
+## Version C11 compilée et testée
+
+Le fichier [c_letters.c](c_letters.c) lit de l'UTF-8 et imprime les stations :
+
+```sh
+cc -std=c11 -Wall -Wextra -Werror -pedantic c_letters.c -o c_letters
+./c_letters --self-test
+printf 'Cactus é Ω 💚\n' | ./c_letters --points
+```
+
+Contrat : UTF-8 strict, maximum 512 scalaires, rejet des séquences mal formées, des surrogates et des encodages excessifs, aucun réseau ou écritures. Résultat attendu : `SELF_TEST_PASS:26_LETTERS_UTF8_AND_REJECTIONS`.
+
+## Frontière maintenue
+
+- La passerelle C-BORDER/1 reste **limitée à six champs, sans charge utile**. Les lettres et lexiques ne s'y transmettent pas automatiquement.
+- Les langues des blobs sont distinctes ; les concepts connus sont traduits par la couche sémantique native, pas par ressemblance visuelle des lettres.
+- L'arbitrage linguistique reste consultatif. Le Method Router et GThink gardent leurs responsabilités.
+- Ni la page ni le C11 ne se connectent au dépôt privé. Aucune livraison entre cœurs, preuve distante ou présence permanente n'est revendiquée.
+- En cas de divergence, le résultat reste opaque ou non concluant. Aucun consensus fictif.
+
+Voir [le paquet de démonstration](public-demo-language-pack.json) et [le contrat](c-alphabet.contract.v1.json).
