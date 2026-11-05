@@ -29,7 +29,15 @@
   }));
   let currentPack = DEMO, packKind = "demo";
   let tickCount = 0;
-  function heartTick() {
+  let localPort = null;
+  let localSent = 0, localReceived = 0, localDropped = 0;
+  const gateway = window.GVaultLocalGateway;
+  function localStats(label) {
+    el("localBridgeStats").textContent = "Émis : " + localSent +
+      " · Reçus par une page : " + localReceived + " · Ignorés (limite) : " + localDropped;
+    if (label) el("localBridgeStatus").textContent = label;
+  }
+  function heartTick(need="HEART_TICK") {
     tickCount += 1;
     const activeLane = tickCount % 2 === 1 ? "tic" : "tac";
     document.body.dataset.heartPhase = activeLane;
@@ -46,6 +54,17 @@
     const active = activeLane === "tic" ? tic : tac;
     void active.offsetWidth;
     active.classList.add("beat");
+    if (localPort) {
+      try {
+        const nonce = localPort.send(need, activeLane.toUpperCase());
+        if (nonce) {
+          localSent += 1;
+          localStats("Signal local " + need + " émis, réception encore non confirmée.");
+        }
+      } catch (error) {
+        localStats("Transmission locale refusée : " + (error?.message || "indisponible"));
+      }
+    }
   }
   const inform = (message, error=false) => {
     el("notice").textContent = message;
@@ -145,29 +164,68 @@
   for(const char of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
     const button=document.createElement("button");button.type="button";button.textContent=char;
     button.setAttribute("aria-label","Ajouter le point C_"+char);
-    button.addEventListener("click",()=>{el("phrase").value+=char;renderStations(el("phrase").value,"letterStations");heartTick();});
+    button.addEventListener("click",()=>{el("phrase").value+=char;renderStations(el("phrase").value,"letterStations");heartTick("LETTER_POINT");});
     alphabet.append(button);
   }
   for(const char of ["É","À","Ç","È","Ê","Ü","Ω","💚"," "]) {
     const button=document.createElement("button");button.type="button";button.textContent=char===" "?"ESPACE":char;button.className="special";
-    button.addEventListener("click",()=>{el("phrase").value+=char;renderStations(el("phrase").value,"letterStations");heartTick();});
+    button.addEventListener("click",()=>{el("phrase").value+=char;renderStations(el("phrase").value,"letterStations");heartTick("LETTER_POINT");});
     alphabet.append(button);
   }
-  el("phrase").addEventListener("input",()=>{renderStations(el("phrase").value,"letterStations");heartTick();});
+  el("phrase").addEventListener("input",()=>{renderStations(el("phrase").value,"letterStations");heartTick("LETTER_POINT");});
   el("clear").addEventListener("click",()=>{el("phrase").value="";renderStations("","letterStations");heartTick();});
-  el("concept").addEventListener("change",()=>{drawConcept();heartTick();});
-  el("wordInput").addEventListener("input",()=>{translateWord();heartTick();});
-  el("loadDemo").addEventListener("click",()=>{currentPack=DEMO;packKind="demo";showPack();heartTick();inform("Démonstration rechargée.");});
+  el("concept").addEventListener("change",()=>{drawConcept();heartTick("LANGUAGE_CONCEPT");});
+  el("wordInput").addEventListener("input",()=>{
+    translateWord();
+    const word=el("wordInput").value.trim();
+    const known=currentPack.concepts.some(c=>currentPack.languages[0].lexicon[c]===word);
+    heartTick(known ? "LANGUAGE_CONCEPT" : "OPAQUE_UNKNOWN");
+  });
+  el("loadDemo").addEventListener("click",()=>{currentPack=DEMO;packKind="demo";showPack();heartTick("BOUNDARY_CHECK");inform("Démonstration rechargée.");});
   el("import").addEventListener("click",()=>{
     const raw=el("packInput").value;
     if(raw.length>12000){inform("Paquet trop volumineux.",true);return;}
     try{
       const p=validatePack(JSON.parse(raw));
-      currentPack=p;packKind="import";showPack();heartTick();
+      currentPack=p;packKind="import";showPack();heartTick("PROVENANCE_CHECK");
       inform("Lexiques chargés en mémoire locale ; aucune requête réseau.");
       el("packInput").value="";
     }catch(e){inform("Import refusé : "+String(e.message??e),true);}
   });
+  el("startLocalBridge").addEventListener("click",()=>{
+    if (localPort || !gateway) return;
+    try {
+      localPort = gateway.openPort("ALPHABET",{
+        onReceipt(receipt) {
+          localReceived += 1;
+          localStats("Une page de la passerelle a confirmé une réception locale pour " +
+            receipt.nonce + ". Aucun cœur réel n'a répondu.");
+        },
+        onDropped() {
+          localDropped += 1;
+          localStats("Trop de tics rapides : certains signaux ont été ignorés.");
+        }
+      });
+      el("startLocalBridge").disabled=true;
+      el("stopLocalBridge").disabled=false;
+      localStats("Canal ouvert : seuls les prochains tics circulent entre pages du même navigateur.");
+    } catch(error) {
+      localStats("Canal indisponible : " + (error?.message || "non autorisé"));
+    }
+  });
+  el("stopLocalBridge").addEventListener("click",()=>{
+    localPort?.close();localPort=null;
+    el("startLocalBridge").disabled=false;
+    el("stopLocalBridge").disabled=true;
+    localStats("Canal fermé, aucun signal envoyé.");
+  });
+  el("sendNeed").addEventListener("click",()=>{
+    const need=el("needClass").value;
+    if (!gateway || !Object.prototype.hasOwnProperty.call(gateway.needs,need)) return;
+    heartTick(need);
+    if (!localPort) localStats("TIC/TAC local joué. Active le canal pour transmettre un besoin.");
+  });
+  window.addEventListener("pagehide",()=>{localPort?.close();localPort=null;});
   el("copyRoute").addEventListener("click",async()=>{
     try{await navigator.clipboard.writeText(el("lastRoute").textContent);inform("Points copiés. Aucun transfert entre cœurs.");}
     catch{inform("Copie bloquée par le navigateur.",true);}
@@ -176,5 +234,6 @@
   el("phrase").value="cactus coton écho 💚";
   renderStations(el("phrase").value,"letterStations");
   showPack();
+  localStats("Canal inactif. Ouvre également la passerelle, puis active les deux extrémités.");
   inform("Libre-service prêt. Les deux langues visibles sont fictives, construites avec la formule interne.");
 })();
