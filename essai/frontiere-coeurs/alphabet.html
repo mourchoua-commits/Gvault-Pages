@@ -32,11 +32,15 @@ a{color:var(--mint)}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin:11px 0}
 .alphabet{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:6px}
 .alphabet button{position:relative;padding:10px 2px;font:700 .88rem ui-monospace,monospace;background:#17353d}
-.alphabet button::after{content:"♥";position:absolute;right:3px;top:1px;color:#f2a3b7;font-size:.68rem;opacity:.9}
+.alphabet button::after{content:"♥";position:absolute;right:3px;top:1px;color:#f2a3b7;font-size:.68rem;opacity:0;transition:opacity .12s linear}
+body[data-heart-phase="tic"] .alphabet button:nth-child(odd)::after,
+body[data-heart-phase="tac"] .alphabet button:nth-child(even)::after{opacity:1}
 .alphabet .special{background:#3c3322;border-color:#8a7148;color:#f6dba4;font-size:.75rem}
 .points{display:flex;gap:6px;flex-wrap:wrap;max-height:300px;overflow:auto;padding:9px 0}
 .char-point{position:relative;border:1px solid #4c666d;border-radius:10px;background:#09171d;min-width:72px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:4px}
-.station-heart{position:absolute;top:4px;right:6px;font-size:.72rem;line-height:1;color:#f8a8be;pointer-events:none}
+.station-heart{position:absolute;top:4px;right:6px;font-size:.72rem;line-height:1;color:#f8a8be;pointer-events:none;opacity:0;transition:opacity .12s linear}
+body[data-heart-phase="tic"] .char-point[data-heart-lane="tic"] .station-heart,
+body[data-heart-phase="tac"] .char-point[data-heart-lane="tac"] .station-heart{opacity:1}
 .char-point strong{font-size:1.2rem;font-weight:650;min-height:1.6rem}
 .char-point code{font:750 .72rem ui-monospace,monospace;color:var(--mint)}
 .char-point small{font:.67rem ui-monospace,monospace}
@@ -48,14 +52,23 @@ pre{font:.82rem/1.6 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflo
 .lexeme-lane{padding:12px;border-radius:10px;border:1px solid #395459;margin:10px 0;background:#0a161b}
 .lexeme-lane b{font:700 .8rem ui-monospace,monospace}
 .route{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
-.route code::before{content:"♥";color:#f8a8be;margin-right:5px;font-size:.8em}
+.route code::before{content:"♥";color:#f8a8be;margin-right:5px;font-size:.8em;opacity:0;transition:opacity .12s linear}
+body[data-heart-phase="tic"] .route code:nth-child(odd)::before,
+body[data-heart-phase="tac"] .route code:nth-child(even)::before{opacity:1}
 .route code{border:1px solid #52766e;border-radius:6px;padding:5px;background:#1b3737;color:var(--mint);font-size:.77rem}
 #notice{margin-top:15px;border-left:3px solid var(--mint);padding:10px;color:var(--ink);background:#14282a}
 #notice[data-state=error]{border-color:#ff9f9f;color:#ffb5b5}
-.heart-beat{display:inline-block;color:#faabc5;font-size:1.15em;transform-origin:center}
-.heart-beat.beat{animation:heart-tic .38s ease-out}
+.heart-relay{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:1px solid #38565d;background:#0b191f;border-radius:12px;padding:10px 13px;margin-top:9px}
+.heart-channel{display:inline-flex;align-items:center;gap:5px;font:750 .8rem ui-monospace,monospace;letter-spacing:.04em}
+.relay-heart{display:inline-block;color:#faabc5;font-size:1.3rem;line-height:1;opacity:0;transform-origin:center;transition:opacity .12s linear}
+.relay-heart.lit{opacity:1}
+.relay-heart.beat{animation:heart-tic .38s ease-out}
+.heart-state{flex-basis:100%;font-size:.8rem;color:var(--muted)}
 @keyframes heart-tic{0%{transform:scale(1)}40%{transform:scale(1.7)}100%{transform:scale(1)}}
-@media(prefers-reduced-motion:reduce){.heart-beat.beat{animation:none}}
+@media(prefers-reduced-motion:reduce){
+  .relay-heart.beat{animation:none}
+  .relay-heart,.station-heart,.alphabet button::after,.route code::before{transition:none}
+}
 .hint{font-size:.84rem}
 footer{padding:18px 3px;color:var(--muted);font-size:.83rem}
 @media(max-width:720px){.layout{grid-template-columns:1fr}.wide{grid-column:auto}.alphabet{grid-template-columns:repeat(6,minmax(0,1fr))}.panel{padding:15px}.compare{grid-template-columns:1fr}}
@@ -78,8 +91,14 @@ footer{padding:18px 3px;color:var(--muted);font-size:.83rem}
 <label for="phrase">Compose un texte (local uniquement)</label>
 <textarea id="phrase" maxlength="2048" spellcheck="false" aria-label="Texte à décomposer par caractère"></textarea>
 <div class="actions"><button id="clear" class="secondary" type="button">Effacer</button><button id="copyRoute" type="button">Copier les points C</button></div>
-<p>Nombre de stations : <strong id="pointCount">0</strong>. <span id="heartBeat" class="heart-beat" aria-hidden="true">♥</span> Tics : <strong id="heartTicks">0</strong>. Chaque tic fait battre un petit cœur, localement.</p>
-<p class="hint">Chaque point porte son propre cœur. Aucun texte n'est envoyé à GitHub ou aux cœurs par cette page.</p>
+<p>Nombre de stations : <strong id="pointCount">0</strong>. Tics : <strong id="heartTicks">0</strong>.</p>
+<div class="heart-relay" aria-label="Deux petits cœurs alternent à chaque tic">
+  <span class="heart-channel"><span id="heartBeatTic" class="relay-heart" aria-hidden="true">♥</span> TIC</span>
+  <span class="heart-channel"><span id="heartBeatTac" class="relay-heart" aria-hidden="true">♥</span> TAC</span>
+  <span id="heartState" class="heart-state" role="status" aria-live="polite">Deux cœurs éteints, prêts à alterner.</span>
+</div>
+<p class="hint">Au premier geste, TIC s'allume. Au geste suivant, il s'éteint pendant que TAC s'allume. Les mini-cœurs des lettres suivent la même alternance, sans minuterie.</p>
+<p class="hint">Aucun texte n'est envoyé à GitHub ou aux cœurs par cette page.</p>
 <div id="letterStations" class="points" aria-live="polite"></div>
 <h3>Route locale produite</h3>
 <pre id="lastRoute">Vide</pre>

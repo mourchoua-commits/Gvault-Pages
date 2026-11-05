@@ -57,3 +57,9 @@ Voir [le paquet de démonstration](public-demo-language-pack.json) et [le contra
 Chaque station affichée possède un petit cœur, ainsi que les boutons de l'alphabet et les points des mots traduits. Les frappes au clavier et les pressions sur les lettres font **battre un seul cœur par événement d'entrée**, avec un compteur temporaire « Tics ». Une saisie collée affiche un cœur sur chaque caractère mais ne déclenche qu'une pulsation visuelle pour le collage. Le compteur repart de zéro à chaque ouverture de page.
 
 Cette représentation est **uniquement visuelle et locale** : elle ne constitue ni un battement réel des cœurs GThink, ni un heartbeat réseau, ni un accusé de réception distant. La préférence système de réduction des animations est respectée ; aucun son, stockage ou accès réseau supplémentaire.
+
+## Relais TIC / TAC · 5 novembre 2026
+
+Chaque événement de saisie ou interaction sur les lettres déclenche un relais **alternatif et exclusif** : TIC allumé / TAC éteint, puis TIC éteint / TAC allumé. Le compteur local progresse d'une unité par geste. Tous les mini-cœurs des stations et des lexèmes restent associés en alternance à l'une de ces deux voies ; seule la voie active est lumineuse, l'autre est réellement masquée (opacité zéro). Quand le suivant s'allume, le précédent s'éteint immédiatement. Les deux cœurs sont éteints au chargement.
+
+Les tests simulés vérifient le cycle TIC → TAC → TIC → TAC, l'exclusion des deux états actifs simultanés et l'affectation alternée des stations. La page conserve les garde-fous existants : pas de son, pas de réseau ni de persistance ajoutés, et aucune connexion aux vrais cœurs GThink. Le paramètre de réduction des animations est toujours respecté.
