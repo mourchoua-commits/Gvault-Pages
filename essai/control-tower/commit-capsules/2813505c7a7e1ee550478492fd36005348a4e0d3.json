@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "2813505c7a7e1ee550478492fd36005348a4e0d3",
+  "parentSha": "fb6c572cc3d61ad3f6fa93f4e02ba2cf99ce7aab",
+  "committedAt": "2026-11-16T19:57:08+01:00",
+  "summary": {
+    "subject": "Route Studio CLEAN : version publiée (grille chromatique inversable, consentement, tous instruments)",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 4295,
+    "deletions": 1,
+    "paths": [
+      "route-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "FULL",
+    "changedFiles": 1,
+    "additions": 4295,
+    "deletions": 1,
+    "magnitude": 4296,
+    "committedAt": "2026-11-16T19:57:08+01:00",
+    "parentSha": "fb6c572cc3d61ad3f6fa93f4e02ba2cf99ce7aab"
+  },
+  "pulseKey": "CTP1:2813505c7a7e1ee550478492fd36005348a4e0d3:eb52f916c48e9e8b",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "b2dc94af6272f010d19daf436caa9076ffe334598c75577f202920975d4df3ad",
+  "typedKeys": {
+    "commit": "gitc:2813505c7a7e1ee550478492fd36005348a4e0d3",
+    "parent": "gitc:fb6c572cc3d61ad3f6fa93f4e02ba2cf99ce7aab",
+    "pulse": "ctp1:2813505c7a7e1ee550478492fd36005348a4e0d3:eb52f916c48e9e8b",
+    "translation": "cttrans:b2dc94af6272f010d19daf436caa9076ffe334598c75577f202920975d4df3ad",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "2813505c7a7e1ee550478492fd36005348a4e0d3",
+    "parentSha": "fb6c572cc3d61ad3f6fa93f4e02ba2cf99ce7aab",
+    "committedAt": "2026-11-16T19:57:08+01:00",
+    "summary": {
+      "subject": "Route Studio CLEAN : version publiée (grille chromatique inversable, consentement, tous instruments)",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 4295,
+      "deletions": 1,
+      "paths": [
+        "route-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "FULL",
+      "changedFiles": 1,
+      "additions": 4295,
+      "deletions": 1,
+      "magnitude": 4296,
+      "committedAt": "2026-11-16T19:57:08+01:00",
+      "parentSha": "fb6c572cc3d61ad3f6fa93f4e02ba2cf99ce7aab"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/2813505c7a7e1ee550478492fd36005348a4e0d3.json",
+      "vfsKey": "CTP1:2813505c7a7e1ee550478492fd36005348a4e0d3:eb52f916c48e9e8b",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/2813505c7a7e1ee550478492fd36005348a4e0d3.json"
+}
