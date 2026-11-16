@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "ccb04836d9b75a17d7fd5b44bb934b1aa2000720",
+  "parentSha": "47b55972bedef57239e6ed9258b140c4c7260650",
+  "committedAt": "2026-11-16T13:37:11+01:00",
+  "summary": {
+    "subject": "Route Studio CLEAN — jet final jouable (consentement RGPD, estompe huile, dessin musical, Magic System résonnant)",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 4180,
+    "deletions": 0,
+    "paths": [
+      "route-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "FULL",
+    "changedFiles": 1,
+    "additions": 4180,
+    "deletions": 0,
+    "magnitude": 4180,
+    "committedAt": "2026-11-16T13:37:11+01:00",
+    "parentSha": "47b55972bedef57239e6ed9258b140c4c7260650"
+  },
+  "pulseKey": "CTP1:ccb04836d9b75a17d7fd5b44bb934b1aa2000720:b4895a3cb3f0e6f7",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "ab6738a62997eb0f4b3730f35178db08809dd7d858def3acf0647f554c0d88d9",
+  "typedKeys": {
+    "commit": "gitc:ccb04836d9b75a17d7fd5b44bb934b1aa2000720",
+    "parent": "gitc:47b55972bedef57239e6ed9258b140c4c7260650",
+    "pulse": "ctp1:ccb04836d9b75a17d7fd5b44bb934b1aa2000720:b4895a3cb3f0e6f7",
+    "translation": "cttrans:ab6738a62997eb0f4b3730f35178db08809dd7d858def3acf0647f554c0d88d9",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "ccb04836d9b75a17d7fd5b44bb934b1aa2000720",
+    "parentSha": "47b55972bedef57239e6ed9258b140c4c7260650",
+    "committedAt": "2026-11-16T13:37:11+01:00",
+    "summary": {
+      "subject": "Route Studio CLEAN — jet final jouable (consentement RGPD, estompe huile, dessin musical, Magic System résonnant)",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 4180,
+      "deletions": 0,
+      "paths": [
+        "route-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "FULL",
+      "changedFiles": 1,
+      "additions": 4180,
+      "deletions": 0,
+      "magnitude": 4180,
+      "committedAt": "2026-11-16T13:37:11+01:00",
+      "parentSha": "47b55972bedef57239e6ed9258b140c4c7260650"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/ccb04836d9b75a17d7fd5b44bb934b1aa2000720.json",
+      "vfsKey": "CTP1:ccb04836d9b75a17d7fd5b44bb934b1aa2000720:b4895a3cb3f0e6f7",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/ccb04836d9b75a17d7fd5b44bb934b1aa2000720.json"
+}
