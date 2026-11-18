@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "8bb1169381c681dfe4ff322e3cefa17f867da9a5",
+  "parentSha": "f93afa6b55aa28b229e14d71e97a8b61a0333053",
+  "committedAt": "2026-11-18T20:36:05+01:00",
+  "summary": {
+    "subject": "Ajout de Chat Studio (chat style Discord en HTML)",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 265,
+    "deletions": 0,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 265,
+    "deletions": 0,
+    "magnitude": 265,
+    "committedAt": "2026-11-18T20:36:05+01:00",
+    "parentSha": "f93afa6b55aa28b229e14d71e97a8b61a0333053"
+  },
+  "pulseKey": "CTP1:8bb1169381c681dfe4ff322e3cefa17f867da9a5:d00b249629506c3d",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "3fdb4756ae9a9b20b4ae99d0bdb924c91413b0466853486405d69143413ea7e2",
+  "typedKeys": {
+    "commit": "gitc:8bb1169381c681dfe4ff322e3cefa17f867da9a5",
+    "parent": "gitc:f93afa6b55aa28b229e14d71e97a8b61a0333053",
+    "pulse": "ctp1:8bb1169381c681dfe4ff322e3cefa17f867da9a5:d00b249629506c3d",
+    "translation": "cttrans:3fdb4756ae9a9b20b4ae99d0bdb924c91413b0466853486405d69143413ea7e2",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "8bb1169381c681dfe4ff322e3cefa17f867da9a5",
+    "parentSha": "f93afa6b55aa28b229e14d71e97a8b61a0333053",
+    "committedAt": "2026-11-18T20:36:05+01:00",
+    "summary": {
+      "subject": "Ajout de Chat Studio (chat style Discord en HTML)",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 265,
+      "deletions": 0,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 265,
+      "deletions": 0,
+      "magnitude": 265,
+      "committedAt": "2026-11-18T20:36:05+01:00",
+      "parentSha": "f93afa6b55aa28b229e14d71e97a8b61a0333053"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/8bb1169381c681dfe4ff322e3cefa17f867da9a5.json",
+      "vfsKey": "CTP1:8bb1169381c681dfe4ff322e3cefa17f867da9a5:d00b249629506c3d",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/8bb1169381c681dfe4ff322e3cefa17f867da9a5.json"
+}
