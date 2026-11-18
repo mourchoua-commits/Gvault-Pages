@@ -1,0 +1,265 @@
+
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chat Studio</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+  body { background: #313338; color: #dbdee1; height: 100vh; display: flex; overflow: hidden; }
+
+  /* Sidebar salons */
+  #sidebar { width: 240px; background: #2b2d31; display: flex; flex-direction: column; }
+  #sidebar h1 { font-size: 16px; padding: 16px; color: #fff; border-bottom: 1px solid #1e1f22; box-shadow: 0 1px 2px rgba(0,0,0,.3); }
+  .channel { padding: 8px 12px; margin: 2px 8px; border-radius: 6px; cursor: pointer; color: #949ba4; font-size: 15px; }
+  .channel:hover { background: #35373c; color: #fff; }
+  .channel.active { background: #404249; color: #fff; }
+  .channel .hash { opacity: .6; margin-right: 4px; }
+
+  /* Zone de chat */
+  #main { flex: 1; display: flex; flex-direction: column; }
+  #chat-header { padding: 12px 16px; border-bottom: 1px solid #1e1f22; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.3); }
+  #chat-header .hash { color: #949ba4; }
+  #call-btn { margin-left: auto; background: #5865f2; border: none; color: #fff; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  #call-btn:hover { background: #4752c4; }
+
+  #messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .msg { display: flex; gap: 12px; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; font-size: 16px; }
+  .msg-body { min-width: 0; }
+  .msg-head { display: flex; align-items: baseline; gap: 8px; }
+  .msg-author { font-weight: 600; color: #fff; font-size: 15px; }
+  .msg-time { font-size: 11px; color: #949ba4; }
+  .msg-text { font-size: 15px; word-wrap: break-word; }
+  .msg-img { max-width: 420px; max-height: 300px; border-radius: 8px; margin-top: 6px; cursor: pointer; display: block; }
+
+  /* Barre de saisie */
+  #composer { padding: 0 16px 20px; }
+  #composer-inner { background: #383a40; border-radius: 8px; display: flex; align-items: center; padding: 4px 10px; gap: 8px; }
+  #attach-btn { background: none; border: none; color: #b5bac1; font-size: 22px; cursor: pointer; padding: 6px; }
+  #attach-btn:hover { color: #fff; }
+  #msg-input { flex: 1; background: none; border: none; outline: none; color: #dbdee1; font-size: 15px; padding: 10px 4px; }
+  #msg-input::placeholder { color: #6d6f78; }
+  #send-btn { background: none; border: none; color: #b5bac1; font-size: 20px; cursor: pointer; padding: 6px; }
+  #send-btn:hover { color: #fff; }
+
+  /* Modal appel */
+  #call-modal { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 10; }
+  #call-modal.open { display: flex; }
+  #call-modal .big-avatar { width: 110px; height: 110px; border-radius: 50%; background: #5865f2; display: flex; align-items: center; justify-content: center; font-size: 44px; font-weight: bold; color: #fff; animation: pulse 1.6s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(88,101,242,.5);} 50% { box-shadow: 0 0 0 22px rgba(88,101,242,0);} }
+  #call-modal h2 { margin-top: 18px; color: #fff; }
+  #call-modal p { color: #949ba4; margin-top: 6px; }
+  #hangup { margin-top: 26px; background: #da373c; border: none; color: #fff; font-size: 15px; padding: 12px 28px; border-radius: 24px; cursor: pointer; }
+  #hangup:hover { background: #a12d31; }
+
+  /* Modal image plein écran */
+  #img-modal { position: fixed; inset: 0; background: rgba(0,0,0,.9); display: none; align-items: center; justify-content: center; z-index: 20; cursor: zoom-out; }
+  #img-modal.open { display: flex; }
+  #img-modal img { max-width: 92vw; max-height: 92vh; border-radius: 8px; }
+
+  /* Login */
+  #login { position: fixed; inset: 0; background: #313338; display: flex; align-items: center; justify-content: center; z-index: 30; flex-direction: column; gap: 14px; }
+  #login h1 { color: #fff; margin-bottom: 8px; }
+  #pseudo-input { background: #1e1f22; border: 1px solid #5865f2; outline: none; color: #fff; padding: 12px 16px; border-radius: 8px; font-size: 16px; width: 280px; text-align: center; }
+  #login-btn { background: #5865f2; border: none; color: #fff; padding: 12px 32px; border-radius: 8px; font-size: 16px; cursor: pointer; }
+  #login-btn:hover { background: #4752c4; }
+</style>
+</head>
+<body>
+
+<div id="login">
+  <h1>Chat Studio</h1>
+  <input id="pseudo-input" placeholder="Ton pseudo..." maxlength="20" />
+  <button id="login-btn">Rejoindre le chat</button>
+</div>
+
+<div id="sidebar">
+  <h1>Chat Studio</h1>
+  <div id="channels"></div>
+</div>
+
+<div id="main">
+  <div id="chat-header">
+    <span class="hash">#</span><span id="channel-name">général</span>
+    <button id="call-btn">📞 Appeler</button>
+  </div>
+  <div id="messages"></div>
+  <div id="composer">
+    <div id="composer-inner">
+      <button id="attach-btn" title="Envoyer une image">＋</button>
+      <input type="file" id="file-input" accept="image/*" hidden />
+      <input id="msg-input" placeholder="Envoyer un message..." maxlength="1000" />
+      <button id="send-btn" title="Envoyer">➤</button>
+    </div>
+  </div>
+</div>
+
+<div id="call-modal">
+  <div class="big-avatar">📞</div>
+  <h2>Appel en cours...</h2>
+  <p id="call-status">Connexion avec ton pote...</p>
+  <button id="hangup">Raccrocher</button>
+</div>
+
+<div id="img-modal"><img id="img-modal-src" alt="" /></div>
+
+<script>
+(function () {
+  var CHANNELS = ["général", "images", "blabla"];
+  var COLORS = ["#5865f2", "#57f287", "#fee75c", "#eb459e", "#ed4245", "#f47b20", "#1abc9c"];
+  var pseudo = null;
+  var currentChannel = "général";
+
+  var login = document.getElementById("login");
+  var pseudoInput = document.getElementById("pseudo-input");
+  var messagesEl = document.getElementById("messages");
+  var input = document.getElementById("msg-input");
+  var channelsEl = document.getElementById("channels");
+
+  function colorFor(name) {
+    var h = 0;
+    for (var i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % 997;
+    return COLORS[h % COLORS.length];
+  }
+
+  function loadMessages(ch) {
+    try { return JSON.parse(localStorage.getItem("chatstudio_" + ch)) || []; }
+    catch (e) { return []; }
+  }
+  function saveMessages(ch, msgs) {
+    localStorage.setItem("chatstudio_" + ch, JSON.stringify(msgs));
+  }
+
+  function renderChannels() {
+    channelsEl.innerHTML = "";
+    CHANNELS.forEach(function (ch) {
+      var div = document.createElement("div");
+      div.className = "channel" + (ch === currentChannel ? " active" : "");
+      div.innerHTML = '<span class="hash">#</span>' + ch;
+      div.onclick = function () {
+        currentChannel = ch;
+        document.getElementById("channel-name").textContent = ch;
+        renderChannels();
+        renderMessages();
+      };
+      channelsEl.appendChild(div);
+    });
+  }
+
+  function renderMessages() {
+    var msgs = loadMessages(currentChannel);
+    messagesEl.innerHTML = "";
+    msgs.forEach(function (m) {
+      var div = document.createElement("div");
+      div.className = "msg";
+      var av = document.createElement("div");
+      av.className = "avatar";
+      av.style.background = colorFor(m.author);
+      av.textContent = m.author.charAt(0).toUpperCase();
+      var body = document.createElement("div");
+      body.className = "msg-body";
+      var head = document.createElement("div");
+      head.className = "msg-head";
+      head.innerHTML = '<span class="msg-author" style="color:' + colorFor(m.author) + '">' + escapeHtml(m.author) + "</span>" +
+        '<span class="msg-time">' + m.time + "</span>";
+      body.appendChild(head);
+      if (m.text) {
+        var t = document.createElement("div");
+        t.className = "msg-text";
+        t.textContent = m.text;
+        body.appendChild(t);
+      }
+      if (m.image) {
+        var img = document.createElement("img");
+        img.className = "msg-img";
+        img.src = m.image;
+        img.onclick = function () {
+          document.getElementById("img-modal-src").src = m.image;
+          document.getElementById("img-modal").classList.add("open");
+        };
+        body.appendChild(img);
+      }
+      div.appendChild(av);
+      div.appendChild(body);
+      messagesEl.appendChild(div);
+    });
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function send(text, image) {
+    if (!text && !image) return;
+    var msgs = loadMessages(currentChannel);
+    var now = new Date();
+    msgs.push({
+      author: pseudo,
+      text: text || "",
+      image: image || null,
+      time: now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })
+    });
+    saveMessages(currentChannel, msgs);
+    renderMessages();
+  }
+
+  document.getElementById("login-btn").onclick = function () {
+    var p = pseudoInput.value.trim();
+    if (!p) { pseudoInput.focus(); return; }
+    pseudo = p;
+    login.style.display = "none";
+    renderChannels();
+    renderMessages();
+    input.focus();
+  };
+  pseudoInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") document.getElementById("login-btn").click();
+  });
+
+  document.getElementById("send-btn").onclick = function () {
+    send(input.value.trim(), null);
+    input.value = "";
+    input.focus();
+  };
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { send(input.value.trim(), null); input.value = ""; }
+  });
+
+  document.getElementById("attach-btn").onclick = function () {
+    document.getElementById("file-input").click();
+  };
+  document.getElementById("file-input").addEventListener("change", function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      send("", reader.result);
+      document.getElementById("file-input").value = "";
+    };
+    reader.readAsDataURL(file);
+  });
+
+  var callModal = document.getElementById("call-modal");
+  document.getElementById("call-btn").onclick = function () {
+    callModal.classList.add("open");
+    document.getElementById("call-status").textContent = "Connexion avec ton pote...";
+    setTimeout(function () {
+      document.getElementById("call-status").textContent = "En ligne ! (appel simulé)";
+    }, 1800);
+  };
+  document.getElementById("hangup").onclick = function () {
+    callModal.classList.remove("open");
+  };
+
+  document.getElementById("img-modal").onclick = function () {
+    this.classList.remove("open");
+  };
+})();
+</script>
+</body>
+</html>
