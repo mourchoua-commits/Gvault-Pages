@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "4729cfff0964abef538a852ea06926924171338f",
+  "parentSha": "c68e8227f85af72b38aa7ae525d2cd7fdd67ec18",
+  "committedAt": "2026-11-18T20:46:35+01:00",
+  "summary": {
+    "subject": "Chat Studio v3 : chat P2P temps réel, appels WebRTC, réactions, typing, notifications, avatar perso",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 426,
+    "deletions": 183,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "FULL",
+    "changedFiles": 1,
+    "additions": 426,
+    "deletions": 183,
+    "magnitude": 609,
+    "committedAt": "2026-11-18T20:46:35+01:00",
+    "parentSha": "c68e8227f85af72b38aa7ae525d2cd7fdd67ec18"
+  },
+  "pulseKey": "CTP1:4729cfff0964abef538a852ea06926924171338f:a7f758303b99349b",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "72d9c57ed6c6204c39f940cd0c516d7b212c44ce3c503264b123399bf55274af",
+  "typedKeys": {
+    "commit": "gitc:4729cfff0964abef538a852ea06926924171338f",
+    "parent": "gitc:c68e8227f85af72b38aa7ae525d2cd7fdd67ec18",
+    "pulse": "ctp1:4729cfff0964abef538a852ea06926924171338f:a7f758303b99349b",
+    "translation": "cttrans:72d9c57ed6c6204c39f940cd0c516d7b212c44ce3c503264b123399bf55274af",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "4729cfff0964abef538a852ea06926924171338f",
+    "parentSha": "c68e8227f85af72b38aa7ae525d2cd7fdd67ec18",
+    "committedAt": "2026-11-18T20:46:35+01:00",
+    "summary": {
+      "subject": "Chat Studio v3 : chat P2P temps réel, appels WebRTC, réactions, typing, notifications, avatar perso",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 426,
+      "deletions": 183,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "FULL",
+      "changedFiles": 1,
+      "additions": 426,
+      "deletions": 183,
+      "magnitude": 609,
+      "committedAt": "2026-11-18T20:46:35+01:00",
+      "parentSha": "c68e8227f85af72b38aa7ae525d2cd7fdd67ec18"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/4729cfff0964abef538a852ea06926924171338f.json",
+      "vfsKey": "CTP1:4729cfff0964abef538a852ea06926924171338f:a7f758303b99349b",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/4729cfff0964abef538a852ea06926924171338f.json"
+}
