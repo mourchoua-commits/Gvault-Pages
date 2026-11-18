@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "9a0f4a91ccc2a563e1c1224d917b95b0db357f7d",
+  "parentSha": "7194cd0d96dc0ad5085a21dc188c4d3d2b304a61",
+  "committedAt": "2026-11-18T20:40:42+01:00",
+  "summary": {
+    "subject": "Chat Studio v2 : responsive mobile/tablette, menu tiroir, pseudo mémorisé",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 83,
+    "deletions": 36,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 83,
+    "deletions": 36,
+    "magnitude": 119,
+    "committedAt": "2026-11-18T20:40:42+01:00",
+    "parentSha": "7194cd0d96dc0ad5085a21dc188c4d3d2b304a61"
+  },
+  "pulseKey": "CTP1:9a0f4a91ccc2a563e1c1224d917b95b0db357f7d:0ded381afff28685",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "6bdf0252e6b4c2dfeb740044fbfb08555d05122fe211b25edb53fa23f0b2c00d",
+  "typedKeys": {
+    "commit": "gitc:9a0f4a91ccc2a563e1c1224d917b95b0db357f7d",
+    "parent": "gitc:7194cd0d96dc0ad5085a21dc188c4d3d2b304a61",
+    "pulse": "ctp1:9a0f4a91ccc2a563e1c1224d917b95b0db357f7d:0ded381afff28685",
+    "translation": "cttrans:6bdf0252e6b4c2dfeb740044fbfb08555d05122fe211b25edb53fa23f0b2c00d",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "9a0f4a91ccc2a563e1c1224d917b95b0db357f7d",
+    "parentSha": "7194cd0d96dc0ad5085a21dc188c4d3d2b304a61",
+    "committedAt": "2026-11-18T20:40:42+01:00",
+    "summary": {
+      "subject": "Chat Studio v2 : responsive mobile/tablette, menu tiroir, pseudo mémorisé",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 83,
+      "deletions": 36,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 83,
+      "deletions": 36,
+      "magnitude": 119,
+      "committedAt": "2026-11-18T20:40:42+01:00",
+      "parentSha": "7194cd0d96dc0ad5085a21dc188c4d3d2b304a61"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/9a0f4a91ccc2a563e1c1224d917b95b0db357f7d.json",
+      "vfsKey": "CTP1:9a0f4a91ccc2a563e1c1224d917b95b0db357f7d:0ded381afff28685",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/9a0f4a91ccc2a563e1c1224d917b95b0db357f7d.json"
+}
