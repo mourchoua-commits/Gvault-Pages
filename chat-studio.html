@@ -1,70 +1,89 @@
-
 <!doctype html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Chat Studio</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-  body { background: #313338; color: #dbdee1; height: 100vh; display: flex; overflow: hidden; }
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body { background: #313338; color: #dbdee1; height: 100dvh; display: flex; overflow: hidden; }
 
   /* Sidebar salons */
-  #sidebar { width: 240px; background: #2b2d31; display: flex; flex-direction: column; }
+  #sidebar { width: 240px; background: #2b2d31; display: flex; flex-direction: column; flex-shrink: 0; transition: transform .25s ease; z-index: 5; }
   #sidebar h1 { font-size: 16px; padding: 16px; color: #fff; border-bottom: 1px solid #1e1f22; box-shadow: 0 1px 2px rgba(0,0,0,.3); }
-  .channel { padding: 8px 12px; margin: 2px 8px; border-radius: 6px; cursor: pointer; color: #949ba4; font-size: 15px; }
+  .channel { padding: 10px 12px; margin: 2px 8px; border-radius: 6px; cursor: pointer; color: #949ba4; font-size: 15px; user-select: none; }
   .channel:hover { background: #35373c; color: #fff; }
   .channel.active { background: #404249; color: #fff; }
   .channel .hash { opacity: .6; margin-right: 4px; }
+  #overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; z-index: 4; }
 
   /* Zone de chat */
-  #main { flex: 1; display: flex; flex-direction: column; }
-  #chat-header { padding: 12px 16px; border-bottom: 1px solid #1e1f22; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.3); }
+  #main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  #chat-header { padding: 10px 12px; border-bottom: 1px solid #1e1f22; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.3); }
   #chat-header .hash { color: #949ba4; }
-  #call-btn { margin-left: auto; background: #5865f2; border: none; color: #fff; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  #burger { display: none; background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; padding: 4px 8px; min-width: 44px; min-height: 44px; }
+  #call-btn { margin-left: auto; background: #5865f2; border: none; color: #fff; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 14px; min-height: 40px; white-space: nowrap; }
   #call-btn:hover { background: #4752c4; }
 
-  #messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  #messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; overscroll-behavior: contain; }
   .msg { display: flex; gap: 12px; }
   .avatar { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; font-size: 16px; }
-  .msg-body { min-width: 0; }
-  .msg-head { display: flex; align-items: baseline; gap: 8px; }
-  .msg-author { font-weight: 600; color: #fff; font-size: 15px; }
+  .msg-body { min-width: 0; flex: 1; }
+  .msg-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .msg-author { font-weight: 600; font-size: 15px; }
   .msg-time { font-size: 11px; color: #949ba4; }
-  .msg-text { font-size: 15px; word-wrap: break-word; }
-  .msg-img { max-width: 420px; max-height: 300px; border-radius: 8px; margin-top: 6px; cursor: pointer; display: block; }
+  .msg-text { font-size: 15px; word-wrap: break-word; overflow-wrap: anywhere; }
+  .msg-img { max-width: min(420px, 100%); max-height: 300px; border-radius: 8px; margin-top: 6px; cursor: pointer; display: block; }
 
   /* Barre de saisie */
-  #composer { padding: 0 16px 20px; }
-  #composer-inner { background: #383a40; border-radius: 8px; display: flex; align-items: center; padding: 4px 10px; gap: 8px; }
-  #attach-btn { background: none; border: none; color: #b5bac1; font-size: 22px; cursor: pointer; padding: 6px; }
-  #attach-btn:hover { color: #fff; }
-  #msg-input { flex: 1; background: none; border: none; outline: none; color: #dbdee1; font-size: 15px; padding: 10px 4px; }
+  #composer { padding: 0 16px calc(16px + env(safe-area-inset-bottom)); }
+  #composer-inner { background: #383a40; border-radius: 8px; display: flex; align-items: center; padding: 4px 10px; gap: 4px; }
+  #attach-btn, #send-btn { background: none; border: none; color: #b5bac1; font-size: 22px; cursor: pointer; min-width: 44px; min-height: 44px; }
+  #attach-btn:hover, #send-btn:hover { color: #fff; }
+  #msg-input { flex: 1; background: none; border: none; outline: none; color: #dbdee1; font-size: 16px; padding: 10px 4px; min-width: 0; }
   #msg-input::placeholder { color: #6d6f78; }
-  #send-btn { background: none; border: none; color: #b5bac1; font-size: 20px; cursor: pointer; padding: 6px; }
-  #send-btn:hover { color: #fff; }
 
   /* Modal appel */
-  #call-modal { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 10; }
+  #call-modal { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 10; padding: 20px; text-align: center; }
   #call-modal.open { display: flex; }
   #call-modal .big-avatar { width: 110px; height: 110px; border-radius: 50%; background: #5865f2; display: flex; align-items: center; justify-content: center; font-size: 44px; font-weight: bold; color: #fff; animation: pulse 1.6s infinite; }
   @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(88,101,242,.5);} 50% { box-shadow: 0 0 0 22px rgba(88,101,242,0);} }
   #call-modal h2 { margin-top: 18px; color: #fff; }
   #call-modal p { color: #949ba4; margin-top: 6px; }
-  #hangup { margin-top: 26px; background: #da373c; border: none; color: #fff; font-size: 15px; padding: 12px 28px; border-radius: 24px; cursor: pointer; }
+  #hangup { margin-top: 26px; background: #da373c; border: none; color: #fff; font-size: 15px; padding: 12px 28px; border-radius: 24px; cursor: pointer; min-height: 44px; }
   #hangup:hover { background: #a12d31; }
 
   /* Modal image plein écran */
   #img-modal { position: fixed; inset: 0; background: rgba(0,0,0,.9); display: none; align-items: center; justify-content: center; z-index: 20; cursor: zoom-out; }
   #img-modal.open { display: flex; }
-  #img-modal img { max-width: 92vw; max-height: 92vh; border-radius: 8px; }
+  #img-modal img { max-width: 94vw; max-height: 94vh; border-radius: 8px; }
 
   /* Login */
-  #login { position: fixed; inset: 0; background: #313338; display: flex; align-items: center; justify-content: center; z-index: 30; flex-direction: column; gap: 14px; }
+  #login { position: fixed; inset: 0; background: #313338; display: flex; align-items: center; justify-content: center; z-index: 30; flex-direction: column; gap: 14px; padding: 20px; }
   #login h1 { color: #fff; margin-bottom: 8px; }
-  #pseudo-input { background: #1e1f22; border: 1px solid #5865f2; outline: none; color: #fff; padding: 12px 16px; border-radius: 8px; font-size: 16px; width: 280px; text-align: center; }
-  #login-btn { background: #5865f2; border: none; color: #fff; padding: 12px 32px; border-radius: 8px; font-size: 16px; cursor: pointer; }
+  #pseudo-input { background: #1e1f22; border: 1px solid #5865f2; outline: none; color: #fff; padding: 12px 16px; border-radius: 8px; font-size: 16px; width: min(280px, 90vw); text-align: center; }
+  #login-btn { background: #5865f2; border: none; color: #fff; padding: 12px 32px; border-radius: 8px; font-size: 16px; cursor: pointer; min-height: 44px; }
   #login-btn:hover { background: #4752c4; }
+
+  /* Mobile : sidebar en tiroir */
+  @media (max-width: 768px) {
+    #burger { display: block; }
+    #sidebar { position: fixed; top: 0; left: 0; bottom: 0; transform: translateX(-100%); box-shadow: 2px 0 12px rgba(0,0,0,.5); }
+    #sidebar.open { transform: translateX(0); }
+    #overlay.open { display: block; }
+    #messages { padding: 12px; }
+    #composer { padding: 0 10px calc(10px + env(safe-area-inset-bottom)); }
+    #call-btn { padding: 8px 10px; font-size: 13px; }
+    .msg-img { max-height: 220px; }
+  }
+
+  /* Très petit écran */
+  @media (max-width: 380px) {
+    #call-btn { font-size: 0; }
+    #call-btn::after { content: "📞"; font-size: 18px; }
+    .avatar { width: 34px; height: 34px; font-size: 14px; }
+  }
 </style>
 </head>
 <body>
@@ -75,6 +94,8 @@
   <button id="login-btn">Rejoindre le chat</button>
 </div>
 
+<div id="overlay"></div>
+
 <div id="sidebar">
   <h1>Chat Studio</h1>
   <div id="channels"></div>
@@ -82,6 +103,7 @@
 
 <div id="main">
   <div id="chat-header">
+    <button id="burger" aria-label="Menu">☰</button>
     <span class="hash">#</span><span id="channel-name">général</span>
     <button id="call-btn">📞 Appeler</button>
   </div>
@@ -117,6 +139,19 @@
   var messagesEl = document.getElementById("messages");
   var input = document.getElementById("msg-input");
   var channelsEl = document.getElementById("channels");
+  var sidebar = document.getElementById("sidebar");
+  var overlay = document.getElementById("overlay");
+
+  function closeSidebar() {
+    sidebar.classList.remove("open");
+    overlay.classList.remove("open");
+  }
+
+  document.getElementById("burger").onclick = function () {
+    sidebar.classList.toggle("open");
+    overlay.classList.toggle("open");
+  };
+  overlay.onclick = closeSidebar;
 
   function colorFor(name) {
     var h = 0;
@@ -143,6 +178,7 @@
         document.getElementById("channel-name").textContent = ch;
         renderChannels();
         renderMessages();
+        closeSidebar();
       };
       channelsEl.appendChild(div);
     });
@@ -162,8 +198,15 @@
       body.className = "msg-body";
       var head = document.createElement("div");
       head.className = "msg-head";
-      head.innerHTML = '<span class="msg-author" style="color:' + colorFor(m.author) + '">' + escapeHtml(m.author) + "</span>" +
-        '<span class="msg-time">' + m.time + "</span>";
+      var author = document.createElement("span");
+      author.className = "msg-author";
+      author.style.color = colorFor(m.author);
+      author.textContent = m.author;
+      var time = document.createElement("span");
+      time.className = "msg-time";
+      time.textContent = m.time;
+      head.appendChild(author);
+      head.appendChild(time);
       body.appendChild(head);
       if (m.text) {
         var t = document.createElement("div");
@@ -175,6 +218,7 @@
         var img = document.createElement("img");
         img.className = "msg-img";
         img.src = m.image;
+        img.loading = "lazy";
         img.onclick = function () {
           document.getElementById("img-modal-src").src = m.image;
           document.getElementById("img-modal").classList.add("open");
@@ -186,12 +230,6 @@
       messagesEl.appendChild(div);
     });
     messagesEl.scrollTop = messagesEl.scrollHeight;
-  }
-
-  function escapeHtml(s) {
-    return s.replace(/[&<>"']/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
-    });
   }
 
   function send(text, image) {
@@ -212,6 +250,7 @@
     var p = pseudoInput.value.trim();
     if (!p) { pseudoInput.focus(); return; }
     pseudo = p;
+    localStorage.setItem("chatstudio_pseudo", p);
     login.style.display = "none";
     renderChannels();
     renderMessages();
@@ -220,6 +259,14 @@
   pseudoInput.addEventListener("keydown", function (e) {
     if (e.key === "Enter") document.getElementById("login-btn").click();
   });
+
+  var savedPseudo = localStorage.getItem("chatstudio_pseudo");
+  if (savedPseudo) {
+    pseudo = savedPseudo;
+    login.style.display = "none";
+    renderChannels();
+    renderMessages();
+  }
 
   document.getElementById("send-btn").onclick = function () {
     send(input.value.trim(), null);
