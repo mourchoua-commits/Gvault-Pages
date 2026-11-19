@@ -106,7 +106,7 @@
 
   /* Mode focus : masque le haut et la barre de saisie */
   body.focus #chat-header, body.focus #composer, body.focus #typing { display: none; }
-  body:not(.in) #main, body:not(.in) #focus-btn { display: none; }
+  body:not(.in) #main, body:not(.in) #sidebar, body:not(.in) #focus-btn { display: none; }
   #focus-btn { position: fixed; left: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 8; background: rgba(24,25,32,.85); border: 1px solid rgba(255,255,255,.12); color: #b5bac1; font-size: 18px; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; backdrop-filter: blur(8px); }
   #focus-btn:hover { color: #fff; }
 
@@ -764,7 +764,7 @@ let customFontName = null;
 let currentFontCss = "'Segoe UI', system-ui, sans-serif";
 function applyFont(css, name) {
   currentFontCss = css;
-  document.documentElement.style.setProperty("--app-font", css);
+  $("msg-input").style.fontFamily = css; // la police ne s'applique qu'à l'écriture
   localStorage.setItem("chatstudio_font", name || css);
   document.querySelectorAll("#font-row button").forEach(b => b.classList.toggle("sel", b.dataset.css === css));
 }
@@ -793,7 +793,6 @@ if (savedFont) {
   const preset = FONT_PRESETS.find(f => f.name === savedFont);
   applyFont(preset ? preset.css : savedFont, savedFont);
 } else applyFont(FONT_PRESETS[0].css, FONT_PRESETS[0].name);
-
 /* ---------- Mode focus : masque haut + barre de saisie ---------- */
 $("focus-btn").onclick = () => {
   document.body.classList.toggle("focus");
