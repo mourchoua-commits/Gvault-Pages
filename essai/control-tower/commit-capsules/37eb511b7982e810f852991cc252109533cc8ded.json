@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "37eb511b7982e810f852991cc252109533cc8ded",
+  "parentSha": "3a4c09cf81a09baf978df98b2c7cb5c0a375adb0",
+  "committedAt": "2026-11-19T18:11:17+01:00",
+  "summary": {
+    "subject": "fix(chat-studio): bouton Appeler réduit de moitié sur mobile",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "magnitude": 1,
+    "committedAt": "2026-11-19T18:11:17+01:00",
+    "parentSha": "3a4c09cf81a09baf978df98b2c7cb5c0a375adb0"
+  },
+  "pulseKey": "CTP1:37eb511b7982e810f852991cc252109533cc8ded:1f0fbba49931e232",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "d739e33cc5a7011fbd78bdb5e4d35508715d41e76eb595face020d41adb5c2e8",
+  "typedKeys": {
+    "commit": "gitc:37eb511b7982e810f852991cc252109533cc8ded",
+    "parent": "gitc:3a4c09cf81a09baf978df98b2c7cb5c0a375adb0",
+    "pulse": "ctp1:37eb511b7982e810f852991cc252109533cc8ded:1f0fbba49931e232",
+    "translation": "cttrans:d739e33cc5a7011fbd78bdb5e4d35508715d41e76eb595face020d41adb5c2e8",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "37eb511b7982e810f852991cc252109533cc8ded",
+    "parentSha": "3a4c09cf81a09baf978df98b2c7cb5c0a375adb0",
+    "committedAt": "2026-11-19T18:11:17+01:00",
+    "summary": {
+      "subject": "fix(chat-studio): bouton Appeler réduit de moitié sur mobile",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "magnitude": 1,
+      "committedAt": "2026-11-19T18:11:17+01:00",
+      "parentSha": "3a4c09cf81a09baf978df98b2c7cb5c0a375adb0"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/37eb511b7982e810f852991cc252109533cc8ded.json",
+      "vfsKey": "CTP1:37eb511b7982e810f852991cc252109533cc8ded:1f0fbba49931e232",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/37eb511b7982e810f852991cc252109533cc8ded.json"
+}
