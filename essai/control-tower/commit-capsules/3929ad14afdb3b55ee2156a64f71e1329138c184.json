@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "3929ad14afdb3b55ee2156a64f71e1329138c184",
+  "parentSha": "ec2864a1d1b7f9ad0b096f0dde2a46bca69dc89e",
+  "committedAt": "2026-11-19T17:28:10+01:00",
+  "summary": {
+    "subject": "Chat Studio: retour à la v21 (jeux P2P Pong/Morpion, sans le lien Route Studio du menu)",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1121,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "FULL",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 1121,
+    "magnitude": 1122,
+    "committedAt": "2026-11-19T17:28:10+01:00",
+    "parentSha": "ec2864a1d1b7f9ad0b096f0dde2a46bca69dc89e"
+  },
+  "pulseKey": "CTP1:3929ad14afdb3b55ee2156a64f71e1329138c184:a7aceb864cb1dcbd",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "cb2fe68da0ced64f18d0d60432af185d42da645f89db2933ee3a3bdcf88e2dbc",
+  "typedKeys": {
+    "commit": "gitc:3929ad14afdb3b55ee2156a64f71e1329138c184",
+    "parent": "gitc:ec2864a1d1b7f9ad0b096f0dde2a46bca69dc89e",
+    "pulse": "ctp1:3929ad14afdb3b55ee2156a64f71e1329138c184:a7aceb864cb1dcbd",
+    "translation": "cttrans:cb2fe68da0ced64f18d0d60432af185d42da645f89db2933ee3a3bdcf88e2dbc",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "3929ad14afdb3b55ee2156a64f71e1329138c184",
+    "parentSha": "ec2864a1d1b7f9ad0b096f0dde2a46bca69dc89e",
+    "committedAt": "2026-11-19T17:28:10+01:00",
+    "summary": {
+      "subject": "Chat Studio: retour à la v21 (jeux P2P Pong/Morpion, sans le lien Route Studio du menu)",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1121,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "FULL",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1121,
+      "magnitude": 1122,
+      "committedAt": "2026-11-19T17:28:10+01:00",
+      "parentSha": "ec2864a1d1b7f9ad0b096f0dde2a46bca69dc89e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/3929ad14afdb3b55ee2156a64f71e1329138c184.json",
+      "vfsKey": "CTP1:3929ad14afdb3b55ee2156a64f71e1329138c184:a7aceb864cb1dcbd",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/3929ad14afdb3b55ee2156a64f71e1329138c184.json"
+}
