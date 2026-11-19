@@ -272,6 +272,29 @@ function msgId() { return Date.now().toString(36) + Math.random().toString(36).s
 function loadMessages(ch) { try { return JSON.parse(localStorage.getItem("chatstudio_" + roomId + "_" + ch)) || []; } catch(e) { return []; } }
 function saveMessages(ch, msgs) { localStorage.setItem("chatstudio_" + roomId + "_" + ch, JSON.stringify(msgs.slice(-200))); }
 
+/* ---------- Portail images : IndexedDB (gros quota persistant, séparé du localStorage) ---------- */
+const imgDB = new Promise((resolve, reject) => {
+  const req = indexedDB.open("chatstudio-portail", 1);
+  req.onupgradeneeded = () => req.result.createObjectStore("images", { keyPath: "id" });
+  req.onsuccess = () => resolve(req.result);
+  req.onerror = () => reject(req.error);
+});
+function putImage(id, dataUrl) {
+  return imgDB.then(db => new Promise((res, rej) => {
+    const tx = db.transaction("images", "readwrite");
+    tx.objectStore("images").put({ id, data: dataUrl });
+    tx.oncomplete = res; tx.onerror = () => rej(tx.error);
+  })).catch(e => console.warn("portail image indisponible", e));
+}
+function getImage(id) {
+  return imgDB.then(db => new Promise((res, rej) => {
+    const tx = db.transaction("images", "readonly");
+    const rq = tx.objectStore("images").get(id);
+    rq.onsuccess = () => res(rq.result ? rq.result.data : null);
+    rq.onerror = () => rej(rq.error);
+  })).catch(() => null);
+}
+
 /* ---------- Rendu ---------- */
 function renderChannels() {
   const el = $("channels"); el.innerHTML = "";
@@ -307,10 +330,12 @@ function msgNode(m) {
   const t = document.createElement("span"); t.className = "msg-time"; t.textContent = m.time;
   head.appendChild(a); head.appendChild(t); body.appendChild(head);
   if (m.text) { const tx = document.createElement("div"); tx.className = "msg-text"; tx.textContent = m.text; body.appendChild(tx); }
-  if (m.image) {
-    const img = document.createElement("img"); img.className = "msg-img"; img.src = m.image; img.loading = "lazy";
-    img.onclick = () => { $("img-modal-src").src = m.image; $("img-modal").classList.add("open"); };
+  if (m.image || m.imgId) {
+    const img = document.createElement("img"); img.className = "msg-img"; img.loading = "lazy";
+    img.onclick = () => { if (img.src) { $("img-modal-src").src = img.src; $("img-modal").classList.add("open"); } };
     body.appendChild(img);
+    if (m.image) img.src = m.image;
+    else getImage(m.imgId).then(d => { if (d) img.src = d; });
   }
   const reacts = document.createElement("div"); reacts.className = "reactions";
   const counts = {};
@@ -442,8 +467,10 @@ function handleNet(data, id) {
 function addRemoteMessage(d) {
   const msgs = loadMessages(d.channel);
   if (msgs.find(x => x.id === d.id)) return;
-  msgs.push({ id: d.id, author: d.author, avatar: d.avatar, text: d.text, image: d.image, time: d.time, reactions: [] });
+  const m = { id: d.id, author: d.author, avatar: d.avatar, text: d.text, image: null, imgId: d.image ? d.id : null, time: d.time, reactions: [] };
+  msgs.push(m);
   saveMessages(d.channel, msgs);
+  if (d.image) putImage(d.id, d.image);
   if (d.channel === currentChannel) renderMessages();
   notify(d.author + " : " + (d.text || "📷 image"));
 }
@@ -492,17 +519,19 @@ function broadcast(d) { if (sendChat) { try { sendChat(d); } catch(e) { console.
 function send(text, image) {
   if (!text && !image || !pseudo) return;
   const now = new Date();
+  const id = msgId();
   const m = {
-    id: msgId(), author: pseudo, avatar,
-    text: text || "", image: image || null,
+    id, author: pseudo, avatar,
+    text: text || "", image: null, imgId: image ? id : null,
     time: now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
     reactions: []
   };
   const msgs = loadMessages(currentChannel);
   msgs.push(m);
-  try { saveMessages(currentChannel, msgs); } catch(e) { console.warn("localStorage plein, image gardée en mémoire seulement", e); msgsKeepAlive.push(m); }
+  try { saveMessages(currentChannel, msgs); } catch(e) { console.warn("localStorage plein", e); msgsKeepAlive.push(m); }
+  if (image) putImage(id, image); // l'image part dans le portail, pas dans localStorage
   renderMessages();
-  broadcast({ type: "msg", channel: currentChannel, ...m });
+  broadcast({ type: "msg", channel: currentChannel, ...m, image });
 }
 const msgsKeepAlive = [];
 $("send-btn").onclick = () => { send(input.value.trim(), null); input.value = ""; input.focus(); };
