@@ -121,6 +121,12 @@
   #font-row button.sel { border-color: #5865f2; background: rgba(88,101,242,.3); color: #fff; }
   #font-upload { color: #8b9bff; font-size: 12px; cursor: pointer; text-decoration: underline; width: 100%; text-align: center; }
 
+  /* Couleurs d'écriture */
+  #color-row { display: flex; gap: 6px; align-items: center; justify-content: center; }
+  #color-row button { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,.25); cursor: pointer; padding: 0; }
+  #color-row button.sel { border-color: #fff; box-shadow: 0 0 8px rgba(255,255,255,.6); }
+  #color-custom { width: 26px; height: 26px; border: none; background: none; cursor: pointer; padding: 0; }
+
   @media (max-width: 768px) {
     #burger { display: block; }
     #sidebar { position: fixed; top: 0; left: 0; bottom: 0; transform: translateX(-100%); box-shadow: 2px 0 12px rgba(0,0,0,.6); }
@@ -153,6 +159,8 @@
     <input id="pseudo-input" placeholder="Ton pseudo..." maxlength="20" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
     <div id="font-row"></div>
     <label id="font-upload">📁 Importer une police (dafont .ttf/.otf/.woff)<input type="file" id="font-input" accept=".ttf,.otf,.woff,.woff2" hidden /></label>
+    <div id="color-row"></div>
+    <input type="color" id="color-custom" value="#dbdee1" title="Couleur perso" />
     <button id="login-btn">Rejoindre le salon</button>
     <div id="room-list-wrap">
       <h3>Salons ouverts</h3>
@@ -354,6 +362,7 @@ function msgNode(m) {
   const body = document.createElement("div");
   body.className = "msg-body";
   if (m.font) body.style.fontFamily = m.font; // chaque message garde la police de son auteur
+  if (m.color) body.style.color = m.color; // et la couleur d'écriture de son auteur
   const head = document.createElement("div"); head.className = "msg-head";
   const a = document.createElement("span"); a.className = "msg-author"; a.style.color = ac; a.textContent = m.author;
   if (m.font) a.style.fontFamily = m.font;
@@ -467,19 +476,19 @@ async function connectNet() {
     [sendSignal, onSignal] = room.makeAction("signal");
     room.onPeerJoin(id => {
       peers[id] = peers[id] || {};
-      sendChat({ type: "hello", pseudo, avatar, font: currentFontCss }, id);
+      sendChat({ type: "hello", pseudo, avatar, font: currentFontCss, color: currentColorCss }, id);
       renderPeers();
     });
     room.onPeerLeave(id => { delete peers[id]; closePeer(id); renderPeers(); });
     onChat((data, id) => handleNet(data, id));
     onSignal((data, id) => handleSignal(data, id));
-    sendChat({ type: "hello", pseudo, avatar, font: currentFontCss });
+    sendChat({ type: "hello", pseudo, avatar, font: currentFontCss, color: currentColorCss });
   } catch (e) {}
 }
 
 function handleNet(data, id) {
   if (!data) return;
-  if (data.type === "hello") { peers[id] = { pseudo: data.pseudo, avatar: data.avatar, font: data.font }; renderPeers(); }
+  if (data.type === "hello") { peers[id] = { pseudo: data.pseudo, avatar: data.avatar, font: data.font, color: data.color }; renderPeers(); }
   else if (data.type === "wizz") doWizz(data.pseudo);
   else if (data.type === "msg") addRemoteMessage(data);
   else if (data.type === "react") {
@@ -498,7 +507,7 @@ function handleNet(data, id) {
 function addRemoteMessage(d) {
   const msgs = loadMessages(d.channel);
   if (msgs.find(x => x.id === d.id)) return;
-  const m = { id: d.id, author: d.author, avatar: d.avatar, font: d.font, text: d.text, image: null, imgId: d.image ? d.id : null, time: d.time, reactions: [] };
+  const m = { id: d.id, author: d.author, avatar: d.avatar, font: d.font, color: d.color, text: d.text, image: null, imgId: d.image ? d.id : null, time: d.time, reactions: [] };
   msgs.push(m);
   saveMessages(d.channel, msgs);
   if (d.image) putImage(d.id, d.image);
@@ -552,7 +561,7 @@ function send(text, image) {
   const now = new Date();
   const id = msgId();
   const m = {
-    id, author: pseudo, avatar, font: currentFontCss,
+    id, author: pseudo, avatar, font: currentFontCss, color: currentColorCss,
     text: text || "", image: null, imgId: image ? id : null,
     time: now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
     reactions: []
@@ -693,6 +702,7 @@ function renderPeers() {
     const pn = d.querySelector(".pname");
     pn.textContent = name;
     if (p.font) pn.style.fontFamily = p.font;
+    if (p.color) pn.style.color = p.color;
     el.appendChild(d);
   });
 }
@@ -798,6 +808,26 @@ if (savedFont) {
   const preset = FONT_PRESETS.find(f => f.name === savedFont);
   applyFont(preset ? preset.css : savedFont, savedFont);
 } else applyFont(FONT_PRESETS[0].css, FONT_PRESETS[0].name);
+/* ---------- Couleur d'écriture perso ---------- */
+let currentColorCss = "#dbdee1";
+const TEXT_COLORS = ["#dbdee1", "#5865f2", "#57f287", "#fee75c", "#eb459e", "#ed4245", "#f47b20", "#1abc9c", "#ffffff", "#8b9bff"];
+function applyColor(css) {
+  currentColorCss = css;
+  $("msg-input").style.color = css;
+  localStorage.setItem("chatstudio_color", css);
+  document.querySelectorAll("#color-row button").forEach(b => b.classList.toggle("sel", b.dataset.c === css));
+  $("color-custom").value = css.length === 7 ? css : "#dbdee1";
+}
+TEXT_COLORS.forEach(c => {
+  const b = document.createElement("button");
+  b.style.background = c; b.dataset.c = c; b.title = c;
+  b.onclick = () => applyColor(c);
+  $("color-row").appendChild(b);
+});
+$("color-custom").addEventListener("input", e => applyColor(e.target.value));
+const savedColor = localStorage.getItem("chatstudio_color");
+applyColor(savedColor || TEXT_COLORS[0]);
+
 /* ---------- Mode focus : masque haut + barre de saisie ---------- */
 $("focus-btn").onclick = () => {
   document.body.classList.toggle("focus");
