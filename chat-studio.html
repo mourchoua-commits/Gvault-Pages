@@ -106,8 +106,14 @@
 
   /* Mode focus : masque le haut et la barre de saisie */
   body.focus #chat-header, body.focus #composer, body.focus #typing { display: none; }
+  body:not(.in) #main, body:not(.in) #focus-btn { display: none; }
   #focus-btn { position: fixed; left: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 8; background: rgba(24,25,32,.85); border: 1px solid rgba(255,255,255,.12); color: #b5bac1; font-size: 18px; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; backdrop-filter: blur(8px); }
   #focus-btn:hover { color: #fff; }
+
+  /* Wizz MSN */
+  #wizz-btn { background: linear-gradient(90deg,#fee75c,#f47b20); border: none; color: #1e1f22; font-weight: 700; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; min-height: 40px; white-space: nowrap; }
+  @keyframes wizz-shake { 0%,100%{transform:translate(0,0)} 20%{transform:translate(-8px,4px)} 40%{transform:translate(8px,-4px)} 60%{transform:translate(-6px,-3px)} 80%{transform:translate(6px,3px)} }
+  body.wizz #main, body.wizz #sidebar { animation: wizz-shake .5s linear; }
 
   /* Polices */
   #font-row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; max-width: 280px; align-items: center; }
@@ -175,6 +181,7 @@
     <button id="burger" aria-label="Menu">☰</button>
     <span class="hash">#</span><span id="channel-name">général</span>
     <span id="room-tag"></span>
+    <button id="wizz-btn">📳 Wizz</button>
     <button id="call-btn">📞 Appeler</button>
   </div>
   <div id="messages"></div>
@@ -271,6 +278,7 @@ window.addEventListener("popstate", () => {
 });
 function leaveToLogin() {
   pseudo = null;
+  document.body.classList.remove("in");
   if (room) { try { room.leave(); } catch(e) {} room = null; sendChat = null; }
   Object.keys(peerConnections).forEach(closePeer);
   $("call-modal").classList.remove("open");
@@ -341,6 +349,7 @@ function msgNode(m) {
   div.insertAdjacentHTML("beforeend", avatarHtml(m.avatar, "avatar"));
   const body = document.createElement("div");
   body.className = "msg-body";
+  if (m.font) body.style.fontFamily = m.font; // chaque message garde la police de son auteur
   const head = document.createElement("div"); head.className = "msg-head";
   const a = document.createElement("span"); a.className = "msg-author"; a.style.color = colorFor(m.author); a.textContent = m.author;
   const t = document.createElement("span"); t.className = "msg-time"; t.textContent = m.time;
@@ -453,19 +462,20 @@ async function connectNet() {
     [sendSignal, onSignal] = room.makeAction("signal");
     room.onPeerJoin(id => {
       peers[id] = peers[id] || {};
-      sendChat({ type: "hello", pseudo, avatar }, id);
+      sendChat({ type: "hello", pseudo, avatar, font: currentFontCss }, id);
       renderPeers();
     });
     room.onPeerLeave(id => { delete peers[id]; closePeer(id); renderPeers(); });
     onChat((data, id) => handleNet(data, id));
     onSignal((data, id) => handleSignal(data, id));
-    sendChat({ type: "hello", pseudo, avatar });
+    sendChat({ type: "hello", pseudo, avatar, font: currentFontCss });
   } catch (e) {}
 }
 
 function handleNet(data, id) {
   if (!data) return;
-  if (data.type === "hello") { peers[id] = { pseudo: data.pseudo, avatar: data.avatar }; renderPeers(); }
+  if (data.type === "hello") { peers[id] = { pseudo: data.pseudo, avatar: data.avatar, font: data.font }; renderPeers(); }
+  else if (data.type === "wizz") doWizz(data.pseudo);
   else if (data.type === "msg") addRemoteMessage(data);
   else if (data.type === "react") {
     const msgs = loadMessages(data.channel);
@@ -483,7 +493,7 @@ function handleNet(data, id) {
 function addRemoteMessage(d) {
   const msgs = loadMessages(d.channel);
   if (msgs.find(x => x.id === d.id)) return;
-  const m = { id: d.id, author: d.author, avatar: d.avatar, text: d.text, image: null, imgId: d.image ? d.id : null, time: d.time, reactions: [] };
+  const m = { id: d.id, author: d.author, avatar: d.avatar, font: d.font, text: d.text, image: null, imgId: d.image ? d.id : null, time: d.time, reactions: [] };
   msgs.push(m);
   saveMessages(d.channel, msgs);
   if (d.image) putImage(d.id, d.image);
@@ -537,7 +547,7 @@ function send(text, image) {
   const now = new Date();
   const id = msgId();
   const m = {
-    id, author: pseudo, avatar,
+    id, author: pseudo, avatar, font: currentFontCss,
     text: text || "", image: null, imgId: image ? id : null,
     time: now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
     reactions: []
@@ -652,6 +662,17 @@ $("hangup").onclick = () => {
   $("call-modal").classList.remove("open");
 };
 
+/* ---------- Wizz façon MSN ---------- */
+function doWizz(from) {
+  document.body.classList.remove("wizz");
+  void document.body.offsetWidth;
+  document.body.classList.add("wizz");
+  setTimeout(() => document.body.classList.remove("wizz"), 600);
+  beep(); setTimeout(beep, 150);
+  if (from && !document.hasFocus()) notify("📳 " + from + " t'a wizzé !");
+}
+$("wizz-btn").onclick = () => { broadcast({ type: "wizz", pseudo }); doWizz(null); };
+
 /* ---------- Peers ---------- */
 function renderPeers() {
   const el = $("peers"); el.innerHTML = "";
@@ -662,7 +683,11 @@ function renderPeers() {
   el.appendChild(me);
   Object.entries(peers).forEach(([id, p]) => {
     const d = document.createElement("div"); d.className = "peer";
-    d.innerHTML = '<span class="dot"></span><span>' + (p.avatar || "👤") + " " + (p.pseudo || "...") + "</span>";
+    const name = p.pseudo || "...";
+    d.innerHTML = '<span class="dot"></span><span>' + (p.avatar || "👤") + ' <b class="pname"></b></span>';
+    const pn = d.querySelector(".pname");
+    pn.textContent = name;
+    if (p.font) pn.style.fontFamily = p.font;
     el.appendChild(d);
   });
 }
@@ -706,6 +731,7 @@ function joinRoom() {
   if (sendLobby) sendLobby({ name: roomId, by: p });
   $("room-tag").textContent = "#" + roomId;
   $("login").style.display = "none";
+  document.body.classList.add("in");
   history.pushState({ inChat: true }, "");
   renderChannels(); renderMessages(); renderPeers();
   if (Notification.permission === "default") Notification.requestPermission();
@@ -735,7 +761,9 @@ const FONT_PRESETS = [
   { name: "Bungee", css: "'Bungee', cursive" }
 ];
 let customFontName = null;
+let currentFontCss = "'Segoe UI', system-ui, sans-serif";
 function applyFont(css, name) {
+  currentFontCss = css;
   document.documentElement.style.setProperty("--app-font", css);
   localStorage.setItem("chatstudio_font", name || css);
   document.querySelectorAll("#font-row button").forEach(b => b.classList.toggle("sel", b.dataset.css === css));
