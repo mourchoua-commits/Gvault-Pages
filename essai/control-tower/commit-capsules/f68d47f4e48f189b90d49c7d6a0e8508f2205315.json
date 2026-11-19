@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "f68d47f4e48f189b90d49c7d6a0e8508f2205315",
+  "parentSha": "be6476b44f8dc705a043d73babafb83ce33e6632",
+  "committedAt": "2026-11-19T17:10:12+01:00",
+  "summary": {
+    "subject": "route-studio: supprime le frontmatter canvas + bouton retour page d'entrée",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 4299,
+    "paths": [
+      "route-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "FULL",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 4299,
+    "magnitude": 4300,
+    "committedAt": "2026-11-19T17:10:12+01:00",
+    "parentSha": "be6476b44f8dc705a043d73babafb83ce33e6632"
+  },
+  "pulseKey": "CTP1:f68d47f4e48f189b90d49c7d6a0e8508f2205315:8d8fa91709a84d7f",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "0f4b805f8c55e20bcd78d9d74660a010212bfb75ca123ae784344d0a1b4ff12c",
+  "typedKeys": {
+    "commit": "gitc:f68d47f4e48f189b90d49c7d6a0e8508f2205315",
+    "parent": "gitc:be6476b44f8dc705a043d73babafb83ce33e6632",
+    "pulse": "ctp1:f68d47f4e48f189b90d49c7d6a0e8508f2205315:8d8fa91709a84d7f",
+    "translation": "cttrans:0f4b805f8c55e20bcd78d9d74660a010212bfb75ca123ae784344d0a1b4ff12c",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "f68d47f4e48f189b90d49c7d6a0e8508f2205315",
+    "parentSha": "be6476b44f8dc705a043d73babafb83ce33e6632",
+    "committedAt": "2026-11-19T17:10:12+01:00",
+    "summary": {
+      "subject": "route-studio: supprime le frontmatter canvas + bouton retour page d'entrée",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 4299,
+      "paths": [
+        "route-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "FULL",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 4299,
+      "magnitude": 4300,
+      "committedAt": "2026-11-19T17:10:12+01:00",
+      "parentSha": "be6476b44f8dc705a043d73babafb83ce33e6632"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/f68d47f4e48f189b90d49c7d6a0e8508f2205315.json",
+      "vfsKey": "CTP1:f68d47f4e48f189b90d49c7d6a0e8508f2205315:8d8fa91709a84d7f",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/f68d47f4e48f189b90d49c7d6a0e8508f2205315.json"
+}
