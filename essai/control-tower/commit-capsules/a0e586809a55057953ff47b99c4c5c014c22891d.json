@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "a0e586809a55057953ff47b99c4c5c014c22891d",
+  "parentSha": "de93928d1d8e2ebdc66bf5216d26b6d2e4a5b82c",
+  "committedAt": "2026-11-19T21:39:30+01:00",
+  "summary": {
+    "subject": "Ajout des CGU officielles du Gvault (personne n'exploite personne)",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 32,
+    "deletions": 0,
+    "paths": [
+      "CGU.md"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 32,
+    "deletions": 0,
+    "magnitude": 32,
+    "committedAt": "2026-11-19T21:39:30+01:00",
+    "parentSha": "de93928d1d8e2ebdc66bf5216d26b6d2e4a5b82c"
+  },
+  "pulseKey": "CTP1:a0e586809a55057953ff47b99c4c5c014c22891d:621370c3d7fc2f12",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "a9e78c0a53297a5aa920f672ebb6ac6c96b9f172744061762447c09b8f9d313c",
+  "typedKeys": {
+    "commit": "gitc:a0e586809a55057953ff47b99c4c5c014c22891d",
+    "parent": "gitc:de93928d1d8e2ebdc66bf5216d26b6d2e4a5b82c",
+    "pulse": "ctp1:a0e586809a55057953ff47b99c4c5c014c22891d:621370c3d7fc2f12",
+    "translation": "cttrans:a9e78c0a53297a5aa920f672ebb6ac6c96b9f172744061762447c09b8f9d313c",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "a0e586809a55057953ff47b99c4c5c014c22891d",
+    "parentSha": "de93928d1d8e2ebdc66bf5216d26b6d2e4a5b82c",
+    "committedAt": "2026-11-19T21:39:30+01:00",
+    "summary": {
+      "subject": "Ajout des CGU officielles du Gvault (personne n'exploite personne)",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 32,
+      "deletions": 0,
+      "paths": [
+        "CGU.md"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 32,
+      "deletions": 0,
+      "magnitude": 32,
+      "committedAt": "2026-11-19T21:39:30+01:00",
+      "parentSha": "de93928d1d8e2ebdc66bf5216d26b6d2e4a5b82c"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/a0e586809a55057953ff47b99c4c5c014c22891d.json",
+      "vfsKey": "CTP1:a0e586809a55057953ff47b99c4c5c014c22891d:621370c3d7fc2f12",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/a0e586809a55057953ff47b99c4c5c014c22891d.json"
+}
