@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "e01bfa0027b90712791cc78bc0d29d434dba59e8",
+  "parentSha": "aafb017096f063ff48c27f9e1c053f14b104ae0e",
+  "committedAt": "2026-11-19T15:18:04+01:00",
+  "summary": {
+    "subject": "Chat Studio v16 : retour méthode image v14, salons créés/renommables (créateur only), hashtag unique par pseudo, singe enlevé",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 81,
+    "deletions": 54,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 81,
+    "deletions": 54,
+    "magnitude": 135,
+    "committedAt": "2026-11-19T15:18:04+01:00",
+    "parentSha": "aafb017096f063ff48c27f9e1c053f14b104ae0e"
+  },
+  "pulseKey": "CTP1:e01bfa0027b90712791cc78bc0d29d434dba59e8:4e6c0bfa44705893",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "6c351632a93d4884949d4e5921c29880ae11d47755650f1158865cb0373632c8",
+  "typedKeys": {
+    "commit": "gitc:e01bfa0027b90712791cc78bc0d29d434dba59e8",
+    "parent": "gitc:aafb017096f063ff48c27f9e1c053f14b104ae0e",
+    "pulse": "ctp1:e01bfa0027b90712791cc78bc0d29d434dba59e8:4e6c0bfa44705893",
+    "translation": "cttrans:6c351632a93d4884949d4e5921c29880ae11d47755650f1158865cb0373632c8",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "e01bfa0027b90712791cc78bc0d29d434dba59e8",
+    "parentSha": "aafb017096f063ff48c27f9e1c053f14b104ae0e",
+    "committedAt": "2026-11-19T15:18:04+01:00",
+    "summary": {
+      "subject": "Chat Studio v16 : retour méthode image v14, salons créés/renommables (créateur only), hashtag unique par pseudo, singe enlevé",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 81,
+      "deletions": 54,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 81,
+      "deletions": 54,
+      "magnitude": 135,
+      "committedAt": "2026-11-19T15:18:04+01:00",
+      "parentSha": "aafb017096f063ff48c27f9e1c053f14b104ae0e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/e01bfa0027b90712791cc78bc0d29d434dba59e8.json",
+      "vfsKey": "CTP1:e01bfa0027b90712791cc78bc0d29d434dba59e8:4e6c0bfa44705893",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/e01bfa0027b90712791cc78bc0d29d434dba59e8.json"
+}
