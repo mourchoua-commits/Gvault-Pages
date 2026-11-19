@@ -4,9 +4,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Orbitron:wght@600&family=Roboto+Mono&family=Dancing+Script:wght@600&family=Bungee&display=swap" rel="stylesheet" />
 <title>Chat Studio</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--app-font, 'Segoe UI', system-ui, -apple-system, sans-serif); -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; }
   body { background: #050508; color: #dbdee1; height: 100dvh; display: flex; overflow: hidden; }
   #bg { position: fixed; inset: 0; z-index: 0; }
@@ -102,6 +104,17 @@
   #create-room-input { flex: 1; background: rgba(0,0,0,.5); border: 1px solid rgba(255,255,255,.15); outline: none; color: #fff; padding: 10px 12px; border-radius: 8px; font-size: 15px; min-width: 0; }
   #create-room-btn { background: rgba(87,242,135,.15); border: 1px solid #57f287; color: #57f287; border-radius: 8px; padding: 10px 14px; cursor: pointer; font-size: 14px; white-space: nowrap; }
 
+  /* Mode focus : masque le haut et la barre de saisie */
+  body.focus #chat-header, body.focus #composer, body.focus #typing { display: none; }
+  #focus-btn { position: fixed; left: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 8; background: rgba(24,25,32,.85); border: 1px solid rgba(255,255,255,.12); color: #b5bac1; font-size: 18px; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; backdrop-filter: blur(8px); }
+  #focus-btn:hover { color: #fff; }
+
+  /* Polices */
+  #font-row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; max-width: 280px; align-items: center; }
+  #font-row button { background: rgba(255,255,255,.06); border: 2px solid transparent; color: #dbdee1; border-radius: 8px; padding: 6px 10px; font-size: 13px; cursor: pointer; min-height: 36px; }
+  #font-row button.sel { border-color: #5865f2; background: rgba(88,101,242,.3); color: #fff; }
+  #font-upload { color: #8b9bff; font-size: 12px; cursor: pointer; text-decoration: underline; width: 100%; text-align: center; }
+
   @media (max-width: 768px) {
     #burger { display: block; }
     #sidebar { position: fixed; top: 0; left: 0; bottom: 0; transform: translateX(-100%); box-shadow: 2px 0 12px rgba(0,0,0,.6); }
@@ -132,6 +145,8 @@
     <div id="avatar-grid"></div>
     <label id="avatar-upload">📷 ou upload une photo<input type="file" id="avatar-input" accept="image/*" hidden /></label>
     <input id="pseudo-input" placeholder="Ton pseudo..." maxlength="20" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
+    <div id="font-row"></div>
+    <label id="font-upload">📁 Importer une police (dafont .ttf/.otf/.woff)<input type="file" id="font-input" accept=".ttf,.otf,.woff,.woff2" hidden /></label>
     <button id="login-btn">Rejoindre le salon</button>
     <div id="room-list-wrap">
       <h3>Salons ouverts</h3>
@@ -186,6 +201,7 @@
 
 <div id="videos"></div>
 <div id="img-modal"><img id="img-modal-src" alt="" /></div>
+<button id="focus-btn" title="Masquer/afficher le haut et la barre d'écriture">🙈</button>
 
 <script type="module">
 const CHANNELS = ["général", "images", "blabla"];
@@ -708,6 +724,53 @@ if (savedAvatar) {
   if (avatar.startsWith("data:")) $("avatar-preview").innerHTML = `<img src="${avatar}"/>`;
   else { $("avatar-preview").textContent = avatar; document.querySelectorAll("#avatar-grid button").forEach(x => { if (x.textContent === avatar) x.classList.add("sel"); }); }
 }
+
+/* ---------- Polices ---------- */
+const FONT_PRESETS = [
+  { name: "Classique", css: "'Segoe UI', system-ui, sans-serif" },
+  { name: "Pacifico", css: "'Pacifico', cursive" },
+  { name: "Orbitron", css: "'Orbitron', sans-serif" },
+  { name: "Roboto Mono", css: "'Roboto Mono', monospace" },
+  { name: "Dancing", css: "'Dancing Script', cursive" },
+  { name: "Bungee", css: "'Bungee', cursive" }
+];
+let customFontName = null;
+function applyFont(css, name) {
+  document.documentElement.style.setProperty("--app-font", css);
+  localStorage.setItem("chatstudio_font", name || css);
+  document.querySelectorAll("#font-row button").forEach(b => b.classList.toggle("sel", b.dataset.css === css));
+}
+FONT_PRESETS.forEach(f => {
+  const b = document.createElement("button");
+  b.textContent = f.name; b.dataset.css = f.css; b.style.fontFamily = f.css;
+  b.onclick = () => { customFontName = null; applyFont(f.css, f.name); };
+  $("font-row").appendChild(b);
+});
+$("font-input").addEventListener("change", e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    customFontName = "MaPolice-" + Date.now();
+    const face = new FontFace(customFontName, r.result);
+    face.load().then(loaded => {
+      document.fonts.add(loaded);
+      applyFont("'" + customFontName + "', sans-serif", "custom");
+    }).catch(() => alert("Police non reconnue (essaie .ttf ou .woff)"));
+  };
+  r.readAsArrayBuffer(f);
+  e.target.value = "";
+});
+const savedFont = localStorage.getItem("chatstudio_font");
+if (savedFont) {
+  const preset = FONT_PRESETS.find(f => f.name === savedFont);
+  applyFont(preset ? preset.css : savedFont, savedFont);
+} else applyFont(FONT_PRESETS[0].css, FONT_PRESETS[0].name);
+
+/* ---------- Mode focus : masque haut + barre de saisie ---------- */
+$("focus-btn").onclick = () => {
+  document.body.classList.toggle("focus");
+  $("focus-btn").textContent = document.body.classList.contains("focus") ? "👁" : "🙈";
+};
 
 renderRoomList();
 connectLobby();
