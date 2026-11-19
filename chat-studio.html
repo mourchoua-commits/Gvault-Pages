@@ -935,6 +935,7 @@ $("logout-btn").onclick = () => leaveToLogin();
 
 /* ---------- Mini-jeux ---------- */
 const GAMES_TOOLS = [
+  ["../route-studio.html", "🗺️ Route Studio"],
   ["blop-r4", "🎈 Blop R4"],
   ["blop-r5", "🎈 Blop R5"],
   ["blop-r6", "🎈 Blop R6"],
@@ -953,7 +954,9 @@ const menu = $("games-menu");
 const hTools = document.createElement("h4"); hTools.textContent = "🛠 Outils du Gvault"; menu.appendChild(hTools);
 GAMES_TOOLS.forEach(([slug, label]) => {
   const a = document.createElement("a");
-  a.href = "https://mourchoua-commits.github.io/Gvault-Pages/essai/" + slug + "/index.html";
+  a.href = slug.startsWith("../")
+    ? "https://mourchoua-commits.github.io/Gvault-Pages/route-studio.html"
+    : "https://mourchoua-commits.github.io/Gvault-Pages/essai/" + slug + "/index.html";
   a.target = "_blank"; a.rel = "noopener"; a.textContent = label;
   menu.appendChild(a);
 });
