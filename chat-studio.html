@@ -330,8 +330,11 @@ requestAnimationFrame(animateBg);
 /* ---------- Navigation ---------- */
 function leaveToLogin() {
   pseudo = null;
-  document.body.classList.remove("in");
-  if (room) { try { room.leave(); } catch(e) {} room = null; sendChat = null; }
+  document.body.classList.remove("in", "wizz", "invert");
+  peers = {};
+  Object.keys(typingUsers).forEach(k => delete typingUsers[k]);
+  $("typing").textContent = "";
+  if (room) { try { room.leave(); } catch(e) {} room = null; sendChat = null; onChat = null; sendSignal = null; onSignal = null; }
   Object.keys(peerConnections).forEach(closePeer);
   $("call-modal").classList.remove("open");
   $("login").style.display = "flex";
@@ -659,6 +662,7 @@ $("call-btn").onclick = async () => {
 
 async function startCall(peerId, isCaller) {
   if (peerConnections[peerId]) return;
+  if (!localStream) return; // pas de micro/cam dispo -> pas d'appel
   const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
   peerConnections[peerId] = pc;
   localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
