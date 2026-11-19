@@ -131,14 +131,14 @@
     <div id="avatar-preview">😀</div>
     <div id="avatar-grid"></div>
     <label id="avatar-upload">📷 ou upload une photo<input type="file" id="avatar-input" accept="image/*" hidden /></label>
-    <input id="pseudo-input" placeholder="Ton pseudo..." maxlength="20" />
+    <input id="pseudo-input" placeholder="Ton pseudo..." maxlength="20" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
     <button id="login-btn">Rejoindre le salon</button>
     <div id="room-list-wrap">
       <h3>Salons ouverts</h3>
       <div id="room-list"></div>
     </div>
     <div id="create-row">
-      <input id="create-room-input" placeholder="Nom du nouveau salon..." maxlength="30" />
+      <input id="create-room-input" placeholder="Nom du nouveau salon..." maxlength="30" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
       <button id="create-room-btn">Créer</button>
     </div>
     <div id="net-status">connexion au réseau...</div>
@@ -168,7 +168,7 @@
     <div id="composer-inner">
       <button id="attach-btn" title="Envoyer une image">＋</button>
       <input type="file" id="file-input" accept="image/*" hidden />
-      <input id="msg-input" placeholder="Envoyer un message..." maxlength="1000" />
+      <input id="msg-input" placeholder="Envoyer un message..." maxlength="1000" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
       <button id="send-btn" title="Envoyer">➤</button>
     </div>
   </div>
@@ -486,7 +486,7 @@ function showTyping(name) {
   }, 3500);
 }
 
-function broadcast(d) { if (sendChat) sendChat(d); }
+function broadcast(d) { if (sendChat) { try { sendChat(d); } catch(e) { console.warn("broadcast échoué", e); } } }
 
 /* ---------- Envoi ---------- */
 function send(text, image) {
@@ -499,7 +499,9 @@ function send(text, image) {
     reactions: []
   };
   const msgs = loadMessages(currentChannel);
-  msgs.push(m); saveMessages(currentChannel, msgs); renderMessages();
+  msgs.push(m);
+  try { saveMessages(currentChannel, msgs); } catch(e) { console.warn("localStorage plein", e); }
+  renderMessages();
   broadcast({ type: "msg", channel: currentChannel, ...m });
 }
 $("send-btn").onclick = () => { send(input.value.trim(), null); input.value = ""; input.focus(); };
@@ -507,8 +509,22 @@ input.addEventListener("keydown", e => { if (e.key === "Enter") { send(input.val
 $("attach-btn").onclick = () => $("file-input").click();
 $("file-input").addEventListener("change", e => {
   const f = e.target.files[0]; if (!f) return;
+  $("file-input").value = "";
   const r = new FileReader();
-  r.onload = () => { send("", r.result); $("file-input").value = ""; };
+  r.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      // compression : max 900px, JPEG 70% -> tient dans les limites P2P et localStorage
+      const scale = Math.min(1, 900 / Math.max(img.width, img.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width * scale);
+      c.height = Math.round(img.height * scale);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      send("", c.toDataURL("image/jpeg", 0.7));
+    };
+    img.onerror = () => send("", r.result);
+    img.src = r.result;
+  };
   r.readAsDataURL(f);
 });
 
