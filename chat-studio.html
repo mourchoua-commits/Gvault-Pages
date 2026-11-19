@@ -123,6 +123,18 @@
   #games-menu h4 { color: #949ba4; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; padding: 2px 6px 6px; }
   #games-menu a { color: #dbdee1; text-decoration: none; padding: 8px 10px; border-radius: 6px; font-size: 14px; display: flex; gap: 8px; align-items: center; }
   #games-menu a:hover { background: rgba(88,101,242,.3); color: #fff; }
+
+  /* Modale de jeu */
+  #game-modal { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 25; gap: 10px; padding: 16px; }
+  #game-modal.open { display: flex; }
+  #game-modal h2 { color: #fff; font-size: 20px; }
+  #game-area { background: #14151c; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 12px; display: flex; align-items: center; justify-content: center; }
+  #game-area canvas { max-width: 92vw; max-height: 62vh; border-radius: 8px; }
+  #ttt-board { display: grid; grid-template-columns: repeat(3, 90px); grid-template-rows: repeat(3, 90px); gap: 6px; }
+  #ttt-board button { font-size: 40px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 10px; color: #fff; cursor: pointer; }
+  #ttt-board button:hover { background: rgba(88,101,242,.3); }
+  #game-status { color: #949ba4; font-size: 14px; min-height: 20px; }
+  #game-close { background: #da373c; border: none; color: #fff; padding: 10px 24px; border-radius: 20px; cursor: pointer; font-size: 14px; min-height: 40px; }
   @keyframes wizz-shake { 0%,100%{transform:translate(0,0)} 20%{transform:translate(-8px,4px)} 40%{transform:translate(8px,-4px)} 60%{transform:translate(-6px,-3px)} 80%{transform:translate(6px,3px)} }
   body.wizz #main, body.wizz #sidebar { animation: wizz-shake .5s linear; }
 
@@ -235,6 +247,12 @@
 
 <div id="videos"></div>
 <div id="img-modal"><img id="img-modal-src" alt="" /></div>
+<div id="game-modal">
+  <h2 id="game-title">🎮</h2>
+  <div id="game-area"></div>
+  <div id="game-status"></div>
+  <button id="game-close">Quitter</button>
+</div>
 
 <script type="module">
 const DEFAULT_CHANNELS = ["général", "images", "blabla"];
@@ -577,6 +595,7 @@ function handleNet(data, id) {
     if (data.channel === currentChannel) renderMessages();
   }
   else if (data.type === "typing") showTyping(data.pseudo);
+  else if (data.type === "game") handleGame(data);
 }
 
 function addRemoteMessage(d) {
@@ -914,8 +933,8 @@ $("focus-btn").onclick = () => {
 };
 $("logout-btn").onclick = () => leaveToLogin();
 
-/* ---------- Mini-jeux du Gvault ---------- */
-const GAMES = [
+/* ---------- Mini-jeux ---------- */
+const GAMES_TOOLS = [
   ["blop-r4", "🎈 Blop R4"],
   ["blop-r5", "🎈 Blop R5"],
   ["blop-r6", "🎈 Blop R6"],
@@ -926,16 +945,158 @@ const GAMES = [
   ["gthink-actor-presentation", "🎭 Gthink Actor"],
   ["project-catalog", "📁 Project Catalog"]
 ];
-GAMES.forEach(([slug, label]) => {
+const MULTI_GAMES = [
+  ["pong", "🏓 Pong 1v1"],
+  ["morpion", "⭕ Morpion"]
+];
+const menu = $("games-menu");
+const hTools = document.createElement("h4"); hTools.textContent = "🛠 Outils du Gvault"; menu.appendChild(hTools);
+GAMES_TOOLS.forEach(([slug, label]) => {
   const a = document.createElement("a");
   a.href = "https://mourchoua-commits.github.io/Gvault-Pages/essai/" + slug + "/index.html";
-  a.target = "_blank";
-  a.rel = "noopener";
-  a.textContent = label;
-  $("games-menu").appendChild(a);
+  a.target = "_blank"; a.rel = "noopener"; a.textContent = label;
+  menu.appendChild(a);
+});
+const hMulti = document.createElement("h4"); hMulti.textContent = "🎮 Jeux à plusieurs (ce salon)"; menu.appendChild(hMulti);
+MULTI_GAMES.forEach(([id, label]) => {
+  const b = document.createElement("a");
+  b.href = "#"; b.textContent = label;
+  b.onclick = e => { e.preventDefault(); $("games-menu").classList.remove("open"); startGame(id, label); };
+  menu.appendChild(b);
 });
 $("games-btn").onclick = e => { e.stopPropagation(); $("games-menu").classList.toggle("open"); };
 document.addEventListener("click", e => { if (!e.target.closest("#games-menu") && !e.target.closest("#games-btn")) $("games-menu").classList.remove("open"); });
+
+/* ---------- Moteur de jeux P2P ---------- */
+let game = null; // {id, owner, ...}
+function startGame(id, label) {
+  if (!Object.keys(peers).length) { $("game-status").textContent = ""; alert("Il faut être au moins 2 dans le salon pour jouer !"); return; }
+  game = { id, owner: pseudo, state: null };
+  broadcast({ type: "game", action: "start", id, owner: pseudo });
+  openGame(id, label);
+}
+function openGame(id, label) {
+  $("game-title").textContent = label;
+  $("game-status").textContent = "En attente de l'adversaire...";
+  $("game-area").innerHTML = "";
+  $("game-modal").classList.add("open");
+  if (id === "morpion") initMorpion();
+  if (id === "pong") initPong();
+}
+$("game-close").onclick = () => {
+  if (game) broadcast({ type: "game", action: "quit" });
+  game = null;
+  $("game-modal").classList.remove("open");
+  stopPong();
+};
+
+function handleGame(d) {
+  if (!d || !d.action) return;
+  if (d.action === "start") {
+    if (!game) { game = { id: d.id, owner: d.owner, state: null }; openGame(d.id, d.id === "pong" ? "🏓 Pong 1v1" : "⭕ Morpion"); }
+    else if (game.id === d.id && game.owner !== d.owner) { game.owner = d.owner; $("game-status").textContent = "Partie lancée !"; }
+    return;
+  }
+  if (d.action === "quit") { if (game) { stopPong(); game = null; $("game-modal").classList.remove("open"); } return; }
+  if (!game || game.id !== d.id) return;
+  if (game.id === "morpion") gameMorpion(d);
+  if (game.id === "pong") gamePong(d);
+}
+
+/* ----- Morpion ----- */
+let ttt = null;
+function initMorpion() {
+  ttt = { board: Array(9).fill(""), turn: "X" };
+  const board = document.createElement("div"); board.id = "ttt-board";
+  ttt.board.forEach((v, i) => {
+    const b = document.createElement("button");
+    b.textContent = v;
+    b.onclick = () => {
+      if (!ttt || ttt.board[i] || ttt.turn !== mySymbol()) return;
+      broadcast({ type: "game", action: "move", id: "morpion", cell: i, sym: ttt.turn });
+      applyTttMove(i, ttt.turn);
+    };
+    board.appendChild(b);
+  });
+  $("game-area").appendChild(board);
+  updateTttStatus();
+}
+function mySymbol() { return game && game.owner === pseudo ? "X" : "O"; }
+function applyTttMove(i, sym) {
+  ttt.board[i] = sym;
+  const btns = $("ttt-board").children;
+  btns[i].textContent = sym;
+  const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  if (wins.some(w => w.every(x => ttt.board[x] === sym))) { $("game-status").textContent = "🎉 " + sym + " gagne !"; broadcast({type:"game",action:"move",id:"morpion",cell:-1,sym}); ttt = null; setTimeout(()=>{ if(game) initMorpion(); }, 2500); return; }
+  if (ttt.board.every(v => v)) { $("game-status").textContent = "Match nul !"; ttt = null; setTimeout(()=>{ if(game) initMorpion(); }, 2500); return; }
+  ttt.turn = sym === "X" ? "O" : "X";
+  updateTttStatus();
+}
+function updateTttStatus() {
+  if (!ttt) return;
+  $("game-status").textContent = ttt.turn === mySymbol() ? "À toi de jouer (" + mySymbol() + ")" : "Tour de l'adversaire (" + ttt.turn + ")";
+}
+function gameMorpion(d) {
+  if (d.action === "move") { if (d.cell >= 0 && ttt) applyTttMove(d.cell, d.sym); }
+}
+
+/* ----- Pong 1v1 ----- */
+let pong = null, pongRAF = null;
+function initPong() {
+  const c = document.createElement("canvas");
+  c.width = 640; c.height = 400; c.style.background = "#050508"; c.style.maxWidth = "92vw";
+  $("game-area").appendChild(c);
+  pong = { c, ctx: c.getContext("2d"), ball: { x: 320, y: 200, vx: 4, vy: 3 }, p1: 160, p2: 160, s1: 0, s2: 0, host: game.owner === pseudo };
+  if (pong.host) $("game-status").textContent = "Tu es le serveur : à toi de lancer ! (souris/haut-bas)";
+  else $("game-status").textContent = "Adversaire : déplace ta raquette (souris/haut-bas)";
+  c.addEventListener("mousemove", e => {
+    const r = c.getBoundingClientRect();
+    const y = (e.clientY - r.top) * (400 / r.height);
+    if (pong.host) pong.p1 = y; else pong.p2 = y;
+    broadcast({ type: "game", action: "paddle", id: "pong", y });
+  });
+  c.addEventListener("touchmove", e => {
+    e.preventDefault();
+    const r = c.getBoundingClientRect();
+    const y = (e.touches[0].clientY - r.top) * (400 / r.height);
+    if (pong.host) pong.p1 = y; else pong.p2 = y;
+    broadcast({ type: "game", action: "paddle", id: "pong", y });
+  }, { passive: false });
+  if (pong.host) pongLoop();
+  drawPong();
+}
+function pongLoop() {
+  if (!pong || !game || game.id !== "pong") return;
+  const b = pong.ball;
+  b.x += b.vx; b.y += b.vy;
+  if (b.y < 8 || b.y > 392) b.vy *= -1;
+  if (b.x < 24 && Math.abs(b.y - pong.p1) < 50) { b.vx = Math.abs(b.vx) + 0.3; b.vy += (b.y - pong.p1) * 0.08; }
+  if (b.x > 616 && Math.abs(b.y - pong.p2) < 50) { b.vx = -Math.abs(b.vx) - 0.3; b.vy += (b.y - pong.p2) * 0.08; }
+  if (b.x < 0) { pong.s2++; b.x = 320; b.y = 200; b.vx = 4; b.vy = 3; }
+  if (b.x > 640) { pong.s1++; b.x = 320; b.y = 200; b.vx = -4; b.vy = 3; }
+  broadcast({ type: "game", action: "state", id: "pong", ball: b, p1: pong.p1, p2: pong.p2, s1: pong.s1, s2: pong.s2 });
+  drawPong();
+  pongRAF = setTimeout(pongLoop, 33);
+}
+function stopPong() { if (pongRAF) clearTimeout(pongRAF); pongRAF = null; pong = null; }
+function drawPong() {
+  if (!pong) return;
+  const x = pong.ctx;
+  x.fillStyle = "#050508"; x.fillRect(0, 0, 640, 400);
+  x.strokeStyle = "rgba(255,255,255,.25)"; x.setLineDash([6, 8]); x.beginPath(); x.moveTo(320, 0); x.lineTo(320, 400); x.stroke(); x.setLineDash([]);
+  x.fillStyle = "#57f287"; x.fillRect(8, pong.p1 - 40, 12, 80);
+  x.fillStyle = "#eb459e"; x.fillRect(620, pong.p2 - 40, 12, 80);
+  x.fillStyle = "#fff"; x.beginPath(); x.arc(pong.ball.x, pong.ball.y, 7, 0, 7); x.fill();
+  x.font = "28px sans-serif"; x.fillText(pong.s1, 280, 36); x.fillText(pong.s2, 340, 36);
+}
+function gamePong(d) {
+  if (!pong) return;
+  if (d.action === "paddle") { if (pong.host) pong.p2 = d.y; else pong.p1 = d.y; drawPong(); }
+  if (d.action === "state" && !pong.host) {
+    pong.ball = d.ball; pong.p1 = d.p1; pong.p2 = d.p2; pong.s1 = d.s1; pong.s2 = d.s2;
+    drawPong();
+  }
+}
 
 renderRoomList();
 connectLobby();
