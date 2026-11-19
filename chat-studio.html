@@ -169,6 +169,7 @@
   #paint-bar .swatch { width:22px; height:22px; border-radius:50%; border:2px solid rgba(255,255,255,.25); cursor:pointer; padding:0; }
   #paint-bar .swatch.active { border-color:#fff; box-shadow:0 0 8px rgba(255,255,255,.7); }
   #paint-bar select, #paint-bar input[type=color] { background:#14151c; color:#dbdee1; border:1px solid rgba(255,255,255,.15); border-radius:8px; padding:5px 8px; font-size:13px; }
+  #paint-bar input[type=range], #world-bar input[type=range] { width:70px; accent-color:#5865f2; }
   #paint-canvas { background:#0a0a10; border:1px solid rgba(255,255,255,.15); border-radius:8px; touch-action:none; max-width:94vw; cursor:crosshair; }
   #paint-pads { display:none; grid-template-columns:repeat(6,1fr); gap:8px; width:min(420px,90vw); }
   #paint-pads.open { display:grid; }
@@ -1180,13 +1181,20 @@ function initPaint(){
   wrap.innerHTML = '<div id="paint-bar">'
     + '<button class="ptool active" data-t="pen" title="Crayon">✏️</button>'
     + '<button class="ptool" data-t="line" title="Ligne">➖</button>'
+    + '<button class="ptool" data-t="rect" title="Rectangle">▭</button>'
     + '<button class="ptool" data-t="fill" title="Remplissage">🪣</button>'
     + '<button class="ptool" data-t="erase" title="Gomme">🧽</button>'
+    + '<button class="ptool" data-t="pick" title="Pipette : prend la couleur sous le doigt">💧</button>'
     + '<span id="paint-swatches" style="display:flex;gap:4px;align-items:center;flex-wrap:wrap"></span>'
     + '<input type="color" id="paint-color" value="#5865f2" title="Couleur perso">'
+    + '<input type="range" id="paint-brush" min="1" max="3" step="1" value="1" title="Taille du pinceau">'
     + '<select id="paint-inst" title="Instrument (Route Studio)"></select>'
+    + '<button class="ptool" id="paint-undo" title="Annuler (Ctrl+Z)">↶</button>'
+    + '<button class="ptool" id="paint-redo" title="Rétablir (Ctrl+Y)">↷</button>'
     + '<button class="ptool" id="paint-play" title="Jouer le dessin">▶️ Jouer</button>'
     + '<button class="ptool" id="paint-magic" title="Palette magique">🌈 Magie</button>'
+    + '<button class="ptool" id="paint-png" title="Télécharger le dessin en PNG">⬇️ PNG</button>'
+    + '<button class="ptool" id="paint-send" title="Envoyer le dessin dans ce salon">📨 Salon</button>'
     + '<button class="ptool" id="paint-clear" title="Tout effacer">🧹</button>'
     + '</div>'
     + '<canvas id="paint-canvas" width="' + (P.cols*P.cell) + '" height="' + (P.rows*P.cell) + '"></canvas>'
@@ -1207,23 +1215,43 @@ function initPaint(){
   P.pads=pads;
   const cv=$("paint-canvas"), cx=cv.getContext("2d");
   P.cv=cv; P.cx=cx;
+  P.hist=[]; P.redo=[]; P.brush=1; $("paint-brush").value="1";
   drawPaintGrid();
-  let drawing=false, stroke=[], lineStart=null;
+  let drawing=false, stroke=[], shapeStart=null, lastC=null;
   const cellFromEvent=e=>{ const r=cv.getBoundingClientRect(); return { x:Math.max(0,Math.min(P.cols-1,Math.floor((e.clientX-r.left)/r.width*P.cols))), y:Math.max(0,Math.min(P.rows-1,Math.floor((e.clientY-r.top)/r.height*P.rows))) }; };
+  function brushCells(cx0,cy0){ const r=P.brush-1, out=[]; for(let dy=-r;dy<=r;dy++) for(let dx=-r;dx<=r;dx++){ if(dx*dx+dy*dy>r*r+(r>0?1:0)) continue; const x=cx0+dx, y=cy0+dy; if(x>=0&&x<P.cols&&y>=0&&y<P.rows) out.push({x,y}); } return out; }
+  function stamp(cx0,cy0,c){ const out=[]; for(const b of brushCells(cx0,cy0)){ if(P.grid[b.y][b.x]===c) continue; out.push({x:b.x,y:b.y,c,prev:P.grid[b.y][b.x]}); P.grid[b.y][b.x]=c; paintCell(b.x,b.y,c); } return out; }
+  function pushHist(before,after){ if((!before||!before.length)&&(!after||!after.length)) return; P.hist.push({before:before||[],after:after||[]}); if(P.hist.length>60) P.hist.shift(); P.redo.length=0; }
+  function undoPaint(){ const h=P.hist.pop(); if(!h) return; h.before.forEach(cc=>{ P.grid[cc.y][cc.x]=cc.c; paintCell(cc.x,cc.y,cc.c); }); broadcast({type:"game",action:"paint",id:"paint",cells:h.before}); P.redo.push(h); }
+  function redoPaint(){ const h=P.redo.pop(); if(!h) return; if(!h.after.length){ P.grid.forEach(r=>r.fill(null)); drawPaintGrid(); broadcast({type:"game",action:"clear",id:"paint"}); } else { h.after.forEach(cc=>{ P.grid[cc.y][cc.x]=cc.c; paintCell(cc.x,cc.y,cc.c); }); broadcast({type:"game",action:"paint",id:"paint",cells:h.after}); } P.hist.push(h); }
+  function lineCells(a,b){ const cells=[]; const dx=Math.abs(b.x-a.x), dy=Math.abs(b.y-a.y), sx=a.x<b.x?1:-1, sy=a.y<b.y?1:-1; let err=dx-dy, x=a.x, y=a.y; for(;;){ cells.push({x:x,y:y}); if(x===b.x&&y===b.y) break; const e2=2*err; if(e2>-dy){err-=dy;x+=sx;} if(e2<dx){err+=dx;y+=sy;} } return cells; }
+  function shapeCells(a,b){ if(P.tool!=="rect") return lineCells(a,b); const cells=[]; const x0=Math.min(a.x,b.x), x1=Math.max(a.x,b.x), y0=Math.min(a.y,b.y), y1=Math.max(a.y,b.y); for(let x=x0;x<=x1;x++){ cells.push({x:x,y:y0}); if(y1!==y0) cells.push({x:x,y:y1}); } for(let y=y0+1;y<y1;y++){ cells.push({x:x0,y:y}); if(x1!==x0) cells.push({x:x1,y:y}); } return cells; }
+  function fillAt(x,y,c){ const target=P.grid[y][x]; if(target===c) return; const stack=[[x,y]]; const changed=[]; while(stack.length){ const p=stack.pop(); const px=p[0], py=p[1]; if(px<0||py<0||px>=P.cols||py>=P.rows) continue; if(P.grid[py][px]!==target) continue; changed.push({x:px,y:py,c:c,prev:target}); P.grid[py][px]=c; paintCell(px,py,c); if(px>0)stack.push([px-1,py]); if(px<P.cols-1)stack.push([px+1,py]); if(py>0)stack.push([px,py-1]); if(py<P.rows-1)stack.push([px,py+1]); } pushHist(changed.map(o=>({x:o.x,y:o.y,c:o.prev})), changed.map(o=>({x:o.x,y:o.y,c:o.c}))); broadcast({type:"game",action:"paint",id:"paint",cells:changed.map(o=>({x:o.x,y:o.y,c:o.c}))}); }
+  function paintExportCanvas(){ const c=document.createElement("canvas"); c.width=P.cols*P.cell; c.height=P.rows*P.cell; const x=c.getContext("2d"); x.fillStyle="#0a0a10"; x.fillRect(0,0,c.width,c.height); for(let y=0;y<P.rows;y++) for(let x=0;x<P.cols;x++) if(P.grid[y][x]){ x.fillStyle=P.grid[y][x]; x.fillRect(x*P.cell,y*P.cell,P.cell,P.cell); } return c; }
   cv.addEventListener("pointerdown",e=>{ e.preventDefault(); audioCtx(); const c=cellFromEvent(e);
     if(P.tool==="fill"){ fillAt(c.x,c.y,P.color); return; }
-    if(P.tool==="line"){ lineStart=c; return; }
-    drawing=true; stroke=[{x:c.x,y:c.y,c:P.tool==="erase"?null:P.color}]; paintCell(c.x,c.y,stroke[0].c); playInst(P.inst,midiOf(c.y),0.25);
+    if(P.tool==="pick"){ const v=P.grid[c.y][c.x]; if(v){ P.color=v; $("paint-color").value=v; document.querySelectorAll("#paint-swatches .swatch").forEach(x=>x.classList.remove("active")); } return; }
+    if(P.tool==="line"||P.tool==="rect"){ shapeStart=c; return; }
+    drawing=true; lastC=c; stroke=stamp(c.x,c.y,P.tool==="erase"?null:P.color); playInst(P.inst,midiOf(c.y),0.25);
     try{ cv.setPointerCapture(e.pointerId); }catch(err){}
   });
-  cv.addEventListener("pointermove",e=>{ if(!drawing) return; const c=cellFromEvent(e); const last=stroke[stroke.length-1]; if(last&&last.x===c.x&&last.y===c.y) return; const cell={x:c.x,y:c.y,c:P.tool==="erase"?null:P.color}; stroke.push(cell); paintCell(cell.x,cell.y,cell.c); });
-  cv.addEventListener("pointerup",e=>{ if(P.tool==="line"&&lineStart){ const c=cellFromEvent(e); const cells=lineCells(lineStart,c); cells.forEach(cc=>{ P.grid[cc.y][cc.x]=P.color; paintCell(cc.x,cc.y,P.color); }); broadcast({type:"game",action:"paint",id:"paint",cells:cells.map(cc=>({x:cc.x,y:cc.y,c:P.color}))}); lineStart=null; return; } if(!drawing) return; drawing=false; if(stroke.length) broadcast({type:"game",action:"paint",id:"paint",cells:stroke}); stroke=[]; });
-  function lineCells(a,b){ const cells=[]; const dx=Math.abs(b.x-a.x), dy=Math.abs(b.y-a.y), sx=a.x<b.x?1:-1, sy=a.y<b.y?1:-1; let err=dx-dy, x=a.x, y=a.y; for(;;){ cells.push({x:x,y:y}); if(x===b.x&&y===b.y) break; const e2=2*err; if(e2>-dy){err-=dy;x+=sx;} if(e2<dx){err+=dx;y+=sy;} } return cells; }
-  function fillAt(x,y,c){ const target=P.grid[y][x]; if(target===c) return; const stack=[[x,y]]; const changed=[]; while(stack.length){ const p=stack.pop(); const px=p[0], py=p[1]; if(px<0||py<0||px>=P.cols||py>=P.rows) continue; if(P.grid[py][px]!==target) continue; P.grid[py][px]=c; paintCell(px,py,c); changed.push({x:px,y:py,c:c}); if(px>0)stack.push([px-1,py]); if(px<P.cols-1)stack.push([px+1,py]); if(py>0)stack.push([px,py-1]); if(py<P.rows-1)stack.push([px,py+1]); } broadcast({type:"game",action:"paint",id:"paint",cells:changed}); }
-  $("paint-clear").onclick=()=>{ P.grid.forEach(r=>r.fill(null)); drawPaintGrid(); broadcast({type:"game",action:"clear",id:"paint"}); };
+  cv.addEventListener("pointermove",e=>{ if(!drawing) return; const c=cellFromEvent(e); if(lastC&&lastC.x===c.x&&lastC.y===c.y) return; lastC=c; stroke=stroke.concat(stamp(c.x,c.y,P.tool==="erase"?null:P.color)); });
+  cv.addEventListener("pointerup",e=>{ const c=cellFromEvent(e);
+    if(shapeStart&&(P.tool==="line"||P.tool==="rect")){ const cells=shapeCells(shapeStart,c); const before=cells.map(cc=>({x:cc.x,y:cc.y,c:P.grid[cc.y][cc.x]})).filter(cc=>cc.c!==P.color); cells.forEach(cc=>{ P.grid[cc.y][cc.x]=P.color; paintCell(cc.x,cc.y,P.color); }); const after=cells.map(cc=>({x:cc.x,y:cc.y,c:P.color})); pushHist(before,after); broadcast({type:"game",action:"paint",id:"paint",cells:after}); shapeStart=null; return; }
+    if(!drawing) return; drawing=false; lastC=null;
+    if(stroke.length){ broadcast({type:"game",action:"paint",id:"paint",cells:stroke.map(s=>({x:s.x,y:s.y,c:s.c}))}); pushHist(stroke.map(s=>({x:s.x,y:s.y,c:s.prev})), stroke.map(s=>({x:s.x,y:s.y,c:s.c}))); }
+    stroke=[];
+  });
+  $("paint-brush").addEventListener("input",e=>{ P.brush=+e.target.value; });
+  $("paint-clear").onclick=()=>{ const before=[]; P.grid.forEach((r,y)=>r.forEach((v,x)=>{ if(v) before.push({x:x,y:y,c:v}); })); P.grid.forEach(r=>r.fill(null)); drawPaintGrid(); pushHist(before,[]); broadcast({type:"game",action:"clear",id:"paint"}); };
   $("paint-play").onclick=()=>{ broadcast({type:"game",action:"play",id:"paint"}); playPaint(); };
   $("paint-magic").onclick=()=>{ pads.classList.toggle("open"); };
-  $("game-status").textContent="🎨 Dessine : tes coups partent aux autres joueurs du salon. ▶️ Jouer = le dessin devient musique. 🌈 = pads magiques.";
+  $("paint-undo").onclick=()=>undoPaint();
+  $("paint-redo").onclick=()=>redoPaint();
+  $("paint-png").onclick=()=>{ const a=document.createElement("a"); a.download="paint-studio-"+Date.now()+".png"; a.href=paintExportCanvas().toDataURL("image/png"); a.click(); };
+  $("paint-send").onclick=()=>{ send("", paintExportCanvas().toDataURL("image/png")); $("game-status").textContent="📨 Dessin envoyé dans #"+currentChannel+" !"; };
+  if(!P._kbd){ P._kbd=true; window.addEventListener("keydown",e=>{ if(!P.cv||!$("game-modal").classList.contains("open")||!game||game.id!=="paint") return; const k=e.key.toLowerCase(); if((e.ctrlKey||e.metaKey)&&k==="z"&&!e.shiftKey){ e.preventDefault(); undoPaint(); } else if((e.ctrlKey||e.metaKey)&&(k==="y"||(k==="z"&&e.shiftKey))){ e.preventDefault(); redoPaint(); } }); }
+  $("game-status").textContent="🎨 Pinceau réglable, formes (➖ ▭), pipette 💧, Ctrl+Z / Ctrl+Y, ⬇️ PNG, 📨 envoi dans le salon, ▶️ le dessin devient musique, 🌈 pads magiques — tout part aux autres joueurs.";
 }
 function drawPaintGrid(){ const cx=P.cx, cv=P.cv; if(!cx) return; cx.fillStyle="#0a0a10"; cx.fillRect(0,0,cv.width,cv.height); cx.strokeStyle="rgba(255,255,255,.07)"; cx.lineWidth=1; for(let x=1;x<P.cols;x++){ cx.beginPath(); cx.moveTo(x*P.cell+0.5,0); cx.lineTo(x*P.cell+0.5,cv.height); cx.stroke(); } for(let y=1;y<P.rows;y++){ cx.beginPath(); cx.moveTo(0,y*P.cell+0.5); cx.lineTo(cv.width,y*P.cell+0.5); cx.stroke(); } for(let y=0;y<P.rows;y++) for(let x=0;x<P.cols;x++) if(P.grid[y][x]) paintCell(x,y,P.grid[y][x]); }
 function paintCell(x,y,c){ const cx=P.cx; if(!cx) return; cx.fillStyle=c||"#0a0a10"; cx.fillRect(x*P.cell+1,y*P.cell+1,P.cell-2,P.cell-2); }
@@ -1270,7 +1298,7 @@ const WMATS=[
 ];
 const WMAT_BY_ID={}; WMATS.forEach(m=>WMAT_BY_ID[m.id]=m);
 const FLAMMABLE=new Set([6,7,8,10,18]);
-const W = { grid:new Uint8Array(WW*WH), life:new Uint8Array(WW*WH), mv:new Uint8Array(WW*WH), brush:3, timer:null, cv:null, painting:false, stroke:[], resonant:-1, resonantUntil:0 };
+const W = { grid:new Uint8Array(WW*WH), life:new Uint8Array(WW*WH), mv:new Uint8Array(WW*WH), brush:3, brushR:2, paused:false, timer:null, cv:null, painting:false, stroke:[], resonant:-1, resonantUntil:0 };
 const wIdx=(x,y)=>y*WW+x;
 const wGet=(x,y)=>(x<0||x>=WW||y<0||y>=WH)?1:W.grid[wIdx(x,y)];
 const wSet=(x,y,m)=>{ if(x>=0&&x<WW&&y>=0&&y<WH) W.grid[wIdx(x,y)]=m; };
@@ -1278,6 +1306,7 @@ const wPut=(x,y,m)=>{ if(x<0||x>=WW||y<0||y>=WH)return; W.grid[wIdx(x,y)]=m; W.l
 const wSwap=(x1,y1,x2,y2)=>{ const a=wIdx(x1,y1), b=wIdx(x2,y2); const m=W.grid[a]; W.grid[a]=W.grid[b]; W.grid[b]=m; const l=W.life[a]; W.life[a]=W.life[b]; W.life[b]=l; W.mv[b]=1; };
 const wNear=(x,y,pred)=>{ for(const d of [[1,0],[-1,0],[0,1],[0,-1],[1,-1],[-1,-1],[1,1],[-1,1]]) if(pred(wGet(x+d[0],y+d[1]))) return true; return false; };
 function wTick(){
+  if(W.paused) return;
   W.mv.fill(0);
   const rain=document.getElementById("world-rain") && document.getElementById("world-rain").checked;
   if(rain) for(let i=0;i<3;i++){ const x=Math.floor(Math.random()*WW); if(!W.grid[wIdx(x,0)]) W.grid[wIdx(x,0)]=3; }
@@ -1370,23 +1399,26 @@ function wSeed(){
   return s;
 }
 function initWorld(){
-  W.grid.fill(0); W.life.fill(0);
+  W.grid.fill(0); W.life.fill(0); W.paused=false;
   const wrap=document.createElement("div"); wrap.id="world-wrap";
   let matsHtml="";
   WMATS.forEach(mt=>{ matsHtml+='<button class="mat'+(mt.id===W.brush?' active':'')+'" data-m="'+mt.id+'" style="border-color:rgb('+mt.col.join(',')+')" title="'+mt.name+'">'+mt.emoji+" "+mt.name+"</button>"; });
   wrap.innerHTML='<div id="world-bar">'+matsHtml
+    +'<button class="wbtn" id="world-pause">⏸ Pause</button>'
+    +'<input type="range" id="world-brush" min="1" max="5" step="1" value="2" title="Taille du pinceau">'
     +'<button class="wbtn" id="world-play">▶️ Jouer le monde</button>'
     +'<button class="wbtn" id="world-seed">🌰 Semer</button>'
     +'<label style="color:#b5bac1;font-size:12px;display:flex;gap:4px;align-items:center"><input type="checkbox" id="world-rain"> 🌧️ Pluie</label>'
     +'<button class="wbtn" id="world-clear">🗑️ Vider</button></div>'
+    +'<button class="wbtn" id="world-png">⬇️ PNG</button>'
     +'<canvas id="world-canvas" width="'+(WW*WCELL)+'" height="'+(WH*WCELL)+'"></canvas>';
   $("game-area").appendChild(wrap);
   W.cv=$("world-canvas");
   wrap.querySelectorAll(".mat").forEach(b=>{ b.onclick=()=>{ W.brush=+b.dataset.m; wrap.querySelectorAll(".mat").forEach(x=>x.classList.toggle("active",x===b)); }; });
   const cv=$("world-canvas");
   const cellAt=e=>{ const r=cv.getBoundingClientRect(); return [Math.max(0,Math.min(WW-1,Math.floor((e.clientX-r.left)/(r.width/WW)))), Math.max(0,Math.min(WH-1,Math.floor((e.clientY-r.top)/(r.height/WH))))]; };
-  const paintAt=e=>{ const c=cellAt(e); const cells=[];
-    for(let dy=-2;dy<=2;dy++) for(let dx=-2;dx<=2;dx++){ if(dx*dx+dy*dy>5) continue; const x=c[0]+dx, y=c[1]+dy;
+  const paintAt=e=>{ const c=cellAt(e); const cells=[]; const r=W.brushR;
+    for(let dy=-r;dy<=r;dy++) for(let dx=-r;dx<=r;dx++){ if(dx*dx+dy*dy>r*r+1) continue; const x=c[0]+dx, y=c[1]+dy;
       if(W.brush===0) wPut(x,y,0);
       else if(!wGet(x,y)||W.brush===1||W.brush===8) wPut(x,y,W.brush);
       if(x>=0&&x<WW&&y>=0&&y<WH) cells.push({x:x,y:y,m:W.grid[wIdx(x,y)]}); }
@@ -1397,11 +1429,14 @@ function initWorld(){
   cv.addEventListener("pointermove",e=>{ if(!W.painting) return; W.stroke=W.stroke.concat(paintAt(e)); });
   window.addEventListener("pointerup",()=>{ if(!W.painting) return; W.painting=false; if(W.stroke.length) broadcast({type:"game",action:"wpaint",id:"world",cells:W.stroke}); W.stroke=[]; });
   $("world-clear").onclick=()=>{ W.grid.fill(0); W.life.fill(0); wRender(); broadcast({type:"game",action:"wclear",id:"world"}); };
+  $("world-pause").onclick=()=>{ W.paused=!W.paused; $("world-pause").textContent=W.paused?"▶️ Reprendre":"⏸ Pause"; };
+  $("world-brush").addEventListener("input",e=>{ W.brushR=+e.target.value; });
+  $("world-png").onclick=()=>{ if(!W.cv) return; const a=document.createElement("a"); a.download="monde-vivant-"+Date.now()+".png"; a.href=W.cv.toDataURL("image/png"); a.click(); };
   $("world-seed").onclick=()=>{ const s=wSeed(); broadcast({type:"game",action:"wseed",id:"world"}); $("game-status").textContent="🌰 "+s+" graines semées — ajoute de l'eau !"; };
   $("world-play").onclick=()=>{ broadcast({type:"game",action:"wplay",id:"world"}); wPlay(); };
   if(!W.timer) W.timer=setInterval(wTick,50);
   wRender();
-  $("game-status").textContent="🪐 Peins ton écosystème (matières du tableau périodique) : eau fait pousser les graines, lave + eau = pierre, feu brûle le bois… ▶️ le monde se joue en musique !";
+  $("game-status").textContent="🪐 Peins ton écosystème (matières du tableau périodique, pinceau réglable, ⏸ pause, ⬇️ PNG) : eau fait pousser les graines, lave + eau = pierre, feu brûle le bois… ▶️ le monde se joue en musique !";
 }
 function stopWorld(){ if(W.timer){ clearInterval(W.timer); W.timer=null; } }
 function gameWorld(d){
