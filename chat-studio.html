@@ -180,6 +180,10 @@
   <h1>Chat Studio</h1>
   <div class="side-section">Salons</div>
   <div id="channels"></div>
+  <div id="chan-create-row" style="display:flex;gap:4px;padding:4px 8px;">
+    <input id="chan-create-input" placeholder="Nouveau salon..." maxlength="24" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" style="flex:1;min-width:0;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12);border-radius:6px;color:#fff;padding:7px 9px;font-size:13px;" />
+    <button id="chan-create-btn" style="background:#5865f2;border:none;color:#fff;border-radius:6px;padding:7px 10px;cursor:pointer;font-size:13px;">＋</button>
+  </div>
   <div class="side-section">En ligne</div>
   <div id="peers"></div>
 </div>
@@ -216,10 +220,50 @@
 
 <div id="videos"></div>
 <div id="img-modal"><img id="img-modal-src" alt="" /></div>
-<button id="focus-btn" title="Masquer/afficher le haut et la barre d'écriture">🙈</button>
+<button id="focus-btn" title="Masquer/afficher le haut et la barre d'écriture">📖</button>
 
 <script type="module">
-const CHANNELS = ["général", "images", "blabla"];
+const DEFAULT_CHANNELS = ["général", "images", "blabla"];
+let channels = []; // [{name, by}]
+let myTag = "0000";
+
+function tagFor(p) {
+  const key = "chatstudio_tag_" + p;
+  let t = localStorage.getItem(key);
+  if (!t) { t = String(1000 + Math.floor(Math.random() * 9000)); localStorage.setItem(key, t); }
+  return t;
+}
+
+function loadChannels() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("chatstudio_channels_" + roomId));
+    if (Array.isArray(saved) && saved.length) { channels = saved; return; }
+  } catch(e) {}
+  channels = DEFAULT_CHANNELS.map(n => ({ name: n, by: "système" }));
+  saveChannels();
+}
+function saveChannels() {
+  localStorage.setItem("chatstudio_channels_" + roomId, JSON.stringify(channels));
+}
+function addChannel(name, by, broadcastIt) {
+  name = String(name || "").toLowerCase().replace(/[^a-z0-9-_]/g, "").slice(0, 24);
+  if (!name || channels.find(c => c.name === name)) return;
+  channels.push({ name, by: by || pseudo || "?" });
+  saveChannels();
+  if (broadcastIt !== false) broadcast({ type: "chan-add", name, by: pseudo });
+  renderChannels();
+}
+function renameChannel(from, to, by, broadcastIt) {
+  to = String(to || "").toLowerCase().replace(/[^a-z0-9-_]/g, "").slice(0, 24);
+  const c = channels.find(c => c.name === from);
+  if (!c || !to || channels.find(x => x.name === to)) return;
+  if (by && c.by !== by) return; // seul le créateur peut renommer
+  c.name = to;
+  saveChannels();
+  if (currentChannel === from) { currentChannel = to; localStorage.setItem("chatstudio_channel", to); $("channel-name").textContent = to; renderMessages(); }
+  if (broadcastIt !== false) broadcast({ type: "chan-rename", from, to, by: pseudo });
+  renderChannels();
+}
 const REACTIONS = ["👍", "❤️", "😂", "😮", "😢", "🔥"];
 const EMOJI_AVATARS = ["😀","😎","🤖","👽","🐱","🦊","🐼","🦁","🐸","🐵"];
 const COLORS = ["#5865f2","#57f287","#fee75c","#eb459e","#ed4245","#f47b20","#1abc9c"];
@@ -327,14 +371,29 @@ function getImage(id) {
   })).catch(() => null);
 }
 
+$("chan-create-btn").onclick = () => { addChannel($("chan-create-input").value, pseudo); $("chan-create-input").value = ""; };
+$("chan-create-input").addEventListener("keydown", e => { if (e.key === "Enter") $("chan-create-btn").click(); });
+
 /* ---------- Rendu ---------- */
 function renderChannels() {
   const el = $("channels"); el.innerHTML = "";
-  CHANNELS.forEach(ch => {
+  channels.forEach(c => {
     const d = document.createElement("div");
-    d.className = "channel" + (ch === currentChannel ? " active" : "");
-    d.innerHTML = '<span class="hash">#</span>' + ch;
-    d.onclick = () => { currentChannel = ch; localStorage.setItem("chatstudio_channel", ch); $("channel-name").textContent = ch; renderChannels(); renderMessages(); closeSidebar(); };
+    d.className = "channel" + (c.name === currentChannel ? " active" : "");
+    d.innerHTML = '<span class="hash">#</span><span class="cname"></span>';
+    d.querySelector(".cname").textContent = c.name;
+    d.onclick = () => { currentChannel = c.name; localStorage.setItem("chatstudio_channel", c.name); $("channel-name").textContent = c.name; renderChannels(); renderMessages(); closeSidebar(); };
+    if (c.by === pseudo) { // seul le créateur peut renommer
+      const edit = document.createElement("span");
+      edit.textContent = " ✏️"; edit.title = "Renommer (créateur uniquement)";
+      edit.style.cursor = "pointer"; edit.style.fontSize = "12px";
+      edit.onclick = e => {
+        e.stopPropagation();
+        const to = prompt("Nouveau nom du salon #" + c.name + " :", c.name);
+        if (to) renameChannel(c.name, to, pseudo);
+      };
+      d.appendChild(edit);
+    }
     el.appendChild(d);
   });
 }
@@ -364,7 +423,7 @@ function msgNode(m) {
   if (m.font) body.style.fontFamily = m.font; // chaque message garde la police de son auteur
   if (m.color) body.style.color = m.color; // et la couleur d'écriture de son auteur
   const head = document.createElement("div"); head.className = "msg-head";
-  const a = document.createElement("span"); a.className = "msg-author"; a.style.color = ac; a.textContent = m.author;
+  const a = document.createElement("span"); a.className = "msg-author"; a.style.color = ac; a.textContent = m.author + "#" + (m.tag || "0000");
   if (m.font) a.style.fontFamily = m.font;
   const t = document.createElement("span"); t.className = "msg-time"; t.textContent = m.time;
   head.appendChild(a); head.appendChild(t); body.appendChild(head);
@@ -476,33 +535,23 @@ async function connectNet() {
     [sendSignal, onSignal] = room.makeAction("signal");
     room.onPeerJoin(id => {
       peers[id] = peers[id] || {};
-      sendChat({ type: "hello", pseudo, avatar, font: currentFontCss, color: currentColorCss }, id);
+      sendChat({ type: "hello", pseudo, tag: myTag, avatar, font: currentFontCss, color: currentColorCss }, id);
       renderPeers();
     });
     room.onPeerLeave(id => { delete peers[id]; closePeer(id); renderPeers(); });
     onChat((data, id) => handleNet(data, id));
     onSignal((data, id) => handleSignal(data, id));
-    sendChat({ type: "hello", pseudo, avatar, font: currentFontCss, color: currentColorCss });
+    sendChat({ type: "hello", pseudo, tag: myTag, avatar, font: currentFontCss, color: currentColorCss });
   } catch (e) {}
 }
 
 function handleNet(data, id) {
   if (!data) return;
-  if (data.type === "hello") { peers[id] = { pseudo: data.pseudo, avatar: data.avatar, font: data.font, color: data.color }; renderPeers(); }
+  if (data.type === "hello") { peers[id] = { pseudo: data.pseudo, tag: data.tag, avatar: data.avatar, font: data.font, color: data.color }; renderPeers(); }
   else if (data.type === "wizz") doWizz(data.pseudo);
   else if (data.type === "msg") addRemoteMessage(data);
-  else if (data.type === "img-start") { incomingImages[data.id] = { parts: new Array(data.total), meta: data }; }
-  else if (data.type === "img-chunk") {
-    const inc = incomingImages[data.id];
-    if (inc) inc.parts[data.i] = data.data;
-  }
-  else if (data.type === "img-end") {
-    const inc = incomingImages[data.id];
-    if (inc && inc.parts.every(p => p != null)) {
-      addRemoteImage(data, inc.parts.join(""));
-    }
-    delete incomingImages[data.id];
-  }
+  else if (data.type === "chan-add") addChannel(data.name, data.by, false);
+  else if (data.type === "chan-rename") renameChannel(data.from, data.to, data.by, false);
   else if (data.type === "react") {
     const msgs = loadMessages(data.channel);
     const m = msgs.find(x => x.id === data.id); if (!m) return;
@@ -519,24 +568,12 @@ function handleNet(data, id) {
 function addRemoteMessage(d) {
   const msgs = loadMessages(d.channel);
   if (msgs.find(x => x.id === d.id)) return;
-  const m = { id: d.id, author: d.author, avatar: d.avatar, font: d.font, color: d.color, text: d.text, image: null, imgId: d.image ? d.id : null, time: d.time, reactions: [] };
+  const m = { id: d.id, author: d.author, tag: d.tag, avatar: d.avatar, font: d.font, color: d.color, text: d.text, image: null, imgId: d.image ? d.id : null, time: d.time, reactions: [] };
   msgs.push(m);
   saveMessages(d.channel, msgs);
   if (d.image) putImage(d.id, d.image);
   if (d.channel === currentChannel) renderMessages();
   notify(d.author + " : " + (d.text || "📷 image"));
-}
-
-/* Image reçue : on la met dans le portail puis on affiche */
-function addRemoteImage(d, dataUrl) {
-  const msgs = loadMessages(d.channel);
-  if (msgs.find(x => x.id === d.id)) return;
-  const m = { id: d.id, author: d.author, avatar: d.avatar, font: d.font, color: d.color, text: "", image: null, imgId: d.id, time: d.time, reactions: [] };
-  msgs.push(m);
-  saveMessages(d.channel, msgs);
-  putImage(d.id, dataUrl);
-  if (d.channel === currentChannel) renderMessages();
-  notify(d.author + " : 📷 image");
 }
 
 /* ---------- Notifications ---------- */
@@ -585,7 +622,7 @@ function send(text, image) {
   const now = new Date();
   const id = msgId();
   const m = {
-    id, author: pseudo, avatar, font: currentFontCss, color: currentColorCss,
+    id, author: pseudo, tag: myTag, avatar, font: currentFontCss, color: currentColorCss,
     text: text || "", image: null, imgId: image ? id : null,
     time: now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
     reactions: []
@@ -595,22 +632,9 @@ function send(text, image) {
   try { saveMessages(currentChannel, msgs); } catch(e) { console.warn("localStorage plein", e); msgsKeepAlive.push(m); }
   if (image) putImage(id, image); // l'image part dans le portail, pas dans localStorage
   renderMessages();
-  if (image) sendImageChunked(m, image); // transport par morceaux, stockage dans le portail
-  else broadcast({ type: "msg", channel: currentChannel, ...m });
+  broadcast({ type: "msg", channel: currentChannel, ...m, image });
 }
 const msgsKeepAlive = [];
-
-/* Transport d'image pleine qualité par morceaux (le réseau P2P limite la taille d'un message) */
-const CHUNK = 24000;
-function sendImageChunked(m, img) {
-  const total = Math.ceil(img.length / CHUNK);
-  broadcast({ type: "img-start", channel: currentChannel, id: m.id, author: m.author, avatar: m.avatar, font: m.font, color: m.color, time: m.time, total });
-  for (let i = 0; i < total; i++) {
-    broadcast({ type: "img-chunk", id: m.id, i, data: img.slice(i * CHUNK, (i + 1) * CHUNK) });
-  }
-  broadcast({ type: "img-end", channel: currentChannel, id: m.id, author: m.author, avatar: m.avatar, font: m.font, color: m.color, time: m.time });
-}
-const incomingImages = {}; // id -> {parts:[], meta}
 $("send-btn").onclick = () => { send(input.value.trim(), null); input.value = ""; input.focus(); };
 input.addEventListener("keydown", e => { if (e.key === "Enter") { send(input.value.trim(), null); input.value = ""; } });
 $("attach-btn").onclick = () => $("file-input").click();
@@ -730,11 +754,11 @@ function renderPeers() {
   const me = document.createElement("div"); me.className = "peer";
   me.innerHTML = '<span class="dot"></span>';
   me.appendChild(Object.assign(document.createElement("span"), { textContent: avatar + " " }));
-  me.appendChild(Object.assign(document.createElement("span"), { textContent: pseudo + " (toi)" }));
+  me.appendChild(Object.assign(document.createElement("span"), { textContent: pseudo + "#" + myTag + " (toi)" }));
   el.appendChild(me);
   Object.entries(peers).forEach(([id, p]) => {
     const d = document.createElement("div"); d.className = "peer";
-    const name = p.pseudo || "...";
+    const name = (p.pseudo || "...") + "#" + (p.tag || "0000");
     d.innerHTML = '<span class="dot"></span><span>' + (p.avatar || "👤") + ' <b class="pname"></b></span>';
     const pn = d.querySelector(".pname");
     pn.textContent = name;
@@ -775,10 +799,13 @@ function joinRoom() {
   const p = $("pseudo-input").value.trim();
   if (!p) { $("pseudo-input").focus(); return; }
   pseudo = p;
+  myTag = tagFor(p);
   localStorage.setItem("chatstudio_pseudo", p);
   localStorage.setItem("chatstudio_avatar", avatar);
+  loadChannels();
   const savedChannel = localStorage.getItem("chatstudio_channel");
-  if (savedChannel && CHANNELS.includes(savedChannel)) currentChannel = savedChannel;
+  if (savedChannel && channels.find(c => c.name === savedChannel)) currentChannel = savedChannel;
+  else currentChannel = channels[0].name;
   addRoom(roomId, p);
   if (sendLobby) sendLobby({ name: roomId, by: p });
   $("room-tag").textContent = "#" + roomId;
@@ -868,7 +895,7 @@ applyColor(savedColor || TEXT_COLORS[0]);
 /* ---------- Mode focus : masque haut + barre de saisie ---------- */
 $("focus-btn").onclick = () => {
   document.body.classList.toggle("focus");
-  $("focus-btn").textContent = document.body.classList.contains("focus") ? "👁" : "🙈";
+  $("focus-btn").textContent = document.body.classList.contains("focus") ? "💬" : "📖";
 };
 
 renderRoomList();
