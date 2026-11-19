@@ -426,6 +426,18 @@ function handleNet(data, id) {
   if (!data) return;
   if (data.type === "hello") { peers[id] = { pseudo: data.pseudo, avatar: data.avatar }; renderPeers(); }
   else if (data.type === "msg") addRemoteMessage(data);
+  else if (data.type === "img-start") { incomingImages[data.id] = { parts: new Array(data.total), meta: data }; }
+  else if (data.type === "img-chunk") {
+    const inc = incomingImages[data.id];
+    if (inc) inc.parts[data.i] = data.data;
+  }
+  else if (data.type === "img-end") {
+    const inc = incomingImages[data.id];
+    if (inc && inc.parts.every(p => p !== undefined && p !== null)) {
+      addRemoteMessage({ channel: data.channel, id: data.id, author: data.author, avatar: data.avatar, text: "", image: inc.parts.join(""), time: data.time });
+    }
+    delete incomingImages[data.id];
+  }
   else if (data.type === "react") {
     const msgs = loadMessages(data.channel);
     const m = msgs.find(x => x.id === data.id); if (!m) return;
@@ -500,10 +512,25 @@ function send(text, image) {
   };
   const msgs = loadMessages(currentChannel);
   msgs.push(m);
-  try { saveMessages(currentChannel, msgs); } catch(e) { console.warn("localStorage plein", e); }
+  try { saveMessages(currentChannel, msgs); } catch(e) { console.warn("localStorage plein, image gardée en mémoire seulement", e); msgsKeepAlive.push(m); }
   renderMessages();
-  broadcast({ type: "msg", channel: currentChannel, ...m });
+  if (m.image) sendImageChunked(m); // image pleine qualité, découpée en morceaux
+  else broadcast({ type: "msg", channel: currentChannel, ...m });
 }
+const msgsKeepAlive = [];
+
+/* Envoi d'image pleine qualité par morceaux (le réseau P2P limite la taille d'un message) */
+const CHUNK = 24000;
+function sendImageChunked(m) {
+  const img = m.image;
+  const total = Math.ceil(img.length / CHUNK);
+  broadcast({ type: "img-start", channel: currentChannel, id: m.id, author: m.author, avatar: m.avatar, time: m.time, total });
+  for (let i = 0; i < total; i++) {
+    broadcast({ type: "img-chunk", id: m.id, i, data: img.slice(i * CHUNK, (i + 1) * CHUNK) });
+  }
+  broadcast({ type: "img-end", channel: currentChannel, id: m.id, author: m.author, avatar: m.avatar, time: m.time });
+}
+const incomingImages = {}; // id -> {parts:[], meta}
 $("send-btn").onclick = () => { send(input.value.trim(), null); input.value = ""; input.focus(); };
 input.addEventListener("keydown", e => { if (e.key === "Enter") { send(input.value.trim(), null); input.value = ""; } });
 $("attach-btn").onclick = () => $("file-input").click();
