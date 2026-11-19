@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "d2426331f5ed164d52a4dd0989293f5dd4465f45",
+  "parentSha": "207b55d484c832f888f6e54a0f20184bee56e981",
+  "committedAt": "2026-11-19T14:47:44+01:00",
+  "summary": {
+    "subject": "Chat Studio v13 : messages signés (bord + nom + police de l'auteur), wizz confirmé pour tout le salon",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 6,
+    "deletions": 1,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 6,
+    "deletions": 1,
+    "magnitude": 7,
+    "committedAt": "2026-11-19T14:47:44+01:00",
+    "parentSha": "207b55d484c832f888f6e54a0f20184bee56e981"
+  },
+  "pulseKey": "CTP1:d2426331f5ed164d52a4dd0989293f5dd4465f45:3534b7549ad12ff9",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "ec64481153fbc420f0b713f273c39ce636bb1657025799d46cac9e8c0da2923a",
+  "typedKeys": {
+    "commit": "gitc:d2426331f5ed164d52a4dd0989293f5dd4465f45",
+    "parent": "gitc:207b55d484c832f888f6e54a0f20184bee56e981",
+    "pulse": "ctp1:d2426331f5ed164d52a4dd0989293f5dd4465f45:3534b7549ad12ff9",
+    "translation": "cttrans:ec64481153fbc420f0b713f273c39ce636bb1657025799d46cac9e8c0da2923a",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "d2426331f5ed164d52a4dd0989293f5dd4465f45",
+    "parentSha": "207b55d484c832f888f6e54a0f20184bee56e981",
+    "committedAt": "2026-11-19T14:47:44+01:00",
+    "summary": {
+      "subject": "Chat Studio v13 : messages signés (bord + nom + police de l'auteur), wizz confirmé pour tout le salon",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 6,
+      "deletions": 1,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 6,
+      "deletions": 1,
+      "magnitude": 7,
+      "committedAt": "2026-11-19T14:47:44+01:00",
+      "parentSha": "207b55d484c832f888f6e54a0f20184bee56e981"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/d2426331f5ed164d52a4dd0989293f5dd4465f45.json",
+      "vfsKey": "CTP1:d2426331f5ed164d52a4dd0989293f5dd4465f45:3534b7549ad12ff9",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/d2426331f5ed164d52a4dd0989293f5dd4465f45.json"
+}
