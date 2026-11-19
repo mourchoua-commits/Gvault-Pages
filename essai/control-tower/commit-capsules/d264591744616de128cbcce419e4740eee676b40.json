@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "d264591744616de128cbcce419e4740eee676b40",
+  "parentSha": "6f7bc20ee50587a4d39a96353469b938fc20139b",
+  "committedAt": "2026-11-19T15:06:23+01:00",
+  "summary": {
+    "subject": "Chat Studio v15 : images transportées par morceaux pour tous, stockage portail IndexedDB conservé",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 38,
+    "deletions": 1,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 38,
+    "deletions": 1,
+    "magnitude": 39,
+    "committedAt": "2026-11-19T15:06:23+01:00",
+    "parentSha": "6f7bc20ee50587a4d39a96353469b938fc20139b"
+  },
+  "pulseKey": "CTP1:d264591744616de128cbcce419e4740eee676b40:296d61919c2f09a4",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "07bb9fae30d288168e194baf5929bdbbad091f7639f0b44a43cb31f7a2a04adb",
+  "typedKeys": {
+    "commit": "gitc:d264591744616de128cbcce419e4740eee676b40",
+    "parent": "gitc:6f7bc20ee50587a4d39a96353469b938fc20139b",
+    "pulse": "ctp1:d264591744616de128cbcce419e4740eee676b40:296d61919c2f09a4",
+    "translation": "cttrans:07bb9fae30d288168e194baf5929bdbbad091f7639f0b44a43cb31f7a2a04adb",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "d264591744616de128cbcce419e4740eee676b40",
+    "parentSha": "6f7bc20ee50587a4d39a96353469b938fc20139b",
+    "committedAt": "2026-11-19T15:06:23+01:00",
+    "summary": {
+      "subject": "Chat Studio v15 : images transportées par morceaux pour tous, stockage portail IndexedDB conservé",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 38,
+      "deletions": 1,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 38,
+      "deletions": 1,
+      "magnitude": 39,
+      "committedAt": "2026-11-19T15:06:23+01:00",
+      "parentSha": "6f7bc20ee50587a4d39a96353469b938fc20139b"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/d264591744616de128cbcce419e4740eee676b40.json",
+      "vfsKey": "CTP1:d264591744616de128cbcce419e4740eee676b40:296d61919c2f09a4",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/d264591744616de128cbcce419e4740eee676b40.json"
+}
