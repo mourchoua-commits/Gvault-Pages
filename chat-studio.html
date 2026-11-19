@@ -26,7 +26,11 @@
 
   #main { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; z-index: 2; }
   #chat-header { position: relative; }
-  #chat-header { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.07); font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; background: rgba(24,25,32,.7); backdrop-filter: blur(12px); }
+  #chat-header { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.07); font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; row-gap: 6px; flex-wrap: wrap; background: rgba(24,25,32,.7); backdrop-filter: blur(12px); }
+  #chat-header .hash { flex-shrink: 0; }
+  #channel-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #room-tag { flex-shrink: 0; white-space: nowrap; }
+  #chat-header button { flex-shrink: 0; }
   #chat-header .hash { color: #949ba4; }
   #room-tag { font-size: 11px; color: #b5bac1; font-weight: normal; background: rgba(255,255,255,.08); padding: 2px 8px; border-radius: 10px; }
   #burger { display: none; background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; padding: 4px 8px; min-width: 44px; min-height: 44px; }
@@ -165,6 +169,8 @@
     #messages { padding: 12px; }
     #composer { padding: 0 10px calc(10px + env(safe-area-inset-bottom)); }
     #call-btn { padding: 8px 10px; font-size: 13px; }
+    #room-tag { display: none; }
+    #wizz-btn { padding: 8px 10px; font-size: 12px; }
     .msg-img { max-height: 220px; }
     #videos video { width: 120px; }
   }
