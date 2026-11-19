@@ -22,12 +22,13 @@ L'équipe du Gvault peut avertir, suspendre ou bannir tout membre qui enfreint c
 **Équipe de modération :**
 - Pauline
 - Rachel
+- Kali
 
 Les modérateurs sont désignés individuellement, pour leur confiance et leur comportement exemplaire, jamais en fonction de leur origine ou de leur groupe.
 
 ## 4. Signalement
 
-Si tu es victime ou témoin d'un abus, signale-le immédiatement à l'équipe du Gvault (Pauline ou Rachel).
+Si tu es victime ou témoin d'un abus, signale-le immédiatement à l'équipe du Gvault (Pauline, Rachel ou Kali).
 
 ## 5. Responsabilité
 
