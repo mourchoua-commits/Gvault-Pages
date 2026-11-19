@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "5122e74e2e4a2c6de4997e0f354d4ffa36db0efc",
+  "parentSha": "f8a9acf0e25f84cbeb30b9e1a6c78dedb378515a",
+  "committedAt": "2026-11-19T21:44:11+01:00",
+  "summary": {
+    "subject": "Ajout de Pauline et Rachel comme modératrices dans les CGU",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 7,
+    "deletions": 1,
+    "paths": [
+      "CGU.md"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 7,
+    "deletions": 1,
+    "magnitude": 8,
+    "committedAt": "2026-11-19T21:44:11+01:00",
+    "parentSha": "f8a9acf0e25f84cbeb30b9e1a6c78dedb378515a"
+  },
+  "pulseKey": "CTP1:5122e74e2e4a2c6de4997e0f354d4ffa36db0efc:4c69d84e2f7ef5cb",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "5f336098fa403e303a98726d84569fd83eb75e3aa15440a24aefcef3f6df8f67",
+  "typedKeys": {
+    "commit": "gitc:5122e74e2e4a2c6de4997e0f354d4ffa36db0efc",
+    "parent": "gitc:f8a9acf0e25f84cbeb30b9e1a6c78dedb378515a",
+    "pulse": "ctp1:5122e74e2e4a2c6de4997e0f354d4ffa36db0efc:4c69d84e2f7ef5cb",
+    "translation": "cttrans:5f336098fa403e303a98726d84569fd83eb75e3aa15440a24aefcef3f6df8f67",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "5122e74e2e4a2c6de4997e0f354d4ffa36db0efc",
+    "parentSha": "f8a9acf0e25f84cbeb30b9e1a6c78dedb378515a",
+    "committedAt": "2026-11-19T21:44:11+01:00",
+    "summary": {
+      "subject": "Ajout de Pauline et Rachel comme modératrices dans les CGU",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 7,
+      "deletions": 1,
+      "paths": [
+        "CGU.md"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 7,
+      "deletions": 1,
+      "magnitude": 8,
+      "committedAt": "2026-11-19T21:44:11+01:00",
+      "parentSha": "f8a9acf0e25f84cbeb30b9e1a6c78dedb378515a"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/5122e74e2e4a2c6de4997e0f354d4ffa36db0efc.json",
+      "vfsKey": "CTP1:5122e74e2e4a2c6de4997e0f354d4ffa36db0efc:4c69d84e2f7ef5cb",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/5122e74e2e4a2c6de4997e0f354d4ffa36db0efc.json"
+}
