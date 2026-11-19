@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "5f1657cb043d5d08e6a226b7f34697868cd415f9",
+  "parentSha": "089c318af17ee7453d3632270d22c24f72f6097f",
+  "committedAt": "2026-11-19T16:45:59+01:00",
+  "summary": {
+    "subject": "Chat Studio v22 : Route Studio ajouté en haut du menu outils",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 4,
+    "deletions": 1,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 4,
+    "deletions": 1,
+    "magnitude": 5,
+    "committedAt": "2026-11-19T16:45:59+01:00",
+    "parentSha": "089c318af17ee7453d3632270d22c24f72f6097f"
+  },
+  "pulseKey": "CTP1:5f1657cb043d5d08e6a226b7f34697868cd415f9:1bf0bd47b75306df",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "55cea388c4f09fe496ab5d733f6511ac5d15093682c758ade7d1c49f24b68374",
+  "typedKeys": {
+    "commit": "gitc:5f1657cb043d5d08e6a226b7f34697868cd415f9",
+    "parent": "gitc:089c318af17ee7453d3632270d22c24f72f6097f",
+    "pulse": "ctp1:5f1657cb043d5d08e6a226b7f34697868cd415f9:1bf0bd47b75306df",
+    "translation": "cttrans:55cea388c4f09fe496ab5d733f6511ac5d15093682c758ade7d1c49f24b68374",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "5f1657cb043d5d08e6a226b7f34697868cd415f9",
+    "parentSha": "089c318af17ee7453d3632270d22c24f72f6097f",
+    "committedAt": "2026-11-19T16:45:59+01:00",
+    "summary": {
+      "subject": "Chat Studio v22 : Route Studio ajouté en haut du menu outils",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 4,
+      "deletions": 1,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 4,
+      "deletions": 1,
+      "magnitude": 5,
+      "committedAt": "2026-11-19T16:45:59+01:00",
+      "parentSha": "089c318af17ee7453d3632270d22c24f72f6097f"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/5f1657cb043d5d08e6a226b7f34697868cd415f9.json",
+      "vfsKey": "CTP1:5f1657cb043d5d08e6a226b7f34697868cd415f9:1bf0bd47b75306df",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/5f1657cb043d5d08e6a226b7f34697868cd415f9.json"
+}
