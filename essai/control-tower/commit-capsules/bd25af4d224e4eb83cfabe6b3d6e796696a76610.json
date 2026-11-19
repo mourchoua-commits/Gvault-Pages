@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "bd25af4d224e4eb83cfabe6b3d6e796696a76610",
+  "parentSha": "a4e78c765087ad7a390a7c30b93d0c2d0eccad65",
+  "committedAt": "2026-11-19T14:04:41+01:00",
+  "summary": {
+    "subject": "Chat Studio v7 : images pleine qualité envoyées par morceaux (sans compression)",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 29,
+    "deletions": 2,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 29,
+    "deletions": 2,
+    "magnitude": 31,
+    "committedAt": "2026-11-19T14:04:41+01:00",
+    "parentSha": "a4e78c765087ad7a390a7c30b93d0c2d0eccad65"
+  },
+  "pulseKey": "CTP1:bd25af4d224e4eb83cfabe6b3d6e796696a76610:a722c06afc6bcfa8",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "2150b2471cbcb206499fc4290d49525e30ffdceaf7ad6aaa68678ddf10bba91b",
+  "typedKeys": {
+    "commit": "gitc:bd25af4d224e4eb83cfabe6b3d6e796696a76610",
+    "parent": "gitc:a4e78c765087ad7a390a7c30b93d0c2d0eccad65",
+    "pulse": "ctp1:bd25af4d224e4eb83cfabe6b3d6e796696a76610:a722c06afc6bcfa8",
+    "translation": "cttrans:2150b2471cbcb206499fc4290d49525e30ffdceaf7ad6aaa68678ddf10bba91b",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "bd25af4d224e4eb83cfabe6b3d6e796696a76610",
+    "parentSha": "a4e78c765087ad7a390a7c30b93d0c2d0eccad65",
+    "committedAt": "2026-11-19T14:04:41+01:00",
+    "summary": {
+      "subject": "Chat Studio v7 : images pleine qualité envoyées par morceaux (sans compression)",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 29,
+      "deletions": 2,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 29,
+      "deletions": 2,
+      "magnitude": 31,
+      "committedAt": "2026-11-19T14:04:41+01:00",
+      "parentSha": "a4e78c765087ad7a390a7c30b93d0c2d0eccad65"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/bd25af4d224e4eb83cfabe6b3d6e796696a76610.json",
+      "vfsKey": "CTP1:bd25af4d224e4eb83cfabe6b3d6e796696a76610:a722c06afc6bcfa8",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/bd25af4d224e4eb83cfabe6b3d6e796696a76610.json"
+}
