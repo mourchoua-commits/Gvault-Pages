@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="fr">
 <head>
@@ -204,30 +205,49 @@ const peerConnections = {};
 const $ = id => document.getElementById(id);
 const messagesEl = $("messages"), input = $("msg-input"), sidebar = $("sidebar"), overlay = $("overlay");
 
-/* ---------- Fond glitch procédural (style de l'image) ---------- */
-function drawBg() {
-  const c = $("bg"), ctx = c.getContext("2d");
-  c.width = innerWidth; c.height = innerHeight;
-  ctx.fillStyle = "#050508"; ctx.fillRect(0, 0, c.width, c.height);
-  const palette = ["#5865f2","#57f287","#fee75c","#eb459e","#ed4245","#1abc9c","#f47b20","#8b9bff","#ffffff"];
-  for (let i = 0; i < 260; i++) {
-    const x = Math.random() * c.width;
-    const w = 1 + Math.random() * 3;
-    const y = Math.random() * c.height;
-    const h = 20 + Math.random() * (c.height * 0.5);
-    ctx.globalAlpha = 0.08 + Math.random() * 0.5;
-    ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
-    ctx.fillRect(x, y, w, h);
-  }
-  for (let i = 0; i < 900; i++) {
-    ctx.globalAlpha = 0.2 + Math.random() * 0.6;
-    ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
-    ctx.fillRect(Math.random() * c.width, Math.random() * c.height, 1 + Math.random() * 2, 1 + Math.random() * 2);
-  }
-  ctx.globalAlpha = 1;
+/* ---------- Fond glitch animé (style de l'image) ---------- */
+const bgCanvas = $("bg"), bgCtx = bgCanvas.getContext("2d");
+const PALETTE = ["#5865f2","#57f287","#fee75c","#eb459e","#ed4245","#1abc9c","#f47b20","#8b9bff","#ffffff"];
+function sizeBg() { bgCanvas.width = innerWidth; bgCanvas.height = innerHeight; bgCtx.fillStyle = "#050508"; bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height); }
+sizeBg();
+addEventListener("resize", sizeBg);
+const streaks = [];
+for (let i = 0; i < 120; i++) streaks.push(newStreak(true));
+function newStreak(anyY) {
+  return {
+    x: Math.random() * innerWidth,
+    y: anyY ? Math.random() * innerHeight : -Math.random() * 300,
+    w: 1 + Math.random() * 3,
+    h: 30 + Math.random() * innerHeight * 0.5,
+    speed: 0.3 + Math.random() * 1.4,
+    color: PALETTE[Math.floor(Math.random() * PALETTE.length)],
+    alpha: 0.06 + Math.random() * 0.4
+  };
 }
-drawBg();
-addEventListener("resize", drawBg);
+let bgFrame = 0;
+function animateBg() {
+  bgFrame++;
+  bgCtx.fillStyle = "rgba(5,5,8,0.14)";
+  bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+  for (const s of streaks) {
+    s.y += s.speed;
+    if (s.y - s.h > innerHeight) Object.assign(s, newStreak(false));
+    bgCtx.globalAlpha = s.alpha;
+    bgCtx.fillStyle = s.color;
+    bgCtx.fillRect(s.x, s.y - s.h, s.w, s.h);
+  }
+  if (bgFrame % 40 === 0) { // flash glitch occasionnel
+    for (let i = 0; i < 14; i++) {
+      bgCtx.globalAlpha = 0.25 + Math.random() * 0.4;
+      bgCtx.fillStyle = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+      const y = Math.random() * innerHeight;
+      bgCtx.fillRect(0, y, innerWidth, 1 + Math.random() * 3);
+    }
+  }
+  bgCtx.globalAlpha = 1;
+  requestAnimationFrame(animateBg);
+}
+requestAnimationFrame(animateBg);
 
 /* ---------- Navigation : retour arrière -> page pseudo ---------- */
 window.addEventListener("popstate", () => {
@@ -259,7 +279,7 @@ function renderChannels() {
     const d = document.createElement("div");
     d.className = "channel" + (ch === currentChannel ? " active" : "");
     d.innerHTML = '<span class="hash">#</span>' + ch;
-    d.onclick = () => { currentChannel = ch; $("channel-name").textContent = ch; renderChannels(); renderMessages(); closeSidebar(); };
+    d.onclick = () => { currentChannel = ch; localStorage.setItem("chatstudio_channel", ch); $("channel-name").textContent = ch; renderChannels(); renderMessages(); closeSidebar(); };
     el.appendChild(d);
   });
 }
@@ -631,6 +651,8 @@ function joinRoom() {
   pseudo = p;
   localStorage.setItem("chatstudio_pseudo", p);
   localStorage.setItem("chatstudio_avatar", avatar);
+  const savedChannel = localStorage.getItem("chatstudio_channel");
+  if (savedChannel && CHANNELS.includes(savedChannel)) currentChannel = savedChannel;
   addRoom(roomId, p);
   if (sendLobby) sendLobby({ name: roomId, by: p });
   $("room-tag").textContent = "#" + roomId;
