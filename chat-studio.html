@@ -174,7 +174,15 @@
   #paint-pads.open { display:grid; }
   #paint-pads .pad { aspect-ratio:1; border-radius:50%; border:2px solid rgba(255,255,255,.25); cursor:pointer; }
   #paint-pads .pad.pressed { outline:3px solid #fff; box-shadow:0 0 12px #fff; }
-    @media (max-width: 768px) {
+  /* Monde vivant */
+  #world-wrap { display:flex; flex-direction:column; gap:8px; align-items:center; max-width:96vw; }
+  #world-bar { display:flex; gap:5px; flex-wrap:wrap; align-items:center; justify-content:center; max-width:94vw; }
+  #world-bar .mat { padding:4px 8px; border:1px solid rgba(255,255,255,.15); border-radius:12px; background:rgba(255,255,255,.05); color:#dbdee1; cursor:pointer; font-size:12px; }
+  #world-bar .mat.active { border-color:#5865f2; background:rgba(88,101,242,.35); color:#fff; }
+  #world-bar .wbtn { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); color:#dbdee1; border-radius:8px; padding:6px 10px; cursor:pointer; font-size:13px; min-height:34px; }
+  #world-canvas { background:#0a0a14; border:1px solid rgba(255,255,255,.15); border-radius:8px; touch-action:none; max-width:94vw; cursor:crosshair; image-rendering:pixelated; }
+
+  @media (max-width: 768px) {
     #burger { display: block; }
     #sidebar { position: fixed; top: 0; left: 0; bottom: 0; transform: translateX(-100%); box-shadow: 2px 0 12px rgba(0,0,0,.6); }
     #sidebar.open { transform: translateX(0); }
@@ -978,7 +986,8 @@ const GAMES_TOOLS = [
 const MULTI_GAMES = [
   ["pong", "🏓 Pong 1v1"],
   ["morpion", "⭕ Morpion"],
-  ["paint", "🎨 Paint Studio"]
+  ["paint", "🎨 Paint Studio"],
+  ["world", "🪐 Monde vivant"]
 ];
 const menu = $("games-menu");
 const hTools = document.createElement("h4"); hTools.textContent = "🛠 Outils du Gvault"; menu.appendChild(hTools);
@@ -1014,12 +1023,13 @@ function openGame(id, label) {
   if (id === "morpion") initMorpion();
   if (id === "pong") initPong();
   if (id === "paint") initPaint();
+  if (id === "world") initWorld();
 }
 $("game-close").onclick = () => {
   if (game) broadcast({ type: "game", action: "quit" });
   game = null;
   $("game-modal").classList.remove("open");
-  stopPong();
+  stopPong(); stopWorld();
 };
 
 function handleGame(d) {
@@ -1029,11 +1039,12 @@ function handleGame(d) {
     else if (game.id === d.id && game.owner !== d.owner) { game.owner = d.owner; $("game-status").textContent = "Partie lancée !"; }
     return;
   }
-  if (d.action === "quit") { if (game) { stopPong(); game = null; $("game-modal").classList.remove("open"); } return; }
+  if (d.action === "quit") { if (game) { stopPong(); stopWorld(); game = null; $("game-modal").classList.remove("open"); } return; }
   if (!game || game.id !== d.id) return;
   if (game.id === "morpion") gameMorpion(d);
   if (game.id === "pong") gamePong(d);
   if (game.id === "paint") gamePaint(d);
+  if (game.id === "world") gameWorld(d);
 }
 
 /* ----- Morpion ----- */
@@ -1131,9 +1142,6 @@ function gamePong(d) {
   }
 }
 
-function PAINT_JS() {
-    return "";
-  }
 
 /* ----- Paint Studio multi (grille + instruments Route Studio + magie) ----- */
 const P = { cols:48, rows:30, cell:12, grid:[], tool:"pen", color:"#5865f2", inst:"piano", playing:false, cv:null, cx:null, pads:null };
@@ -1215,7 +1223,7 @@ function initPaint(){
   $("paint-clear").onclick=()=>{ P.grid.forEach(r=>r.fill(null)); drawPaintGrid(); broadcast({type:"game",action:"clear",id:"paint"}); };
   $("paint-play").onclick=()=>{ broadcast({type:"game",action:"play",id:"paint"}); playPaint(); };
   $("paint-magic").onclick=()=>{ pads.classList.toggle("open"); };
-  $("game-status").textContent="🎨 Dessine : tes coups partent aux autres joueurs du salon. ▶️ Jouer = le dessin devient musique (instrument Route Studio). 🌈 = pads magiques.";
+  $("game-status").textContent="🎨 Dessine : tes coups partent aux autres joueurs du salon. ▶️ Jouer = le dessin devient musique. 🌈 = pads magiques.";
 }
 function drawPaintGrid(){ const cx=P.cx, cv=P.cv; if(!cx) return; cx.fillStyle="#0a0a10"; cx.fillRect(0,0,cv.width,cv.height); cx.strokeStyle="rgba(255,255,255,.07)"; cx.lineWidth=1; for(let x=1;x<P.cols;x++){ cx.beginPath(); cx.moveTo(x*P.cell+0.5,0); cx.lineTo(x*P.cell+0.5,cv.height); cx.stroke(); } for(let y=1;y<P.rows;y++){ cx.beginPath(); cx.moveTo(0,y*P.cell+0.5); cx.lineTo(cv.width,y*P.cell+0.5); cx.stroke(); } for(let y=0;y<P.rows;y++) for(let x=0;x<P.cols;x++) if(P.grid[y][x]) paintCell(x,y,P.grid[y][x]); }
 function paintCell(x,y,c){ const cx=P.cx; if(!cx) return; cx.fillStyle=c||"#0a0a10"; cx.fillRect(x*P.cell+1,y*P.cell+1,P.cell-2,P.cell-2); }
@@ -1228,6 +1236,180 @@ function gamePaint(d){
   else if(d.action==="clear"){ P.grid.forEach(r=>r.fill(null)); drawPaintGrid(); }
   else if(d.action==="play"){ playPaint(); }
   else if(d.action==="magic"){ pressPad(d.pad,false); }
+}
+
+
+/* ----- Monde vivant : écosystème falling-sand, matières du tableau périodique (multi P2P) ----- */
+const WW=96, WH=64, WCELL=6;
+const WMATS=[
+  {id:0, emoji:"🧽", name:"Vide", col:[10,10,20], kind:"void", inst:null, oct:0},
+  {id:1, emoji:"🪨", name:"Roche (Si)", col:[138,138,149], kind:"solid", inst:"pluck", oct:-12},
+  {id:2, emoji:"🟨", name:"Sable (SiO2)", col:[232,201,106], kind:"powder", inst:"mbox", oct:0},
+  {id:3, emoji:"💧", name:"Eau (H2O)", col:[58,123,213], kind:"liquid", inst:"pluck", oct:0},
+  {id:4, emoji:"🌋", name:"Lave", col:[255,94,43], kind:"lava", inst:"b808", oct:-12},
+  {id:5, emoji:"🔥", name:"Feu", col:[255,158,43], kind:"fire", inst:"ember", oct:0},
+  {id:6, emoji:"🌱", name:"Plante (C)", col:[58,167,106], kind:"plant", inst:"marimba", oct:0},
+  {id:7, emoji:"🌰", name:"Graine", col:[150,98,50], kind:"seed", inst:"sitar", oct:0},
+  {id:8, emoji:"🪵", name:"Bois (cellulose)", col:[122,82,48], kind:"wood", inst:"guitar", oct:-12},
+  {id:9, emoji:"☁️", name:"Vapeur (H2O gaz)", col:[205,214,226], kind:"steam", inst:"flute", oct:12},
+  {id:10, emoji:"⚫", name:"Charbon (C)", col:[34,34,38], kind:"powder", inst:"chip", oct:-12},
+  {id:11, emoji:"🪙", name:"Or (Au)", col:[255,210,74], kind:"solid", inst:"bell", oct:12},
+  {id:12, emoji:"🩶", name:"Argent (Ag)", col:[217,217,227], kind:"solid", inst:"vibra", oct:12},
+  {id:13, emoji:"🟫", name:"Fer (Fe)", col:[184,115,51], kind:"solid", inst:"bass", oct:-12},
+  {id:14, emoji:"🟠", name:"Cuivre (Cu)", col:[217,138,75], kind:"solid", inst:"trumpet", oct:0},
+  {id:15, emoji:"⚪", name:"Sel (NaCl)", col:[240,240,245], kind:"powder", inst:"mbox", oct:12},
+  {id:16, emoji:"🟡", name:"Soufre (S)", col:[242,225,76], kind:"powder", inst:"chip", oct:12},
+  {id:17, emoji:"🩶", name:"Mercure (Hg)", col:[192,200,208], kind:"liquid", inst:"pluck", oct:12},
+  {id:18, emoji:"🛢️", name:"Pétrole (CxHy)", col:[40,32,28], kind:"oil", inst:"bass", oct:-12},
+  {id:19, emoji:"💨", name:"Oxygène (O2)", col:[155,208,255], kind:"gas", inst:"flute", oct:12},
+  {id:20, emoji:"🌫️", name:"Azote (N2)", col:[184,196,255], kind:"gas", inst:"choir", oct:12},
+  {id:21, emoji:"🧪", name:"Chlore (Cl2)", col:[184,233,134], kind:"gas", inst:"synth", oct:12},
+  {id:22, emoji:"🎈", name:"Hélium (He)", col:[255,233,168], kind:"gas", inst:"bell", oct:24},
+  {id:23, emoji:"💡", name:"Néon (Ne)", col:[255,154,213], kind:"gas", inst:"synth", oct:24},
+  {id:24, emoji:"🧊", name:"Glace (H2O)", col:[200,230,255], kind:"ice", inst:"marimba", oct:12}
+];
+const WMAT_BY_ID={}; WMATS.forEach(m=>WMAT_BY_ID[m.id]=m);
+const FLAMMABLE=new Set([6,7,8,10,18]);
+const W = { grid:new Uint8Array(WW*WH), life:new Uint8Array(WW*WH), mv:new Uint8Array(WW*WH), brush:3, timer:null, cv:null, painting:false, stroke:[], resonant:-1, resonantUntil:0 };
+const wIdx=(x,y)=>y*WW+x;
+const wGet=(x,y)=>(x<0||x>=WW||y<0||y>=WH)?1:W.grid[wIdx(x,y)];
+const wSet=(x,y,m)=>{ if(x>=0&&x<WW&&y>=0&&y<WH) W.grid[wIdx(x,y)]=m; };
+const wPut=(x,y,m)=>{ if(x<0||x>=WW||y<0||y>=WH)return; W.grid[wIdx(x,y)]=m; W.life[wIdx(x,y)]= m===5?24+Math.floor(Math.random()*20) : (m===9||WMAT_BY_ID[m].kind==="gas")?60+Math.floor(Math.random()*60) : 0; };
+const wSwap=(x1,y1,x2,y2)=>{ const a=wIdx(x1,y1), b=wIdx(x2,y2); const m=W.grid[a]; W.grid[a]=W.grid[b]; W.grid[b]=m; const l=W.life[a]; W.life[a]=W.life[b]; W.life[b]=l; W.mv[b]=1; };
+const wNear=(x,y,pred)=>{ for(const d of [[1,0],[-1,0],[0,1],[0,-1],[1,-1],[-1,-1],[1,1],[-1,1]]) if(pred(wGet(x+d[0],y+d[1]))) return true; return false; };
+function wTick(){
+  W.mv.fill(0);
+  const rain=document.getElementById("world-rain") && document.getElementById("world-rain").checked;
+  if(rain) for(let i=0;i<3;i++){ const x=Math.floor(Math.random()*WW); if(!W.grid[wIdx(x,0)]) W.grid[wIdx(x,0)]=3; }
+  for(let y=WH-1;y>=0;y--) for(let x=0;x<WW;x++){
+    const i=wIdx(x,y); if(W.mv[i]) continue;
+    const m=W.grid[i]; if(!m) continue;
+    const mat=WMAT_BY_ID[m], k=mat.kind;
+    if(k==="solid"||k==="wood") continue;
+    if(k==="ice"){ if(wNear(x,y,n=>n===5||n===4)) wPut(x,y,3); continue; }
+    if(k==="plant"){
+      if(Math.random()<0.06 && wNear(x,y,n=>n===3)){ wSet(x,y,0); const gx=x+Math.floor(Math.random()*3)-1, gy=y+(Math.random()<0.5?-1:0); if(!wGet(gx,gy)) wSet(gx,gy,6); }
+      continue;
+    }
+    if(k==="powder"||k==="seed"){
+      const b=wGet(x,y+1);
+      if(b===0||b===3||b===9||WMAT_BY_ID[b].kind==="gas"||WMAT_BY_ID[b].kind==="liquid"||WMAT_BY_ID[b].kind==="oil"||WMAT_BY_ID[b].kind==="lava") wSwap(x,y,x,y+1);
+      else { const d=Math.random()<0.5?-1:1; const bd=wGet(x+d,y+1); if(bd===0||WMAT_BY_ID[bd].kind==="liquid"||WMAT_BY_ID[bd].kind==="gas") wSwap(x,y,x+d,y+1); }
+      if(k==="seed"){ const b2=wGet(x,y+1); let wet=rain||wNear(x,y,n=>n===3); if((b2===2||b2===1)&&wet&&Math.random()<0.25) wPut(x,y,6); }
+      continue;
+    }
+    if(k==="liquid"||k==="oil"||k==="lava"){
+      if(k==="lava"||k==="oil"){
+        for(const d of [[1,0],[-1,0],[0,-1],[0,1]]){ const n=wGet(x+d[0],y+d[1]);
+          if(k==="lava"&&n===3){ wSet(x,y,1); wPut(x+d[0],y+d[1],9); break; }
+          if(FLAMMABLE.has(n)&&Math.random()<0.5) wPut(x+d[0],y+d[1],5);
+        }
+        if(W.grid[i]!==m) continue;
+      }
+      if(k==="lava"&&Math.random()<0.5) continue;
+      const b=wGet(x,y+1);
+      if(b===0) wSwap(x,y,x,y+1);
+      else { const d=Math.random()<0.5?-1:1; if(wGet(x+d,y+1)===0) wSwap(x,y,x+d,y+1); else if(wGet(x+d,y)===0) wSwap(x,y,x+d,y); }
+      continue;
+    }
+    if(k==="fire"){
+      W.life[i]--;
+      if(W.life[i]===0||W.life[i]===255){ if(Math.random()<0.4) wPut(x,y,9); else wSet(x,y,0); continue; }
+      for(const d of [[1,0],[-1,0],[0,1],[0,-1]]){ const n=wGet(x+d[0],y+d[1]);
+        if(n===3){ wPut(x,y,9); wPut(x+d[0],y+d[1],9); break; }
+        if(FLAMMABLE.has(n)&&Math.random()<0.4) wPut(x+d[0],y+d[1],5); }
+      if(W.grid[i]===5&&wGet(x,y-1)===0&&Math.random()<0.3) wSwap(x,y,x,y-1);
+      continue;
+    }
+    if(k==="steam"||k==="gas"){
+      W.life[i]--;
+      if(W.life[i]===0||W.life[i]===255||y===0){ if(k==="steam"&&Math.random()<0.35) wPut(x,y,3); else wSet(x,y,0); continue; }
+      if(wGet(x,y-1)===0) wSwap(x,y,x,y-1);
+      else { const d=Math.random()<0.5?-1:1; if(wGet(x+d,y-1)===0) wSwap(x,y,x+d,y-1); }
+      continue;
+    }
+  }
+  wRender();
+}
+const wcv=document.createElement("canvas"); wcv.width=WW; wcv.height=WH;
+const wctx2d=wcv.getContext("2d");
+const wimg=wctx2d.createImageData(WW,WH);
+function wRender(){
+  if(!W.cv) return;
+  const d=wimg.data;
+  for(let i=0;i<WW*WH;i++){ const c=WMAT_BY_ID[W.grid[i]].col; d[i*4]=c[0]; d[i*4+1]=c[1]; d[i*4+2]=c[2]; d[i*4+3]=255; }
+  wctx2d.putImageData(wimg,0,0);
+  const ctx=W.cv.getContext("2d");
+  ctx.imageSmoothingEnabled=false;
+  ctx.clearRect(0,0,WW*WCELL,WH*WCELL);
+  ctx.drawImage(wcv,0,0,WW*WCELL,WH*WCELL);
+  const nowR=performance.now();
+  if(W.resonant>=0&&nowR<W.resonantUntil){ const rc=WMAT_BY_ID[W.resonant].col; ctx.fillStyle="rgba("+rc[0]+","+rc[1]+","+rc[2]+",0.9)";
+    for(let ri=0;ri<WW*WH;ri++){ if(W.grid[ri]!==W.resonant||Math.random()>0.25) continue; ctx.fillRect((ri%WW)*WCELL,(ri/WW|0)*WCELL,WCELL,WCELL); } }
+}
+function wMidiOf(y){ const penta=[0,2,4,7,9,12,14,16,19,21,24]; const i=Math.min(penta.length-1,Math.floor((WH-1-y)/WH*penta.length)); return 72+penta[penta.length-1-i]; }
+function wPlay(){
+  audioCtx();
+  const bands=16, bw=WW/bands;
+  for(let b=0;b<bands;b++){
+    const tally=new Map(); let ys=0, n=0;
+    for(let x=Math.floor(b*bw);x<Math.min(WW,Math.floor((b+1)*bw));x++) for(let y=0;y<WH;y++){ const m=W.grid[wIdx(x,y)]; if(m&&WMAT_BY_ID[m].kind!=="gas"&&m!==9){ tally.set(m,(tally.get(m)||0)+1); ys+=y; n++; } }
+    if(!tally.size) continue;
+    let best=0,bc=-1; for(const e of tally) if(e[1]>bc){bc=e[1];best=e[0];}
+    const mat=WMAT_BY_ID[best];
+    const hFrac=n?1-(ys/n)/WH:0.5;
+    const midi=wMidiOf(Math.round(hFrac*WH))+mat.oct;
+    setTimeout(()=>playInst(mat.inst,midi,0.35), b*140);
+  }
+}
+function wSeed(){
+  let s=0;
+  for(let t=0;t<200&&s<25;t++){ const x=Math.floor(Math.random()*WW);
+    for(let y=WH-1;y>0;y--){ const m=W.grid[wIdx(x,y)]; if(m&&m!==3&&m!==9){ if(!W.grid[wIdx(x,y-1)]){ wPut(x,y-1,7); s++; } break; } } }
+  wRender();
+  return s;
+}
+function initWorld(){
+  W.grid.fill(0); W.life.fill(0);
+  const wrap=document.createElement("div"); wrap.id="world-wrap";
+  let matsHtml="";
+  WMATS.forEach(mt=>{ matsHtml+='<button class="mat'+(mt.id===W.brush?' active':'')+'" data-m="'+mt.id+'" style="border-color:rgb('+mt.col.join(',')+')" title="'+mt.name+'">'+mt.emoji+" "+mt.name+"</button>"; });
+  wrap.innerHTML='<div id="world-bar">'+matsHtml
+    +'<button class="wbtn" id="world-play">▶️ Jouer le monde</button>'
+    +'<button class="wbtn" id="world-seed">🌰 Semer</button>'
+    +'<label style="color:#b5bac1;font-size:12px;display:flex;gap:4px;align-items:center"><input type="checkbox" id="world-rain"> 🌧️ Pluie</label>'
+    +'<button class="wbtn" id="world-clear">🗑️ Vider</button></div>'
+    +'<canvas id="world-canvas" width="'+(WW*WCELL)+'" height="'+(WH*WCELL)+'"></canvas>';
+  $("game-area").appendChild(wrap);
+  W.cv=$("world-canvas");
+  wrap.querySelectorAll(".mat").forEach(b=>{ b.onclick=()=>{ W.brush=+b.dataset.m; wrap.querySelectorAll(".mat").forEach(x=>x.classList.toggle("active",x===b)); }; });
+  const cv=$("world-canvas");
+  const cellAt=e=>{ const r=cv.getBoundingClientRect(); return [Math.max(0,Math.min(WW-1,Math.floor((e.clientX-r.left)/(r.width/WW)))), Math.max(0,Math.min(WH-1,Math.floor((e.clientY-r.top)/(r.height/WH))))]; };
+  const paintAt=e=>{ const c=cellAt(e); const cells=[];
+    for(let dy=-2;dy<=2;dy++) for(let dx=-2;dx<=2;dx++){ if(dx*dx+dy*dy>5) continue; const x=c[0]+dx, y=c[1]+dy;
+      if(W.brush===0) wPut(x,y,0);
+      else if(!wGet(x,y)||W.brush===1||W.brush===8) wPut(x,y,W.brush);
+      if(x>=0&&x<WW&&y>=0&&y<WH) cells.push({x:x,y:y,m:W.grid[wIdx(x,y)]}); }
+    if(W.brush>0){ W.resonant=W.brush; W.resonantUntil=performance.now()+1400; const mt=WMAT_BY_ID[W.brush]; if(mt.inst) playInst(mt.inst, 60+W.brush*3, 0.4); }
+    wRender();
+    return cells; };
+  cv.addEventListener("pointerdown",e=>{ e.preventDefault(); audioCtx(); W.painting=true; W.stroke=paintAt(e); try{cv.setPointerCapture(e.pointerId);}catch(err){} });
+  cv.addEventListener("pointermove",e=>{ if(!W.painting) return; W.stroke=W.stroke.concat(paintAt(e)); });
+  window.addEventListener("pointerup",()=>{ if(!W.painting) return; W.painting=false; if(W.stroke.length) broadcast({type:"game",action:"wpaint",id:"world",cells:W.stroke}); W.stroke=[]; });
+  $("world-clear").onclick=()=>{ W.grid.fill(0); W.life.fill(0); wRender(); broadcast({type:"game",action:"wclear",id:"world"}); };
+  $("world-seed").onclick=()=>{ const s=wSeed(); broadcast({type:"game",action:"wseed",id:"world"}); $("game-status").textContent="🌰 "+s+" graines semées — ajoute de l'eau !"; };
+  $("world-play").onclick=()=>{ broadcast({type:"game",action:"wplay",id:"world"}); wPlay(); };
+  if(!W.timer) W.timer=setInterval(wTick,50);
+  wRender();
+  $("game-status").textContent="🪐 Peins ton écosystème (matières du tableau périodique) : eau fait pousser les graines, lave + eau = pierre, feu brûle le bois… ▶️ le monde se joue en musique !";
+}
+function stopWorld(){ if(W.timer){ clearInterval(W.timer); W.timer=null; } }
+function gameWorld(d){
+  if(!W.cv) return;
+  if(d.action==="wpaint"){ d.cells.forEach(c=>{ if(c.x>=0&&c.y>=0&&c.x<WW&&c.y<WH){ W.grid[wIdx(c.x,c.y)]=c.m; } }); wRender(); }
+  else if(d.action==="wclear"){ W.grid.fill(0); W.life.fill(0); wRender(); }
+  else if(d.action==="wseed"){ wSeed(); }
+  else if(d.action==="wplay"){ wPlay(); }
 }
 
 renderRoomList();
