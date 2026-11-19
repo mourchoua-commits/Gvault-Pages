@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -13,7 +12,7 @@
   :focus-visible{outline:2px solid var(--gold); outline-offset:2px; border-radius:6px}
   button:focus:not(:focus-visible), .filebtn:focus:not(:focus-visible), a:focus:not(:focus-visible){outline:none}
   @media (prefers-reduced-motion:reduce){ *{animation:none!important; transition:none!important} }
-  html,body{margin:0;min-height:100%;color:var(--text);font-family:"Segoe UI",system-ui,sans-serif;user-select:none;-webkit-user-select:none;
+  html,body{margin:0;min-height:100%;max-width:100vw;overflow-x:hidden;color:var(--text);font-family:"Segoe UI",system-ui,sans-serif;user-select:none;-webkit-user-select:none;
     background:linear-gradient(180deg,var(--bg1),var(--bg2));
     background-attachment:fixed}
   header{padding:14px 18px 8px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
@@ -242,7 +241,7 @@
   a.hublink:hover{background:rgba(255,255,255,0.1)}
   #status{color:var(--muted);font-size:13px}
   .chk{display:flex;gap:5px;align-items:center;font-size:13px;color:var(--muted)}
-  @media (max-width:700px){ #gridArea{min-width:100%} aside{width:100%} .tag{flex-basis:100%} header{row-gap:8px} footer{gap:8px} footer button,footer .filebtn,footer a.hublink{padding:10px 12px;min-height:44px} }
+  @media (max-width:700px){ #gridArea{min-width:100%;width:100%} aside{width:100%;min-width:0} main{flex-direction:column;padding:8px 10px} .tag{flex-basis:100%} header{padding:10px;row-gap:8px} #rollWrap{max-width:100%} #roll{min-width:578px} footer{gap:8px} footer button,footer .filebtn,footer a.hublink{padding:10px 12px;min-height:44px} .fwindow{right:8px;max-width:calc(100vw - 16px)} #magicPad,#colorWin,#drawWin,#magicSys{width:auto;max-width:calc(100vw - 16px)} }
 </style>
 </head>
 <body>
@@ -4248,6 +4247,7 @@ function dockCallWin() {
 </script>
 </body>
 </html>
+
 
 
 
