@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "c21ccee64934da88fbca80ed6159e7c32905e6d4",
+  "parentSha": "07b2209110ce281e212776b7772fea20f0a27ff1",
+  "committedAt": "2026-11-19T16:22:29+01:00",
+  "summary": {
+    "subject": "Chat Studio v20 : bouton mini-jeux 🎮 dans le header avec les jeux du Gvault",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 34,
+    "deletions": 0,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 34,
+    "deletions": 0,
+    "magnitude": 34,
+    "committedAt": "2026-11-19T16:22:29+01:00",
+    "parentSha": "07b2209110ce281e212776b7772fea20f0a27ff1"
+  },
+  "pulseKey": "CTP1:c21ccee64934da88fbca80ed6159e7c32905e6d4:f158707d2b78b75f",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "425bb50dd8d4882dc50cefbb1180b55a40aeabbe96c774bc506d52408d7908c0",
+  "typedKeys": {
+    "commit": "gitc:c21ccee64934da88fbca80ed6159e7c32905e6d4",
+    "parent": "gitc:07b2209110ce281e212776b7772fea20f0a27ff1",
+    "pulse": "ctp1:c21ccee64934da88fbca80ed6159e7c32905e6d4:f158707d2b78b75f",
+    "translation": "cttrans:425bb50dd8d4882dc50cefbb1180b55a40aeabbe96c774bc506d52408d7908c0",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "c21ccee64934da88fbca80ed6159e7c32905e6d4",
+    "parentSha": "07b2209110ce281e212776b7772fea20f0a27ff1",
+    "committedAt": "2026-11-19T16:22:29+01:00",
+    "summary": {
+      "subject": "Chat Studio v20 : bouton mini-jeux 🎮 dans le header avec les jeux du Gvault",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 34,
+      "deletions": 0,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 34,
+      "deletions": 0,
+      "magnitude": 34,
+      "committedAt": "2026-11-19T16:22:29+01:00",
+      "parentSha": "07b2209110ce281e212776b7772fea20f0a27ff1"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/c21ccee64934da88fbca80ed6159e7c32905e6d4.json",
+      "vfsKey": "CTP1:c21ccee64934da88fbca80ed6159e7c32905e6d4:f158707d2b78b75f",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/c21ccee64934da88fbca80ed6159e7c32905e6d4.json"
+}
