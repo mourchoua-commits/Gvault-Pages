@@ -26,6 +26,7 @@
   #overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; z-index: 4; }
 
   #main { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; z-index: 2; }
+  #chat-header { position: relative; }
   #chat-header { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.07); font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; background: rgba(24,25,32,.7); backdrop-filter: blur(12px); }
   #chat-header .hash { color: #949ba4; }
   #room-tag { font-size: 11px; color: #b5bac1; font-weight: normal; background: rgba(255,255,255,.08); padding: 2px 8px; border-radius: 10px; }
@@ -114,6 +115,14 @@
 
   /* Wizz MSN */
   #wizz-btn { background: linear-gradient(90deg,#fee75c,#f47b20); border: none; color: #1e1f22; font-weight: 700; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; min-height: 40px; white-space: nowrap; }
+  /* Mini-jeux */
+  #games-btn { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); color: #b5bac1; font-size: 16px; width: 40px; height: 40px; border-radius: 6px; cursor: pointer; padding: 0; }
+  #games-btn:hover { color: #fff; background: rgba(255,255,255,.15); }
+  #games-menu { position: absolute; top: 52px; right: 12px; background: #14151c; border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: 8px; display: none; flex-direction: column; gap: 4px; z-index: 15; min-width: 210px; box-shadow: 0 8px 30px rgba(0,0,0,.6); max-height: 60vh; overflow-y: auto; }
+  #games-menu.open { display: flex; }
+  #games-menu h4 { color: #949ba4; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; padding: 2px 6px 6px; }
+  #games-menu a { color: #dbdee1; text-decoration: none; padding: 8px 10px; border-radius: 6px; font-size: 14px; display: flex; gap: 8px; align-items: center; }
+  #games-menu a:hover { background: rgba(88,101,242,.3); color: #fff; }
   @keyframes wizz-shake { 0%,100%{transform:translate(0,0)} 20%{transform:translate(-8px,4px)} 40%{transform:translate(8px,-4px)} 60%{transform:translate(-6px,-3px)} 80%{transform:translate(6px,3px)} }
   body.wizz #main, body.wizz #sidebar { animation: wizz-shake .5s linear; }
 
@@ -196,10 +205,12 @@
     <span class="hash">#</span><span id="channel-name">général</span>
     <span id="room-tag"></span>
     <button id="focus-btn" title="Couleurs inversées">🙈</button>
+    <button id="games-btn" title="Mini-jeux du Gvault">🎮</button>
     <button id="wizz-btn">📳 Wizz</button>
     <button id="logout-btn" title="Se déconnecter">🚪</button>
     <button id="call-btn">📞 Appeler</button>
   </div>
+  <div id="games-menu"><h4>🎮 Mini-jeux du Gvault</h4></div>
   <div id="messages"></div>
   <div id="typing"></div>
   <div id="composer">
@@ -902,6 +913,29 @@ $("focus-btn").onclick = () => {
   $("focus-btn").textContent = document.body.classList.contains("invert") ? "👁" : "🙈";
 };
 $("logout-btn").onclick = () => leaveToLogin();
+
+/* ---------- Mini-jeux du Gvault ---------- */
+const GAMES = [
+  ["blop-r4", "🎈 Blop R4"],
+  ["blop-r5", "🎈 Blop R5"],
+  ["blop-r6", "🎈 Blop R6"],
+  ["control-tower", "🗼 Control Tower"],
+  ["frontiere-coeurs", "❤️ Frontière Cœurs"],
+  ["gadmin", "🛠 Gadmin"],
+  ["grid-method-ab", "▦ Grid Method AB"],
+  ["gthink-actor-presentation", "🎭 Gthink Actor"],
+  ["project-catalog", "📁 Project Catalog"]
+];
+GAMES.forEach(([slug, label]) => {
+  const a = document.createElement("a");
+  a.href = "https://mourchoua-commits.github.io/Gvault-Pages/essai/" + slug + "/index.html";
+  a.target = "_blank";
+  a.rel = "noopener";
+  a.textContent = label;
+  $("games-menu").appendChild(a);
+});
+$("games-btn").onclick = e => { e.stopPropagation(); $("games-menu").classList.toggle("open"); };
+document.addEventListener("click", e => { if (!e.target.closest("#games-menu") && !e.target.closest("#games-btn")) $("games-menu").classList.remove("open"); });
 
 renderRoomList();
 connectLobby();
