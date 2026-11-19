@@ -491,6 +491,18 @@ function handleNet(data, id) {
   if (data.type === "hello") { peers[id] = { pseudo: data.pseudo, avatar: data.avatar, font: data.font, color: data.color }; renderPeers(); }
   else if (data.type === "wizz") doWizz(data.pseudo);
   else if (data.type === "msg") addRemoteMessage(data);
+  else if (data.type === "img-start") { incomingImages[data.id] = { parts: new Array(data.total), meta: data }; }
+  else if (data.type === "img-chunk") {
+    const inc = incomingImages[data.id];
+    if (inc) inc.parts[data.i] = data.data;
+  }
+  else if (data.type === "img-end") {
+    const inc = incomingImages[data.id];
+    if (inc && inc.parts.every(p => p != null)) {
+      addRemoteImage(data, inc.parts.join(""));
+    }
+    delete incomingImages[data.id];
+  }
   else if (data.type === "react") {
     const msgs = loadMessages(data.channel);
     const m = msgs.find(x => x.id === data.id); if (!m) return;
@@ -513,6 +525,18 @@ function addRemoteMessage(d) {
   if (d.image) putImage(d.id, d.image);
   if (d.channel === currentChannel) renderMessages();
   notify(d.author + " : " + (d.text || "📷 image"));
+}
+
+/* Image reçue : on la met dans le portail puis on affiche */
+function addRemoteImage(d, dataUrl) {
+  const msgs = loadMessages(d.channel);
+  if (msgs.find(x => x.id === d.id)) return;
+  const m = { id: d.id, author: d.author, avatar: d.avatar, font: d.font, color: d.color, text: "", image: null, imgId: d.id, time: d.time, reactions: [] };
+  msgs.push(m);
+  saveMessages(d.channel, msgs);
+  putImage(d.id, dataUrl);
+  if (d.channel === currentChannel) renderMessages();
+  notify(d.author + " : 📷 image");
 }
 
 /* ---------- Notifications ---------- */
@@ -571,9 +595,22 @@ function send(text, image) {
   try { saveMessages(currentChannel, msgs); } catch(e) { console.warn("localStorage plein", e); msgsKeepAlive.push(m); }
   if (image) putImage(id, image); // l'image part dans le portail, pas dans localStorage
   renderMessages();
-  broadcast({ type: "msg", channel: currentChannel, ...m, image });
+  if (image) sendImageChunked(m, image); // transport par morceaux, stockage dans le portail
+  else broadcast({ type: "msg", channel: currentChannel, ...m });
 }
 const msgsKeepAlive = [];
+
+/* Transport d'image pleine qualité par morceaux (le réseau P2P limite la taille d'un message) */
+const CHUNK = 24000;
+function sendImageChunked(m, img) {
+  const total = Math.ceil(img.length / CHUNK);
+  broadcast({ type: "img-start", channel: currentChannel, id: m.id, author: m.author, avatar: m.avatar, font: m.font, color: m.color, time: m.time, total });
+  for (let i = 0; i < total; i++) {
+    broadcast({ type: "img-chunk", id: m.id, i, data: img.slice(i * CHUNK, (i + 1) * CHUNK) });
+  }
+  broadcast({ type: "img-end", channel: currentChannel, id: m.id, author: m.author, avatar: m.avatar, font: m.font, color: m.color, time: m.time });
+}
+const incomingImages = {}; // id -> {parts:[], meta}
 $("send-btn").onclick = () => { send(input.value.trim(), null); input.value = ""; input.focus(); };
 input.addEventListener("keydown", e => { if (e.key === "Enter") { send(input.value.trim(), null); input.value = ""; } });
 $("attach-btn").onclick = () => $("file-input").click();
