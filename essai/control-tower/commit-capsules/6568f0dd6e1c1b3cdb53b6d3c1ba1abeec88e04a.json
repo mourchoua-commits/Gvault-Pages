@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "6568f0dd6e1c1b3cdb53b6d3c1ba1abeec88e04a",
+  "parentSha": "4b0e79d3a979c0121237011874b11abd48f17517",
+  "committedAt": "2026-11-19T13:58:10+01:00",
+  "summary": {
+    "subject": "Chat Studio v5 : fond glitch animé, salon courant mémorisé au retour arrière",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 44,
+    "deletions": 22,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 44,
+    "deletions": 22,
+    "magnitude": 66,
+    "committedAt": "2026-11-19T13:58:10+01:00",
+    "parentSha": "4b0e79d3a979c0121237011874b11abd48f17517"
+  },
+  "pulseKey": "CTP1:6568f0dd6e1c1b3cdb53b6d3c1ba1abeec88e04a:483ffa977df25fac",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "47f3df24ccc735922f3383f09359f3d88edf022688c9f5966bc0820f10ce7419",
+  "typedKeys": {
+    "commit": "gitc:6568f0dd6e1c1b3cdb53b6d3c1ba1abeec88e04a",
+    "parent": "gitc:4b0e79d3a979c0121237011874b11abd48f17517",
+    "pulse": "ctp1:6568f0dd6e1c1b3cdb53b6d3c1ba1abeec88e04a:483ffa977df25fac",
+    "translation": "cttrans:47f3df24ccc735922f3383f09359f3d88edf022688c9f5966bc0820f10ce7419",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "6568f0dd6e1c1b3cdb53b6d3c1ba1abeec88e04a",
+    "parentSha": "4b0e79d3a979c0121237011874b11abd48f17517",
+    "committedAt": "2026-11-19T13:58:10+01:00",
+    "summary": {
+      "subject": "Chat Studio v5 : fond glitch animé, salon courant mémorisé au retour arrière",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 44,
+      "deletions": 22,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 44,
+      "deletions": 22,
+      "magnitude": 66,
+      "committedAt": "2026-11-19T13:58:10+01:00",
+      "parentSha": "4b0e79d3a979c0121237011874b11abd48f17517"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/6568f0dd6e1c1b3cdb53b6d3c1ba1abeec88e04a.json",
+      "vfsKey": "CTP1:6568f0dd6e1c1b3cdb53b6d3c1ba1abeec88e04a:483ffa977df25fac",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/6568f0dd6e1c1b3cdb53b6d3c1ba1abeec88e04a.json"
+}
