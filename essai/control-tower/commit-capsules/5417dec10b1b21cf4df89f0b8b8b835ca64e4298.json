@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "5417dec10b1b21cf4df89f0b8b8b835ca64e4298",
+  "parentSha": "e70604ee66171a7a0f56b8e02b443d78abb02255",
+  "committedAt": "2026-11-19T22:13:49+01:00",
+  "summary": {
+    "subject": "Ajout de la clause anti-exclusion (exclusion permanente) dans les CGU",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 3,
+    "deletions": 1,
+    "paths": [
+      "CGU.md"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 3,
+    "deletions": 1,
+    "magnitude": 4,
+    "committedAt": "2026-11-19T22:13:49+01:00",
+    "parentSha": "e70604ee66171a7a0f56b8e02b443d78abb02255"
+  },
+  "pulseKey": "CTP1:5417dec10b1b21cf4df89f0b8b8b835ca64e4298:8ee350750a36b616",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "f3d297d2c3c5c1d1b24134c2a3edb117864b607e9c6931c642543299bad2cdea",
+  "typedKeys": {
+    "commit": "gitc:5417dec10b1b21cf4df89f0b8b8b835ca64e4298",
+    "parent": "gitc:e70604ee66171a7a0f56b8e02b443d78abb02255",
+    "pulse": "ctp1:5417dec10b1b21cf4df89f0b8b8b835ca64e4298:8ee350750a36b616",
+    "translation": "cttrans:f3d297d2c3c5c1d1b24134c2a3edb117864b607e9c6931c642543299bad2cdea",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "5417dec10b1b21cf4df89f0b8b8b835ca64e4298",
+    "parentSha": "e70604ee66171a7a0f56b8e02b443d78abb02255",
+    "committedAt": "2026-11-19T22:13:49+01:00",
+    "summary": {
+      "subject": "Ajout de la clause anti-exclusion (exclusion permanente) dans les CGU",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 3,
+      "deletions": 1,
+      "paths": [
+        "CGU.md"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 3,
+      "deletions": 1,
+      "magnitude": 4,
+      "committedAt": "2026-11-19T22:13:49+01:00",
+      "parentSha": "e70604ee66171a7a0f56b8e02b443d78abb02255"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/5417dec10b1b21cf4df89f0b8b8b835ca64e4298.json",
+      "vfsKey": "CTP1:5417dec10b1b21cf4df89f0b8b8b835ca64e4298:8ee350750a36b616",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/5417dec10b1b21cf4df89f0b8b8b835ca64e4298.json"
+}
