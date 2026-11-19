@@ -104,8 +104,9 @@
   #create-room-input { flex: 1; background: rgba(0,0,0,.5); border: 1px solid rgba(255,255,255,.15); outline: none; color: #fff; padding: 10px 12px; border-radius: 8px; font-size: 15px; min-width: 0; }
   #create-room-btn { background: rgba(87,242,135,.15); border: 1px solid #57f287; color: #57f287; border-radius: 8px; padding: 10px 14px; cursor: pointer; font-size: 14px; white-space: nowrap; }
 
-  /* Mode focus : masque le haut et la barre de saisie */
-  body.focus #chat-header, body.focus #composer, body.focus #typing { display: none; }
+  /* Mode inversé : toutes les couleurs du site en négatif */
+  body.invert { filter: invert(1) hue-rotate(180deg); }
+  body.invert #bg, body.invert #videos video { filter: invert(1) hue-rotate(180deg); }
   body:not(.in) #main, body:not(.in) #sidebar, body:not(.in) #focus-btn { display: none; }
   /* Boutons du header (focus / logout) */
   #focus-btn, #logout-btn { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); color: #b5bac1; font-size: 16px; width: 40px; height: 40px; border-radius: 6px; cursor: pointer; padding: 0; }
@@ -194,7 +195,7 @@
     <button id="burger" aria-label="Menu">☰</button>
     <span class="hash">#</span><span id="channel-name">général</span>
     <span id="room-tag"></span>
-    <button id="focus-btn" title="Masquer/afficher le haut et la barre d'écriture">📖</button>
+    <button id="focus-btn" title="Couleurs inversées">🙈</button>
     <button id="wizz-btn">📳 Wizz</button>
     <button id="logout-btn" title="Se déconnecter">🚪</button>
     <button id="call-btn">📞 Appeler</button>
@@ -893,8 +894,8 @@ applyColor(savedColor || TEXT_COLORS[0]);
 
 /* ---------- Mode focus : masque haut + barre de saisie ---------- */
 $("focus-btn").onclick = () => {
-  document.body.classList.toggle("focus");
-  $("focus-btn").textContent = document.body.classList.contains("focus") ? "💬" : "📖";
+  document.body.classList.toggle("invert");
+  $("focus-btn").textContent = document.body.classList.contains("invert") ? "👁" : "🙈";
 };
 $("logout-btn").onclick = () => leaveToLogin();
 
