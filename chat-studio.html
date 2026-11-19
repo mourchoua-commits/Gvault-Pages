@@ -1134,6 +1134,102 @@ function gamePong(d) {
 function PAINT_JS() {
     return "";
   }
+
+/* ----- Paint Studio multi (grille + instruments Route Studio + magie) ----- */
+const P = { cols:48, rows:30, cell:12, grid:[], tool:"pen", color:"#5865f2", inst:"piano", playing:false, cv:null, cx:null, pads:null };
+const PAINT_COLORS = ["#ffffff","#dbdee1","#5865f2","#57f287","#fee75c","#eb459e","#ed4245","#f47b20","#1abc9c","#8b9bff","#000000"];
+const ROUTE_INSTRUMENTS = [
+  ["piano","🎹 Piano"],["synth","🌊 Synthé"],["chip","👾 8-bit"],["bell","🔔 Cloches"],["organ","🎼 Orgue"],
+  ["strings","🎻 Cordes"],["pluck","🪕 Pluck"],["b808","💣 808"],["guitar","🎸 Guitare"],["flute","🫈 Flûte"],
+  ["trumpet","🎺 Trompette"],["marimba","🪵 Marimba"],["vibra","✨ Vibraphone"],["choir","👨‍🎤 Chœur"],["sitar","🧘 Sitar"],
+  ["bass","🎛️ Basse ronde"],["mbox","🎁 Boîte à musique"],["accord","🪗 Accordéon"],["drums","🥁 Batterie"],
+  ["screech","📞 Pneu qui dérape"],["ember","🔥 Braise"],["rain","🌧 Pluie"],["wind","🌬️ Vent"],["laser","⚡ Laser"],
+  ["heart","💓 Cœur"],["vinyl","📻 Vinyle"],["heli","🚁 Hélico"],["balloon","🎈 Ballon"],["wall","🧱 Mur du son"]
+];
+const MEL_WAVE = {piano:"triangle",synth:"sawtooth",chip:"square",bell:"sine",organ:"sine",strings:"sawtooth",pluck:"triangle",b808:"sine",guitar:"sawtooth",flute:"sine",trumpet:"sawtooth",marimba:"triangle",vibra:"sine",choir:"sawtooth",sitar:"sawtooth",bass:"sine",mbox:"triangle",accord:"square",drums:"square"};
+const SFX_IDS = new Set(["screech","ember","rain","wind","laser","heart","vinyl","heli","balloon","wall"]);
+let actx = null;
+function audioCtx(){ if(!actx){ try{ actx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } if(actx && actx.state==="suspended") actx.resume(); return actx; }
+function midiOf(y){ const penta=[0,2,4,7,9,12,14,16,19,21,24]; const i=Math.min(penta.length-1, Math.floor((P.rows-1-y)/P.rows*penta.length)); return 72+penta[penta.length-1-i]; }
+function freqOf(m){ return 440*Math.pow(2,(m-69)/12); }
+function playInst(inst, midi, dur){
+  const ctx=audioCtx(); if(!ctx) return;
+  const t=ctx.currentTime, f=freqOf(midi), g=ctx.createGain(); g.connect(ctx.destination);
+  if(SFX_IDS.has(inst)){
+    const len=Math.floor(ctx.sampleRate*0.4), buf=ctx.createBuffer(1,len,ctx.sampleRate), d=buf.getChannelData(0);
+    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*(1-i/len);
+    const src=ctx.createBufferSource(); src.buffer=buf;
+    const flt=ctx.createBiquadFilter(); flt.type="bandpass"; flt.frequency.value=800+((midi*137)%2400);
+    src.connect(flt); flt.connect(g); g.gain.value=0.25; src.start(t); return;
+  }
+  const o=ctx.createOscillator(); o.type=MEL_WAVE[inst]||"sine"; o.frequency.setValueAtTime(f,t);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.3,t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+(dur||0.4));
+  o.connect(g); o.start(t); o.stop(t+(dur||0.4)+0.05);
+}
+function initPaint(){
+  P.grid = Array.from({length:P.rows},()=>Array(P.cols).fill(null));
+  const wrap=document.createElement("div"); wrap.id="paint-wrap";
+  wrap.innerHTML = '<div id="paint-bar">'
+    + '<button class="ptool active" data-t="pen" title="Crayon">✏️</button>'
+    + '<button class="ptool" data-t="line" title="Ligne">➖</button>'
+    + '<button class="ptool" data-t="fill" title="Remplissage">🪣</button>'
+    + '<button class="ptool" data-t="erase" title="Gomme">🧽</button>'
+    + '<span id="paint-swatches" style="display:flex;gap:4px;align-items:center;flex-wrap:wrap"></span>'
+    + '<input type="color" id="paint-color" value="#5865f2" title="Couleur perso">'
+    + '<select id="paint-inst" title="Instrument (Route Studio)"></select>'
+    + '<button class="ptool" id="paint-play" title="Jouer le dessin">▶️ Jouer</button>'
+    + '<button class="ptool" id="paint-magic" title="Palette magique">🌈 Magie</button>'
+    + '<button class="ptool" id="paint-clear" title="Tout effacer">🧹</button>'
+    + '</div>'
+    + '<canvas id="paint-canvas" width="' + (P.cols*P.cell) + '" height="' + (P.rows*P.cell) + '"></canvas>'
+    + '<div id="paint-pads"></div>';
+  $("game-area").appendChild(wrap);
+  const sw=$("paint-swatches");
+  PAINT_COLORS.forEach(c=>{ const b=document.createElement("button"); b.className="swatch"+(c===P.color?" active":""); b.style.background=c;
+    b.onclick=()=>{ P.color=c; if(P.tool==="erase") P.tool="pen"; $("paint-color").value=c; document.querySelectorAll("#paint-swatches .swatch").forEach(x=>x.classList.toggle("active",x===b)); };
+    sw.appendChild(b); });
+  $("paint-color").addEventListener("input",e=>{ P.color=e.target.value; if(P.tool==="erase") P.tool="pen"; document.querySelectorAll("#paint-swatches .swatch").forEach(x=>x.classList.remove("active")); });
+  const sel=$("paint-inst");
+  ROUTE_INSTRUMENTS.forEach(pair=>{ const o=document.createElement("option"); o.value=pair[0]; o.textContent=pair[1]; if(pair[0]===P.inst) o.selected=true; sel.appendChild(o); });
+  sel.onchange=()=>{ P.inst=sel.value; playInst(P.inst, 72, 0.3); };
+  wrap.querySelectorAll(".ptool[data-t]").forEach(b=>{ b.onclick=()=>{ P.tool=b.dataset.t; wrap.querySelectorAll(".ptool[data-t]").forEach(x=>x.classList.toggle("active",x===b)); }; });
+  const pads=$("paint-pads");
+  const padCols=["#f43f5e","#f97316","#facc15","#4ade80","#22d3ee","#818cf8"];
+  for(let i=0;i<24;i++){ const p=document.createElement("button"); p.className="pad"; p.style.background=padCols[i%6]; p.style.opacity=String(0.35+((i/6|0)/4)*0.65); p.onclick=()=>pressPad(i,true); pads.appendChild(p); }
+  P.pads=pads;
+  const cv=$("paint-canvas"), cx=cv.getContext("2d");
+  P.cv=cv; P.cx=cx;
+  drawPaintGrid();
+  let drawing=false, stroke=[], lineStart=null;
+  const cellFromEvent=e=>{ const r=cv.getBoundingClientRect(); return { x:Math.max(0,Math.min(P.cols-1,Math.floor((e.clientX-r.left)/r.width*P.cols))), y:Math.max(0,Math.min(P.rows-1,Math.floor((e.clientY-r.top)/r.height*P.rows))) }; };
+  cv.addEventListener("pointerdown",e=>{ e.preventDefault(); audioCtx(); const c=cellFromEvent(e);
+    if(P.tool==="fill"){ fillAt(c.x,c.y,P.color); return; }
+    if(P.tool==="line"){ lineStart=c; return; }
+    drawing=true; stroke=[{x:c.x,y:c.y,c:P.tool==="erase"?null:P.color}]; paintCell(c.x,c.y,stroke[0].c); playInst(P.inst,midiOf(c.y),0.25);
+    try{ cv.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  cv.addEventListener("pointermove",e=>{ if(!drawing) return; const c=cellFromEvent(e); const last=stroke[stroke.length-1]; if(last&&last.x===c.x&&last.y===c.y) return; const cell={x:c.x,y:c.y,c:P.tool==="erase"?null:P.color}; stroke.push(cell); paintCell(cell.x,cell.y,cell.c); });
+  cv.addEventListener("pointerup",e=>{ if(P.tool==="line"&&lineStart){ const c=cellFromEvent(e); const cells=lineCells(lineStart,c); cells.forEach(cc=>{ P.grid[cc.y][cc.x]=P.color; paintCell(cc.x,cc.y,P.color); }); broadcast({type:"game",action:"paint",id:"paint",cells:cells.map(cc=>({x:cc.x,y:cc.y,c:P.color}))}); lineStart=null; return; } if(!drawing) return; drawing=false; if(stroke.length) broadcast({type:"game",action:"paint",id:"paint",cells:stroke}); stroke=[]; });
+  function lineCells(a,b){ const cells=[]; const dx=Math.abs(b.x-a.x), dy=Math.abs(b.y-a.y), sx=a.x<b.x?1:-1, sy=a.y<b.y?1:-1; let err=dx-dy, x=a.x, y=a.y; for(;;){ cells.push({x:x,y:y}); if(x===b.x&&y===b.y) break; const e2=2*err; if(e2>-dy){err-=dy;x+=sx;} if(e2<dx){err+=dx;y+=sy;} } return cells; }
+  function fillAt(x,y,c){ const target=P.grid[y][x]; if(target===c) return; const stack=[[x,y]]; const changed=[]; while(stack.length){ const p=stack.pop(); const px=p[0], py=p[1]; if(px<0||py<0||px>=P.cols||py>=P.rows) continue; if(P.grid[py][px]!==target) continue; P.grid[py][px]=c; paintCell(px,py,c); changed.push({x:px,y:py,c:c}); if(px>0)stack.push([px-1,py]); if(px<P.cols-1)stack.push([px+1,py]); if(py>0)stack.push([px,py-1]); if(py<P.rows-1)stack.push([px,py+1]); } broadcast({type:"game",action:"paint",id:"paint",cells:changed}); }
+  $("paint-clear").onclick=()=>{ P.grid.forEach(r=>r.fill(null)); drawPaintGrid(); broadcast({type:"game",action:"clear",id:"paint"}); };
+  $("paint-play").onclick=()=>{ broadcast({type:"game",action:"play",id:"paint"}); playPaint(); };
+  $("paint-magic").onclick=()=>{ pads.classList.toggle("open"); };
+  $("game-status").textContent="🎨 Dessine : tes coups partent aux autres joueurs du salon. ▶️ Jouer = le dessin devient musique (instrument Route Studio). 🌈 = pads magiques.";
+}
+function drawPaintGrid(){ const cx=P.cx, cv=P.cv; if(!cx) return; cx.fillStyle="#0a0a10"; cx.fillRect(0,0,cv.width,cv.height); cx.strokeStyle="rgba(255,255,255,.07)"; cx.lineWidth=1; for(let x=1;x<P.cols;x++){ cx.beginPath(); cx.moveTo(x*P.cell+0.5,0); cx.lineTo(x*P.cell+0.5,cv.height); cx.stroke(); } for(let y=1;y<P.rows;y++){ cx.beginPath(); cx.moveTo(0,y*P.cell+0.5); cx.lineTo(cv.width,y*P.cell+0.5); cx.stroke(); } for(let y=0;y<P.rows;y++) for(let x=0;x<P.cols;x++) if(P.grid[y][x]) paintCell(x,y,P.grid[y][x]); }
+function paintCell(x,y,c){ const cx=P.cx; if(!cx) return; cx.fillStyle=c||"#0a0a10"; cx.fillRect(x*P.cell+1,y*P.cell+1,P.cell-2,P.cell-2); }
+function playPaint(){ if(P.playing) return; P.playing=true; const stepMs=140; for(let x=0;x<P.cols;x++){ setTimeout(()=>{ for(let y=0;y<P.rows;y++){ if(P.grid[y][x]) playInst(P.inst, midiOf(y), 0.3); } paintCol(x); }, x*stepMs); } setTimeout(()=>{ P.playing=false; drawPaintGrid(); }, P.cols*stepMs+60); }
+function paintCol(x){ const cx=P.cx, cv=P.cv; if(!cx) return; drawPaintGrid(); cx.fillStyle="rgba(255,255,255,.18)"; cx.fillRect(x*P.cell,0,P.cell,cv.height); }
+function pressPad(i,send){ playInst(["bell","synth","marimba","pluck","choir","vibra"][i%6], 60+((i/6|0)*3)+(i%6)*2, 0.5); const pads=P.pads; if(pads&&pads.children[i]){ const p=pads.children[i]; p.classList.add("pressed"); setTimeout(()=>p.classList.remove("pressed"),250); } if(send) broadcast({type:"game",action:"magic",id:"paint",pad:i}); }
+function gamePaint(d){
+  if(!P.cv) return;
+  if(d.action==="paint"){ d.cells.forEach(c=>{ if(c.x>=0&&c.y>=0&&c.x<P.cols&&c.y<P.rows){ P.grid[c.y][c.x]=c.c; paintCell(c.x,c.y,c.c); } }); }
+  else if(d.action==="clear"){ P.grid.forEach(r=>r.fill(null)); drawPaintGrid(); }
+  else if(d.action==="play"){ playPaint(); }
+  else if(d.action==="magic"){ pressPad(d.pad,false); }
+}
+
 renderRoomList();
 connectLobby();
 $("img-modal").onclick = function () { this.classList.remove("open"); };
