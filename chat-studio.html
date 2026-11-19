@@ -107,8 +107,9 @@
   /* Mode focus : masque le haut et la barre de saisie */
   body.focus #chat-header, body.focus #composer, body.focus #typing { display: none; }
   body:not(.in) #main, body:not(.in) #sidebar, body:not(.in) #focus-btn { display: none; }
-  #focus-btn { position: fixed; left: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 8; background: rgba(24,25,32,.85); border: 1px solid rgba(255,255,255,.12); color: #b5bac1; font-size: 18px; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; backdrop-filter: blur(8px); }
-  #focus-btn:hover { color: #fff; }
+  /* Boutons du header (focus / logout) */
+  #focus-btn, #logout-btn { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); color: #b5bac1; font-size: 16px; width: 40px; height: 40px; border-radius: 6px; cursor: pointer; padding: 0; }
+  #focus-btn:hover, #logout-btn:hover { color: #fff; background: rgba(255,255,255,.15); }
 
   /* Wizz MSN */
   #wizz-btn { background: linear-gradient(90deg,#fee75c,#f47b20); border: none; color: #1e1f22; font-weight: 700; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; min-height: 40px; white-space: nowrap; }
@@ -193,7 +194,9 @@
     <button id="burger" aria-label="Menu">☰</button>
     <span class="hash">#</span><span id="channel-name">général</span>
     <span id="room-tag"></span>
+    <button id="focus-btn" title="Masquer/afficher le haut et la barre d'écriture">📖</button>
     <button id="wizz-btn">📳 Wizz</button>
+    <button id="logout-btn" title="Se déconnecter">🚪</button>
     <button id="call-btn">📞 Appeler</button>
   </div>
   <div id="messages"></div>
@@ -220,7 +223,6 @@
 
 <div id="videos"></div>
 <div id="img-modal"><img id="img-modal-src" alt="" /></div>
-<button id="focus-btn" title="Masquer/afficher le haut et la barre d'écriture">📖</button>
 
 <script type="module">
 const DEFAULT_CHANNELS = ["général", "images", "blabla"];
@@ -324,10 +326,7 @@ function animateBg() {
 }
 requestAnimationFrame(animateBg);
 
-/* ---------- Navigation : retour arrière -> page pseudo ---------- */
-window.addEventListener("popstate", () => {
-  if (pseudo) leaveToLogin();
-});
+/* ---------- Navigation ---------- */
 function leaveToLogin() {
   pseudo = null;
   document.body.classList.remove("in");
@@ -897,6 +896,7 @@ $("focus-btn").onclick = () => {
   document.body.classList.toggle("focus");
   $("focus-btn").textContent = document.body.classList.contains("focus") ? "💬" : "📖";
 };
+$("logout-btn").onclick = () => leaveToLogin();
 
 renderRoomList();
 connectLobby();
