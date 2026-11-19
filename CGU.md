@@ -19,9 +19,15 @@ Bienvenue sur le Gvault (Chat Studio, Route Studio et le site associé). En util
 
 L'équipe du Gvault peut avertir, suspendre ou bannir tout membre qui enfreint ces règles, sur la base de faits constatés, appliqués de manière égale pour tout le monde.
 
+**Équipe de modération :**
+- Pauline
+- Rachel
+
+Les modérateurs sont désignés individuellement, pour leur confiance et leur comportement exemplaire, jamais en fonction de leur origine ou de leur groupe.
+
 ## 4. Signalement
 
-Si tu es victime ou témoin d'un abus, signale-le immédiatement à l'équipe du Gvault.
+Si tu es victime ou témoin d'un abus, signale-le immédiatement à l'équipe du Gvault (Pauline ou Rachel).
 
 ## 5. Responsabilité
 
