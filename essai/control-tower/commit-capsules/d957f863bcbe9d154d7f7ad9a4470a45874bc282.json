@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "d957f863bcbe9d154d7f7ad9a4470a45874bc282",
+  "parentSha": "b4426b0d2304fb807bd00d56ff15b3fa53a1d770",
+  "committedAt": "2026-11-19T15:43:49+01:00",
+  "summary": {
+    "subject": "Chat Studio v17 : bouton livre déplacé dans le header, bouton logout 🚪, retour arrière désactivé",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 7,
+    "deletions": 7,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 7,
+    "deletions": 7,
+    "magnitude": 14,
+    "committedAt": "2026-11-19T15:43:49+01:00",
+    "parentSha": "b4426b0d2304fb807bd00d56ff15b3fa53a1d770"
+  },
+  "pulseKey": "CTP1:d957f863bcbe9d154d7f7ad9a4470a45874bc282:6cbf0d6a43a7470e",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "69139cc0a123c49e7d0ebff2cacb76ff0dc626df6ecc1b9cca24b5818563867d",
+  "typedKeys": {
+    "commit": "gitc:d957f863bcbe9d154d7f7ad9a4470a45874bc282",
+    "parent": "gitc:b4426b0d2304fb807bd00d56ff15b3fa53a1d770",
+    "pulse": "ctp1:d957f863bcbe9d154d7f7ad9a4470a45874bc282:6cbf0d6a43a7470e",
+    "translation": "cttrans:69139cc0a123c49e7d0ebff2cacb76ff0dc626df6ecc1b9cca24b5818563867d",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "d957f863bcbe9d154d7f7ad9a4470a45874bc282",
+    "parentSha": "b4426b0d2304fb807bd00d56ff15b3fa53a1d770",
+    "committedAt": "2026-11-19T15:43:49+01:00",
+    "summary": {
+      "subject": "Chat Studio v17 : bouton livre déplacé dans le header, bouton logout 🚪, retour arrière désactivé",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 7,
+      "deletions": 7,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 7,
+      "deletions": 7,
+      "magnitude": 14,
+      "committedAt": "2026-11-19T15:43:49+01:00",
+      "parentSha": "b4426b0d2304fb807bd00d56ff15b3fa53a1d770"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/d957f863bcbe9d154d7f7ad9a4470a45874bc282.json",
+      "vfsKey": "CTP1:d957f863bcbe9d154d7f7ad9a4470a45874bc282:6cbf0d6a43a7470e",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/d957f863bcbe9d154d7f7ad9a4470a45874bc282.json"
+}
