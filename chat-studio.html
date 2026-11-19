@@ -426,18 +426,6 @@ function handleNet(data, id) {
   if (!data) return;
   if (data.type === "hello") { peers[id] = { pseudo: data.pseudo, avatar: data.avatar }; renderPeers(); }
   else if (data.type === "msg") addRemoteMessage(data);
-  else if (data.type === "img-start") { incomingImages[data.id] = { parts: new Array(data.total), meta: data }; }
-  else if (data.type === "img-chunk") {
-    const inc = incomingImages[data.id];
-    if (inc) inc.parts[data.i] = data.data;
-  }
-  else if (data.type === "img-end") {
-    const inc = incomingImages[data.id];
-    if (inc && inc.parts.every(p => p !== undefined && p !== null)) {
-      addRemoteMessage({ channel: data.channel, id: data.id, author: data.author, avatar: data.avatar, text: "", image: inc.parts.join(""), time: data.time });
-    }
-    delete incomingImages[data.id];
-  }
   else if (data.type === "react") {
     const msgs = loadMessages(data.channel);
     const m = msgs.find(x => x.id === data.id); if (!m) return;
@@ -514,23 +502,9 @@ function send(text, image) {
   msgs.push(m);
   try { saveMessages(currentChannel, msgs); } catch(e) { console.warn("localStorage plein, image gardée en mémoire seulement", e); msgsKeepAlive.push(m); }
   renderMessages();
-  if (m.image) sendImageChunked(m); // image pleine qualité, découpée en morceaux
-  else broadcast({ type: "msg", channel: currentChannel, ...m });
+  broadcast({ type: "msg", channel: currentChannel, ...m });
 }
 const msgsKeepAlive = [];
-
-/* Envoi d'image pleine qualité par morceaux (le réseau P2P limite la taille d'un message) */
-const CHUNK = 24000;
-function sendImageChunked(m) {
-  const img = m.image;
-  const total = Math.ceil(img.length / CHUNK);
-  broadcast({ type: "img-start", channel: currentChannel, id: m.id, author: m.author, avatar: m.avatar, time: m.time, total });
-  for (let i = 0; i < total; i++) {
-    broadcast({ type: "img-chunk", id: m.id, i, data: img.slice(i * CHUNK, (i + 1) * CHUNK) });
-  }
-  broadcast({ type: "img-end", channel: currentChannel, id: m.id, author: m.author, avatar: m.avatar, time: m.time });
-}
-const incomingImages = {}; // id -> {parts:[], meta}
 $("send-btn").onclick = () => { send(input.value.trim(), null); input.value = ""; input.focus(); };
 input.addEventListener("keydown", e => { if (e.key === "Enter") { send(input.value.trim(), null); input.value = ""; } });
 $("attach-btn").onclick = () => $("file-input").click();
@@ -538,20 +512,7 @@ $("file-input").addEventListener("change", e => {
   const f = e.target.files[0]; if (!f) return;
   $("file-input").value = "";
   const r = new FileReader();
-  r.onload = () => {
-    const img = new Image();
-    img.onload = () => {
-      // compression : max 900px, JPEG 70% -> tient dans les limites P2P et localStorage
-      const scale = Math.min(1, 900 / Math.max(img.width, img.height));
-      const c = document.createElement("canvas");
-      c.width = Math.round(img.width * scale);
-      c.height = Math.round(img.height * scale);
-      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-      send("", c.toDataURL("image/jpeg", 0.7));
-    };
-    img.onerror = () => send("", r.result);
-    img.src = r.result;
-  };
+  r.onload = () => { send("", r.result); };
   r.readAsDataURL(f);
 });
 
