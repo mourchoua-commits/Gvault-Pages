@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "796152e89cdd9ca8e51063bd9c462f5eba01710e",
+  "parentSha": "42318024dc56b6ff4c5854f3ddcac36da9bde2dd",
+  "committedAt": "2026-11-19T18:25:23+01:00",
+  "summary": {
+    "subject": "feat(chat-studio): mini-jeu Paint Studio multi (grille, palette, outils, instruments Route Studio, pad magique)",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 21,
+    "deletions": 2,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 21,
+    "deletions": 2,
+    "magnitude": 23,
+    "committedAt": "2026-11-19T18:25:23+01:00",
+    "parentSha": "42318024dc56b6ff4c5854f3ddcac36da9bde2dd"
+  },
+  "pulseKey": "CTP1:796152e89cdd9ca8e51063bd9c462f5eba01710e:d1cb1f4672c67d4c",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "6901980d64f9d9739309952a00515853bf221cd6797bdaec8983a8dfaef23a48",
+  "typedKeys": {
+    "commit": "gitc:796152e89cdd9ca8e51063bd9c462f5eba01710e",
+    "parent": "gitc:42318024dc56b6ff4c5854f3ddcac36da9bde2dd",
+    "pulse": "ctp1:796152e89cdd9ca8e51063bd9c462f5eba01710e:d1cb1f4672c67d4c",
+    "translation": "cttrans:6901980d64f9d9739309952a00515853bf221cd6797bdaec8983a8dfaef23a48",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "796152e89cdd9ca8e51063bd9c462f5eba01710e",
+    "parentSha": "42318024dc56b6ff4c5854f3ddcac36da9bde2dd",
+    "committedAt": "2026-11-19T18:25:23+01:00",
+    "summary": {
+      "subject": "feat(chat-studio): mini-jeu Paint Studio multi (grille, palette, outils, instruments Route Studio, pad magique)",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 21,
+      "deletions": 2,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 21,
+      "deletions": 2,
+      "magnitude": 23,
+      "committedAt": "2026-11-19T18:25:23+01:00",
+      "parentSha": "42318024dc56b6ff4c5854f3ddcac36da9bde2dd"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/796152e89cdd9ca8e51063bd9c462f5eba01710e.json",
+      "vfsKey": "CTP1:796152e89cdd9ca8e51063bd9c462f5eba01710e:d1cb1f4672c67d4c",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/796152e89cdd9ca8e51063bd9c462f5eba01710e.json"
+}
