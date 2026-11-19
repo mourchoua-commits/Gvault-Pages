@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "d8ae039883750998a61435fcf4e7656c2f7aff4c",
+  "parentSha": "d671eb861bbb20b83ea9392cd5f74e1530bd7653",
+  "committedAt": "2026-11-19T21:45:43+01:00",
+  "summary": {
+    "subject": "Ajout de Kali à l'équipe de modération des CGU",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 2,
+    "deletions": 1,
+    "paths": [
+      "CGU.md"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 2,
+    "deletions": 1,
+    "magnitude": 3,
+    "committedAt": "2026-11-19T21:45:43+01:00",
+    "parentSha": "d671eb861bbb20b83ea9392cd5f74e1530bd7653"
+  },
+  "pulseKey": "CTP1:d8ae039883750998a61435fcf4e7656c2f7aff4c:9f585b7dcae0eae0",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "de4d4f7bac451e3c5618ce3c6ff83ec370a754a4724e749282052f9331aea5e5",
+  "typedKeys": {
+    "commit": "gitc:d8ae039883750998a61435fcf4e7656c2f7aff4c",
+    "parent": "gitc:d671eb861bbb20b83ea9392cd5f74e1530bd7653",
+    "pulse": "ctp1:d8ae039883750998a61435fcf4e7656c2f7aff4c:9f585b7dcae0eae0",
+    "translation": "cttrans:de4d4f7bac451e3c5618ce3c6ff83ec370a754a4724e749282052f9331aea5e5",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "d8ae039883750998a61435fcf4e7656c2f7aff4c",
+    "parentSha": "d671eb861bbb20b83ea9392cd5f74e1530bd7653",
+    "committedAt": "2026-11-19T21:45:43+01:00",
+    "summary": {
+      "subject": "Ajout de Kali à l'équipe de modération des CGU",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 1,
+      "paths": [
+        "CGU.md"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 1,
+      "magnitude": 3,
+      "committedAt": "2026-11-19T21:45:43+01:00",
+      "parentSha": "d671eb861bbb20b83ea9392cd5f74e1530bd7653"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/d8ae039883750998a61435fcf4e7656c2f7aff4c.json",
+      "vfsKey": "CTP1:d8ae039883750998a61435fcf4e7656c2f7aff4c:9f585b7dcae0eae0",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/d8ae039883750998a61435fcf4e7656c2f7aff4c.json"
+}
