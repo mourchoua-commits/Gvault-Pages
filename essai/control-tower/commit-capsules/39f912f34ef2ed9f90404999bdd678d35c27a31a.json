@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "39f912f34ef2ed9f90404999bdd678d35c27a31a",
+  "parentSha": "9a9433cdb2e3ae86b2b804c604fd1b278086cde6",
+  "committedAt": "2026-11-19T13:52:23+01:00",
+  "summary": {
+    "subject": "Chat Studio v4 : retour arrière -> login, lobby des salons créés, redesign glitch",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 188,
+    "deletions": 81,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 188,
+    "deletions": 81,
+    "magnitude": 269,
+    "committedAt": "2026-11-19T13:52:23+01:00",
+    "parentSha": "9a9433cdb2e3ae86b2b804c604fd1b278086cde6"
+  },
+  "pulseKey": "CTP1:39f912f34ef2ed9f90404999bdd678d35c27a31a:4493c6a82e45d32f",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "8443aa6da1de9527c733098a4a7b6d0d2aa81f6b6fe9f6cefa4afe9845d707c3",
+  "typedKeys": {
+    "commit": "gitc:39f912f34ef2ed9f90404999bdd678d35c27a31a",
+    "parent": "gitc:9a9433cdb2e3ae86b2b804c604fd1b278086cde6",
+    "pulse": "ctp1:39f912f34ef2ed9f90404999bdd678d35c27a31a:4493c6a82e45d32f",
+    "translation": "cttrans:8443aa6da1de9527c733098a4a7b6d0d2aa81f6b6fe9f6cefa4afe9845d707c3",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "39f912f34ef2ed9f90404999bdd678d35c27a31a",
+    "parentSha": "9a9433cdb2e3ae86b2b804c604fd1b278086cde6",
+    "committedAt": "2026-11-19T13:52:23+01:00",
+    "summary": {
+      "subject": "Chat Studio v4 : retour arrière -> login, lobby des salons créés, redesign glitch",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 188,
+      "deletions": 81,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 188,
+      "deletions": 81,
+      "magnitude": 269,
+      "committedAt": "2026-11-19T13:52:23+01:00",
+      "parentSha": "9a9433cdb2e3ae86b2b804c604fd1b278086cde6"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/39f912f34ef2ed9f90404999bdd678d35c27a31a.json",
+      "vfsKey": "CTP1:39f912f34ef2ed9f90404999bdd678d35c27a31a:4493c6a82e45d32f",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/39f912f34ef2ed9f90404999bdd678d35c27a31a.json"
+}
