@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "d61d55af27d798c96b71e892ebe05db14c6116a5",
+  "parentSha": "4d30677190eb6375faa6266b8e541633c401abde",
+  "committedAt": "2026-11-19T17:29:33+01:00",
+  "summary": {
+    "subject": "Chat Studio: retour à la v21 (lien Route Studio retiré du menu outils)",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1118,
+    "deletions": 1,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "FULL",
+    "changedFiles": 1,
+    "additions": 1118,
+    "deletions": 1,
+    "magnitude": 1119,
+    "committedAt": "2026-11-19T17:29:33+01:00",
+    "parentSha": "4d30677190eb6375faa6266b8e541633c401abde"
+  },
+  "pulseKey": "CTP1:d61d55af27d798c96b71e892ebe05db14c6116a5:8a653dc3e883f9e1",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "41333fdd272274bd4ace466dff45bd9d1ca9d61586e20fb1d653fafafde4e0c5",
+  "typedKeys": {
+    "commit": "gitc:d61d55af27d798c96b71e892ebe05db14c6116a5",
+    "parent": "gitc:4d30677190eb6375faa6266b8e541633c401abde",
+    "pulse": "ctp1:d61d55af27d798c96b71e892ebe05db14c6116a5:8a653dc3e883f9e1",
+    "translation": "cttrans:41333fdd272274bd4ace466dff45bd9d1ca9d61586e20fb1d653fafafde4e0c5",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "d61d55af27d798c96b71e892ebe05db14c6116a5",
+    "parentSha": "4d30677190eb6375faa6266b8e541633c401abde",
+    "committedAt": "2026-11-19T17:29:33+01:00",
+    "summary": {
+      "subject": "Chat Studio: retour à la v21 (lien Route Studio retiré du menu outils)",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1118,
+      "deletions": 1,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "FULL",
+      "changedFiles": 1,
+      "additions": 1118,
+      "deletions": 1,
+      "magnitude": 1119,
+      "committedAt": "2026-11-19T17:29:33+01:00",
+      "parentSha": "4d30677190eb6375faa6266b8e541633c401abde"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/d61d55af27d798c96b71e892ebe05db14c6116a5.json",
+      "vfsKey": "CTP1:d61d55af27d798c96b71e892ebe05db14c6116a5:8a653dc3e883f9e1",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/d61d55af27d798c96b71e892ebe05db14c6116a5.json"
+}
