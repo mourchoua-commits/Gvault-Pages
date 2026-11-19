@@ -8,6 +8,8 @@ Bienvenue sur le Gvault (Chat Studio, Route Studio et le site associé). En util
 
 **Personne n'exploite personne, pour aucune raison.** Aucun membre ne doit abuser, harceler, menacer, humilier ou profiter d'un autre membre, que ce soit dans le chat, dans les jeux ou ailleurs sur le site.
 
+**Toute forme de privation, d'exclusion ou de discrimination envers un membre est strictement répréhensible et passible d'exclusion permanente du Gvault.**
+
 ## 2. Comportement attendu
 
 - Respecter tous les membres, sans distinction.
@@ -17,7 +19,7 @@ Bienvenue sur le Gvault (Chat Studio, Route Studio et le site associé). En util
 
 ## 3. Modération
 
-L'équipe du Gvault peut avertir, suspendre ou bannir tout membre qui enfreint ces règles, sur la base de faits constatés, appliqués de manière égale pour tout le monde.
+L'équipe du Gvault peut avertir, suspendre ou bannir tout membre qui enfreint ces règles, sur la base de faits constatés, appliqués de manière égale pour tout le monde. Toute exclusion discriminatoire d'un membre est passible d'exclusion permanente.
 
 **Équipe de modération :**
 - Pauline
