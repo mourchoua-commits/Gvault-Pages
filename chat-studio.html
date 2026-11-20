@@ -74,6 +74,10 @@
   #hangup, .accept-btn { background: #da373c; border: none; color: #fff; font-size: 15px; padding: 12px 28px; border-radius: 24px; cursor: pointer; min-height: 44px; }
   .accept-btn { background: #57f287; color: #14151c; font-weight: 600; }
   #hangup:hover { background: #a12d31; }
+  #call-modal.connected .big-avatar, #call-modal.connected #call-title, #call-modal.connected #call-status { display: none; }
+  #call-modal.connected { justify-content: flex-end; align-items: flex-start; }
+  #call-modal.connected .call-actions { position: fixed; left: 14px; bottom: 18px; margin-top: 0; }
+  #call-modal.connected #hangup { padding: 10px 18px; font-size: 13px; opacity: .8; }
   #videos { position: fixed; bottom: 90px; right: 16px; display: none; flex-direction: column; gap: 8px; z-index: 9; }
   #videos.open { display: flex; }
   #videos video { width: 180px; border-radius: 10px; background: #000; border: 2px solid #5865f2; }
@@ -737,7 +741,7 @@ async function startCall(peerId, isCaller) {
   localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
   pc.onicecandidate = ev => { if (ev.candidate) sendSignal({ to: peerId, data: { candidate: ev.candidate } }, peerId); };
   pc.ontrack = ev => showRemoteVideo(peerId, ev.streams[0]);
-  pc.onconnectionstatechange = () => { if (pc.connectionState === "failed" || pc.connectionState === "closed") closePeer(peerId); };
+  pc.onconnectionstatechange = () => { if (pc.connectionState === "connected") $("call-modal").classList.add("connected"); if (pc.connectionState === "failed" || pc.connectionState === "closed") closePeer(peerId); };
   if (isCaller) {
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
@@ -757,6 +761,7 @@ async function handleSignal(msg, from) {
     $("accept-call").onclick = () => {
       $("accept-call").style.display = "none";
       $("call-status").textContent = "En ligne !";
+      $("call-modal").classList.add("connected");
     };
     return;
   }
@@ -803,11 +808,12 @@ function openCallModal(av, title, status) {
   if (av && av.startsWith("data:")) el.innerHTML = `<img src="${av}"/>`; else el.textContent = av;
   $("call-title").textContent = title;
   $("call-status").textContent = status;
+  $("call-modal").classList.remove("connected");
   $("call-modal").classList.add("open");
 }
 $("hangup").onclick = () => {
   Object.keys(peerConnections).forEach(closePeer);
-  $("call-modal").classList.remove("open");
+  $("call-modal").classList.remove("open", "connected");
 };
 
 /* ---------- Wizz façon MSN ---------- */
@@ -1188,6 +1194,9 @@ const SFX_IDS = new Set(["screech","ember","rain","wind","laser","heart","vinyl"
 let actx = null;
 function audioCtx(){ if(!actx){ try{ actx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } if(actx && actx.state==="suspended") actx.resume(); return actx; }
 function midiOf(y){ const penta=[0,2,4,7,9,12,14,16,19,21,24]; const i=Math.min(penta.length-1, Math.floor((P.rows-1-y)/P.rows*penta.length)); return 72+penta[penta.length-1-i]; }
+// Fréquence de Fermi d'une couleur : chaque couleur de la palette a SA tonalité, distincte des autres 🎛️
+const FERMI_MIDI = {}; PAINT_COLORS.forEach((c,i)=>{ FERMI_MIDI[String(c).toLowerCase()] = 57 + i*3; });
+function colorMidi(c){ if(!c) return midiOf(P.rows-1); const k=String(c).toLowerCase(); if(FERMI_MIDI[k]!=null) return FERMI_MIDI[k]; const n=parseInt(k.slice(1),16); if(isNaN(n)) return midiOf(P.rows-1); const hue=((n>>16&255)*0.299+(n>>8&255)*0.587+(n&255)*0.114)/255; return 57+Math.floor(hue*36); } // teinte -> tonalité unique
 function freqOf(m){ return 440*Math.pow(2,(m-69)/12); }
 function playInst(inst, midi, dur){
   const ctx=audioCtx(); if(!ctx) return;
@@ -1260,7 +1269,7 @@ function initPaint(){
     if(P.tool==="fill"){ fillAt(c.x,c.y,P.color); return; }
     if(P.tool==="pick"){ const v=P.grid[c.y][c.x]; if(v){ P.color=v; $("paint-color").value=v; document.querySelectorAll("#paint-swatches .swatch").forEach(x=>x.classList.remove("active")); } return; }
     if(P.tool==="line"||P.tool==="rect"){ shapeStart=c; return; }
-    drawing=true; lastC=c; stroke=stamp(c.x,c.y,P.tool==="erase"?null:P.color); playInst(P.inst,midiOf(c.y),0.25);
+    drawing=true; lastC=c; stroke=stamp(c.x,c.y,P.tool==="erase"?null:P.color); playInst(P.inst, P.tool==="erase"?midiOf(c.y):colorMidi(P.color), 0.25);
     try{ cv.setPointerCapture(e.pointerId); }catch(err){}
   });
   cv.addEventListener("pointermove",e=>{ if(!drawing) return; const c=cellFromEvent(e); if(lastC&&lastC.x===c.x&&lastC.y===c.y) return; lastC=c; stroke=stroke.concat(stamp(c.x,c.y,P.tool==="erase"?null:P.color)); });
@@ -1283,7 +1292,7 @@ function initPaint(){
 }
 function drawPaintGrid(){ const cx=P.cx, cv=P.cv; if(!cx) return; cx.fillStyle="#0a0a10"; cx.fillRect(0,0,cv.width,cv.height); cx.strokeStyle="rgba(255,255,255,.07)"; cx.lineWidth=1; for(let x=1;x<P.cols;x++){ cx.beginPath(); cx.moveTo(x*P.cell+0.5,0); cx.lineTo(x*P.cell+0.5,cv.height); cx.stroke(); } for(let y=1;y<P.rows;y++){ cx.beginPath(); cx.moveTo(0,y*P.cell+0.5); cx.lineTo(cv.width,y*P.cell+0.5); cx.stroke(); } for(let y=0;y<P.rows;y++) for(let x=0;x<P.cols;x++) if(P.grid[y][x]) paintCell(x,y,P.grid[y][x]); }
 function paintCell(x,y,c){ const cx=P.cx; if(!cx) return; cx.fillStyle=c||"#0a0a10"; cx.fillRect(x*P.cell+1,y*P.cell+1,P.cell-2,P.cell-2); }
-function playPaint(){ if(P.playing) return; P.playing=true; const stepMs=140; for(let x=0;x<P.cols;x++){ setTimeout(()=>{ for(let y=0;y<P.rows;y++){ if(P.grid[y][x]) playInst(P.inst, midiOf(y), 0.3); } paintCol(x); }, x*stepMs); } setTimeout(()=>{ P.playing=false; drawPaintGrid(); }, P.cols*stepMs+60); }
+function playPaint(){ if(P.playing) return; P.playing=true; const stepMs=140; for(let x=0;x<P.cols;x++){ setTimeout(()=>{ for(let y=0;y<P.rows;y++){ if(P.grid[y][x]) playInst(P.inst, colorMidi(P.grid[y][x]), 0.3); } paintCol(x); }, x*stepMs); } setTimeout(()=>{ P.playing=false; drawPaintGrid(); }, P.cols*stepMs+60); }
 function paintCol(x){ const cx=P.cx, cv=P.cv; if(!cx) return; drawPaintGrid(); cx.fillStyle="rgba(255,255,255,.18)"; cx.fillRect(x*P.cell,0,P.cell,cv.height); }
 function pressPad(i,send){ playInst(["bell","synth","marimba","pluck","choir","vibra"][i%6], 60+((i/6|0)*3)+(i%6)*2, 0.5); const pads=P.pads; if(pads&&pads.children[i]){ const p=pads.children[i]; p.classList.add("pressed"); setTimeout(()=>p.classList.remove("pressed"),250); } if(send) broadcast({type:"game",action:"magic",id:"paint",pad:i}); }
 function gamePaint(d){
