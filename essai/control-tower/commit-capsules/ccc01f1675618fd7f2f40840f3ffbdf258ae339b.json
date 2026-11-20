@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "ccc01f1675618fd7f2f40840f3ffbdf258ae339b",
+  "parentSha": "d80d00ef0da34a3383adeb2532515acbe47b1b57",
+  "committedAt": "2026-11-20T09:00:26Z",
+  "summary": {
+    "subject": "feat(chat-studio): mode solo contre le bot quand on est seul dans le salon",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 35,
+    "deletions": 7,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 35,
+    "deletions": 7,
+    "magnitude": 42,
+    "committedAt": "2026-11-20T09:00:26Z",
+    "parentSha": "d80d00ef0da34a3383adeb2532515acbe47b1b57"
+  },
+  "pulseKey": "CTP1:ccc01f1675618fd7f2f40840f3ffbdf258ae339b:040d253337503251",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "d7a4fd3924c7c634de852230d3cceebfb8d18702d1799c0d46299b07f96bcf3a",
+  "typedKeys": {
+    "commit": "gitc:ccc01f1675618fd7f2f40840f3ffbdf258ae339b",
+    "parent": "gitc:d80d00ef0da34a3383adeb2532515acbe47b1b57",
+    "pulse": "ctp1:ccc01f1675618fd7f2f40840f3ffbdf258ae339b:040d253337503251",
+    "translation": "cttrans:d7a4fd3924c7c634de852230d3cceebfb8d18702d1799c0d46299b07f96bcf3a",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "ccc01f1675618fd7f2f40840f3ffbdf258ae339b",
+    "parentSha": "d80d00ef0da34a3383adeb2532515acbe47b1b57",
+    "committedAt": "2026-11-20T09:00:26Z",
+    "summary": {
+      "subject": "feat(chat-studio): mode solo contre le bot quand on est seul dans le salon",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 35,
+      "deletions": 7,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 35,
+      "deletions": 7,
+      "magnitude": 42,
+      "committedAt": "2026-11-20T09:00:26Z",
+      "parentSha": "d80d00ef0da34a3383adeb2532515acbe47b1b57"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/ccc01f1675618fd7f2f40840f3ffbdf258ae339b.json",
+      "vfsKey": "CTP1:ccc01f1675618fd7f2f40840f3ffbdf258ae339b:040d253337503251",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/ccc01f1675618fd7f2f40840f3ffbdf258ae339b.json"
+}
