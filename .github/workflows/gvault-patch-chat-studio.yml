@@ -1,0 +1,85 @@
+name: gvault-patch-chat-studio
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  patch:
+    if: contains(github.event.head_commit.message, '[gvault-patch]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Applique le patch sur chat-studio.html
+        run: |
+          python3 << 'PYEOF'
+          import sys
+          p = 'chat-studio.html'
+          s = open(p, encoding='utf-8').read()
+
+          css_anchor = '  #hangup:hover { background: #a12d31; }'
+          css_new = css_anchor + '''
+  #call-modal.connected .big-avatar, #call-modal.connected #call-title, #call-modal.connected #call-status { display: none; }
+  #call-modal.connected { justify-content: flex-end; align-items: flex-start; }
+  #call-modal.connected .call-actions { position: fixed; left: 14px; bottom: 18px; margin-top: 0; }
+  #call-modal.connected #hangup { padding: 10px 18px; font-size: 13px; opacity: .8; }'''
+          assert s.count(css_anchor) == 1, 'css anchor'
+          s = s.replace(css_anchor, css_new)
+
+          old = 'pc.onconnectionstatechange = () => { if (pc.connectionState === "failed" || pc.connectionState === "closed") closePeer(peerId); };'
+          new = 'pc.onconnectionstatechange = () => { if (pc.connectionState === "connected") $("call-modal").classList.add("connected"); if (pc.connectionState === "failed" || pc.connectionState === "closed") closePeer(peerId); };'
+          assert s.count(old) == 1, 'connstate'
+          s = s.replace(old, new)
+
+          old = '''      $("accept-call").style.display = "none";
+      $("call-status").textContent = "En ligne !";'''
+          new = '''      $("accept-call").style.display = "none";
+      $("call-status").textContent = "En ligne !";
+      $("call-modal").classList.add("connected");'''
+          assert s.count(old) == 1, 'accept'
+          s = s.replace(old, new)
+
+          old = '  $("call-modal").classList.add("open");\n}\n$("hangup").onclick = () => {'
+          new = '  $("call-modal").classList.remove("connected");\n  $("call-modal").classList.add("open");\n}\n$("hangup").onclick = () => {'
+          assert s.count(old) == 1, 'openmodal'
+          s = s.replace(old, new)
+
+          old = '''  Object.keys(peerConnections).forEach(closePeer);
+  $("call-modal").classList.remove("open");
+};'''
+          new = '''  Object.keys(peerConnections).forEach(closePeer);
+  $("call-modal").classList.remove("open", "connected");
+};'''
+          assert s.count(old) == 1, 'hangup'
+          s = s.replace(old, new)
+
+          old = 'function midiOf(y){ const penta=[0,2,4,7,9,12,14,16,19,21,24]; const i=Math.min(penta.length-1, Math.floor((P.rows-1-y)/P.rows*penta.length)); return 72+penta[penta.length-1-i]; }'
+          new = old + '''
+// Fréquence de Fermi d'une couleur : chaque couleur de la palette a SA tonalité, distincte des autres 🎛️
+const FERMI_MIDI = {}; PAINT_COLORS.forEach((c,i)=>{ FERMI_MIDI[String(c).toLowerCase()] = 57 + i*3; });
+function colorMidi(c){ if(!c) return midiOf(P.rows-1); const k=String(c).toLowerCase(); if(FERMI_MIDI[k]!=null) return FERMI_MIDI[k]; const n=parseInt(k.slice(1),16); if(isNaN(n)) return midiOf(P.rows-1); const hue=((n>>16&255)*0.299+(n>>8&255)*0.587+(n&255)*0.114)/255; return 57+Math.floor(hue*36); } // teinte -> tonalité unique'''
+          assert s.count(old) == 1, 'midiOf'
+          s = s.replace(old, new)
+
+          old = 'if(P.grid[y][x]) playInst(P.inst, midiOf(y), 0.3); } paintCol(x);'
+          new = 'if(P.grid[y][x]) playInst(P.inst, colorMidi(P.grid[y][x]), 0.3); } paintCol(x);'
+          assert s.count(old) == 1, 'playPaint'
+          s = s.replace(old, new)
+
+          old = 'drawing=true; lastC=c; stroke=stamp(c.x,c.y,P.tool==="erase"?null:P.color); playInst(P.inst,midiOf(c.y),0.25);'
+          new = 'drawing=true; lastC=c; stroke=stamp(c.x,c.y,P.tool==="erase"?null:P.color); playInst(P.inst, P.tool==="erase"?midiOf(c.y):colorMidi(P.color), 0.25);'
+          assert s.count(old) == 1, 'pointerdown'
+          s = s.replace(old, new)
+
+          open(p, 'w', encoding='utf-8').write(s)
+          print('patch OK')
+          PYEOF
+      - name: Commit et push
+        run: |
+          git config user.name "Vibe Nuage Agent"
+          git config user.email "vibe@mistral.ai"
+          git add chat-studio.html
+          git commit -m "feat(chat-studio): tonalite Fermi par couleur dans Paint Studio + modale d'appel discrete une fois la connexion etablie"
+          git rm -q .github/workflows/gvault-patch-chat-studio.yml
+          git commit -m "chore: retire le workflow de patch temporaire" || true
+          git push
