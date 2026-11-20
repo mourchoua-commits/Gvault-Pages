@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "5dc8af5b0dcf442fca4295ef2ac0a6fcacc5d23f",
+  "parentSha": "17a22d6c2e62ee16f3862685caa72cc828dba057",
+  "committedAt": "2026-11-20T11:18:17+01:00",
+  "summary": {
+    "subject": "test temporaire",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "paths": [
+      "test-inj.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 1,
+    "deletions": 0,
+    "magnitude": 1,
+    "committedAt": "2026-11-20T11:18:17+01:00",
+    "parentSha": "17a22d6c2e62ee16f3862685caa72cc828dba057"
+  },
+  "pulseKey": "CTP1:5dc8af5b0dcf442fca4295ef2ac0a6fcacc5d23f:07dbdcd605735fe3",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "a05ea569e51f54de900ff4c242d7b0dda2046537d75b397c08b8d5b8cf57c9a7",
+  "typedKeys": {
+    "commit": "gitc:5dc8af5b0dcf442fca4295ef2ac0a6fcacc5d23f",
+    "parent": "gitc:17a22d6c2e62ee16f3862685caa72cc828dba057",
+    "pulse": "ctp1:5dc8af5b0dcf442fca4295ef2ac0a6fcacc5d23f:07dbdcd605735fe3",
+    "translation": "cttrans:a05ea569e51f54de900ff4c242d7b0dda2046537d75b397c08b8d5b8cf57c9a7",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "5dc8af5b0dcf442fca4295ef2ac0a6fcacc5d23f",
+    "parentSha": "17a22d6c2e62ee16f3862685caa72cc828dba057",
+    "committedAt": "2026-11-20T11:18:17+01:00",
+    "summary": {
+      "subject": "test temporaire",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "paths": [
+        "test-inj.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 0,
+      "magnitude": 1,
+      "committedAt": "2026-11-20T11:18:17+01:00",
+      "parentSha": "17a22d6c2e62ee16f3862685caa72cc828dba057"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/5dc8af5b0dcf442fca4295ef2ac0a6fcacc5d23f.json",
+      "vfsKey": "CTP1:5dc8af5b0dcf442fca4295ef2ac0a6fcacc5d23f:07dbdcd605735fe3",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/5dc8af5b0dcf442fca4295ef2ac0a6fcacc5d23f.json"
+}
