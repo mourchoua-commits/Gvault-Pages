@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "f883c3d1c8f8e7292ce01a960bb622e3296c75cb",
+  "parentSha": "ab24177e6aa50c036abf6a5554bc36d84cd37c37",
+  "committedAt": "2026-11-20T18:39:07+01:00",
+  "summary": {
+    "subject": "chat-studio: restauration version complète (Paint Studio + Monde vivant, commit 49e8fd51)",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 24,
+    "deletions": 826,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "FULL",
+    "changedFiles": 1,
+    "additions": 24,
+    "deletions": 826,
+    "magnitude": 850,
+    "committedAt": "2026-11-20T18:39:07+01:00",
+    "parentSha": "ab24177e6aa50c036abf6a5554bc36d84cd37c37"
+  },
+  "pulseKey": "CTP1:f883c3d1c8f8e7292ce01a960bb622e3296c75cb:27a5380db8afa872",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "4b18fbf731056efb4b6599d53f39df15e2dcb72b2db9ff2bc17f4f4b0d39ecd9",
+  "typedKeys": {
+    "commit": "gitc:f883c3d1c8f8e7292ce01a960bb622e3296c75cb",
+    "parent": "gitc:ab24177e6aa50c036abf6a5554bc36d84cd37c37",
+    "pulse": "ctp1:f883c3d1c8f8e7292ce01a960bb622e3296c75cb:27a5380db8afa872",
+    "translation": "cttrans:4b18fbf731056efb4b6599d53f39df15e2dcb72b2db9ff2bc17f4f4b0d39ecd9",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "f883c3d1c8f8e7292ce01a960bb622e3296c75cb",
+    "parentSha": "ab24177e6aa50c036abf6a5554bc36d84cd37c37",
+    "committedAt": "2026-11-20T18:39:07+01:00",
+    "summary": {
+      "subject": "chat-studio: restauration version complète (Paint Studio + Monde vivant, commit 49e8fd51)",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 24,
+      "deletions": 826,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "FULL",
+      "changedFiles": 1,
+      "additions": 24,
+      "deletions": 826,
+      "magnitude": 850,
+      "committedAt": "2026-11-20T18:39:07+01:00",
+      "parentSha": "ab24177e6aa50c036abf6a5554bc36d84cd37c37"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/f883c3d1c8f8e7292ce01a960bb622e3296c75cb.json",
+      "vfsKey": "CTP1:f883c3d1c8f8e7292ce01a960bb622e3296c75cb:27a5380db8afa872",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/f883c3d1c8f8e7292ce01a960bb622e3296c75cb.json"
+}
