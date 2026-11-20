@@ -64,15 +64,15 @@
   #msg-input { flex: 1; background: none; border: none; outline: none; color: #dbdee1; font-size: 16px; padding: 10px 4px; min-width: 0; }
   #msg-input::placeholder { color: #6d6f78; }
 
-  #call-modal { position: fixed; inset: 0; background: rgba(0,0,0,.9); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 10; padding: 20px; text-align: center; }
+  #call-modal { position: fixed; top: 70px; right: 16px; width: 250px; background: #141419; border: 1px solid #2b2d36; border-radius: 14px; display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 30; padding: 16px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,.6); }
   #call-modal.open { display: flex; }
-  #call-modal .big-avatar { width: 110px; height: 110px; border-radius: 50%; background: #5865f2; display: flex; align-items: center; justify-content: center; font-size: 44px; color: #fff; animation: pulse 1.6s infinite; overflow: hidden; }
+  #call-modal .big-avatar { width: 72px; height: 72px; border-radius: 50%; background: #5865f2; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #fff; animation: pulse 1.6s infinite; overflow: hidden; }
   #call-modal .big-avatar img { width: 100%; height: 100%; object-fit: cover; }
   @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(88,101,242,.6);} 50% { box-shadow: 0 0 0 22px rgba(88,101,242,0);} }
-  #call-modal h2 { margin-top: 18px; color: #fff; }
-  #call-modal p { color: #949ba4; margin-top: 6px; }
-  .call-actions { display: flex; gap: 14px; margin-top: 26px; }
-  #hangup, .accept-btn { background: #da373c; border: none; color: #fff; font-size: 15px; padding: 12px 28px; border-radius: 24px; cursor: pointer; min-height: 44px; }
+  #call-modal h2 { margin-top: 10px; color: #fff; font-size: 17px; }
+  #call-modal p { color: #949ba4; margin-top: 4px; font-size: 13px; }
+  .call-actions { display: flex; gap: 10px; margin-top: 14px; }
+  #hangup, .accept-btn { background: #da373c; border: none; color: #fff; font-size: 14px; padding: 9px 20px; border-radius: 22px; cursor: pointer; min-height: 40px; }
   .accept-btn { background: #57f287; color: #14151c; font-weight: 600; }
   #hangup:hover { background: #a12d31; }
   #videos { position: fixed; bottom: 90px; right: 16px; display: none; flex-direction: column; gap: 8px; z-index: 9; }
