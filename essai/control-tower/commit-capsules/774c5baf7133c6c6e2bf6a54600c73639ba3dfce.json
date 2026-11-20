@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "774c5baf7133c6c6e2bf6a54600c73639ba3dfce",
+  "parentSha": "d961320eb140724124caae7a420725ca226b70ee",
+  "committedAt": "2026-11-20T18:46:17+01:00",
+  "summary": {
+    "subject": "chat-studio: restauration version complète 49e8fd51 (Paint Studio + Monde vivant musical)",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 205,
+    "deletions": 1,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "WIDE",
+    "changedFiles": 1,
+    "additions": 205,
+    "deletions": 1,
+    "magnitude": 206,
+    "committedAt": "2026-11-20T18:46:17+01:00",
+    "parentSha": "d961320eb140724124caae7a420725ca226b70ee"
+  },
+  "pulseKey": "CTP1:774c5baf7133c6c6e2bf6a54600c73639ba3dfce:20f778d8b6528e7a",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "f8ac9cbdf1b9ec3263e419cd9e957e41c7d85c2f52a2f3548a9221e373eac40a",
+  "typedKeys": {
+    "commit": "gitc:774c5baf7133c6c6e2bf6a54600c73639ba3dfce",
+    "parent": "gitc:d961320eb140724124caae7a420725ca226b70ee",
+    "pulse": "ctp1:774c5baf7133c6c6e2bf6a54600c73639ba3dfce:20f778d8b6528e7a",
+    "translation": "cttrans:f8ac9cbdf1b9ec3263e419cd9e957e41c7d85c2f52a2f3548a9221e373eac40a",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "774c5baf7133c6c6e2bf6a54600c73639ba3dfce",
+    "parentSha": "d961320eb140724124caae7a420725ca226b70ee",
+    "committedAt": "2026-11-20T18:46:17+01:00",
+    "summary": {
+      "subject": "chat-studio: restauration version complète 49e8fd51 (Paint Studio + Monde vivant musical)",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 205,
+      "deletions": 1,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "WIDE",
+      "changedFiles": 1,
+      "additions": 205,
+      "deletions": 1,
+      "magnitude": 206,
+      "committedAt": "2026-11-20T18:46:17+01:00",
+      "parentSha": "d961320eb140724124caae7a420725ca226b70ee"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/774c5baf7133c6c6e2bf6a54600c73639ba3dfce.json",
+      "vfsKey": "CTP1:774c5baf7133c6c6e2bf6a54600c73639ba3dfce:20f778d8b6528e7a",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/774c5baf7133c6c6e2bf6a54600c73639ba3dfce.json"
+}
