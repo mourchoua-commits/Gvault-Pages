@@ -998,7 +998,7 @@ GAMES_TOOLS.forEach(([slug, label]) => {
   a.target = "_blank"; a.rel = "noopener"; a.textContent = label;
   menu.appendChild(a);
 });
-const hMulti = document.createElement("h4"); hMulti.textContent = "🎮 Jeux à plusieurs (ce salon)"; menu.appendChild(hMulti);
+const hMulti = document.createElement("h4"); hMulti.textContent = "🎮 Jeux du salon (solo 🤖 contre le bot si tu es seul·e)"; menu.appendChild(hMulti);
 MULTI_GAMES.forEach(([id, label]) => {
   const b = document.createElement("a");
   b.href = "#"; b.textContent = label;
@@ -1011,14 +1011,18 @@ document.addEventListener("click", e => { if (!e.target.closest("#games-menu") &
 /* ---------- Moteur de jeux P2P ---------- */
 let game = null; // {id, owner, ...}
 function startGame(id, label) {
-  if (!Object.keys(peers).length) { $("game-status").textContent = ""; alert("Il faut être au moins 2 dans le salon pour jouer !"); return; }
+  if (!Object.keys(peers).length) {
+    game = { id, owner: pseudo, state: null, solo: true };
+    openGame(id, label + " · 🤖 solo");
+    return;
+  }
   game = { id, owner: pseudo, state: null };
   broadcast({ type: "game", action: "start", id, owner: pseudo });
   openGame(id, label);
 }
 function openGame(id, label) {
   $("game-title").textContent = label;
-  $("game-status").textContent = "En attente de l'adversaire...";
+  $("game-status").textContent = game && game.solo ? "Mode solo : tu joues contre le bot 🤖" : "En attente de l'adversaire...";
   $("game-area").innerHTML = "";
   $("game-modal").classList.add("open");
   if (id === "morpion") initMorpion();
@@ -1067,6 +1071,23 @@ function initMorpion() {
   updateTttStatus();
 }
 function mySymbol() { return game && game.owner === pseudo ? "X" : "O"; }
+function pickTttCell(board, sym) {
+  const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  const other = sym === "X" ? "O" : "X";
+  for (const w of wins) if (w.filter(x => board[x] === sym).length === 2 && w.some(x => !board[x])) return w.find(x => !board[x]);
+  for (const w of wins) if (w.filter(x => board[x] === other).length === 2 && w.some(x => !board[x])) return w.find(x => !board[x]);
+  if (!board[4]) return 4;
+  const corners = [0,2,6,8].filter(i => !board[i]);
+  if (corners.length) return corners[Math.floor(Math.random()*corners.length)];
+  const empty = board.map((v,i) => v ? -1 : i).filter(i => i >= 0);
+  return empty[Math.floor(Math.random()*empty.length)];
+}
+function botTttMove() {
+  if (!game || !game.solo || game.id !== "morpion" || !ttt || ttt.turn !== "O") return;
+  const i = pickTttCell(ttt.board, "O");
+  if (i === undefined || i < 0) return;
+  setTimeout(() => { if (ttt && game && game.id === "morpion" && ttt.turn === "O") applyTttMove(i, "O"); }, 450);
+}
 function applyTttMove(i, sym) {
   ttt.board[i] = sym;
   const btns = $("ttt-board").children;
@@ -1076,10 +1097,11 @@ function applyTttMove(i, sym) {
   if (ttt.board.every(v => v)) { $("game-status").textContent = "Match nul !"; ttt = null; setTimeout(()=>{ if(game) initMorpion(); }, 2500); return; }
   ttt.turn = sym === "X" ? "O" : "X";
   updateTttStatus();
+  botTttMove();
 }
 function updateTttStatus() {
   if (!ttt) return;
-  $("game-status").textContent = ttt.turn === mySymbol() ? "À toi de jouer (" + mySymbol() + ")" : "Tour de l'adversaire (" + ttt.turn + ")";
+  $("game-status").textContent = ttt.turn === mySymbol() ? "À toi de jouer (" + mySymbol() + ")" : (game && game.solo ? "Tour du bot (" + ttt.turn + ")" : "Tour de l'adversaire (" + ttt.turn + ")");
 }
 function gameMorpion(d) {
   if (d.action === "move") { if (d.cell >= 0 && ttt) applyTttMove(d.cell, d.sym); }
@@ -1092,7 +1114,8 @@ function initPong() {
   c.width = 640; c.height = 400; c.style.background = "#050508"; c.style.maxWidth = "92vw";
   $("game-area").appendChild(c);
   pong = { c, ctx: c.getContext("2d"), ball: { x: 320, y: 200, vx: 4, vy: 3 }, p1: 160, p2: 160, s1: 0, s2: 0, host: game.owner === pseudo };
-  if (pong.host) $("game-status").textContent = "Tu es le serveur : à toi de lancer ! (souris/haut-bas)";
+  if (game.solo) $("game-status").textContent = "Mode solo : bat le bot 🤖 (souris/haut-bas)";
+  else if (pong.host) $("game-status").textContent = "Tu es le serveur : à toi de lancer ! (souris/haut-bas)";
   else $("game-status").textContent = "Adversaire : déplace ta raquette (souris/haut-bas)";
   c.addEventListener("mousemove", e => {
     const r = c.getBoundingClientRect();
@@ -1119,6 +1142,11 @@ function pongLoop() {
   if (b.x > 616 && Math.abs(b.y - pong.p2) < 50) { b.vx = -Math.abs(b.vx) - 0.3; b.vy += (b.y - pong.p2) * 0.08; }
   if (b.x < 0) { pong.s2++; b.x = 320; b.y = 200; b.vx = 4; b.vy = 3; }
   if (b.x > 640) { pong.s1++; b.x = 320; b.y = 200; b.vx = -4; b.vy = 3; }
+  if (game.solo) {
+    const target = b.y + (Math.random() - 0.5) * 34;
+    const diff = target - pong.p2;
+    pong.p2 = Math.max(40, Math.min(360, pong.p2 + Math.max(-3.4, Math.min(3.4, diff * 0.15))));
+  }
   broadcast({ type: "game", action: "state", id: "pong", ball: b, p1: pong.p1, p2: pong.p2, s1: pong.s1, s2: pong.s2 });
   drawPong();
   pongRAF = setTimeout(pongLoop, 33);
@@ -1251,7 +1279,7 @@ function initPaint(){
   $("paint-png").onclick=()=>{ const a=document.createElement("a"); a.download="paint-studio-"+Date.now()+".png"; a.href=paintExportCanvas().toDataURL("image/png"); a.click(); };
   $("paint-send").onclick=()=>{ send("", paintExportCanvas().toDataURL("image/png")); $("game-status").textContent="📨 Dessin envoyé dans #"+currentChannel+" !"; };
   if(!P._kbd){ P._kbd=true; window.addEventListener("keydown",e=>{ if(!P.cv||!$("game-modal").classList.contains("open")||!game||game.id!=="paint") return; const k=e.key.toLowerCase(); if((e.ctrlKey||e.metaKey)&&k==="z"&&!e.shiftKey){ e.preventDefault(); undoPaint(); } else if((e.ctrlKey||e.metaKey)&&(k==="y"||(k==="z"&&e.shiftKey))){ e.preventDefault(); redoPaint(); } }); }
-  $("game-status").textContent="🎨 Pinceau réglable, formes (➖ ▭), pipette 💧, Ctrl+Z / Ctrl+Y, ⬇️ PNG, 📨 envoi dans le salon, ▶️ le dessin devient musique, 🌈 pads magiques — tout part aux autres joueurs.";
+  $("game-status").textContent="🎨 Pinceau réglable, formes (➖ ▭), pipette 💧, Ctrl+Z / Ctrl+Y, ⬇️ PNG, 📨 envoi dans le salon, ▶️ le dessin devient musique, 🌈 pads magiques" + (game && game.solo ? " — mode solo, dessine librement !" : " — tout part aux autres joueurs.");
 }
 function drawPaintGrid(){ const cx=P.cx, cv=P.cv; if(!cx) return; cx.fillStyle="#0a0a10"; cx.fillRect(0,0,cv.width,cv.height); cx.strokeStyle="rgba(255,255,255,.07)"; cx.lineWidth=1; for(let x=1;x<P.cols;x++){ cx.beginPath(); cx.moveTo(x*P.cell+0.5,0); cx.lineTo(x*P.cell+0.5,cv.height); cx.stroke(); } for(let y=1;y<P.rows;y++){ cx.beginPath(); cx.moveTo(0,y*P.cell+0.5); cx.lineTo(cv.width,y*P.cell+0.5); cx.stroke(); } for(let y=0;y<P.rows;y++) for(let x=0;x<P.cols;x++) if(P.grid[y][x]) paintCell(x,y,P.grid[y][x]); }
 function paintCell(x,y,c){ const cx=P.cx; if(!cx) return; cx.fillStyle=c||"#0a0a10"; cx.fillRect(x*P.cell+1,y*P.cell+1,P.cell-2,P.cell-2); }
@@ -1436,7 +1464,7 @@ function initWorld(){
   $("world-play").onclick=()=>{ broadcast({type:"game",action:"wplay",id:"world"}); wPlay(); };
   if(!W.timer) W.timer=setInterval(wTick,50);
   wRender();
-  $("game-status").textContent="🪐 Peins ton écosystème (matières du tableau périodique, pinceau réglable, ⏸ pause, ⬇️ PNG) : eau fait pousser les graines, lave + eau = pierre, feu brûle le bois… ▶️ le monde se joue en musique !";
+  $("game-status").textContent="🪐 Peins ton écosystème (matières du tableau périodique, pinceau réglable, ⏸ pause, ⬇️ PNG) : eau fait pousser les graines, lave + eau = pierre, feu brûle le bois… ▶️ le monde se joue en musique !" + (game && game.solo ? " — mode solo, le monde est à toi !" : "");
 }
 function stopWorld(){ if(W.timer){ clearInterval(W.timer); W.timer=null; } }
 function gameWorld(d){
