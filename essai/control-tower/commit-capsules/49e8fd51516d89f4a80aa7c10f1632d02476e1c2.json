@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "49e8fd51516d89f4a80aa7c10f1632d02476e1c2",
+  "parentSha": "471bb892208f694923b0767788ff8cca002d328e",
+  "committedAt": "2026-11-20T17:45:41+01:00",
+  "summary": {
+    "subject": "chat-studio: Paint Studio + Monde vivant avec fréquence selon le placement vertical (couleur/instrument inchangé)",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 218,
+    "deletions": 376,
+    "paths": [
+      "chat-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "FULL",
+    "changedFiles": 1,
+    "additions": 218,
+    "deletions": 376,
+    "magnitude": 594,
+    "committedAt": "2026-11-20T17:45:41+01:00",
+    "parentSha": "471bb892208f694923b0767788ff8cca002d328e"
+  },
+  "pulseKey": "CTP1:49e8fd51516d89f4a80aa7c10f1632d02476e1c2:185b9005ac76a7c9",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "cacfb3e77012eb576e0a94892949a8045481eb95afbd9a5d44105aaf6d8ffea5",
+  "typedKeys": {
+    "commit": "gitc:49e8fd51516d89f4a80aa7c10f1632d02476e1c2",
+    "parent": "gitc:471bb892208f694923b0767788ff8cca002d328e",
+    "pulse": "ctp1:49e8fd51516d89f4a80aa7c10f1632d02476e1c2:185b9005ac76a7c9",
+    "translation": "cttrans:cacfb3e77012eb576e0a94892949a8045481eb95afbd9a5d44105aaf6d8ffea5",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "49e8fd51516d89f4a80aa7c10f1632d02476e1c2",
+    "parentSha": "471bb892208f694923b0767788ff8cca002d328e",
+    "committedAt": "2026-11-20T17:45:41+01:00",
+    "summary": {
+      "subject": "chat-studio: Paint Studio + Monde vivant avec fréquence selon le placement vertical (couleur/instrument inchangé)",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 218,
+      "deletions": 376,
+      "paths": [
+        "chat-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "FULL",
+      "changedFiles": 1,
+      "additions": 218,
+      "deletions": 376,
+      "magnitude": 594,
+      "committedAt": "2026-11-20T17:45:41+01:00",
+      "parentSha": "471bb892208f694923b0767788ff8cca002d328e"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/49e8fd51516d89f4a80aa7c10f1632d02476e1c2.json",
+      "vfsKey": "CTP1:49e8fd51516d89f4a80aa7c10f1632d02476e1c2:185b9005ac76a7c9",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/49e8fd51516d89f4a80aa7c10f1632d02476e1c2.json"
+}
