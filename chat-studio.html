@@ -1182,3 +1182,318 @@ function initPaint() {
   });
   const mk = (label, fn) => { const b = document.createElement("button"); b.className = "ptool"; b.textContent = label; b.onclick = fn; bar.appendChild(b); return b; };
   const brushBtn = mk("🖌 x1", () => { paint.brush = paint.brush % 3 + 1; brushBtn.textContent = "🖌 x" + paint.brush; });
+  mk("↩️", () => { if (paint.undo.length) { paint.redo.push(paint.grid); paint.grid = paint.undo.pop(); drawPaint(); } });
+  mk("↪️", () => { if (paint.redo.length) { paint.undo.push(paint.grid); paint.grid = paint.redo.pop(); drawPaint(); } });
+  mk("🎵 Pads", () => pads.classList.toggle("open"));
+  mk("📷 PNG", () => { const a = document.createElement("a"); a.download = "paint-studio.png"; a.href = cv.toDataURL("image/png"); a.click(); });
+  mk("📤 Envoyer", () => { send("🎨 " + pseudo + " a dessiné :", cv.toDataURL("image/png")); });
+  for (let i = 0; i < 6; i++) {
+    const p = document.createElement("div"); p.className = "pad"; p.style.background = PAINT_COLORS[3 + i * 2] || "#5865f2";
+    p.onclick = () => { pluck(noteFreq(i), undefined, 0.4, 0.2); p.classList.add("pressed"); setTimeout(() => p.classList.remove("pressed"), 150); };
+    pads.appendChild(p);
+  }
+  wrap.appendChild(bar); wrap.appendChild(cv); wrap.appendChild(pads);
+  $("game-area").appendChild(wrap);
+  const cellAt = e => {
+    const r = cv.getBoundingClientRect();
+    return [Math.floor((e.clientX - r.left) / r.width * PW), Math.floor((e.clientY - r.top) / r.height * PH)];
+  };
+  const applyCell = (x, y, val) => {
+    if (x < 0 || y < 0 || x >= PW || y >= PH) return;
+    const i = y * PW + x;
+    if (paint.grid[i] === val) return;
+    paint.grid[i] = val;
+    paint.ctx.fillStyle = PAINT_COLORS[val];
+    paint.ctx.fillRect(x * CELL, y * CELL, CELL, CELL);
+    pluck(noteFreq(val % 16), undefined, 0.12, 0.06);
+  };
+  const stroke = (x, y, erase) => {
+    if (paint.tool === "pipette") {
+      if (x < 0 || y < 0 || x >= PW || y >= PH) return;
+      paint.color = paint.grid[y * PW + x] % PAINT_COLORS.length;
+      bar.querySelectorAll(".swatch").forEach((s, si) => s.classList.toggle("active", si === paint.color));
+      return;
+    }
+    const val = erase ? 0 : paint.color;
+    for (let dy = -paint.brush + 1; dy < paint.brush; dy++) for (let dx = -paint.brush + 1; dx < paint.brush; dx++) {
+      if (dx * dx + dy * dy > paint.brush * paint.brush) continue;
+      applyCell(x + dx, y + dy, val);
+    }
+    if (!erase) broadcast({ type: "game", action: "paint-cell", id: "paint", x, y });
+  };
+  cv.addEventListener("pointerdown", e => {
+    e.preventDefault();
+    const [x, y] = cellAt(e);
+    paint.undo.push(paint.grid); paint.redo = [];
+    if (paint.undo.length > 30) paint.undo.shift();
+    if (paint.tool === "rect") { paint.rectStart = [x, y]; return; }
+    paint.stroke = true;
+    stroke(x, y, e.button === 2);
+  });
+  cv.addEventListener("pointermove", e => {
+    if (!paint.stroke || !e.buttons) return;
+    const [x, y] = cellAt(e);
+    if (paint.tool === "rect" && paint.rectStart) {
+      drawPaint();
+      paint.ctx.strokeStyle = PAINT_COLORS[paint.color]; paint.ctx.lineWidth = 2;
+      const [x0, y0] = paint.rectStart;
+      paint.ctx.strokeRect(Math.min(x0, x) * CELL, Math.min(y0, y) * CELL, Math.abs(x - x0) * CELL + CELL, Math.abs(y - y0) * CELL + CELL);
+      return;
+    }
+    stroke(x, y, (e.buttons & 2) !== 0);
+  });
+  cv.addEventListener("pointerup", e => {
+    if (paint.tool === "rect" && paint.rectStart) {
+      const [x, y] = cellAt(e);
+      const [x0, y0] = paint.rectStart; paint.rectStart = null;
+      for (let yy = Math.min(y0, y); yy <= Math.max(y0, y); yy++) for (let xx = Math.min(x0, x); xx <= Math.max(x0, x); xx++) applyCell(xx, yy, e.button === 2 ? 0 : paint.color);
+      broadcast({ type: "game", action: "paint-cell", id: "paint", x: x0, y: y0 });
+    }
+    paint.stroke = false;
+  });
+  cv.addEventListener("contextmenu", e => e.preventDefault());
+  drawPaint();
+  $("game-status").textContent = Object.keys(peers).length ? "Dessine, ton pote voit en direct !" : "Mode solo : dessine tranquille 🎨";
+  if (game.owner === pseudo) broadcast({ type: "game", action: "paint-sync", id: "paint", grid: Array.from(paint.grid) });
+}
+function drawPaint() {
+  if (!paint) return;
+  for (let y = 0; y < paint.PH; y++) for (let x = 0; x < paint.PW; x++) {
+    const v = paint.grid[y * paint.PW + x];
+    paint.ctx.fillStyle = PAINT_COLORS[v];
+    paint.ctx.fillRect(x * paint.CELL, y * paint.CELL, paint.CELL, paint.CELL);
+  }
+}
+function stopPaint() { paint = null; }
+function gamePaint(d) {
+  if (!paint) return;
+  if (d.action === "paint-sync" && Array.isArray(d.grid)) { paint.grid = Uint8Array.from(d.grid.slice(0, paint.PW * paint.PH)); drawPaint(); }
+  if (d.action === "paint-cell" && typeof d.x === "number" && typeof d.y === "number") {
+    const val = paint.color;
+    for (let dy = -paint.brush + 1; dy < paint.brush; dy++) for (let dx = -paint.brush + 1; dx < paint.brush; dx++) {
+      const xx = d.x + dx, yy = d.y + dy;
+      if (xx < 0 || yy < 0 || xx >= paint.PW || yy >= paint.PH) continue;
+      paint.grid[yy * paint.PW + xx] = val;
+    }
+    drawPaint();
+  }
+}
+
+/* ----- Monde vivant (falling-sand musical) ----- */
+const MV_W = 96, MV_H = 64, MV_CELL = 6;
+const MV_MATS = [
+  { id:'vide',    name:'Vide',     color:'#0a0a14', kind:'void'   },
+  { id:'sable',   name:'Sable',    color:'#e2c290', kind:'powder' },
+  { id:'eau',     name:'Eau H2O',  color:'#3b82f6', kind:'liquid' },
+  { id:'huile',   name:'Pétrole',  color:'#3f3f46', kind:'liquid' },
+  { id:'lave',    name:'Lave',     color:'#f97316', kind:'liquid' },
+  { id:'vapeur',  name:'Vapeur',   color:'#cbd5e1', kind:'gas'    },
+  { id:'glace',   name:'Glace',    color:'#a5f3fc', kind:'solid'  },
+  { id:'pierre',  name:'Pierre',   color:'#78716c', kind:'solid'  },
+  { id:'bois',    name:'Bois',     color:'#92400e', kind:'solid'  },
+  { id:'charbon', name:'Charbon',  color:'#1c1917', kind:'solid'  },
+  { id:'plante',  name:'Plante',   color:'#22c55e', kind:'life'   },
+  { id:'graine',  name:'Graine',   color:'#a3e635', kind:'powder' },
+  { id:'feu',     name:'Feu',      color:'#ef4444', kind:'fire'   },
+  { id:'or',      name:'Or Au',    color:'#facc15', kind:'powder' },
+  { id:'argent',  name:'Argent Ag',color:'#e5e7eb', kind:'powder' },
+  { id:'fer',     name:'Fer Fe',   color:'#b45309', kind:'powder' },
+  { id:'cuivre',  name:'Cuivre Cu',color:'#fb923c', kind:'powder' },
+  { id:'mercure', name:'Mercure Hg',color:'#94a3b8', kind:'liquid' },
+  { id:'soufre',  name:'Soufre S', color:'#fde047', kind:'powder' },
+  { id:'sel',     name:'Sel NaCl', color:'#f8fafc', kind:'powder' },
+  { id:'oxy',     name:'O2',       color:'#7dd3fc', kind:'gas'    },
+  { id:'azote',   name:'N2',       color:'#a5b4fc', kind:'gas'    },
+  { id:'chlore',  name:'Cl2',      color:'#bef264', kind:'gas'    },
+  { id:'helium',  name:'He',       color:'#fda4af', kind:'gas'    },
+  { id:'neon',    name:'Ne',       color:'#f472b6', kind:'gas'    },
+  { id:'hydrogen',name:'H2',       color:'#d8b4fe', kind:'gas'    }
+];
+MV_MATS.forEach((m, i) => m.note = noteFreq(i)); // chaque matière = une note différente
+let mv = null;
+function initMonde() {
+  const wrap = document.createElement("div"); wrap.id = "paint-wrap";
+  const bar = document.createElement("div"); bar.id = "paint-bar";
+  const seq = document.createElement("div"); seq.id = "mv-seq";
+  const cv = document.createElement("canvas"); cv.id = "paint-canvas"; cv.width = MV_W * MV_CELL; cv.height = MV_H * MV_CELL; cv.style.imageRendering = "pixelated";
+  mv = { wrap, bar, seq, cv, ctx: cv.getContext("2d"), grid: new Uint8Array(MV_W * MV_H), cur: 1, brush: 2, paused: false, loopOn: false, loopTimer: null, stepIdx: 0, botTimer: null, raf: 0 };
+  const gi = (x, y) => y * MV_W + x;
+  const inB = (x, y) => x >= 0 && x < MV_W && y >= 0 && y < MV_H;
+  mv.gi = gi; mv.inB = inB;
+  MV_MATS.forEach((m, i) => {
+    const b = document.createElement("button");
+    b.className = "ptool" + (i === mv.cur ? " active" : ""); b.textContent = m.name;
+    b.style.borderLeft = "4px solid " + m.color; b.title = "note " + Math.round(m.note) + " Hz";
+    b.onclick = () => { mv.cur = i; bar.querySelectorAll(".ptool").forEach(x => x.classList.remove("active")); b.classList.add("active"); pluck(m.note, undefined, 0.3, 0.15); };
+    bar.appendChild(b);
+  });
+  const mk = (label, fn) => { const b = document.createElement("button"); b.className = "ptool"; b.textContent = label; b.onclick = fn; bar.appendChild(b); return b; };
+  const pauseBtn = mk("⏸ Pause", () => { mv.paused = !mv.paused; pauseBtn.textContent = mv.paused ? "▶️ Reprendre" : "⏸ Pause"; });
+  mk("🎵 Boucle", () => playMvLoop());
+  const brushBtn = mk("🖌 x2", () => { mv.brush = mv.brush % 5 + 1; brushBtn.textContent = "🖌 x" + mv.brush; });
+  mk("🗑 Clear", () => { mv.grid.fill(0); broadcast({ type: "game", action: "mv-sync", id: "monde", grid: Array.from(mv.grid) }); });
+  mk("🌋 Terrain", () => {
+    mv.grid.fill(0);
+    for (let x = 0; x < MV_W; x++) {
+      const h = 18 + Math.floor(8 * Math.sin(x / 8) + Math.random() * 3);
+      for (let y = MV_H - h; y < MV_H; y++) mv.grid[gi(x, y)] = y > MV_H - 4 ? 7 : 1;
+    }
+    for (let i = 0; i < 40; i++) mv.grid[gi(2 + Math.floor(Math.random() * (MV_W - 4)), MV_H - 20 - Math.floor(Math.random() * 10))] = 11;
+    broadcast({ type: "game", action: "mv-sync", id: "monde", grid: Array.from(mv.grid) });
+  });
+  mk("📷 PNG", () => { const a = document.createElement("a"); a.download = "monde-vivant.png"; a.href = cv.toDataURL("image/png"); a.click(); });
+  for (let i = 0; i < 16; i++) { const s = document.createElement("div"); s.className = "st"; seq.appendChild(s); }
+  wrap.appendChild(bar); wrap.appendChild(seq); wrap.appendChild(cv);
+  $("game-area").appendChild(wrap);
+  mv.paint = (e, erase) => {
+    const r = cv.getBoundingClientRect();
+    const x = Math.floor((e.clientX - r.left) / r.width * MV_W);
+    const y = Math.floor((e.clientY - r.top) / r.height * MV_H);
+    const cells = [];
+    for (let dy = -mv.brush + 1; dy < mv.brush; dy++) for (let dx = -mv.brush + 1; dx < mv.brush; dx++) {
+      if (dx * dx + dy * dy > mv.brush * mv.brush) continue;
+      if (inB(x + dx, y + dy)) { mv.grid[gi(x + dx, y + dy)] = erase ? 0 : mv.cur; cells.push([x + dx, y + dy]); if (!erase) pluck(MV_MATS[mv.cur].note, undefined, 0.15, 0.08); }
+    }
+    if (cells.length) broadcast({ type: "game", action: "mv-paint", id: "monde", cells, val: erase ? 0 : mv.cur });
+  };
+  cv.addEventListener("pointerdown", e => { e.preventDefault(); mv.paint(e, e.button === 2); });
+  cv.addEventListener("pointermove", e => { if (e.buttons) mv.paint(e, (e.buttons & 2) !== 0); });
+  cv.addEventListener("contextmenu", e => e.preventDefault());
+  for (let x = 0; x < MV_W; x++) {
+    const h = 16 + Math.floor(6 * Math.sin(x / 7));
+    for (let y = MV_H - h; y < MV_H; y++) mv.grid[gi(x, y)] = 1;
+  }
+  $("game-status").textContent = Object.keys(peers).length ? "Écosystème vivant, chaque matière joue sa note !" : "Mode solo : le bot joue avec toi 🤖";
+  if (!Object.keys(peers).length) {
+    mv.botTimer = setInterval(() => {
+      if (!mv || mv.paused) return;
+      const m = 1 + Math.floor(Math.random() * (MV_MATS.length - 1));
+      for (let k = 0; k < 12; k++) mv.grid[gi(Math.floor(Math.random() * MV_W), Math.floor(Math.random() * MV_H / 2))] = m;
+    }, 400);
+  }
+  const loop = () => {
+    if (!mv) return;
+    if (!mv.paused) { mvStep(); mvStep(); }
+    mvDraw();
+    mv.raf = requestAnimationFrame(loop);
+  };
+  loop();
+  if (game.owner === pseudo) broadcast({ type: "game", action: "mv-sync", id: "monde", grid: Array.from(mv.grid) });
+}
+function mvStep() {
+  const { grid, gi, inB } = mv;
+  const moved = new Uint8Array(MV_W * MV_H);
+  for (let y = MV_H - 1; y >= 0; y--) {
+    const dir = Math.random() < 0.5 ? 1 : -1;
+    for (let n = 0; n < MV_W; n++) {
+      const x = dir > 0 ? n : MV_W - 1 - n;
+      const i = gi(x, y), m = grid[i];
+      if (!m || moved[i]) continue;
+      const mat = MV_MATS[m];
+      if (mat.kind === "powder" || mat.kind === "liquid") {
+        const below = inB(x, y + 1) ? grid[gi(x, y + 1)] : 1;
+        if (!below || MV_MATS[below].kind === "gas") {
+          grid[gi(x, y + 1)] = m; grid[i] = below; moved[gi(x, y + 1)] = 1; continue;
+        }
+        const s = dir > 0 ? 1 : -1;
+        for (const dx of [s, -s]) {
+          if (inB(x + dx, y + 1) && !grid[gi(x + dx, y + 1)]) {
+            grid[gi(x + dx, y + 1)] = m; grid[i] = 0; moved[gi(x + dx, y + 1)] = 1; break;
+          }
+        }
+      } else if (mat.kind === "gas") {
+        if (y > 0 && !grid[gi(x, y - 1)]) {
+          grid[gi(x, y - 1)] = m; grid[i] = 0; moved[gi(x, y - 1)] = 1;
+        } else {
+          const dx = Math.random() < 0.5 ? 1 : -1;
+          if (inB(x + dx, y - 1) && !grid[gi(x + dx, y - 1)]) {
+            grid[gi(x + dx, y - 1)] = m; grid[i] = 0; moved[gi(x + dx, y - 1)] = 1;
+          }
+        }
+      } else if (mat.kind === "fire") {
+        if (Math.random() < 0.7) {
+          const dx = Math.floor(Math.random() * 3) - 1, dy = -1 - (Math.random() < 0.3 ? 1 : 0);
+          if (inB(x + dx, y + dy)) {
+            const j = gi(x + dx, y + dy), t = grid[j];
+            if (!t) { grid[j] = m; grid[i] = 0; }
+            else if (MV_MATS[t].kind === "life" || (MV_MATS[t].kind === "solid" && MV_MATS[t].id === "bois") || MV_MATS[t].id === "charbon" || MV_MATS[t].id === "huile") {
+              grid[j] = 0;
+              if (Math.random() < 0.2) grid[i] = 5;
+            }
+          }
+        } else grid[i] = 0;
+      } else if (mat.kind === "life") {
+        for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+          if (inB(x + dx, y + dy) && MV_MATS[grid[gi(x + dx, y + dy)]] && MV_MATS[grid[gi(x + dx, y + dy)]].id === "eau" && Math.random() < 0.02) {
+            if (inB(x, y - 1) && !grid[gi(x, y - 1)]) { grid[gi(x, y - 1)] = m; break; }
+          }
+        }
+      }
+      if (mat.id === "lave") {
+        for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+          if (inB(x + dx, y + dy) && MV_MATS[grid[gi(x + dx, y + dy)]] && MV_MATS[grid[gi(x + dx, y + dy)]].id === "eau") {
+            grid[gi(x + dx, y + dy)] = 7;
+            grid[i] = 5;
+            break;
+          }
+        }
+      }
+      if (mat.id === "graine") {
+        for (const [dx, dy] of [[0,1],[1,0],[-1,0]]) {
+          if (inB(x + dx, y + dy) && MV_MATS[grid[gi(x + dx, y + dy)]] && MV_MATS[grid[gi(x + dx, y + dy)]].id === "eau" && Math.random() < 0.05) {
+            grid[i] = 11; break;
+          }
+        }
+      }
+    }
+  }
+}
+function mvDraw() {
+  const { ctx, grid, gi } = mv;
+  for (let y = 0; y < MV_H; y++) for (let x = 0; x < MV_W; x++) {
+    const m = grid[gi(x, y)];
+    ctx.fillStyle = m ? MV_MATS[m].color : "#0a0a14";
+    ctx.fillRect(x * MV_CELL, y * MV_CELL, MV_CELL, MV_CELL);
+  }
+}
+const MV_BANDS = 16, MV_STEP_MS = 160;
+function playMvLoop() {
+  if (!mv) return;
+  mv.loopOn = !mv.loopOn;
+  $("game-status").textContent = mv.loopOn ? "🎵 boucle : le monde devient un séquenceur (16 bandes)" : "";
+  if (mv.loopTimer) { clearInterval(mv.loopTimer); mv.loopTimer = null; return; }
+  mv.stepIdx = 0;
+  mv.loopTimer = setInterval(() => {
+    if (!mv) return;
+    const { grid, gi } = mv;
+    const y0 = Math.floor(mv.stepIdx * MV_H / MV_BANDS), y1 = Math.floor((mv.stepIdx + 1) * MV_H / MV_BANDS);
+    const notes = new Set();
+    for (let y = y0; y < y1; y++) for (let x = 0; x < MV_W; x++) {
+      const m = grid[gi(x, y)];
+      if (m) notes.add(MV_MATS[m].note);
+    }
+    const t = audio().currentTime;
+    notes.forEach(f => pluck(f, t, 0.3, 0.12));
+    mv.seq.querySelectorAll(".st").forEach((s, i) => { s.classList.toggle("play", i === mv.stepIdx); s.classList.add("on"); });
+    mv.stepIdx = (mv.stepIdx + 1) % MV_BANDS;
+  }, MV_STEP_MS);
+}
+function stopMonde() {
+  if (mv) { cancelAnimationFrame(mv.raf); if (mv.loopTimer) clearInterval(mv.loopTimer); if (mv.botTimer) clearInterval(mv.botTimer); }
+  mv = null;
+}
+function gameMonde(d) {
+  if (!mv) return;
+  if (d.action === "mv-sync" && Array.isArray(d.grid)) { mv.grid = Uint8Array.from(d.grid.slice(0, MV_W * MV_H)); }
+  if (d.action === "mv-paint" && Array.isArray(d.cells)) {
+    for (const [x, y] of d.cells) { if (mv.inB(x, y)) mv.grid[mv.gi(x, y)] = d.val; }
+  }
+}
+
+renderRoomList();
+connectLobby();
+$("img-modal").onclick = function () { this.classList.remove("open"); };
+</script>
+</body>
+</html>
+
