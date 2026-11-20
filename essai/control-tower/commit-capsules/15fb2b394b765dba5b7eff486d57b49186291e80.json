@@ -1,0 +1,72 @@
+{
+  "schema": "GVAULT_CONTROL_TOWER_COMMIT_CAPSULE_V1",
+  "version": 1,
+  "commitSha": "15fb2b394b765dba5b7eff486d57b49186291e80",
+  "parentSha": "0f5d6c042f49556bdbabb67d2a1e9acfaeb92ec4",
+  "committedAt": "2026-11-20T17:46:53+01:00",
+  "summary": {
+    "subject": "route-studio: couleur des notes à nouveau fixe (couleur de piste), sans teinte par fréquence",
+    "intent": "",
+    "workSpecial": "",
+    "changedFiles": 1,
+    "additions": 4,
+    "deletions": 4,
+    "paths": [
+      "route-studio.html"
+    ]
+  },
+  "pulse": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+    "sampleMode": "MICRO",
+    "changedFiles": 1,
+    "additions": 4,
+    "deletions": 4,
+    "magnitude": 8,
+    "committedAt": "2026-11-20T17:46:53+01:00",
+    "parentSha": "0f5d6c042f49556bdbabb67d2a1e9acfaeb92ec4"
+  },
+  "pulseKey": "CTP1:15fb2b394b765dba5b7eff486d57b49186291e80:c09ccf2e02c0311c",
+  "functionImageVersion": "1.0.0",
+  "translationSha256": "a400027ecd40d41944da588322c6785fa43f99a2ea4e8b0d68af00f3c217a30c",
+  "typedKeys": {
+    "commit": "gitc:15fb2b394b765dba5b7eff486d57b49186291e80",
+    "parent": "gitc:0f5d6c042f49556bdbabb67d2a1e9acfaeb92ec4",
+    "pulse": "ctp1:15fb2b394b765dba5b7eff486d57b49186291e80:c09ccf2e02c0311c",
+    "translation": "cttrans:a400027ecd40d41944da588322c6785fa43f99a2ea4e8b0d68af00f3c217a30c",
+    "functionImage": "ctfunc:1.0.0"
+  },
+  "translation": {
+    "schema": "GVAULT_CONTROL_TOWER_COMMIT_IMAGE_V1",
+    "commitSha": "15fb2b394b765dba5b7eff486d57b49186291e80",
+    "parentSha": "0f5d6c042f49556bdbabb67d2a1e9acfaeb92ec4",
+    "committedAt": "2026-11-20T17:46:53+01:00",
+    "summary": {
+      "subject": "route-studio: couleur des notes à nouveau fixe (couleur de piste), sans teinte par fréquence",
+      "intent": "",
+      "workSpecial": "",
+      "changedFiles": 1,
+      "additions": 4,
+      "deletions": 4,
+      "paths": [
+        "route-studio.html"
+      ]
+    },
+    "pulse": {
+      "schema": "GVAULT_CONTROL_TOWER_COMMIT_PULSE_V1",
+      "sampleMode": "MICRO",
+      "changedFiles": 1,
+      "additions": 4,
+      "deletions": 4,
+      "magnitude": 8,
+      "committedAt": "2026-11-20T17:46:53+01:00",
+      "parentSha": "0f5d6c042f49556bdbabb67d2a1e9acfaeb92ec4"
+    },
+    "functionImageVersion": "1.0.0",
+    "reconstruction": {
+      "lookup": "commit-capsules/15fb2b394b765dba5b7eff486d57b49186291e80.json",
+      "vfsKey": "CTP1:15fb2b394b765dba5b7eff486d57b49186291e80:c09ccf2e02c0311c",
+      "rule": "NEXT_COMMIT_CARRIES_PREVIOUS_COMMIT_IMAGE"
+    }
+  },
+  "capsulePath": "commit-capsules/15fb2b394b765dba5b7eff486d57b49186291e80.json"
+}
